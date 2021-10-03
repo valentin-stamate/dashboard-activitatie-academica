@@ -5,8 +5,34 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 
-const indexRouter = require('./routes');
-const usersRouter = require('./routes/users');
+const {graphqlHTTP} = require('express-graphql')
+const {buildSchema} = require('graphql')
+const sendMail = require("./functions/mail");
+
+const colors = require("colors");
+
+// Construct a schema, using GraphQL schema language
+const schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+`);
+
+// The root provides a resolver function for each API endpoint
+const root = {
+  hello: async () => {
+    let message = 'Mail send';
+
+    await sendMail('photo.backup.vst.01@gmail.com').catch((e) => {
+      console.log(`Error sending mail.`.red.underline);
+      console.log(`Error sending mail.`.red.bold);
+      console.log(`Error sending mail.`.red.bgRed);
+      message = e;
+    });
+
+    return message;
+  },
+};
 
 const app = express();
 
@@ -26,8 +52,12 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// GraphQl
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
