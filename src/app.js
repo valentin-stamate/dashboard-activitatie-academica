@@ -6,33 +6,6 @@ const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 
 const {graphqlHTTP} = require('express-graphql')
-const {buildSchema} = require('graphql')
-const sendMail = require("./functions/mail");
-
-const colors = require("colors");
-
-// Construct a schema, using GraphQL schema language
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
-
-// The root provides a resolver function for each API endpoint
-const root = {
-  hello: async () => {
-    let message = 'Mail send';
-
-    await sendMail('photo.backup.vst.01@gmail.com').catch((e) => {
-      console.log(`Error sending mail.`.red.underline);
-      console.log(`Error sending mail.`.red.bold);
-      console.log(`Error sending mail.`.red.bgRed);
-      message = e;
-    });
-
-    return message;
-  },
-};
 
 const app = express();
 
@@ -51,6 +24,8 @@ app.use(sassMiddleware({
   sourceMap: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+const {schema, root} = require('./appgraphql');
 
 // GraphQl
 app.use('/graphql', graphqlHTTP({

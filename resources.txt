@@ -2,5 +2,6 @@ GraphQl with Express : https://graphql.org/graphql-js/running-an-express-graphql
 Generate PDF : https://stackoverflow.com/questions/8085520/generating-pdf-latex-with-python-script
 Nodemailer : https://nodemailer.com/about/
 Console Color : https://stackoverflow.com/a/13336745/10805602
-
+Run Terminal Command in NodeJs : https://stackabuse.com/executing-shell-commands-with-node-js/
+ReplaceAll NodeJs : https://stackoverflow.com/a/68982424/10805602
 
