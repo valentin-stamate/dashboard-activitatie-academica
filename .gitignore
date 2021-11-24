@@ -1,5 +1,6 @@
-node_modules
-.idea
-*.env
-*.pdf
-*.rtf
+node_modules/
+build/
+logs/
+.idea/
+
+src/app/.notes
