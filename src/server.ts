@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import config from '../config.json';
 import {graphqlHTTP} from 'express-graphql';
-import {resolvers, schema} from "./graphql/export";
+import {resolvers, schema} from "./app/graphql/export";
 
 const app: Express = express();
 
