@@ -12,4 +12,14 @@ Import Schema GraphQl : https://www.graphql-tools.com/docs/schema-loading
 GraphQl Tag : https://www.npmjs.com/package/graphql-tag
 Import Multiple GraphQl Files : https://stackoverflow.com/a/63168642/10805602
 Create Typescript Express Server: https://github.com/PrawiraGenestonlia/create-express-typescript-application
+GraphQL Tools Documentation : https://www.graphql-tools.com/docs/introduction
+Merge Properties Of Two Objects : https://stackoverflow.com/a/171256/10805602
+Loop Through ...args : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
+Sleep : https://stackoverflow.com/a/64762041/10805602
+CORS Policy: https://stackoverflow.com/a/68697930/10805602
+NodeJs File : https://www.w3schools.com/nodejs/nodejs_filesystem.asp
+Object Entries: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values
+Object Keys : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+Fast CSV : https://stackoverflow.com/a/23085938/10805602
+Download File Express : https://stackoverflow.com/a/7288883/10805602
 

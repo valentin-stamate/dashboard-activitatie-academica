@@ -5,6 +5,7 @@ import cors from 'cors';
 import config from '../config.json';
 import {graphqlHTTP} from 'express-graphql';
 import {resolvers, schema} from "./app/graphql/export";
+import {cons} from "./app/script/cons";
 
 const app: Express = express();
 
@@ -19,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // Handle logs in console during development
 if (process.env.NODE_ENV === 'development' || config.NODE_ENV === 'development') {
   app.use(morgan('dev'));
-  app.use(cors());
+  app.use(cors({origin: 'http://localhost:4200'}));
 }
 
 // Handle security and origin in production
@@ -31,16 +32,18 @@ if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
  *                               Register all routes
  ***********************************************************************************/
 
+/** Download */
+app.get(`/${cons.downloadKey}`, function(req, res){
+  const file = `src/files/students.csv`;
+  res.download(file); // Set disposition and send it.
+});
+
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: resolvers,
   graphiql: true,
 }));
 
-// getFilesWithKeyword('router', __dirname + '/app').forEach((file: string) => {
-//   const { router } = require(file);
-//   app.use('/', router);
-// })
 /************************************************************************************
  *                               Express Error Handling
  ***********************************************************************************/
