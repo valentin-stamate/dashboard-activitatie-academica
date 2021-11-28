@@ -22,4 +22,7 @@ Object Entries: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Referenc
 Object Keys : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
 Fast CSV : https://stackoverflow.com/a/23085938/10805602
 Download File Express : https://stackoverflow.com/a/7288883/10805602
+JavaScript Regex : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+RegEx CheatSheet : https://www.jetbrains.com/help/idea/regular-expression-syntax-reference.html#regex-syntax-reference
+
 

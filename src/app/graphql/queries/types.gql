@@ -3,7 +3,17 @@ type GqlResponse {
 }
 
 input StudentForm {
+    # INFORMATION SPECIFIC NAMES
     studentId: String!
+    marriageName: String
+    thesis: String
+    coordinator: String
+    graduationYear: String
+    scholarShip: String
+    completionDate: String
+
+    # REPORTS SPECIFIC NAMES
+    type: String
     title: String
     authors: String
     translatedAuthors: String
