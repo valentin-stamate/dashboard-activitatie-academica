@@ -11,9 +11,10 @@ input StudentForm {
     graduationYear: String
     scholarShip: String
     completionDate: String
+    cnatdcuRank: String
 
     # REPORTS SPECIFIC NAMES
-    type: String
+    type_: String
     title: String
     authors: String
     translatedAuthors: String

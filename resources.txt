@@ -24,5 +24,8 @@ Fast CSV : https://stackoverflow.com/a/23085938/10805602
 Download File Express : https://stackoverflow.com/a/7288883/10805602
 JavaScript Regex : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
 RegEx CheatSheet : https://www.jetbrains.com/help/idea/regular-expression-syntax-reference.html#regex-syntax-reference
-
+Create File If Not Exists : https://stackoverflow.com/questions/12899061/creating-a-file-only-if-it-doesnt-exist-in-node-js/44805479
+Create File If Not Exists : https://www.geeksforgeeks.org/node-js-fs-createwritestream-method
+Replace All Node : https://futurestud.io/tutorials/node-js-string-replace-all-appearances
+Check If File Exists : https://flaviocopes.com/how-to-check-if-file-exists-node
 

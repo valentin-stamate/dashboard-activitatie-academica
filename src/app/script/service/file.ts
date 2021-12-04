@@ -1,8 +1,23 @@
-import {CsvFile} from "../util/csv";
+import {CsvFile} from "./csv";
 import * as fs from "fs";
 
 /* Service that handles files */
 export class FileService {
+
+    static createIfNotExists(path: string): boolean {
+        try {
+            if (!fs.existsSync(path)) {
+                const fileDesc = fs.createWriteStream(path, {flags: 'a+'});
+                fileDesc.close();
+                return true;
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+
+        return false;
+    }
 
     static read(path: string): string {
         try {
@@ -30,16 +45,4 @@ export class FileService {
         }
     }
 
-    static appendCSVLine(filePath: string, headers: string[], object: any) {
-        const csvFile = new CsvFile({
-            path: filePath,
-            headers: headers,
-        });
-
-        csvFile.create([
-            object,
-        ]).catch(err => {
-            console.error(err.stack);
-        });
-    }
 }

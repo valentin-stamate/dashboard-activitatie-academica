@@ -3,3 +3,4 @@ build/
 logs/
 .idea/
 *.csv
+desktop.ini
