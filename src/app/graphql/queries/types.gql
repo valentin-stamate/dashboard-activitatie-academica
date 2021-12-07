@@ -8,7 +8,6 @@ input StudentForm {
     marriageName: String
     thesis: String
     coordinator: String
-    graduationYear: String
     scholarShip: String
     completionDate: String
     cnatdcuRank: String

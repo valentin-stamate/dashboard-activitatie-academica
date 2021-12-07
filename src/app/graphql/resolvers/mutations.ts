@@ -8,8 +8,6 @@ export const mutations = {
     sendForm: async ({form}: any) => {
         const studentId = form.studentId;
 
-        console.log(form)
-
         const idRegex = new RegExp('([0-9]+[A-Z]+[0-9]+)');
 
         if (!idRegex.test(studentId) && studentId.length < 10) {

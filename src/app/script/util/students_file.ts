@@ -7,7 +7,6 @@ export const columnOrderWithName = [
     ['marriageName', 'Nume de Casatorie'],
     ['thesis', 'Teza de Doctorat'],
     ['coordinator', 'Coordonator'],
-    ['graduationYear', 'Anul Absolvirii'],
     ['scholarShip', 'Bursa'],
     ['completionDate', 'Data Completarii'],
     ['cnatdcuRank', 'Rank CNATDCU'],
@@ -85,3 +84,22 @@ export const columnOrderMap = new Map();
 for (let i in columnOrderWithName) {
     columnOrderMap.set(columnOrderWithName[i][0], i);
 }
+
+// TODO Second type of student document
+
+// export const columnOrderWithNameSecond = [
+//     ['studentId', 'Numar Matricol'],
+//     ['doctoralThesisType', 'Tip Formular'],
+//     ['name', 'Nume'],
+//
+// ];
+//
+// export const columnOrderSecond: string[] = [];
+// for (const column of columnOrderWithNameSecond) {
+//     columnOrderSecond.push(column[0]);
+// }
+//
+// export const columnOrderMapSecond = new Map();
+// for (let i in columnOrderWithNameSecond) {
+//     columnOrderMapSecond.set(columnOrderWithNameSecond[i][0], i);
+// }
