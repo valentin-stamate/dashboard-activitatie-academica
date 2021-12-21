@@ -1,23 +1,20 @@
-import {cons} from "../../script/cons";
-import {CsvFile} from "../../script/service/csv";
-import {columnOrder, columnOrderMap, columnOrderWithName} from "../../script/util/students_file";
+import {User} from "../../database/models";
+import {UserDataRepository} from "../../database/repository/user.data.repository";
+
+const demoUser = new User({
+    user_id: 'valentin',
+    email: 'valentin@gmail.com',
+    password: '123456789',
+});
 
 export const queries = {
     hello: async () => {
 
-
-        if (!CsvFile.appendRow(cons.studentsCSVPath, {studentId: 'vfdgdfgdg'}, columnOrder, columnOrderWithName, columnOrderMap, ';')) {
-            throw new Error("Error");
-        }
+        // console.log(await UserRepository.allUsers());
+        // console.log(await UserRepository.addUser(demoUser));
+        // console.log(await UserRepository.activateUser(demoUser));
+        console.log(await UserDataRepository.getInformation(demoUser));
 
         return 'Hello!';
-    },
-    getStudentsData: async ({user, password}: any) => {
-
-        if (user === 'adriana.bejinariu' && password === 'u^*&9jy8da-02eic-lwvun4') {
-            return [`http://localhost:8080/${cons.downloadKey}`];
-        }
-
-        throw new Error("Invalid credentials");
     }
 }

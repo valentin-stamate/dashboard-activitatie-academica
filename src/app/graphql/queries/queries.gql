@@ -1,4 +1,3 @@
 type Query {
     hello: String
-    getStudentsData(user: String!, password: String!): [String]
 }

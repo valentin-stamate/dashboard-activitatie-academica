@@ -4,3 +4,4 @@ logs/
 .idea/
 *.csv
 desktop.ini
+env.ts

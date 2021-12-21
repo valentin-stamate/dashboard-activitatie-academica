@@ -5,7 +5,6 @@ import cors from 'cors';
 import config from '../config.json';
 import {graphqlHTTP} from 'express-graphql';
 import {resolvers, schema} from "./app/graphql/export";
-import {cons} from "./app/script/cons";
 
 const app: Express = express();
 
@@ -33,10 +32,6 @@ if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
  ***********************************************************************************/
 
 /** Download */
-app.get(`/${cons.downloadKey}`, function(req, res){
-  const file = `src/files/students.csv`;
-  res.download(file); // Set disposition and send it.
-});
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,

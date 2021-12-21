@@ -1,3 +1,1 @@
-type Mutation {
-    sendForm(form: StudentForm): GqlResponse
-}
+
