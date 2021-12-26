@@ -5,13 +5,13 @@ import {QueryDB} from "../connection";
 export abstract class UserDataRepository {
 
     static async getInformation(user: User) {
-        const query = `SELECT i.id, i.full_name, i.marriage_name, i.thesis_coordinator, i.founding, i.completion_date 
-                       FROM (SELECT * FROM users WHERE user_id = $1) u 
-                       JOIN user_information ui ON u.user_id = ui.user_id
-                       JOIN information i ON i.id = ui.form_id;`
+        const query = `SELECT *
+                       FROM (SELECT * FROM users WHERE id = $1) u
+                       JOIN user_information ui ON u.id = ui.user_id
+                       JOIN information r ON r.id = ui.relation_id;`
 
         try {
-            const {rows} = await QueryDB(query, [user.userId]);
+            const {rows} = await QueryDB(query, [user.id]);
 
             if (rows.length === 0) {
                 return null;

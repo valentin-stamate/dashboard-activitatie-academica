@@ -1,6 +1,5 @@
 import {ErrorResponse, User} from "../models";
 import {QueryDB} from "../connection";
-import {UtilService} from "../../service/UtilService";
 
 /** User repository. Used for CRUD operations. */
 export abstract class UserRepository {
@@ -22,10 +21,10 @@ export abstract class UserRepository {
 
     /** Activates a user */
     static async activateUser(user: User): Promise<boolean> {
-        const query = "UPDATE users SET activated = TRUE WHERE user_id = $1";
+        const query = "UPDATE users SET activated = TRUE WHERE identifier = $1";
 
         try {
-            await QueryDB(query, [user.userId]);
+            await QueryDB(query, [user.identifier]);
         } catch (e) {
             console.log(e);
 
@@ -37,10 +36,10 @@ export abstract class UserRepository {
 
     /** Given a user, it gives the admin permission. */
     static async makeAdminUser(user: User): Promise<boolean> {
-        const query = "UPDATE users SET admin = TRUE WHERE user_id = $1";
+        const query = "UPDATE users SET admin = TRUE WHERE identifier = $1";
 
         try {
-            await QueryDB(query, [user.userId]);
+            await QueryDB(query, [user.identifier]);
         } catch (e) {
             console.log(e);
 
@@ -54,9 +53,9 @@ export abstract class UserRepository {
      * @return null if the user was added \n
      *         an ErrorResponse instance if the operation fails */
     static async addUser(user: User): Promise<null | ErrorResponse> {
-        const query = "INSERT INTO users(user_id, email, password) VALUES ($1, $2, $3)";
+        const query = "INSERT INTO users(identifier, email, password) VALUES ($1, $2, $3)";
 
-        const userById = await UserRepository.getUserByUserId(user.userId);
+        const userById = await UserRepository.getUserByIdentifier(user.identifier);
         if (userById) {
             return new ErrorResponse('User id already taken.');
         }
@@ -67,7 +66,7 @@ export abstract class UserRepository {
         }
 
         try {
-            await QueryDB(query, [user.userId, user.email, user.password]);
+            await QueryDB(query, [user.identifier, user.email, user.password]);
         } catch (e) {
             console.log(e);
 
@@ -79,11 +78,29 @@ export abstract class UserRepository {
 
     /** Return a user with the given id
      * @return a user instance if found, null otherwise */
-    static async getUserByUserId(userId: string): Promise<User | null> {
-        const query = "SELECT * FROM users WHERE user_id = $1";
+    static async getUserById(id: number): Promise<User | null> {
+        const query = "SELECT * FROM users WHERE id = $1";
 
         try {
-            const {rows} = await QueryDB(query, [userId]);
+            const {rows} = await QueryDB(query, [id]);
+
+            if (rows.length === 1) {
+                return new User(rows[0]);
+            }
+
+            return null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    /** Return a user with the given identifier
+     * @return a user instance if found, null otherwise */
+    static async getUserByIdentifier(identifier: string): Promise<User | null> {
+        const query = "SELECT * FROM users WHERE identifier = $1";
+
+        try {
+            const {rows} = await QueryDB(query, [identifier]);
 
             if (rows.length === 1) {
                 return new User(rows[0]);

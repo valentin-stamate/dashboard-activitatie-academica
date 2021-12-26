@@ -6,7 +6,7 @@ export class ErrorResponse {
 /* User */
 export class User {
     id: string;
-    userId: string;
+    identifier: string;
     email: string;
     password: string;
     admin: boolean;
@@ -14,7 +14,7 @@ export class User {
 
     constructor(payload: any) {
         this.id = payload.id;
-        this.userId = payload.user_id;
+        this.identifier = payload.identifier;
         this.email = payload.email;
         this.password = payload.password;
         this.admin = payload.admin;

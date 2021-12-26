@@ -1,29 +1,26 @@
-/* ----------============ Tables ============---------- */
-DROP TABLE users;
-DROP TABLE information;
-DROP TABLE scientific_article_isi;
-DROP TABLE isi_proceedings;
-DROP TABLE scientific_articles_bdi;
-DROP TABLE scientific_books;
-DROP TABLE translations;
-DROP TABLE scientific_communications;
-DROP TABLE patents;
-DROP TABLE research_contracts;
-DROP TABLE citations;
-DROP TABLE awards_and_nominations;
-DROP TABLE academy_member;
-DROP TABLE editorial_member;
-DROP TABLE organized_events;
-DROP TABLE without_activity;
-DROP TABLE didactic_activity;
-
-DROP TABLE user_information;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS information;
+DROP TABLE IF EXISTS scientific_article_isi;
+DROP TABLE IF EXISTS isi_proceedings;
+DROP TABLE IF EXISTS scientific_articles_bdi;
+DROP TABLE IF EXISTS scientific_books;
+DROP TABLE IF EXISTS translations;
+DROP TABLE IF EXISTS scientific_communications;
+DROP TABLE IF EXISTS patents;
+DROP TABLE IF EXISTS research_contracts;
+DROP TABLE IF EXISTS citations;
+DROP TABLE IF EXISTS awards_and_nominations;
+DROP TABLE IF EXISTS academy_member;
+DROP TABLE IF EXISTS editorial_member;
+DROP TABLE IF EXISTS organized_events;
+DROP TABLE IF EXISTS without_activity;
+DROP TABLE IF EXISTS didactic_activity;
 
 /* Utilizatori */
 CREATE TABLE users (
     id SERIAL,
 
-    user_id VARCHAR(30) UNIQUE NOT NULL,
+    identifier VARCHAR(30) UNIQUE NOT NULL,
     email VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(30) NOT NULL,
     admin BOOLEAN DEFAULT FALSE NOT NULL,
@@ -292,29 +289,3 @@ CREATE TABLE didactic_activity (
 
     PRIMARY KEY (id)
 );
-
-/* ----------============ Link Tables ============---------- */
-CREATE TABLE user_information (
-    user_id VARCHAR(30),
-    information_id INTEGER,
-
-    UNIQUE (user_id, information_id),
-    CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    CONSTRAINT link_t FOREIGN KEY (information_id) REFERENCES information(id) ON DELETE CASCADE
-);
-
-/* ----------============ Examples ============---------- */
-INSERT INTO users(user_id, email, password) VALUES ('valentin', 'valentin@gmail.com', '123456789');
-INSERT INTO information(full_name, marriage_name, thesis_coordinator, founding, completion_date) VALUES ('name', 'marria', 'thess', 'taxa', 'azi');
-INSERT INTO user_information(user_id, form_id) VALUES ('valentin', 1);
-
-SELECT * FROM user_information;
-SELECT * FROM information;
-SELECT * FROM users;
-
-SELECT i.id, i.full_name, i.marriage_name, i.thesis_coordinator, i.founding, i.completion_date
-FROM (SELECT * FROM users WHERE user_id = 'valentin') u
-JOIN user_information ui ON u.user_id = ui.user_id
-JOIN information i ON i.id = ui.form_id;
-
-
