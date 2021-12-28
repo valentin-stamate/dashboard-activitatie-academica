@@ -1,5 +1,5 @@
 import {User} from "../../database/models";
-import {Database} from "../../database/repository/low/database";
+import {DatabaseRepository} from "../../database/repository/crud/database.repository";
 
 const demoUser = new User({
     user_id: 'valentin',
@@ -10,8 +10,8 @@ const demoUser = new User({
 export const queries = {
     hello: async () => {
 
-        await Database.deleteDatabaseTables();
-        await Database.createDatabaseTables();
+        await DatabaseRepository.deleteDatabaseTables();
+        await DatabaseRepository.createDatabaseTables();
 
         // console.log(await UserRepository.allUsers());
         // console.log(await UserRepository.addUser(demoUser));

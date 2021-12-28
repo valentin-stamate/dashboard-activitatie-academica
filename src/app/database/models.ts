@@ -3,6 +3,18 @@ export class ErrorResponse {
     constructor(public message: string) { }
 }
 
+/* Relation between the user and a generic form */
+export class UserRelation {
+    userId: number;
+    relationId: number;
+
+    constructor(props: any) {
+        this.userId = props.user_id;
+        this.relationId = props.relation_id;
+    }
+
+}
+
 /* User */
 export class User {
     id: number;

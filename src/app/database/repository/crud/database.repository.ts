@@ -1,6 +1,7 @@
 import {QueryDB} from "../../connection";
 
-export abstract class Database {
+/** Low level class that handles the creation of the tables. */
+export abstract class DatabaseRepository {
 
     static async createDatabaseTables() {
         /* Tables */
@@ -197,7 +198,7 @@ abstract class DatabaseTables {
             hierarchy_domains VARCHAR(128) NOT NULL,
             article_title VARCHAR(128) NOT NULL,
             authors VARCHAR(128) NOT NULL,
-            bdiIndexed_magazine VARCHAR(128) NOT NULL,
+            bdi_indexed_magazine VARCHAR(128) NOT NULL,
             publication_year VARCHAR(128) NOT NULL,
             volume VARCHAR(128) NOT NULL,
             number VARCHAR(128) NOT NULL,

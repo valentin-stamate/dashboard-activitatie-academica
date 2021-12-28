@@ -2,7 +2,6 @@ import {
     AcademyMember,
     AwardAndNomination,
     Citation, DidacticActivity, EditorialMember,
-    ErrorResponse,
     Information,
     ISIProceeding, OrganizedEvent, Patent, ResearchContract,
     ScientificArticleBDI,
@@ -12,77 +11,7 @@ import {
 import {QueryDB} from "../../connection";
 
 /** CRUD repository for all tables. */
-export abstract class TablesRepository {
-
-    /* ----==== Utilizatori ====---- */
-
-    /** Users - ALL */
-    static async allUsers(): Promise<User[]> {
-        const list: User[] = [];
-        const query = 'SELECT * FROM users';
-
-        const {rows} = await QueryDB(query, []);
-
-        for (const row of rows) {
-            list.push(new User(row));
-        }
-
-        return list;
-    }
-
-    /** Users - CREATE */
-    static async addUser(payload: User) {
-        const query = `INSERT INTO users(identifier, email, password) VALUES ($1, $2, $3)`;
-
-        const params = [payload.identifier, payload.email, payload.password];
-
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    /** Users - READ */
-    static async getUserById(id: number): Promise<User | null> {
-        const query = "SELECT * FROM users WHERE id = $1";
-
-        try {
-            const {rows} = await QueryDB(query, [id]);
-
-            if (rows.length === 1) {
-                return new User(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    /** Users - UPDATE */
-    static async updateUser(payload: User) {
-        const query = `UPDATE users SET identifier = $2, email = $3, password = $4 WHERE id = $1`;
-
-        const params = [payload.id, payload.identifier, payload.email, payload.password];
-
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    /** Users - DELETE */
-    static async deleteUser(payload: User) {
-        const query = `DELETE FROM users WHERE id = $1`;
-
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
-    }
+export abstract class TablesCrudRepository {
 
     /* ----==== Informații ====---- */
 
@@ -176,7 +105,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Articles ISI - CREATE */
-    static async addScientificArticlesISI(payload: ScientificArticleISI) {
+    static async addScientificArticleISI(payload: ScientificArticleISI) {
         const query = `INSERT INTO scientific_article_isi
                        (article_title, authors, publication_date, volume, issue, starting_page, ending_page, 
                         impact_factor, cnatdcu_classification, doi, conference_name, observations) 
@@ -194,7 +123,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Articles ISI - READ */
-    static async getScientificArticlesISI(id: number): Promise<ScientificArticleISI | null> {
+    static async getScientificArticleISI(id: number): Promise<ScientificArticleISI | null> {
         const query = "SELECT * FROM scientific_article_isi WHERE id = $1";
 
         try {
@@ -211,7 +140,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Articles ISI - UPDATE */
-    static async updateScientificArticlesISI(payload: ScientificArticleISI) {
+    static async updateScientificArticleISI(payload: ScientificArticleISI) {
         const query = `UPDATE scientific_article_isi SET article_title = $2, authors = $3, publication_date = $4, 
                                   volume = $5, issue = $6, starting_page = $7, ending_page = $8, 
                                   impact_factor = $9, cnatdcu_classification = $10, doi = $11, conference_name = $12,
@@ -229,7 +158,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Articles ISI - DELETE */
-    static async deleteScientificArticlesISI(payload: ScientificArticleISI) {
+    static async deleteScientificArticleISI(payload: ScientificArticleISI) {
         const query = `DELETE FROM scientific_article_isi WHERE id = $1`;
 
         try {
@@ -256,7 +185,7 @@ export abstract class TablesRepository {
     }
 
     /** ISI Proceedings - CREATE */
-    static async addISIProceedings(payload: ISIProceeding) {
+    static async addISIProceeding(payload: ISIProceeding) {
         const query = `INSERT INTO isi_proceedings 
                        (article_title, authors, conference_name, indexed_volume_type, publication_year, 
                         article_type, conference_type, conference_link, starting_page, ending_page, observations)
@@ -274,7 +203,7 @@ export abstract class TablesRepository {
     }
 
     /** ISI Proceedings - READ */
-    static async getISIProceedings(id: number): Promise<ISIProceeding | null> {
+    static async getISIProceeding(id: number): Promise<ISIProceeding | null> {
         const query = "SELECT * FROM isi_proceedings WHERE id = $1";
 
         try {
@@ -291,7 +220,7 @@ export abstract class TablesRepository {
     }
 
     /** ISI Proceedings - UPDATE */
-    static async updateISIProceedings(payload: ISIProceeding) {
+    static async updateISIProceeding(payload: ISIProceeding) {
         const query = `UPDATE isi_proceedings SET 
                        article_title = $2, authors = $3, conference_name = $4, indexed_volume_type = $5, publication_year = $6,
                        article_type = $7, conference_type = $8, conference_link = $9, starting_page = $10, ending_page = $11,
@@ -310,7 +239,7 @@ export abstract class TablesRepository {
     }
 
     /** ISI Proceedings - DELETE */
-    static async deleteISIProceedings(payload: ISIProceeding) {
+    static async deleteISIProceeding(payload: ISIProceeding) {
         const query = `DELETE FROM isi_proceedings WHERE id = $1`;
 
         try {
@@ -337,9 +266,9 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Articles BDI - CREATE */
-    static async addScientificArticlesBDI(payload: ScientificArticleBDI) {
+    static async addScientificArticleBDI(payload: ScientificArticleBDI) {
         const query = `INSERT INTO scientific_articles_bdi
-                       (hierarchy_domains, article_title, authors, bdiindexed_magazine, publication_year, volume, 
+                       (hierarchy_domains, article_title, authors, bdi_indexed_magazine, publication_year, volume, 
                         number, starting_page, ending_page, international_magazine, cnatdcu_classification, 
                         indexed_article_link, bdi_database, bdi_database_link, observations)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`;
@@ -357,7 +286,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Articles BDI - READ */
-    static async getScientificArticlesBDI(id: number): Promise<ScientificArticleBDI | null> {
+    static async getScientificArticleBDI(id: number): Promise<ScientificArticleBDI | null> {
         const query = `SELECT * FROM scientific_articles_bdi WHERE id = $1`;
 
         try {
@@ -374,7 +303,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Articles BDI - UPDATE */
-    static async updateScientificArticlesBDI(payload: ScientificArticleBDI) {
+    static async updateScientificArticleBDI(payload: ScientificArticleBDI) {
         const query = `UPDATE scientific_articles_bdi SET 
                        hierarchy_domains = $2, article_title = $3, authors = $4, bdi_indexed_magazine = $5,
                        publication_year = $6, volume = $7, number = $8, starting_page = $9, ending_page = $10,
@@ -395,7 +324,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Articles BDI - DELETE */
-    static async deleteScientificArticlesBDI(payload: ScientificArticleBDI) {
+    static async deleteScientificArticleBDI(payload: ScientificArticleBDI) {
         const query = `DELETE FROM scientific_articles_bdi WHERE id = $1`;
 
         try {
@@ -422,7 +351,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Books - CREATE */
-    static async addScientificBooks(payload: ScientificBook) {
+    static async addScientificBook(payload: ScientificBook) {
         const query = `INSERT INTO scientific_books
                        (hierarchy_domains, chapter_title, authors, book_title, page_number, publication_year, 
                         publishing_house, publication_type, isbn, observations)
@@ -440,7 +369,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Books - READ */
-    static async getScientificBooks(id: number): Promise<ScientificBook | null> {
+    static async getScientificBook(id: number): Promise<ScientificBook | null> {
         const query = `SELECT * FROM scientific_books WHERE id = $1`;
 
         try {
@@ -457,7 +386,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Books - UPDATE */
-    static async updateScientificBooks(payload: ScientificBook) {
+    static async updateScientificBook(payload: ScientificBook) {
         const query = `UPDATE scientific_books SET 
                        hierarchy_domains = $2, chapter_title = $3, authors = $4, book_title = $5, page_number = $6, 
                        publication_year = $7, publishing_house = $8, publication_type = $9, isbn = $10, observations = $11
@@ -475,7 +404,7 @@ export abstract class TablesRepository {
     }
 
     /** Scientific Books - DELETE */
-    static async deleteScientificBooks(payload: ScientificBook) {
+    static async deleteScientificBook(payload: ScientificBook) {
         const query = `DELETE FROM scientific_books WHERE id = $1`;
 
         try {
