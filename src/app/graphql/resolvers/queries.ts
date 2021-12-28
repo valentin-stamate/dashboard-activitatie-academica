@@ -1,5 +1,5 @@
 import {User} from "../../database/models";
-import {UserDataRepository} from "../../database/repository/user.data.repository";
+import {Database} from "../../database/repository/low/database";
 
 const demoUser = new User({
     user_id: 'valentin',
@@ -10,10 +10,13 @@ const demoUser = new User({
 export const queries = {
     hello: async () => {
 
+        await Database.deleteDatabaseTables();
+        await Database.createDatabaseTables();
+
         // console.log(await UserRepository.allUsers());
         // console.log(await UserRepository.addUser(demoUser));
         // console.log(await UserRepository.activateUser(demoUser));
-        console.log(await UserDataRepository.getInformation(demoUser));
+        // console.log(await UserDataRepository.getUserInformation(demoUser));
 
         return 'Hello!';
     }

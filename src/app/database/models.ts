@@ -5,27 +5,28 @@ export class ErrorResponse {
 
 /* User */
 export class User {
-    id: string;
+    id: number;
     identifier: string;
     email: string;
     password: string;
     admin: boolean;
     activated: boolean;
 
-    constructor(payload: any) {
-        this.id = payload.id;
-        this.identifier = payload.identifier;
-        this.email = payload.email;
-        this.password = payload.password;
-        this.admin = payload.admin;
-        this.activated = payload.activated;
+    constructor(props: any) {
+        this.id = props.id;
+        this.identifier = props.identifier;
+        this.email = props.email;
+        this.password = props.password;
+        this.admin = props.admin;
+        this.activated = props.activated;
     }
 }
 
 /* Forms */
 
 /* Informații */
-export class InformationForm {
+export class Information {
+    id: number;
     fullName: string;
     marriageName: string;
     thesisCoordinator: string;
@@ -33,6 +34,7 @@ export class InformationForm {
     completionDate: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.fullName = props.full_name;
         this.marriageName = props.marriage_name;
         this.thesisCoordinator = props.thesis_coordinator;
@@ -42,7 +44,8 @@ export class InformationForm {
 }
 
 /* Articole ştiintifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
-export class ScientificArticlesISI {
+export class ScientificArticleISI {
+    id: number;
     articleTitle: string;
     authors: string;
     publicationDate: string;
@@ -57,6 +60,7 @@ export class ScientificArticlesISI {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.articleTitle = props.article_title;
         this.authors = props.authors;
         this.publicationDate = props.publication_date;
@@ -73,7 +77,8 @@ export class ScientificArticlesISI {
 }
 
 /* ISI proceedings */
-export class ISIProceedings {
+export class ISIProceeding {
+    id: number;
     articleTitle: string;
     authors: string;
     conferenceName: string;
@@ -87,6 +92,7 @@ export class ISIProceedings {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.articleTitle = props.article_title;
         this.authors = props.authors;
         this.conferenceName = props.conference_name;
@@ -102,7 +108,8 @@ export class ISIProceedings {
 }
 
 /* Articole științifice publicate în extenso în reviste indexate BDI și reviste de specialitate neindexate */
-export class ScientificArticlesBDI {
+export class ScientificArticleBDI {
+    id: number;
     hierarchyDomains: string;
     articleTitle: string;
     authors: string;
@@ -120,10 +127,11 @@ export class ScientificArticlesBDI {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.hierarchyDomains = props.hierarchy_domains;
         this.articleTitle = props.article_title;
         this.authors = props.authors;
-        this.bdiIndexedMagazine = props.bdiIndexed_magazine;
+        this.bdiIndexedMagazine = props.bdi_indexed_magazine;
         this.publicationYear = props.publication_year;
         this.volume = props.volume;
         this.number = props.number;
@@ -139,7 +147,8 @@ export class ScientificArticlesBDI {
 }
 
 /* Cărţi ştiinţifice sau capitole de cărți publicate în edituri */
-export class ScientificBooks {
+export class ScientificBook {
+    id: number;
     hierarchyDomains: string;
     chapterTitle: string;
     authors: string;
@@ -152,6 +161,7 @@ export class ScientificBooks {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.hierarchyDomains = props.hierarchy_domains;
         this.chapterTitle = props.chapter_name;
         this.authors = props.authors;
@@ -166,7 +176,8 @@ export class ScientificBooks {
 }
 
 /* Traduceri */
-export class Translations {
+export class Translation {
+    id: number;
     hierarchyDomains: string;
     translationTitle: string;
     authors: string;
@@ -180,6 +191,7 @@ export class Translations {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.hierarchyDomains = props.hierarchy_domains;
         this.translationTitle = props.translation_title;
         this.authors = props.authors;
@@ -195,7 +207,8 @@ export class Translations {
 }
 
 /* Comunicări în manifestări științifice */
-export class ScientificCommunications {
+export class ScientificCommunication {
+    id: number;
     authors: string;
     communicationType: string;
     presentationYear: string;
@@ -205,6 +218,7 @@ export class ScientificCommunications {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.authors = props.authors;
         this.communicationType = props.communication_type;
         this.presentationYear = props.presentation_year;
@@ -217,7 +231,8 @@ export class ScientificCommunications {
 }
 
 /* Brevete */
-export class Patents {
+export class Patent {
+    id: number;
     patentTitleOrCBI: string;
     authors: string;
     yearOfObtainingPatent: string;
@@ -228,6 +243,7 @@ export class Patents {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.patentTitleOrCBI = props.patent_title_or_cbi;
         this.authors = props.authors;
         this.yearOfObtainingPatent = props.year_of_obtaining_patent;
@@ -240,7 +256,8 @@ export class Patents {
 }
 
 /* Contracte de cercetare */
-export class ResearchContracts {
+export class ResearchContract {
+    id: number;
     researchContractNameOrProject: string;
     projectCode: string;
     financier: string;
@@ -251,6 +268,7 @@ export class ResearchContracts {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.researchContractNameOrProject = props.research_contract_name_or_project;
         this.projectCode = props.project_code;
         this.financier = props.financier;
@@ -263,7 +281,8 @@ export class ResearchContracts {
 }
 
 /* Citări */
-export class Citations {
+export class Citation {
+    id: number;
     articleTitle: string;
     authors: string;
     publicationTitleWhereReferenced: string;
@@ -281,6 +300,7 @@ export class Citations {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.articleTitle = props.article_title;
         this.authors = props.authors;
         this.publicationTitleWhereReferenced = props.publication_title_where_referenced;
@@ -300,7 +320,8 @@ export class Citations {
 }
 
 /* Premii si nominalizari */
-export class AwardsAndNominations {
+export class AwardAndNomination {
+    id: number;
     yearOfAward: string;
     awardName: string;
     awardType: string;
@@ -310,6 +331,7 @@ export class AwardsAndNominations {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.yearOfAward = props.year_of_award;
         this.awardName = props.award_name;
         this.awardType = props.award_type;
@@ -322,12 +344,14 @@ export class AwardsAndNominations {
 
 /* Membru în academii */
 export class AcademyMember {
+    id: number;
     admissionYear: string;
     academyName: string;
     memberType: string;
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.admissionYear = props.admission_year;
         this.academyName = props.academy_name;
         this.memberType = props.member_type;
@@ -337,6 +361,7 @@ export class AcademyMember {
 
 /* Membru în echipa editorială */
 export class EditorialMember {
+    id: number;
     committeeName: string;
     magazineName: string;
     yearOfCommitteeAttendance: string;
@@ -346,6 +371,7 @@ export class EditorialMember {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.committeeName = props.committee_name;
         this.magazineName = props.magazine_name;
         this.yearOfCommitteeAttendance = props.year_of_committee_attendance;
@@ -357,7 +383,8 @@ export class EditorialMember {
 }
 
 /* Evenimente organizate */
-export class OrganizedEvents {
+export class OrganizedEvent {
+    id: number;
     manifestationName: string;
     startDate: string;
     endDate: string;
@@ -369,6 +396,7 @@ export class OrganizedEvents {
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.manifestationName = props.manifestation_name;
         this.startDate = props.start_date;
         this.endDate = props.end_date;
@@ -383,20 +411,24 @@ export class OrganizedEvents {
 
 /* Fără activitate științifică */
 export class WithoutActivity {
+    id: number;
     observations: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.observations = props.observations;
     }
 }
 
 /* Activitate didactică */
 export class DidacticActivity {
+    id: number;
     className: string;
     activityType: string;
     yearOfAttendingActivity: string;
 
     constructor(props: any) {
+        this.id = props.id;
         this.className = props.class_name;
         this.activityType = props.activity_type;
         this.yearOfAttendingActivity = props.year_of_attending_activity;

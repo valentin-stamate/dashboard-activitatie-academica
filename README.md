@@ -45,4 +45,5 @@
 * Postgres Delete : https://www.postgresql.org/docs/10/sql-delete.html
 * Node Postgres Documentation : https://node-postgres.com/
 * Postgres Update : https://www.postgresqltutorial.com/postgresql-update/
+* Prevent SQL Injection : https://stackoverflow.com/a/58175002/10805602
 
