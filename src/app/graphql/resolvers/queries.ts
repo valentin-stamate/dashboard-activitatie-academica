@@ -1,12 +1,10 @@
 import {Information, User} from "../../database/models";
-import {DatabaseRepository} from "../../database/repository/crud/database.repository";
 import {TablesCrudRepository} from "../../database/repository/crud/tables.crud.repository";
 import {UserRepository} from "../../database/repository/user.repository";
-import {TablesCrudRelationsRepository} from "../../database/repository/crud/tables.crud.relations.repository";
 
 const userDemo = new User({
-    identifier: 'valentin',
-    email: 'valentin@gmail.com',
+    identifier: 'valengggtin',
+    email: 'valentidsfn@gmail.com',
     password: '123456789',
 });
 
@@ -25,13 +23,15 @@ export const queries = {
         // await DatabaseRepository.createDatabaseTables();
 
         // await TablesCrudRepository.addInformation(informationDemo);
-        console.log(await UserRepository.addUser(userDemo));
+        const uRows = await UserRepository.addUser(userDemo);
+        const iRows = await TablesCrudRepository.addInformation(informationDemo);
 
-        const user = await UserRepository.getUserByIdentifier('valentin');
+        const user = new User(uRows[0]);
+        const info = new Information(iRows[0]);
 
         // await TablesCrudRelationsRepository.addUserInformation();
 
-        console.log(await UserRepository.allUsers());
+        console.log(await UserRepository.getUserInformation(user));
 
         // console.log(await UserRepository.allUsers());
         // console.log(await UserRepository.addUser(demoUser));

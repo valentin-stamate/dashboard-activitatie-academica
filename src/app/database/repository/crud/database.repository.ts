@@ -24,45 +24,9 @@ export abstract class DatabaseRepository {
         await DatabaseTables.createOrganizedEventsTable();
         await DatabaseTables.createWithoutActivityTable();
         await DatabaseTables.createDidacticActivityTable();
-
-        /* Table relations */
-        await DatabaseUserRelations.createUserInformationRelation();
-        await DatabaseUserRelations.createUserScientificArticlesISIRelation();
-        await DatabaseUserRelations.createUserISIProceedingsRelation();
-        await DatabaseUserRelations.createUserScientificArticlesBDIRelation();
-        await DatabaseUserRelations.createUserScientificBooksRelation();
-        await DatabaseUserRelations.createUserTranslationsRelation();
-        await DatabaseUserRelations.createUserScientificCommunicationsRelation();
-        await DatabaseUserRelations.createUserPatentsRelation();
-        await DatabaseUserRelations.createUserResearchContractsRelation();
-        await DatabaseUserRelations.createUserCitationsRelation();
-        await DatabaseUserRelations.createUserAwardsAndNominationsRelation();
-        await DatabaseUserRelations.createUserAcademyMemberRelation();
-        await DatabaseUserRelations.createUserEditorialMemberRelation();
-        await DatabaseUserRelations.createUserOrganizedEventsRelation();
-        await DatabaseUserRelations.createUserWithoutActivityRelation();
-        await DatabaseUserRelations.createUserDidacticActivityRelation();
     }
 
     static async deleteDatabaseTables() {
-        /* Table relations */
-        await DatabaseUserRelations.dropUserInformationRelation();
-        await DatabaseUserRelations.dropUserScientificArticlesISIRelation();
-        await DatabaseUserRelations.dropUserISIProceedingsRelation();
-        await DatabaseUserRelations.dropUserScientificArticlesBDIRelation();
-        await DatabaseUserRelations.dropUserScientificBooksRelation();
-        await DatabaseUserRelations.dropUserTranslationsRelation();
-        await DatabaseUserRelations.dropUserScientificCommunicationsRelation();
-        await DatabaseUserRelations.dropUserPatentsRelation();
-        await DatabaseUserRelations.dropUserResearchContractsRelation();
-        await DatabaseUserRelations.dropUserCitationsRelation();
-        await DatabaseUserRelations.dropUserAwardsAndNominationsRelation();
-        await DatabaseUserRelations.dropUserAcademyMemberRelation();
-        await DatabaseUserRelations.dropUserEditorialMemberRelation();
-        await DatabaseUserRelations.dropUserOrganizedEventsRelation();
-        await DatabaseUserRelations.dropUserWithoutActivityRelation();
-        await DatabaseUserRelations.dropUserDidacticActivityRelation();
-
         /* Tables */
         await DatabaseTables.dropUserTable();
         await DatabaseTables.dropInformationTable();
@@ -133,7 +97,7 @@ abstract class DatabaseTables {
         await QueryDB(query, []);
     }
 
-    /** Articole ştiintifice publicate în extenso...(ISI) */
+    /** Articole științifice publicate în extenso...(ISI) */
     static async createScientificArticlesISITable() {
         const query = `CREATE TABLE scientific_article_isi (
             id SERIAL,
@@ -225,7 +189,7 @@ abstract class DatabaseTables {
         await QueryDB(query, []);
     }
 
-    /** Cărţi ştiinţifice sau capitole de cărți publicate în edituri */
+    /** Cărți ştiinţifice sau capitole de cărți publicate în edituri */
     static async createScientificBooksTable() {
         const query = `CREATE TABLE scientific_books (
             id SERIAL,
@@ -392,7 +356,7 @@ abstract class DatabaseTables {
         await QueryDB(query, []);
     }
 
-    /** Premii si nominalizari */
+    /** Premii si nominalizări */
     static async createAwardsAndNominationsTable() {
         const query = `CREATE TABLE awards_and_nominations (
             id SERIAL,
@@ -525,7 +489,6 @@ abstract class DatabaseTables {
         await QueryDB(query, []);
     }
 
-
     static async dropDidacticActivityTable() {
         const query = `DROP TABLE IF EXISTS didactic_activity`;
 
@@ -533,329 +496,3 @@ abstract class DatabaseTables {
     }
 }
 
-/** This class contains the methods for creating the table relations.
- * This should be used after all tables from DatabaseTables are created. */
-abstract class DatabaseUserRelations {
-
-    /** Informații */
-    static async createUserInformationRelation() {
-        const query = `CREATE TABLE user_information (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES information(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserInformationRelation() {
-        const query = `DROP TABLE IF EXISTS user_information`;
-
-        await QueryDB(query, []);
-    }
-
-
-    /** Articole ştiintifice publicate în extenso...(ISI) */
-    static async createUserScientificArticlesISIRelation() {
-        const query = `CREATE TABLE user_scientific_article_isi (
-            user_id INTEGER,
-            relation_id INTEGER,
-    
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES scientific_article_isi(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserScientificArticlesISIRelation() {
-        const query = `DROP TABLE IF EXISTS user_scientific_article_isi`;
-
-        await QueryDB(query, []);
-    }
-
-    /** ISI proceedings */
-    static async createUserISIProceedingsRelation() {
-        const query = `CREATE TABLE user_isi_proceedings (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES isi_proceedings(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserISIProceedingsRelation() {
-        const query = `DROP TABLE IF EXISTS user_isi_proceedings`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Articole științifice publicate în extenso... (BDI) */
-    static async createUserScientificArticlesBDIRelation() {
-        const query = `CREATE TABLE user_scientific_articles_bdi (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES scientific_articles_bdi(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserScientificArticlesBDIRelation() {
-        const query = `DROP TABLE IF EXISTS user_scientific_articles_bdi`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Cărţi ştiinţifice sau capitole de cărți publicate în edituri */
-    static async createUserScientificBooksRelation() {
-        const query = `CREATE TABLE user_scientific_books (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES scientific_books(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserScientificBooksRelation() {
-        const query = `DROP TABLE IF EXISTS user_scientific_books`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Traduceri */
-    static async createUserTranslationsRelation() {
-        const query = `CREATE TABLE user_translations (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES translations(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserTranslationsRelation() {
-        const query = `DROP TABLE IF EXISTS user_translations`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Comunicări în manifestări științifice */
-    static async createUserScientificCommunicationsRelation() {
-        const query = `CREATE TABLE user_scientific_communications (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES scientific_communications(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserScientificCommunicationsRelation() {
-        const query = `DROP TABLE IF EXISTS user_scientific_communications`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Brevete */
-    static async createUserPatentsRelation() {
-        const query = `CREATE TABLE user_research_contracts (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES research_contracts(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserPatentsRelation() {
-        const query = `DROP TABLE IF EXISTS user_patents`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Contracte de cercetare */
-    static async createUserResearchContractsRelation() {
-        const query = `CREATE TABLE user_patents (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES patents(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserResearchContractsRelation() {
-        const query = `DROP TABLE IF EXISTS user_research_contracts`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Citări */
-    static async createUserCitationsRelation() {
-        const query = `CREATE TABLE user_citations (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES citations(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserCitationsRelation() {
-        const query = `DROP TABLE IF EXISTS user_citations`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Premii si nominalizari */
-    static async createUserAwardsAndNominationsRelation() {
-        const query = `CREATE TABLE user_awards_and_nominations (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES awards_and_nominations(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserAwardsAndNominationsRelation() {
-        const query = `DROP TABLE IF EXISTS user_awards_and_nominations`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Membru în academii */
-    static async createUserAcademyMemberRelation() {
-        const query = `CREATE TABLE user_academy_member (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES academy_member(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserAcademyMemberRelation() {
-        const query = `DROP TABLE IF EXISTS user_academy_member`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Membru în echipa editorială */
-    static async createUserEditorialMemberRelation() {
-        const query = `CREATE TABLE user_editorial_member (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES editorial_member(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserEditorialMemberRelation() {
-        const query = `DROP TABLE IF EXISTS user_editorial_member`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Evenimente organizate */
-    static async createUserOrganizedEventsRelation() {
-        const query = `CREATE TABLE user_organized_events (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES organized_events(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserOrganizedEventsRelation() {
-        const query = `DROP TABLE IF EXISTS user_organized_events`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Fără activitate științifică */
-    static async createUserWithoutActivityRelation() {
-        const query = `CREATE TABLE user_without_activity (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES without_activity(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserWithoutActivityRelation() {
-        const query = `DROP TABLE IF EXISTS user_without_activity`;
-
-        await QueryDB(query, []);
-    }
-
-    /** Activitate didactică */
-    static async createUserDidacticActivityRelation() {
-        const query = `CREATE TABLE user_didactic_activity (
-            user_id INTEGER,
-            relation_id INTEGER,
-        
-            UNIQUE (user_id, relation_id),
-            CONSTRAINT link_u FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            CONSTRAINT link_t FOREIGN KEY (relation_id) REFERENCES didactic_activity(id) ON DELETE CASCADE
-        )`;
-
-        await QueryDB(query, []);
-    }
-
-    static async dropUserDidacticActivityRelation() {
-        const query = `DROP TABLE IF EXISTS user_didactic_activity`;
-
-        await QueryDB(query, []);
-    }
-
-}

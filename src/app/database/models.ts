@@ -3,19 +3,7 @@ export class ErrorResponse {
     constructor(public message: string) { }
 }
 
-/* Relation between the user and a generic form */
-export class UserRelation {
-    userId: number;
-    relationId: number;
-
-    constructor(props: any) {
-        this.userId = props.user_id;
-        this.relationId = props.relation_id;
-    }
-
-}
-
-/* User */
+/* ----==== User ====---- */
 export class User {
     id: number;
     identifier: string;
@@ -34,7 +22,7 @@ export class User {
     }
 }
 
-/* Forms */
+/* ----==== Forms ====---- */
 
 /* Informații */
 export class Information {
@@ -44,6 +32,7 @@ export class Information {
     thesisCoordinator: string;
     founding: string;
     completionDate: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -52,6 +41,7 @@ export class Information {
         this.thesisCoordinator = props.thesis_coordinator;
         this.founding = props.founding;
         this.completionDate = props.completion_date;
+        this.owner = props.owner;
     }
 }
 
@@ -70,6 +60,7 @@ export class ScientificArticleISI {
     doi: string;
     conferenceName: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -85,6 +76,7 @@ export class ScientificArticleISI {
         this.doi = props.doi;
         this.conferenceName = props.conference_name;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -102,6 +94,7 @@ export class ISIProceeding {
     startingPage: string;
     endingPage: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -116,6 +109,7 @@ export class ISIProceeding {
         this.startingPage = props.starting_page;
         this.endingPage = props.ending_page;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -137,6 +131,7 @@ export class ScientificArticleBDI {
     bdiDatabase: string;
     bdiDatabaseLink: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -155,6 +150,7 @@ export class ScientificArticleBDI {
         this.bdiDatabase = props.bdi_database;
         this.bdiDatabaseLink = props.bdi_database_link;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -171,6 +167,7 @@ export class ScientificBook {
     publicationType: string;
     isbn: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -184,6 +181,7 @@ export class ScientificBook {
         this.publicationType = props.publication_type;
         this.isbn = props.isbn;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -201,6 +199,7 @@ export class Translation {
     isbn: string;
     translationType: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -215,6 +214,7 @@ export class Translation {
         this.isbn = props.isbn;
         this.translationType = props.translation_type;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -228,6 +228,7 @@ export class ScientificCommunication {
     manifestationType: string;
     scientificManifestationLink: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -238,6 +239,7 @@ export class ScientificCommunication {
         this.manifestationType = props.manifestation_type;
         this.scientificManifestationLink = props.scientific_manifestation_link;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 
 }
@@ -253,6 +255,7 @@ export class Patent {
     authority: string;
     country: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -264,6 +267,7 @@ export class Patent {
         this.authority = props.authority;
         this.country = props.country;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -278,6 +282,7 @@ export class ResearchContract {
     endProjectPeriod: string;
     contractType: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -289,6 +294,7 @@ export class ResearchContract {
         this.endProjectPeriod = props.end_project_period;
         this.contractType = props.contract_type;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -310,6 +316,7 @@ export class Citation {
     cnatdcuClassification: string;
     citations: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -328,6 +335,7 @@ export class Citation {
         this.cnatdcuClassification = props.cnatdcu_classification;
         this.citations = props.citations;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -341,6 +349,7 @@ export class AwardAndNomination {
     country: string;
     awardedFor: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -351,6 +360,7 @@ export class AwardAndNomination {
         this.country = props.country;
         this.awardedFor = props.award_type;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -361,6 +371,7 @@ export class AcademyMember {
     academyName: string;
     memberType: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -368,6 +379,7 @@ export class AcademyMember {
         this.academyName = props.academy_name;
         this.memberType = props.member_type;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -381,6 +393,7 @@ export class EditorialMember {
     magazineType: string;
     nationalOrInternational: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -391,6 +404,7 @@ export class EditorialMember {
         this.magazineType = props.magazine_type;
         this.nationalOrInternational = props.national_or_international;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -406,6 +420,7 @@ export class OrganizedEvent {
     manifestationLink: string;
     contactPerson: string;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
@@ -418,6 +433,7 @@ export class OrganizedEvent {
         this.manifestationLink = props.manifestation_link;
         this.contactPerson = props.contact_person;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -425,10 +441,12 @@ export class OrganizedEvent {
 export class WithoutActivity {
     id: number;
     observations: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
         this.observations = props.observations;
+        this.owner = props.owner;
     }
 }
 
@@ -438,11 +456,13 @@ export class DidacticActivity {
     className: string;
     activityType: string;
     yearOfAttendingActivity: string;
+    owner: number;
 
     constructor(props: any) {
         this.id = props.id;
         this.className = props.class_name;
         this.activityType = props.activity_type;
         this.yearOfAttendingActivity = props.year_of_attending_activity;
+        this.owner = props.owner;
     }
 }

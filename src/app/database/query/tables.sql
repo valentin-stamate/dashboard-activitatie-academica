@@ -1,6 +1,5 @@
 /* ----==== DROP ====---- */
 
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS information;
 DROP TABLE IF EXISTS scientific_article_isi;
 DROP TABLE IF EXISTS isi_proceedings;
@@ -17,6 +16,7 @@ DROP TABLE IF EXISTS editorial_member;
 DROP TABLE IF EXISTS organized_events;
 DROP TABLE IF EXISTS without_activity;
 DROP TABLE IF EXISTS didactic_activity;
+DROP TABLE IF EXISTS users;
 
 /* ----==== CREATE ====---- */
 
@@ -42,7 +42,9 @@ CREATE TABLE information (
     thesis_coordinator VARCHAR(60) NOT NULL,
     founding VARCHAR(20) NOT NULL,
     completion_date VARCHAR(30) NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -62,7 +64,9 @@ CREATE TABLE scientific_article_isi (
     doi VARCHAR(128) NOT NULL,
     conference_name VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -81,7 +85,9 @@ CREATE TABLE isi_proceedings (
     starting_page VARCHAR(128) NOT NULL,
     ending_page VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -104,7 +110,9 @@ CREATE TABLE scientific_articles_bdi (
     bdi_database VARCHAR(128) NOT NULL,
     bdi_database_link VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -122,7 +130,9 @@ CREATE TABLE scientific_books (
     publication_type VARCHAR(128) NOT NULL,
     isbn VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -141,7 +151,9 @@ CREATE TABLE translations (
     isbn VARCHAR(128) NOT NULL,
     translation_type VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -156,7 +168,9 @@ CREATE TABLE scientific_communications (
     manifestation_type VARCHAR(128) NOT NULL,
     scientific_manifestation_link VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -172,7 +186,9 @@ CREATE TABLE patents (
     authority VARCHAR(128) NOT NULL,
     country VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -188,7 +204,9 @@ CREATE TABLE research_contracts (
     end_project_period VARCHAR(128) NOT NULL,
     contract_type VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -211,7 +229,9 @@ CREATE TABLE citations (
     cnatdcu_classification VARCHAR(128) NOT NULL,
     citations VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -226,7 +246,9 @@ CREATE TABLE awards_and_nominations (
     country VARCHAR(128) NOT NULL,
     awarded_for VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -238,7 +260,9 @@ CREATE TABLE academy_member (
     academy_name VARCHAR(128) NOT NULL,
     member_type VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -253,7 +277,9 @@ CREATE TABLE editorial_member (
     magazine_type VARCHAR(128) NOT NULL,
     national_or_international VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -270,7 +296,9 @@ CREATE TABLE organized_events (
     manifestation_link VARCHAR(128) NOT NULL,
     contact_person VARCHAR(128) NOT NULL,
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -279,7 +307,9 @@ CREATE TABLE without_activity (
     id SERIAL,
 
     observations TEXT NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
@@ -290,25 +320,8 @@ CREATE TABLE didactic_activity (
     class_name VARCHAR(128) NOT NULL,
     activity_type VARCHAR(128) NOT NULL,
     year_of_attending_activity VARCHAR(128) NOT NULL,
+    owner INTEGER NOT NULL UNIQUE,
 
+    CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
-
-/* ----==== INSERT ====---- */
-INSERT INTO users(identifier, email, password) VALUES ('', '', '');
-INSERT INTO information(full_name, marriage_name, thesis_coordinator, founding, completion_date) VALUES ('', '', '', '', '');
-INSERT INTO scientific_article_isi(article_title, authors, publication_date, volume, issue, starting_page, ending_page, impact_factor, cnatdcu_classification, doi, conference_name, observations) VALUES ('', '', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO isi_proceedings(article_title, authors, conference_name, indexed_volume_type, publication_year, article_type, conference_type, conference_link, starting_page, ending_page, observations) VALUES ('', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO scientific_articles_bdi(hierarchy_domains, article_title, authors, bdi_indexed_magazine, publication_year, volume, number, starting_page, ending_page, international_magazine, cnatdcu_classification, indexed_article_link, bdi_database, bdi_database_link, observations) VALUES ('', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO scientific_books(hierarchy_domains, chapter_title, authors, book_title, page_number, publication_year, publishing_house, publication_type, isbn, observations) VALUES ('', '', '', '', '', '', '', '', '', '');
-INSERT INTO translations(hierarchy_domains, translation_title, authors, translated_authors, publication_year, publishing_house, country, page_number, isbn, translation_type, observations) VALUES('', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO scientific_communications(authors, communication_type, presentation_year, scientific_manifestation_name, manifestation_type, scientific_manifestation_link, observations) VALUES ('', '', '', '', '', '', '');
-INSERT INTO patents(patent_title_or_cbi, authors, year_of_obtaining_patent, patent_number, patent_type, authority, country, observations) VALUES ('', '', '', '', '', '', '', '');
-INSERT INTO research_contracts(research_contract_name_or_project, project_code, financier, function, start_project_period, end_project_period, contract_type, observations) VALUES ('', '', '', '', '', '', '', '');
-INSERT INTO citations(article_title, authors, publication_title_where_referenced, authors_names_that_reference, citation_year, volume, impact_factor, issue, article_number, starting_page, ending_page, doi, cnatdcu_classification, citations, observations) VALUES ('', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
-INSERT INTO awards_and_nominations(year_of_award, award_name, award_type, organization_that_give_the_award, country, awarded_for, observations) VALUES ('', '', '', '', '', '', '');
-INSERT INTO academy_member(admission_year, academy_name, member_type, observations) VALUES ('', '', '', '');
-INSERT INTO editorial_member(committee_name, magazine_name, year_of_committee_attendance, quality, magazine_type, national_or_international, observations) VALUES ('', '', '', '', '', '', '');
-INSERT INTO organized_events(manifestation_name, start_date, end_date, manifestation_place, manifestation_type, manifestation_classification, manifestation_link, contact_person, observations) VALUES ('', '', '', '', '', '', '', '', '');
-INSERT INTO without_activity(observations) VALUES ('');
-INSERT INTO didactic_activity(class_name, activity_type, year_of_attending_activity) VALUES ('', '', '');
