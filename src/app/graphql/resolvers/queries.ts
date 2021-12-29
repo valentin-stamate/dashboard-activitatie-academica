@@ -25,7 +25,7 @@ export const queries = {
         // await DatabaseRepository.createDatabaseTables();
 
         // await TablesCrudRepository.addInformation(informationDemo);
-        await UserRepository.addUser(userDemo);
+        console.log(await UserRepository.addUser(userDemo));
 
         const user = await UserRepository.getUserByIdentifier('valentin');
 

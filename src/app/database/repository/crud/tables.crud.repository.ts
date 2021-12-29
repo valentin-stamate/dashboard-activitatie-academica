@@ -35,12 +35,13 @@ export abstract class TablesCrudRepository {
     static async addInformation(payload: Information) {
         const query = `INSERT INTO 
                        information(full_name, marriage_name, thesis_coordinator, founding, completion_date) 
-                       VALUES ($1, $2, $3, $4, $5)`;
+                       VALUES ($1, $2, $3, $4, $5) RETURNING *`;
 
         const params = [payload.fullName, payload.marriageName, payload.thesisCoordinator, payload.founding,
                         payload.completionDate];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Information - READ */
@@ -95,13 +96,14 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO scientific_article_isi
                        (article_title, authors, publication_date, volume, issue, starting_page, ending_page, 
                         impact_factor, cnatdcu_classification, doi, conference_name, observations) 
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`;
 
         const params = [payload.articleTitle, payload.authors, payload.publicationDate, payload.volume,
                         payload.issue, payload.startingPage, payload.endingPage, payload.impactFactor,
                         payload.cnatdcuClassification, payload.doi, payload.conferenceName, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Scientific Articles ISI - READ */
@@ -159,13 +161,14 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO isi_proceedings 
                        (article_title, authors, conference_name, indexed_volume_type, publication_year, 
                         article_type, conference_type, conference_link, starting_page, ending_page, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`;
 
         const params = [payload.articleTitle, payload.authors, payload.conferenceName, payload.indexedVolumeType,
                         payload.publicationYear, payload.articleType, payload.conferenceType, payload.conferenceLink,
                         payload.startingPage, payload.endingPage, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** ISI Proceedings - READ */
@@ -225,14 +228,15 @@ export abstract class TablesCrudRepository {
                        (hierarchy_domains, article_title, authors, bdi_indexed_magazine, publication_year, volume, 
                         number, starting_page, ending_page, international_magazine, cnatdcu_classification, 
                         indexed_article_link, bdi_database, bdi_database_link, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *`;
 
         const params = [payload.hierarchyDomains, payload.articleTitle, payload.authors, payload.bdiIndexedMagazine,
             payload.publicationYear, payload.volume, payload.number, payload.startingPage, payload.endingPage,
             payload.internationalMagazine, payload.cnatdcuClassification, payload.indexedArticleLink, payload.bdiDatabase,
             payload.bdiDatabaseLink, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Scientific Articles BDI - READ */
@@ -293,13 +297,14 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO scientific_books
                        (hierarchy_domains, chapter_title, authors, book_title, page_number, publication_year, 
                         publishing_house, publication_type, isbn, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
 
         const params = [payload.hierarchyDomains, payload.chapterTitle, payload.authors, payload.bookTitle,
                         payload.pageNumber, payload.publicationYear, payload.publishingHouse, payload.publicationType,
                         payload.isbn, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Scientific Books - READ */
@@ -357,13 +362,14 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO translations
                        (hierarchy_domains, translation_title, authors, translated_authors, publication_year, 
                         publishing_house, country, page_number, isbn, translation_type, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`;
 
         const params = [payload.hierarchyDomains, payload.translationTitle, payload.authors, payload.translatedAuthors,
                         payload.publicationYear, payload.publishingHouse, payload.country, payload.pageNumber, payload.isbn,
                         payload.translationType, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Translations - READ */
@@ -422,12 +428,13 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO scientific_communications
                        (authors, communication_type, presentation_year, scientific_manifestation_name, 
                         manifestation_type, scientific_manifestation_link, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
 
         const params = [payload.authors, payload.communicationType, payload.presentationYear, payload.scientificManifestationName,
                         payload.manifestationType, payload.scientificManifestationLink, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Scientific communications - READ */
@@ -484,12 +491,13 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO patents
                        (patent_title_or_cbi, authors, year_of_obtaining_patent, patent_number, patent_type, 
                         authority, country, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
 
         const params = [payload.patentTitleOrCBI, payload.authors, payload.yearOfObtainingPatent, payload.patentNumber,
                         payload.patentType, payload.authority, payload.country, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Patents - READ */
@@ -546,12 +554,13 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO research_contracts
                        (research_contract_name_or_project, project_code, financier, function, start_project_period, 
                         end_project_period, contract_type, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
 
         const params = [payload.researchContractNameOrProject, payload.projectCode, payload.financier, payload.function,
                         payload.startProjectPeriod, payload.endProjectPeriod, payload.contractType, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Research contracts - READ */
@@ -609,14 +618,15 @@ export abstract class TablesCrudRepository {
                        (article_title, authors, publication_title_where_referenced, authors_names_that_reference, 
                         citation_year, volume, impact_factor, issue, article_number, starting_page, ending_page, 
                         doi, cnatdcu_classification, citations, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *`;
 
         const params = [payload.articleTitle, payload.authors, payload.publicationTitleWhereReferenced,
                         payload.authorsNamesThatReference, payload.citationYear, payload.volume, payload.impactFactor,
                         payload.issue, payload.articleNumber, payload.startingPage, payload.endingPage, payload.doi,
                         payload.cnatdcuClassification, payload.citations, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Citations - READ */
@@ -676,12 +686,13 @@ export abstract class TablesCrudRepository {
     static async addAwardAndNomination(payload: AwardAndNomination) {
         const query = `INSERT INTO awards_and_nominations
                        (year_of_award, award_name, award_type, organization_that_give_the_award, country, awarded_for, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
 
         const params = [payload.yearOfAward, payload.awardName, payload.awardType, payload.organizationThatGiveTheAward,
                         payload.country, payload.awardedFor, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Awards and nominations - READ */
@@ -737,11 +748,12 @@ export abstract class TablesCrudRepository {
     static async addAcademyMember(payload: AcademyMember) {
         const query = `INSERT INTO academy_member
                        (admission_year, academy_name, member_type, observations)
-                       VALUES ($1, $2, $3, $4)`;
+                       VALUES ($1, $2, $3, $4) RETURNING *`;
 
         const params = [payload.admissionYear, payload.academyName, payload.memberType, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Academy member - READ */
@@ -796,12 +808,13 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO editorial_member
                        (committee_name, magazine_name, year_of_committee_attendance, quality, magazine_type, 
                         national_or_international, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
 
         const params = [payload.committeeName, payload.magazineName, payload.yearOfCommitteeAttendance, payload.quality,
                         payload.magazineType, payload.nationalOrInternational, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Editorial member - READ */
@@ -858,13 +871,14 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO organized_events
                        (manifestation_name, start_date, end_date, manifestation_place, manifestation_type, 
                         manifestation_classification, manifestation_link, contact_person, observations)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
 
         const params = [payload.manifestationName, payload.startDate, payload.endDate, payload.manifestationPlace,
                         payload.manifestationType, payload.manifestationClassification, payload.manifestationLink,
                         payload.contactPerson, payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Organized events - READ */
@@ -922,11 +936,12 @@ export abstract class TablesCrudRepository {
     static async addWithoutActivity(payload: WithoutActivity) {
         const query = `INSERT INTO without_activity
                        (observations)
-                       VALUES ($1)`;
+                       VALUES ($1) RETURNING *`;
 
         const params = [payload.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Without activity - READ */
@@ -980,11 +995,12 @@ export abstract class TablesCrudRepository {
     static async addDidacticActivity(payload: DidacticActivity) {
         const query = `INSERT INTO didactic_activity
                        (class_name, activity_type, year_of_attending_activity)
-                       VALUES ($1, $2, $3)`;
+                       VALUES ($1, $2, $3) RETURNING *`;
 
         const params = [payload.className, payload.activityType, payload.yearOfAttendingActivity];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Didactic activity - READ */

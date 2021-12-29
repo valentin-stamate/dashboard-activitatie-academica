@@ -46,4 +46,5 @@
 * Node Postgres Documentation : https://node-postgres.com/
 * Postgres Update : https://www.postgresqltutorial.com/postgresql-update/
 * Prevent SQL Injection : https://stackoverflow.com/a/58175002/10805602
+* Return Clause Postgres : https://stackoverflow.com/a/56384990/10805602
 

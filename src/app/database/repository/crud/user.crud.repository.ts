@@ -24,10 +24,11 @@ export abstract class UserCrudRepository {
     /** Users - CREATE |
      * Adds a new user to database. */
     static async addUser(payload: User) {
-        const query = `INSERT INTO users(identifier, email, password) VALUES ($1, $2, $3)`;
+        const query = `INSERT INTO users(identifier, email, password) VALUES ($1, $2, $3) RETURNING *`;
 
         const params = [payload.identifier, payload.email, payload.password];
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Users - READ |
