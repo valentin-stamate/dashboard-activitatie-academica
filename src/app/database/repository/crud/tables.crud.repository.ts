@@ -10,7 +10,9 @@ import {
 } from "../../models";
 import {QueryDB} from "../../connection";
 
-/** CRUD repository for all tables. */
+/** CRUD repository for all tables.
+ * Every method throws an exception if something is wrong.
+ * The exception is handled in the Service layer.*/
 export abstract class TablesCrudRepository {
 
     /* ----==== Informații ====---- */
@@ -38,28 +40,20 @@ export abstract class TablesCrudRepository {
         const params = [payload.fullName, payload.marriageName, payload.thesisCoordinator, payload.founding,
                         payload.completionDate];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Information - READ */
     static async getInformationById(id: number): Promise<Information | null> {
         const query = "SELECT * FROM information WHERE id = $1";
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new Information(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new Information(rows[0]);
         }
+
+        return null;
     }
 
     /** Information - UPDATE */
@@ -70,22 +64,14 @@ export abstract class TablesCrudRepository {
 
         const params = [payload.id, payload.fullName, payload.marriageName, payload.thesisCoordinator, payload.founding, payload.completionDate];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Information - DELETE */
     static async deleteInformation(payload: Information) {
         const query = `DELETE FROM information WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Articole ştiintifice publicate în extenso...(ISI) ====---- */
@@ -115,28 +101,20 @@ export abstract class TablesCrudRepository {
                         payload.issue, payload.startingPage, payload.endingPage, payload.impactFactor,
                         payload.cnatdcuClassification, payload.doi, payload.conferenceName, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Scientific Articles ISI - READ */
     static async getScientificArticleISI(id: number): Promise<ScientificArticleISI | null> {
         const query = "SELECT * FROM scientific_article_isi WHERE id = $1";
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new ScientificArticleISI(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new ScientificArticleISI(rows[0]);
         }
+
+        return null;
     }
 
     /** Scientific Articles ISI - UPDATE */
@@ -150,22 +128,14 @@ export abstract class TablesCrudRepository {
                         payload.issue, payload.startingPage, payload.endingPage, payload.impactFactor,
                         payload.cnatdcuClassification, payload.doi, payload.conferenceName, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Scientific Articles ISI - DELETE */
     static async deleteScientificArticleISI(payload: ScientificArticleISI) {
         const query = `DELETE FROM scientific_article_isi WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== ISI proceedings ====---- */
@@ -195,28 +165,20 @@ export abstract class TablesCrudRepository {
                         payload.publicationYear, payload.articleType, payload.conferenceType, payload.conferenceLink,
                         payload.startingPage, payload.endingPage, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** ISI Proceedings - READ */
     static async getISIProceeding(id: number): Promise<ISIProceeding | null> {
         const query = "SELECT * FROM isi_proceedings WHERE id = $1";
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new ISIProceeding(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new ISIProceeding(rows[0]);
         }
+
+        return null;
     }
 
     /** ISI Proceedings - UPDATE */
@@ -231,22 +193,14 @@ export abstract class TablesCrudRepository {
                         payload.publicationYear, payload.articleType, payload.conferenceType, payload.conferenceLink,
                         payload.startingPage, payload.endingPage, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** ISI Proceedings - DELETE */
     static async deleteISIProceeding(payload: ISIProceeding) {
         const query = `DELETE FROM isi_proceedings WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Articole științifice publicate în extenso... (BDI) ====---- */
@@ -278,28 +232,20 @@ export abstract class TablesCrudRepository {
             payload.internationalMagazine, payload.cnatdcuClassification, payload.indexedArticleLink, payload.bdiDatabase,
             payload.bdiDatabaseLink, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Scientific Articles BDI - READ */
     static async getScientificArticleBDI(id: number): Promise<ScientificArticleBDI | null> {
         const query = `SELECT * FROM scientific_articles_bdi WHERE id = $1`;
+        
+        const {rows} = await QueryDB(query, [id]);
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
-
-            if (rows.length === 1) {
-                return new ScientificArticleBDI(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new ScientificArticleBDI(rows[0]);
         }
+
+        return null;
     }
 
     /** Scientific Articles BDI - UPDATE */
@@ -316,22 +262,14 @@ export abstract class TablesCrudRepository {
                         payload.internationalMagazine, payload.cnatdcuClassification, payload.indexedArticleLink, payload.bdiDatabase,
                         payload.bdiDatabaseLink, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Scientific Articles BDI - DELETE */
     static async deleteScientificArticleBDI(payload: ScientificArticleBDI) {
         const query = `DELETE FROM scientific_articles_bdi WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Cărţi ştiinţifice sau capitole de cărți publicate în edituri ====---- */
@@ -361,28 +299,20 @@ export abstract class TablesCrudRepository {
                         payload.pageNumber, payload.publicationYear, payload.publishingHouse, payload.publicationType,
                         payload.isbn, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Scientific Books - READ */
     static async getScientificBook(id: number): Promise<ScientificBook | null> {
         const query = `SELECT * FROM scientific_books WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new ScientificBook(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new ScientificBook(rows[0]);
         }
+
+        return null;
     }
 
     /** Scientific Books - UPDATE */
@@ -396,22 +326,14 @@ export abstract class TablesCrudRepository {
             payload.pageNumber, payload.publicationYear, payload.publishingHouse, payload.publicationType,
             payload.isbn, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Scientific Books - DELETE */
     static async deleteScientificBook(payload: ScientificBook) {
         const query = `DELETE FROM scientific_books WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Traduceri ====---- */
@@ -441,28 +363,20 @@ export abstract class TablesCrudRepository {
                         payload.publicationYear, payload.publishingHouse, payload.country, payload.pageNumber, payload.isbn,
                         payload.translationType, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Translations - READ */
     static async getTranslation(id: number): Promise<Translation | null> {
         const query = `SELECT * FROM translations WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new Translation(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new Translation(rows[0]);
         }
+
+        return null;
     }
 
     /** Translations - UPDATE */
@@ -477,22 +391,14 @@ export abstract class TablesCrudRepository {
             payload.publicationYear, payload.publishingHouse, payload.country, payload.pageNumber, payload.isbn,
             payload.translationType, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Translations - DELETE */
     static async deleteTranslation(payload: Translation) {
         const query = `DELETE FROM translations WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Comunicări în manifestări științifice ====---- */
@@ -521,28 +427,20 @@ export abstract class TablesCrudRepository {
         const params = [payload.authors, payload.communicationType, payload.presentationYear, payload.scientificManifestationName,
                         payload.manifestationType, payload.scientificManifestationLink, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Scientific communications - READ */
     static async getScientificCommunication(id: number): Promise<ScientificCommunication | null> {
         const query = `SELECT * FROM scientific_communications WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new ScientificCommunication(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new ScientificCommunication(rows[0]);
         }
+
+        return null;
     }
 
     /** Scientific communications - UPDATE */
@@ -555,22 +453,14 @@ export abstract class TablesCrudRepository {
         const params = [payload.id, payload.authors, payload.communicationType, payload.presentationYear, payload.scientificManifestationName,
             payload.manifestationType, payload.scientificManifestationLink, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Scientific communications - DELETE */
     static async deleteScientificCommunication(payload: ScientificCommunication) {
         const query = `DELETE FROM scientific_communications WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Brevete ====---- */
@@ -599,28 +489,20 @@ export abstract class TablesCrudRepository {
         const params = [payload.patentTitleOrCBI, payload.authors, payload.yearOfObtainingPatent, payload.patentNumber,
                         payload.patentType, payload.authority, payload.country, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Patents - READ */
     static async getPatent(id: number): Promise<Patent | null> {
         const query = `SELECT * FROM patents WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new Patent(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new Patent(rows[0]);
         }
+
+        return null;
     }
 
     /** Patents - UPDATE */
@@ -633,22 +515,14 @@ export abstract class TablesCrudRepository {
         const params = [payload.id, payload.patentTitleOrCBI, payload.authors, payload.yearOfObtainingPatent, payload.patentNumber,
             payload.patentType, payload.authority, payload.country, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Patents - DELETE */
     static async deletePatent(payload: Patent) {
         const query = `DELETE FROM patents WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Contracte de cercetare ====---- */
@@ -677,28 +551,20 @@ export abstract class TablesCrudRepository {
         const params = [payload.researchContractNameOrProject, payload.projectCode, payload.financier, payload.function,
                         payload.startProjectPeriod, payload.endProjectPeriod, payload.contractType, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Research contracts - READ */
     static async getResearchContract(id: number): Promise<ResearchContract | null> {
         const query = `SELECT * FROM research_contracts WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new ResearchContract(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new ResearchContract(rows[0]);
         }
+
+        return null;
     }
 
     /** Research contracts - UPDATE */
@@ -711,22 +577,14 @@ export abstract class TablesCrudRepository {
         const params = [payload.id, payload.researchContractNameOrProject, payload.projectCode, payload.financier, payload.function,
             payload.startProjectPeriod, payload.endProjectPeriod, payload.contractType, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Research contracts - DELETE */
     static async deleteResearchContract(payload: ResearchContract) {
         const query = `DELETE FROM research_contracts WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Citări ====---- */
@@ -758,28 +616,20 @@ export abstract class TablesCrudRepository {
                         payload.issue, payload.articleNumber, payload.startingPage, payload.endingPage, payload.doi,
                         payload.cnatdcuClassification, payload.citations, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Citations - READ */
     static async getCitation(id: number): Promise<Citation | null> {
         const query = `SELECT * FROM citations WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new Citation(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new Citation(rows[0]);
         }
+
+        return null;
     }
 
     /** Citations - UPDATE */
@@ -796,22 +646,14 @@ export abstract class TablesCrudRepository {
             payload.issue, payload.articleNumber, payload.startingPage, payload.endingPage, payload.doi,
             payload.cnatdcuClassification, payload.citations, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Citations - DELETE */
     static async deleteCitation(payload: Citation) {
         const query = `DELETE FROM citations WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Premii si nominalizari ====---- */
@@ -839,28 +681,20 @@ export abstract class TablesCrudRepository {
         const params = [payload.yearOfAward, payload.awardName, payload.awardType, payload.organizationThatGiveTheAward,
                         payload.country, payload.awardedFor, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Awards and nominations - READ */
     static async getAwardAndNomination(id: number): Promise<AwardAndNomination | null> {
         const query = `SELECT * FROM awards_and_nominations WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new AwardAndNomination(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new AwardAndNomination(rows[0]);
         }
+
+        return null;
     }
 
     /** Awards and nominations - UPDATE */
@@ -873,22 +707,14 @@ export abstract class TablesCrudRepository {
         const params = [payload.id, payload.yearOfAward, payload.awardName, payload.awardType, payload.organizationThatGiveTheAward,
             payload.country, payload.awardedFor, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Awards and nominations - DELETE */
     static async deleteAwardAndNomination(payload: AwardAndNomination) {
         const query = `DELETE FROM awards_and_nominations WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Membru în academii ====---- */
@@ -915,28 +741,20 @@ export abstract class TablesCrudRepository {
 
         const params = [payload.admissionYear, payload.academyName, payload.memberType, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Academy member - READ */
     static async getAcademyMember(id: number): Promise<AcademyMember | null> {
         const query = `SELECT * FROM academy_member WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new AcademyMember(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new AcademyMember(rows[0]);
         }
+
+        return null;
     }
 
     /** Academy member - UPDATE */
@@ -947,22 +765,14 @@ export abstract class TablesCrudRepository {
 
         const params = [payload.id, payload.admissionYear, payload.academyName, payload.memberType, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Academy member - DELETE */
     static async deleteAcademyMember(payload: AcademyMember) {
         const query = `DELETE FROM academy_member WHERE id = $1`;
-
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Membru în echipa editorială ====---- */
@@ -991,28 +801,20 @@ export abstract class TablesCrudRepository {
         const params = [payload.committeeName, payload.magazineName, payload.yearOfCommitteeAttendance, payload.quality,
                         payload.magazineType, payload.nationalOrInternational, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Editorial member - READ */
     static async getEditorialMember(id: number): Promise<EditorialMember | null> {
         const query = `SELECT * FROM academy_member WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new EditorialMember(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new EditorialMember(rows[0]);
         }
+
+        return null;
     }
 
     /** Editorial member - UPDATE */
@@ -1025,22 +827,14 @@ export abstract class TablesCrudRepository {
         const params = [payload.id, payload.committeeName, payload.magazineName, payload.yearOfCommitteeAttendance,
                         payload.quality, payload.magazineType, payload.nationalOrInternational, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Editorial member - DELETE */
     static async deleteEditorialMember(payload: EditorialMember) {
         const query = `DELETE FROM editorial_member WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Evenimente organizate ====---- */
@@ -1070,28 +864,20 @@ export abstract class TablesCrudRepository {
                         payload.manifestationType, payload.manifestationClassification, payload.manifestationLink,
                         payload.contactPerson, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Organized events - READ */
     static async getOrganizedEvent(id: number): Promise<OrganizedEvent | null> {
         const query = `SELECT * FROM organized_events WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new OrganizedEvent(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new OrganizedEvent(rows[0]);
         }
+
+        return null;
     }
 
     /** Organized events - UPDATE */
@@ -1106,22 +892,14 @@ export abstract class TablesCrudRepository {
                         payload.manifestationPlace, payload.manifestationType, payload.manifestationClassification,
                         payload.manifestationLink, payload.contactPerson, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Organized events - DELETE */
     static async deleteOrganizedEvent(payload: OrganizedEvent) {
         const query = `DELETE FROM organized_events WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Fără activitate științifică ====---- */
@@ -1148,28 +926,20 @@ export abstract class TablesCrudRepository {
 
         const params = [payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Without activity - READ */
     static async getWithoutActivity(id: number): Promise<WithoutActivity | null> {
         const query = `SELECT * FROM without_activity WHERE id = $1`;
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new WithoutActivity(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new WithoutActivity(rows[0]);
         }
+
+        return null;
     }
 
     /** Without activity - UPDATE */
@@ -1180,22 +950,14 @@ export abstract class TablesCrudRepository {
 
         const params = [payload.id, payload.observations];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Without activity - DELETE */
     static async deleteWithoutActivity(payload: WithoutActivity) {
         const query = `DELETE FROM without_activity WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
     /* ----==== Activitate didactică ====---- */
@@ -1222,28 +984,20 @@ export abstract class TablesCrudRepository {
 
         const params = [payload.className, payload.activityType, payload.yearOfAttendingActivity];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Didactic activity - READ */
     static async getDidacticActivity(id: number): Promise<DidacticActivity | null> {
         const query = `SELECT * FROM didactic_activity WHERE id = $1`;
+        
+        const {rows} = await QueryDB(query, [id]);
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
-
-            if (rows.length === 1) {
-                return new DidacticActivity(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new DidacticActivity(rows[0]);
         }
+
+        return null;
     }
 
     /** Didactic activity - UPDATE */
@@ -1254,22 +1008,14 @@ export abstract class TablesCrudRepository {
 
         const params = [payload.id, payload.className, payload.activityType, payload.yearOfAttendingActivity];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Didactic activity - DELETE */
     static async deleteDidacticActivity(payload: DidacticActivity) {
         const query = `DELETE FROM didactic_activity WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 
 }

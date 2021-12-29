@@ -1,6 +1,9 @@
 import {User} from "../../models";
 import {QueryDB} from "../../connection";
 
+/** User CRUD repository.
+ * Every method throws an exception if something is wrong.
+ * The exception is handled in the Service layer. */
 export abstract class UserCrudRepository {
 
     /** Users - ALL |
@@ -24,12 +27,7 @@ export abstract class UserCrudRepository {
         const query = `INSERT INTO users(identifier, email, password) VALUES ($1, $2, $3)`;
 
         const params = [payload.identifier, payload.email, payload.password];
-
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Users - READ |
@@ -37,17 +35,13 @@ export abstract class UserCrudRepository {
     static async getUserById(id: number): Promise<User | null> {
         const query = "SELECT * FROM users WHERE id = $1";
 
-        try {
-            const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [id]);
 
-            if (rows.length === 1) {
-                return new User(rows[0]);
-            }
-
-            return null;
-        } catch (e) {
-            throw e;
+        if (rows.length === 1) {
+            return new User(rows[0]);
         }
+
+        return null;
     }
 
     /** Users - UPDATE |
@@ -57,11 +51,7 @@ export abstract class UserCrudRepository {
 
         const params = [payload.id, payload.identifier, payload.email, payload.password];
 
-        try {
-            await QueryDB(query, params);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, params);
     }
 
     /** Users - DELETE |
@@ -69,10 +59,6 @@ export abstract class UserCrudRepository {
     static async deleteUser(payload: User) {
         const query = `DELETE FROM users WHERE id = $1`;
 
-        try {
-            await QueryDB(query, [payload.id]);
-        } catch (e) {
-            throw e;
-        }
+        await QueryDB(query, [payload.id]);
     }
 }

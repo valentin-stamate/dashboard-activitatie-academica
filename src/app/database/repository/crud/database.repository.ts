@@ -1,6 +1,8 @@
 import {QueryDB} from "../../connection";
 
-/** Low level class that handles the creation of the tables. */
+/** Low level class that handles the creation of the tables.
+ * Every method throws an exception if something is wrong.
+ * The exception is handled in the Service layer.*/
 export abstract class DatabaseRepository {
 
     static async createDatabaseTables() {
