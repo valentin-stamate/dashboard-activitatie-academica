@@ -16,7 +16,7 @@ import {QueryDB} from "../connection";
 /** An extension to TablesCrudRepository.
  * Every method throws an exception if something is wrong.
  * The exception is handled in the Service layer.*/
-class TablesRepository extends TablesCrudRepository {
+export class TablesRepository extends TablesCrudRepository {
 
     /* Informații */
     static async removeInformationByOwner(user: User) {

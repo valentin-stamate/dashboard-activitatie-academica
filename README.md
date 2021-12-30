@@ -47,4 +47,6 @@
 * Postgres Update : https://www.postgresqltutorial.com/postgresql-update/
 * Prevent SQL Injection : https://stackoverflow.com/a/58175002/10805602
 * Return Clause Postgres : https://stackoverflow.com/a/56384990/10805602
-
+* Testing Tutorial(Mocha & Chai & Chai-Http) : https://youtu.be/I4BZQr-5mBY
+* Chai-Graphql : https://www.chaijs.com/plugins/chai-graphql/
+* Chai/Mocha with Typescript : https://dev.to/matteobruni/mocha-chai-with-typescript-37f

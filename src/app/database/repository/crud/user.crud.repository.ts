@@ -22,7 +22,7 @@ export abstract class UserCrudRepository {
     }
 
     /** Users - CREATE |
-     * Adds a new user to database. */
+     * Adds a new user.test.ts to database. */
     static async addUser(payload: User) {
         const query = `INSERT INTO users(identifier, email, password) VALUES ($1, $2, $3) RETURNING *`;
 
@@ -32,7 +32,7 @@ export abstract class UserCrudRepository {
     }
 
     /** Users - READ |
-     * @return a user instance or null if is not found */
+     * @return a user.test.ts instance or null if is not found */
     static async getUserById(id: number): Promise<User | null> {
         const query = "SELECT * FROM users WHERE id = $1";
 
@@ -46,7 +46,7 @@ export abstract class UserCrudRepository {
     }
 
     /** Users - UPDATE |
-     * Update the user information. */
+     * Update the user.test.ts information. */
     static async updateUser(payload: User) {
         const query = `UPDATE users SET identifier = $2, email = $3, password = $4 WHERE id = $1`;
 
@@ -56,7 +56,7 @@ export abstract class UserCrudRepository {
     }
 
     /** Users - DELETE |
-     * Deletes a user. */
+     * Deletes a user.test.ts. */
     static async deleteUser(payload: User) {
         const query = `DELETE FROM users WHERE id = $1`;
 

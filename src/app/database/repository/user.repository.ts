@@ -29,8 +29,8 @@ export class UserRepository extends UserCrudRepository {
         await QueryDB(query, [user.id, status]);
     }
 
-    /** Return a user with the given identifier
-     * @return a user instance if found, null otherwise */
+    /** Return a user.test.ts with the given identifier
+     * @return a user.test.ts instance if found, null otherwise */
     static async getUserByIdentifier(identifier: string): Promise<User | null> {
         const query = "SELECT * FROM users WHERE identifier = $1";
 
@@ -43,8 +43,8 @@ export class UserRepository extends UserCrudRepository {
         return null;
     }
 
-    /** Return a user that matches the mail given.
-     * @return a user instance if found, null otherwise */
+    /** Return a user.test.ts that matches the mail given.
+     * @return a user.test.ts instance if found, null otherwise */
     static async getUserByEmail(email: string): Promise<User | null> {
         const query = "SELECT * FROM users WHERE email = $1";
 

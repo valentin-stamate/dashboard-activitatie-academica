@@ -1,6 +1,7 @@
 import {Information, User} from "../../database/models";
 import {TablesCrudRepository} from "../../database/repository/crud/tables.crud.repository";
 import {UserRepository} from "../../database/repository/user.repository";
+import {TablesRepository} from "../../database/repository/tables.repository";
 
 const userDemo = new User({
     identifier: 'valengggtin',
@@ -24,19 +25,12 @@ export const queries = {
 
         // await TablesCrudRepository.addInformation(informationDemo);
         const uRows = await UserRepository.addUser(userDemo);
-        const iRows = await TablesCrudRepository.addInformation(informationDemo);
-
         const user = new User(uRows[0]);
-        const info = new Information(iRows[0]);
 
-        // await TablesCrudRelationsRepository.addUserInformation();
+        await TablesRepository.addInformation({...informationDemo, owner: user.id});
 
-        console.log(await UserRepository.getUserInformation(user));
+        console.log(await TablesRepository.getInformationByOwner(user));
 
-        // console.log(await UserRepository.allUsers());
-        // console.log(await UserRepository.addUser(demoUser));
-        // console.log(await UserRepository.activateUser(demoUser));
-        // console.log(await UserDataRepository.getUserInformation(demoUser));
 
         return 'Hello!';
     }
