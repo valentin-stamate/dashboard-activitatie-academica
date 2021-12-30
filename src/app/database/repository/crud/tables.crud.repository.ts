@@ -1,5 +1,5 @@
 import {
-    AcademyMember,
+    AcademyMember, Activation,
     AwardAndNomination,
     Citation, DidacticActivity, EditorialMember,
     Information,
@@ -14,6 +14,45 @@ import {QueryDB} from "../../connection";
  * Every method throws an exception if something is wrong.
  * The exception is handled in the Service layer.*/
 export abstract class TablesCrudRepository {
+    /* ----==== Activare ====---- */
+
+    /** Activation - CREATE */
+    static async addActivation(payload: Activation): Promise<Activation[]> {
+        const query = `INSERT INTO activation(user_id, activation_key) VALUES ($1, $2) RETURNING *`;
+        const params = [payload.userId, payload.activationKey];
+
+        const {rows} = await QueryDB(query, params);
+        const list: Activation[] = [];
+
+        for (const row of rows) {
+            list.push(new Activation(row));
+        }
+
+        return list;
+    }
+
+    /** Activation - READ */
+    static async getActivation(id: number): Promise<Activation[]> {
+        const query = `SELECT * FROM activation WHERE id = $1`;
+        const params = [id];
+
+        const {rows} = await QueryDB(query, params);
+        const list: Activation[] = [];
+
+        for (const row of rows) {
+            list.push(new Activation(row));
+        }
+
+        return list;
+    }
+
+    /** Activation - DELETE */
+    static async deleteActivation(payload: Activation) {
+        const query = `DELETE FROM activation WHERE id = $1`;
+        const params = [payload.id];
+
+        await QueryDB(query, params);
+    }
 
     /* ----==== Informații ====---- */
 
@@ -32,7 +71,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Information - CREATE */
-    static async addInformation(payload: Information) {
+    static async addInformation(payload: Information): Promise<Information[]> {
         const query = `INSERT INTO 
                        information(full_name, marriage_name, thesis_coordinator, founding, completion_date, owner) 
                        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
@@ -41,7 +80,13 @@ export abstract class TablesCrudRepository {
                         payload.completionDate, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: Information[] = [];
+
+        for (const row of rows) {
+            list.push(new Information(row));
+        }
+
+        return list;
     }
 
     /** Information - READ */
@@ -92,7 +137,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Articles ISI - CREATE */
-    static async addScientificArticleISI(payload: ScientificArticleISI) {
+    static async addScientificArticleISI(payload: ScientificArticleISI): Promise<ScientificArticleISI[]> {
         const query = `INSERT INTO scientific_article_isi
                        (article_title, authors, publication_date, volume, issue, starting_page, ending_page, 
                         impact_factor, cnatdcu_classification, doi, conference_name, observations, owner) 
@@ -104,7 +149,13 @@ export abstract class TablesCrudRepository {
                         payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ScientificArticleISI[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificArticleISI(row));
+        }
+
+        return list;
     }
 
     /** Scientific Articles ISI - READ */
@@ -158,7 +209,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** ISI Proceedings - CREATE */
-    static async addISIProceeding(payload: ISIProceeding) {
+    static async addISIProceeding(payload: ISIProceeding): Promise<ISIProceeding[]> {
         const query = `INSERT INTO isi_proceedings 
                        (article_title, authors, conference_name, indexed_volume_type, publication_year, 
                         article_type, conference_type, conference_link, starting_page, ending_page, observations, owner)
@@ -169,7 +220,13 @@ export abstract class TablesCrudRepository {
                         payload.startingPage, payload.endingPage, payload.observations, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ISIProceeding[] = [];
+
+        for (const row of rows) {
+            list.push(new ISIProceeding(row));
+        }
+
+        return list;
     }
 
     /** ISI Proceedings - READ */
@@ -224,7 +281,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Articles BDI - CREATE */
-    static async addScientificArticleBDI(payload: ScientificArticleBDI) {
+    static async addScientificArticleBDI(payload: ScientificArticleBDI): Promise<ScientificArticleBDI[]> {
         const query = `INSERT INTO scientific_articles_bdi
                        (hierarchy_domains, article_title, authors, bdi_indexed_magazine, publication_year, volume, 
                         number, starting_page, ending_page, international_magazine, cnatdcu_classification, 
@@ -237,7 +294,13 @@ export abstract class TablesCrudRepository {
             payload.bdiDatabaseLink, payload.observations, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ScientificArticleBDI[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificArticleBDI(row));
+        }
+
+        return list;
     }
 
     /** Scientific Articles BDI - READ */
@@ -294,7 +357,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Books - CREATE */
-    static async addScientificBook(payload: ScientificBook) {
+    static async addScientificBook(payload: ScientificBook): Promise<ScientificBook[]> {
         const query = `INSERT INTO scientific_books
                        (hierarchy_domains, chapter_title, authors, book_title, page_number, publication_year, 
                         publishing_house, publication_type, isbn, observations, owner)
@@ -305,7 +368,13 @@ export abstract class TablesCrudRepository {
                         payload.isbn, payload.observations, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ScientificBook[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificBook(row));
+        }
+
+        return list;
     }
 
     /** Scientific Books - READ */
@@ -359,7 +428,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Translations - CREATE */
-    static async addTranslation(payload: Translation) {
+    static async addTranslation(payload: Translation): Promise<Translation[]> {
         const query = `INSERT INTO translations
                        (hierarchy_domains, translation_title, authors, translated_authors, publication_year, 
                         publishing_house, country, page_number, isbn, translation_type, observations, owner)
@@ -370,7 +439,13 @@ export abstract class TablesCrudRepository {
                         payload.translationType, payload.observations, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: Translation[] = [];
+
+        for (const row of rows) {
+            list.push(new Translation(row));
+        }
+
+        return list;
     }
 
     /** Translations - READ */
@@ -425,7 +500,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific communications - CREATE */
-    static async addScientificCommunication(payload: ScientificCommunication) {
+    static async addScientificCommunication(payload: ScientificCommunication): Promise<ScientificCommunication[]> {
         const query = `INSERT INTO scientific_communications
                        (authors, communication_type, presentation_year, scientific_manifestation_name, 
                         manifestation_type, scientific_manifestation_link, observations, owner)
@@ -435,7 +510,13 @@ export abstract class TablesCrudRepository {
                         payload.manifestationType, payload.scientificManifestationLink, payload.observations, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ScientificCommunication[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificCommunication(row));
+        }
+
+        return list;
     }
 
     /** Scientific communications - READ */
@@ -488,7 +569,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Patents - CREATE */
-    static async addPatent(payload: Patent) {
+    static async addPatent(payload: Patent): Promise<Patent[]> {
         const query = `INSERT INTO patents
                        (patent_title_or_cbi, authors, year_of_obtaining_patent, patent_number, patent_type, 
                         authority, country, observations, owner)
@@ -498,7 +579,13 @@ export abstract class TablesCrudRepository {
                         payload.patentType, payload.authority, payload.country, payload.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: Patent[] = [];
+
+        for (const row of rows) {
+            list.push(new Patent(row));
+        }
+
+        return list;
     }
 
     /** Patents - READ */
@@ -551,7 +638,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Research contracts - CREATE */
-    static async addResearchContract(payload: ResearchContract) {
+    static async addResearchContract(payload: ResearchContract): Promise<ResearchContract[]> {
         const query = `INSERT INTO research_contracts
                        (research_contract_name_or_project, project_code, financier, function, start_project_period, 
                         end_project_period, contract_type, observations, owner)
@@ -562,7 +649,13 @@ export abstract class TablesCrudRepository {
                         payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ResearchContract[] = [];
+
+        for (const row of rows) {
+            list.push(new ResearchContract(row));
+        }
+
+        return list;
     }
 
     /** Research contracts - READ */
@@ -615,7 +708,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Citations - CREATE */
-    static async addCitation(payload: Citation) {
+    static async addCitation(payload: Citation): Promise<Citation[]> {
         const query = `INSERT INTO citations
                        (article_title, authors, publication_title_where_referenced, authors_names_that_reference, 
                         citation_year, volume, impact_factor, issue, article_number, starting_page, ending_page, 
@@ -628,7 +721,13 @@ export abstract class TablesCrudRepository {
                         payload.cnatdcuClassification, payload.citations, payload.observations, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: Citation[] = [];
+
+        for (const row of rows) {
+            list.push(new Citation(row));
+        }
+
+        return list;
     }
 
     /** Citations - READ */
@@ -685,7 +784,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Awards and nominations - CREATE */
-    static async addAwardAndNomination(payload: AwardAndNomination) {
+    static async addAwardAndNomination(payload: AwardAndNomination): Promise<AwardAndNomination[]> {
         const query = `INSERT INTO awards_and_nominations
                        (year_of_award, award_name, award_type, organization_that_give_the_award, country, 
                         awarded_for, observations, owner)
@@ -695,7 +794,13 @@ export abstract class TablesCrudRepository {
                         payload.country, payload.awardedFor, payload.observations, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: AwardAndNomination[] = [];
+
+        for (const row of rows) {
+            list.push(new AwardAndNomination(row));
+        }
+
+        return list;
     }
 
     /** Awards and nominations - READ */
@@ -748,7 +853,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Academy member - CREATE */
-    static async addAcademyMember(payload: AcademyMember) {
+    static async addAcademyMember(payload: AcademyMember): Promise<AcademyMember[]> {
         const query = `INSERT INTO academy_member
                        (admission_year, academy_name, member_type, observations, owner)
                        VALUES ($1, $2, $3, $4, $5) RETURNING *`;
@@ -756,7 +861,13 @@ export abstract class TablesCrudRepository {
         const params = [payload.admissionYear, payload.academyName, payload.memberType, payload.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: AcademyMember[] = [];
+
+        for (const row of rows) {
+            list.push(new AcademyMember(row));
+        }
+
+        return list;
     }
 
     /** Academy member - READ */
@@ -807,7 +918,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Editorial member - CREATE */
-    static async addEditorialMembers(payload: EditorialMember) {
+    static async addEditorialMembers(payload: EditorialMember): Promise<EditorialMember[]> {
         const query = `INSERT INTO editorial_member
                        (committee_name, magazine_name, year_of_committee_attendance, quality, magazine_type, 
                         national_or_international, observations, owner)
@@ -817,7 +928,13 @@ export abstract class TablesCrudRepository {
                         payload.magazineType, payload.nationalOrInternational, payload.observations, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: EditorialMember[] = [];
+
+        for (const row of rows) {
+            list.push(new EditorialMember(row));
+        }
+
+        return list;
     }
 
     /** Editorial member - READ */
@@ -870,7 +987,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Organized events - CREATE */
-    static async addOrganizedEvent(payload: OrganizedEvent) {
+    static async addOrganizedEvent(payload: OrganizedEvent): Promise<OrganizedEvent[]> {
         const query = `INSERT INTO organized_events
                        (manifestation_name, start_date, end_date, manifestation_place, manifestation_type, 
                         manifestation_classification, manifestation_link, contact_person, observations, owner)
@@ -881,7 +998,13 @@ export abstract class TablesCrudRepository {
                         payload.contactPerson, payload.observations, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: OrganizedEvent[] = [];
+
+        for (const row of rows) {
+            list.push(new OrganizedEvent(row));
+        }
+
+        return list;
     }
 
     /** Organized events - READ */
@@ -936,7 +1059,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Without activity - CREATE */
-    static async addWithoutActivity(payload: WithoutActivity) {
+    static async addWithoutActivity(payload: WithoutActivity): Promise<WithoutActivity[]> {
         const query = `INSERT INTO without_activity
                        (observations, owner)
                        VALUES ($1, $2) RETURNING *`;
@@ -944,7 +1067,13 @@ export abstract class TablesCrudRepository {
         const params = [payload.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: WithoutActivity[] = [];
+
+        for (const row of rows) {
+            list.push(new WithoutActivity(row));
+        }
+
+        return list;
     }
 
     /** Without activity - READ */
@@ -995,7 +1124,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Didactic activity - CREATE */
-    static async addDidacticActivity(payload: DidacticActivity) {
+    static async addDidacticActivity(payload: DidacticActivity): Promise<DidacticActivity[]> {
         const query = `INSERT INTO didactic_activity
                        (class_name, activity_type, year_of_attending_activity, owner)
                        VALUES ($1, $2, $3, $4) RETURNING *`;
@@ -1003,7 +1132,13 @@ export abstract class TablesCrudRepository {
         const params = [payload.className, payload.activityType, payload.yearOfAttendingActivity, payload.owner];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: DidacticActivity[] = [];
+
+        for (const row of rows) {
+            list.push(new DidacticActivity(row));
+        }
+
+        return list;
     }
 
     /** Didactic activity - READ */

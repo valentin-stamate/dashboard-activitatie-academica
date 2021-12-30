@@ -8,7 +8,6 @@ export class User {
     id: number;
     identifier: string;
     email: string;
-    password: string;
     admin: boolean;
     activated: boolean;
 
@@ -16,9 +15,20 @@ export class User {
         this.id = props.id;
         this.identifier = props.identifier;
         this.email = props.email;
-        this.password = props.password;
         this.admin = props.admin;
         this.activated = props.activated;
+    }
+}
+
+export class Activation {
+    id: number;
+    userId: number;
+    activationKey: string;
+
+    constructor(props: any) {
+        this.id = props.id;
+        this.userId = props.user_id;
+        this.activationKey = props.activation_key;
     }
 }
 
@@ -45,7 +55,7 @@ export class Information {
     }
 }
 
-/* Articole ştiintifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
+/* Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
 export class ScientificArticleISI {
     id: number;
     articleTitle: string;
@@ -154,7 +164,7 @@ export class ScientificArticleBDI {
     }
 }
 
-/* Cărţi ştiinţifice sau capitole de cărți publicate în edituri */
+/* Cărți ştiinţifice sau capitole de cărți publicate în edituri */
 export class ScientificBook {
     id: number;
     hierarchyDomains: string;
@@ -339,7 +349,7 @@ export class Citation {
     }
 }
 
-/* Premii si nominalizari */
+/* Premii si nominalizări */
 export class AwardAndNomination {
     id: number;
     yearOfAward: string;

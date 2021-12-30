@@ -1,9 +1,11 @@
-
 /** This interface contains only user specific operations.
  * The form association is defined in another interface. */
+import {User} from "../../database/models";
+import {ServiceResponse} from "../service.response";
+
 export interface UserServiceInterface {
     /** Adds a user to database. */
-    addUser(): void;
+    addUser(user: User): Promise<ServiceResponse>;
 
     /** Change user information. */
     editUser(): void;
@@ -12,10 +14,10 @@ export interface UserServiceInterface {
     sendActivationEmail(): void;
 
     /** Sends an email with the login key. This key will replace the password. */
-    loginUser(): void;
+    loginUser(user: User): Promise<ServiceResponse>;
 
     /** Marks a user as activated. */
-    activateUser(): void;
+    activateUser(activationKey: string): Promise<ServiceResponse>;
 
     /** Deactivates the user. It can be reactivated after. */
     deactivateUser(): void;

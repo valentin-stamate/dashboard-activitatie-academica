@@ -1,5 +1,21 @@
+# ----------========== Type ==========---------- #
+
 type GqlResponse {
     message: String
 }
 
+type User {
+    id: Int
+    identifier: String!
+    email: String!
+    admin: Boolean!
+    activated: Boolean!
+}
+
+# ----------========== Input Types ==========---------- #
+
+input NewUser {
+    identifier: String!
+    email: String!
+}
 

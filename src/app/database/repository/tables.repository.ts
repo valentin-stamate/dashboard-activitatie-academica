@@ -1,6 +1,6 @@
 import {TablesCrudRepository} from "./crud/tables.crud.repository";
 import {
-    AcademyMember,
+    AcademyMember, Activation,
     AwardAndNomination,
     Citation, DidacticActivity, EditorialMember,
     Information,
@@ -19,7 +19,7 @@ import {QueryDB} from "../connection";
 export class TablesRepository extends TablesCrudRepository {
 
     /* Informații */
-    static async removeInformationByOwner(user: User) {
+    static async deleteInformationByOwner(user: User) {
       const query = `DELETE FROM information WHERE owner = $1`;
 
       await QueryDB(query, [user.id]);
@@ -39,8 +39,45 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
+    /* Activare */
+    static async deleteActivationByUserId(userId: number) {
+        const query = `DELETE FROM activation WHERE user_id = $1`;
+        const params = [userId];
+
+        await QueryDB(query, params);
+    }
+
+    static async getActivationByUserId(userId: number): Promise<Activation[]> {
+        const query = `SELECT * FROM activation WHERE user_id = $1`;
+        const params = [userId];
+
+        const {rows} = await QueryDB(query, params);
+        const list: Activation[] = [];
+
+        for (const row of rows) {
+            list.push(new Activation(row));
+        }
+
+        return list;
+    }
+
+    static async getActivationByKey(key: string): Promise<Activation[]> {
+        const query = `SELECT * FROM activation WHERE activation_key = $1`;
+        const params = [key];
+
+        const {rows} = await QueryDB(query, params);
+        const list: Activation[] = [];
+
+        for (const row of rows) {
+            list.push(new Activation(row));
+        }
+
+        return list;
+    }
+
+
     /* Articole științifice publicate în extenso...(ISI) */
-    static async removeScientificArticleByOwner(user: User) {
+    static async deleteScientificArticleByOwner(user: User) {
         const query = `DELETE FROM scientific_article_isi WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -61,7 +98,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* ISI proceedings */
-    static async removeISIProceedingsByOwner(user: User) {
+    static async deleteISIProceedingsByOwner(user: User) {
         const query = `DELETE FROM isi_proceedings WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -82,7 +119,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Articole științifice publicate în extenso... (BDI) */
-    static async removeScientificArticleBDIByOwner(user: User) {
+    static async deleteScientificArticleBDIByOwner(user: User) {
         const query = `DELETE FROM scientific_articles_bdi WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -103,7 +140,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Cărți ştiinţifice sau capitole de cărți publicate în edituri */
-    static async removeScientificBookByOwner(user: User) {
+    static async deleteScientificBookByOwner(user: User) {
         const query = `DELETE FROM scientific_books WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -124,7 +161,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Traduceri */
-    static async removeTranslationsByOwner(user: User) {
+    static async deleteTranslationsByOwner(user: User) {
         const query = `DELETE FROM translations WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -145,7 +182,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Comunicări în manifestări științifice */
-    static async removeScientificCommunicationByOwner(user: User) {
+    static async deleteScientificCommunicationByOwner(user: User) {
         const query = `DELETE FROM scientific_communications WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -166,7 +203,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Brevete */
-    static async removePatenByOwner(user: User) {
+    static async deletePatenByOwner(user: User) {
         const query = `DELETE FROM patents WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -187,7 +224,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Contracte de cercetare */
-    static async removeResearchContractByOwner(user: User) {
+    static async deleteResearchContractByOwner(user: User) {
         const query = `DELETE FROM research_contracts WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -208,7 +245,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Citări */
-    static async removeCitationByOwner(user: User) {
+    static async deleteCitationByOwner(user: User) {
         const query = `DELETE FROM citations WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -229,7 +266,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Premii si nominalizări */
-    static async removeAwardAndNominationByOwner(user: User) {
+    static async deleteAwardAndNominationByOwner(user: User) {
         const query = `DELETE FROM awards_and_nominations WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -250,7 +287,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Membru în academii */
-    static async removeAcademyMemberByOwner(user: User) {
+    static async deleteAcademyMemberByOwner(user: User) {
         const query = `DELETE FROM academy_member WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -271,7 +308,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Membru în echipa editorială */
-    static async removeEditorialMemberByOwner(user: User) {
+    static async deleteEditorialMemberByOwner(user: User) {
         const query = `DELETE FROM editorial_member WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -292,7 +329,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Evenimente organizate */
-    static async removeOrganizedEventByOwner(user: User) {
+    static async deleteOrganizedEventByOwner(user: User) {
         const query = `DELETE FROM organized_events WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -313,7 +350,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Fără activitate științifică */
-    static async removeWithoutActivityByOwner(user: User) {
+    static async deleteWithoutActivityByOwner(user: User) {
         const query = `DELETE FROM without_activity WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);
@@ -334,7 +371,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Activitate didactică */
-    static async removeDidacticActivityByOwner(user: User) {
+    static async deleteDidacticActivityByOwner(user: User) {
         const query = `DELETE FROM didactic_activity WHERE owner = $1`;
 
         await QueryDB(query, [user.id]);

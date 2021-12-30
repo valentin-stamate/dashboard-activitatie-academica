@@ -8,6 +8,7 @@ export abstract class DatabaseRepository {
     static async createDatabaseTables() {
         /* Tables */
         await DatabaseTables.createUserTable();
+        await DatabaseTables.createActivationTable();
         await DatabaseTables.createInformationTable();
         await DatabaseTables.createScientificArticlesISITable();
         await DatabaseTables.createISIProceedingsTable();
@@ -28,7 +29,6 @@ export abstract class DatabaseRepository {
 
     static async deleteDatabaseTables() {
         /* Tables */
-        await DatabaseTables.dropUserTable();
         await DatabaseTables.dropInformationTable();
         await DatabaseTables.dropScientificArticlesISITable();
         await DatabaseTables.dropISIProceedingsTable();
@@ -45,6 +45,8 @@ export abstract class DatabaseRepository {
         await DatabaseTables.dropOrganizedEventsTable();
         await DatabaseTables.dropWithoutActivityTable();
         await DatabaseTables.dropDidacticActivityTable();
+        await DatabaseTables.dropActivationTable();
+        await DatabaseTables.dropUserTable();
     }
 
 }
@@ -58,7 +60,6 @@ abstract class DatabaseTables {
             
             identifier VARCHAR(30) UNIQUE NOT NULL,
             email VARCHAR(50) UNIQUE NOT NULL,
-            password VARCHAR(30) NOT NULL,
             admin BOOLEAN DEFAULT FALSE NOT NULL,
             activated BOOLEAN DEFAULT FALSE NOT NULL,
             
@@ -70,6 +71,26 @@ abstract class DatabaseTables {
 
     static async dropUserTable() {
         const query = `DROP TABLE IF EXISTS users`;
+
+        await QueryDB(query, []);
+    }
+
+    /* Activare */
+    static async createActivationTable() {
+        const query = `CREATE TABLE activation (
+            id SERIAL ,
+        
+            user_id INTEGER UNIQUE NOT NULL ,
+            activation_key VARCHAR(64) NOT NULL ,
+        
+            CONSTRAINT user_ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ,
+            PRIMARY KEY (id))`;
+
+        await QueryDB(query, []);
+    }
+
+    static async dropActivationTable() {
+        const query = `DROP TABLE IF EXISTS activation`;
 
         await QueryDB(query, []);
     }

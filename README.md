@@ -4,6 +4,7 @@
 * GraphQl with Express : https://graphql.org/graphql-js/running-an-express-graphql-server
 * Generate PDF : https://stackoverflow.com/questions/8085520/generating-pdf-latex-with-python-script
 * Nodemailer : https://nodemailer.com/about/
+* Nodemailer Typescript : https://www.npmjs.com/package/@types/nodemailer
 * Console Color : https://stackoverflow.com/a/13336745/10805602
 * Run Terminal Command in NodeJs : https://stackabuse.com/executing-shell-commands-with-node-js/
 * ReplaceAll NodeJs : https://stackoverflow.com/a/68982424/10805602
@@ -50,3 +51,14 @@
 * Testing Tutorial(Mocha & Chai & Chai-Http) : https://youtu.be/I4BZQr-5mBY
 * Chai-Graphql : https://www.chaijs.com/plugins/chai-graphql/
 * Chai/Mocha with Typescript : https://dev.to/matteobruni/mocha-chai-with-typescript-37f
+* Type cannot be used as Input : https://stackoverflow.com/a/45806494/10805602
+* Writing error responses GraphQL : https://blog.logrocket.com/handling-graphql-errors-like-a-champ-with-unions-and-interfaces/
+* Why .env : https://stackoverflow.com/a/63319892/10805602
+* Node-Mailer Message Configuration : https://nodemailer.com/message/
+* Generate Random String : https://stackoverflow.com/a/1349426/10805602
+* String Format : https://stackoverflow.com/a/69718380/10805602
+* NodeJs Restful API : https://www.tutorialspoint.com/nodejs/nodejs_restful_api.htm
+* Query Parameters Endpoint : https://stackoverflow.com/a/67937272/10805602
+* JWT : https://jwt.io/
+* JWT With ExpressJs : https://www.digitalocean.com/community/tutorials/nodejs-jwt-expressjs
+

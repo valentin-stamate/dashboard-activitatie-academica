@@ -5,6 +5,7 @@ import cors from 'cors';
 import config from '../config.json';
 import {graphqlHTTP} from 'express-graphql';
 import {resolvers, schema} from "./app/graphql/export";
+import {UserService} from "./app/service/user.service";
 
 const app: Express = express();
 
@@ -31,13 +32,26 @@ if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
  *                               Register all routes
  ***********************************************************************************/
 
-/** Download */
-
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: resolvers,
   graphiql: true,
 }));
+
+/** User activation by email */
+app.get('/activate', async (req, res) => {
+  const key = req.query.key as string;
+
+  if (!key) {
+    res.end(JSON.stringify({message: 'Key not provided'}));
+    return;
+  }
+
+  const userService = new UserService();
+  const serviceResponse = await userService.activateUser(key);
+
+  res.end(JSON.stringify({message:serviceResponse.message}));
+});
 
 /************************************************************************************
  *                               Express Error Handling
