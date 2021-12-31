@@ -1,7 +1,7 @@
-import {User} from "../../database/models";
-import {UserService} from "../../service/user.service";
+import {User} from "../../../database/models";
+import {UserService} from "../../../service/user.service";
 
-export const Mutation = {
+export const MutationUnknown = {
     signUpUser: async ({user}: {user: User}) => {
         const service = new UserService();
 

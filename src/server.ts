@@ -4,10 +4,18 @@ import helmet from 'helmet';
 import cors from 'cors';
 import config from '../config.json';
 import {graphqlHTTP} from 'express-graphql';
-import {resolvers, schema} from "./app/graphql/export";
+import {
+  resolversUnknown,
+  resolversAdmin,
+  schemaUnknown,
+  schemaAdmin,
+  schemaUser,
+  resolversUser
+} from "./app/graphql/export";
 import {UserService} from "./app/service/user.service";
 import {Responses} from "./app/service/service.response";
 import {FormService} from "./app/service/form.service";
+import {adminUserRequestMiddleware, unknownUserRequestMiddleware, userRequestMiddleware} from "./middlewares";
 
 const app: Express = express();
 
@@ -34,9 +42,21 @@ if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
  *                               Register all routes
  ***********************************************************************************/
 
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  rootValue: resolvers,
+app.use('/unknown/graphql', unknownUserRequestMiddleware, graphqlHTTP({
+  schema: schemaUnknown,
+  rootValue: resolversUnknown,
+  graphiql: true,
+}));
+
+app.use('/user/graphql', userRequestMiddleware, graphqlHTTP({
+  schema: schemaUser,
+  rootValue: resolversUser,
+  graphiql: true,
+}));
+
+app.use('/admin/graphql', adminUserRequestMiddleware, graphqlHTTP({
+  schema: schemaAdmin,
+  rootValue: resolversAdmin,
   graphiql: true,
 }));
 

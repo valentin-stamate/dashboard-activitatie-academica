@@ -58,9 +58,11 @@
 * Generate Random String : https://stackoverflow.com/a/1349426/10805602
 * String Format : https://stackoverflow.com/a/69718380/10805602
 * NodeJs Restful API : https://www.tutorialspoint.com/nodejs/nodejs_restful_api.htm
-* Query Parameters Endpoint : https://stackoverflow.com/a/67937272/10805602
+* QueryUnknown Parameters Endpoint : https://stackoverflow.com/a/67937272/10805602
 * JWT : https://jwt.io/
 * JWT With ExpressJs : https://www.digitalocean.com/community/tutorials/nodejs-jwt-expressjs
 * JWY Verify Token : https://medium.com/swlh/using-the-jsonwebtoken-node-package-to-verify-json-web-tokens-497ecdaba830
 * JWY Synchronous Verify Token : https://stackoverflow.com/a/54419385/10805602
+* Express Authentication Middlewares : https://graphql.org/graphql-js/authentication-and-express-middleware/
+* Express Middlewares (Also Useful For Limiting Requests) : https://blog.logrocket.com/express-middleware-a-complete-guide/
 
