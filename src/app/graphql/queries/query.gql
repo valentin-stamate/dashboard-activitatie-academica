@@ -1,6 +1,5 @@
 type Query {
     hello: String
-    user(id: Int): User
 }
 
 

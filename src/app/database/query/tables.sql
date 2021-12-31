@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS editorial_member;
 DROP TABLE IF EXISTS organized_events;
 DROP TABLE IF EXISTS without_activity;
 DROP TABLE IF EXISTS didactic_activity;
+DROP TABLE IF EXISTS authentication;
 DROP TABLE IF EXISTS activation;
 DROP TABLE IF EXISTS users;
 
@@ -39,6 +40,17 @@ CREATE TABLE activation (
 
     user_id INTEGER UNIQUE NOT NULL ,
     activation_key VARCHAR(64) NOT NULL ,
+
+    CONSTRAINT user_ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ,
+    PRIMARY KEY (id)
+);
+
+/* Auth */
+CREATE TABLE authentication (
+    id SERIAL ,
+
+    user_id INTEGER UNIQUE NOT NULL ,
+    auth_key VARCHAR(64) NOT NULL ,
 
     CONSTRAINT user_ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ,
     PRIMARY KEY (id)

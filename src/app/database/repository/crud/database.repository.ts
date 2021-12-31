@@ -9,6 +9,7 @@ export abstract class DatabaseRepository {
         /* Tables */
         await DatabaseTables.createUserTable();
         await DatabaseTables.createActivationTable();
+        await DatabaseTables.createAuthenticationTable();
         await DatabaseTables.createInformationTable();
         await DatabaseTables.createScientificArticlesISITable();
         await DatabaseTables.createISIProceedingsTable();
@@ -45,6 +46,7 @@ export abstract class DatabaseRepository {
         await DatabaseTables.dropOrganizedEventsTable();
         await DatabaseTables.dropWithoutActivityTable();
         await DatabaseTables.dropDidacticActivityTable();
+        await DatabaseTables.dropAuthenticationTable();
         await DatabaseTables.dropActivationTable();
         await DatabaseTables.dropUserTable();
     }
@@ -91,8 +93,26 @@ abstract class DatabaseTables {
 
     static async dropActivationTable() {
         const query = `DROP TABLE IF EXISTS activation`;
+        await QueryDB(query, []);
+    }
+
+    /* Auth */
+    static async createAuthenticationTable() {
+        const query = `CREATE TABLE authentication (
+            id SERIAL ,
+        
+            user_id INTEGER UNIQUE NOT NULL ,
+            auth_key VARCHAR(64) NOT NULL ,
+        
+            CONSTRAINT user_ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ,
+            PRIMARY KEY (id))`;
 
         await QueryDB(query, []);
+    }
+
+    static async dropAuthenticationTable() {
+            const query = `DROP TABLE IF EXISTS authentication`;
+            await QueryDB(query, []);
     }
 
     /** Informații */
@@ -114,7 +134,6 @@ abstract class DatabaseTables {
 
     static async dropInformationTable() {
         const query = `DROP TABLE IF EXISTS information`;
-
         await QueryDB(query, []);
     }
 
@@ -144,7 +163,6 @@ abstract class DatabaseTables {
 
     static async dropScientificArticlesISITable() {
         const query = `DROP TABLE IF EXISTS scientific_article_isi`;
-
         await QueryDB(query, []);
     }
 
@@ -173,7 +191,6 @@ abstract class DatabaseTables {
 
     static async dropISIProceedingsTable() {
         const query = `DROP TABLE IF EXISTS isi_proceedings`;
-
         await QueryDB(query, []);
     }
 
@@ -206,7 +223,6 @@ abstract class DatabaseTables {
 
     static async dropScientificArticlesBDITable() {
         const query = `DROP TABLE IF EXISTS scientific_articles_bdi`;
-
         await QueryDB(query, []);
     }
 
@@ -234,7 +250,6 @@ abstract class DatabaseTables {
 
     static async dropScientificBooksTable() {
         const query = `DROP TABLE IF EXISTS scientific_books`;
-
         await QueryDB(query, []);
     }
 
@@ -263,7 +278,6 @@ abstract class DatabaseTables {
 
     static async dropTranslationsTable() {
         const query = `DROP TABLE IF EXISTS translations`;
-
         await QueryDB(query, []);
     }
 
@@ -288,7 +302,6 @@ abstract class DatabaseTables {
 
     static async dropScientificCommunicationsTable() {
         const query = `DROP TABLE IF EXISTS scientific_communications`;
-
         await QueryDB(query, []);
     }
 
@@ -314,7 +327,6 @@ abstract class DatabaseTables {
 
     static async dropPatentsTable() {
         const query = `DROP TABLE IF EXISTS patents`;
-
         await QueryDB(query, []);
     }
 
@@ -340,7 +352,6 @@ abstract class DatabaseTables {
 
     static async dropResearchContractsTable() {
         const query = `DROP TABLE IF EXISTS research_contracts`;
-
         await QueryDB(query, []);
     }
 
@@ -373,7 +384,6 @@ abstract class DatabaseTables {
 
     static async dropCitationsTable() {
         const query = `DROP TABLE IF EXISTS citations`;
-
         await QueryDB(query, []);
     }
 
@@ -398,7 +408,6 @@ abstract class DatabaseTables {
 
     static async dropAwardsAndNominationsTable() {
         const query = `DROP TABLE IF EXISTS awards_and_nominations`;
-
         await QueryDB(query, []);
     }
 
@@ -420,7 +429,6 @@ abstract class DatabaseTables {
 
     static async dropAcademyMemberTable() {
         const query = `DROP TABLE IF EXISTS academy_member`;
-
         await QueryDB(query, []);
     }
 
@@ -445,7 +453,6 @@ abstract class DatabaseTables {
 
     static async dropEditorialMemberTable() {
         const query = `DROP TABLE IF EXISTS editorial_member`;
-
         await QueryDB(query, []);
     }
 
@@ -472,7 +479,6 @@ abstract class DatabaseTables {
 
     static async dropOrganizedEventsTable() {
         const query = `DROP TABLE IF EXISTS organized_events`;
-
         await QueryDB(query, []);
     }
 
@@ -491,7 +497,6 @@ abstract class DatabaseTables {
 
     static async dropWithoutActivityTable() {
         const query = `DROP TABLE IF EXISTS without_activity`;
-
         await QueryDB(query, []);
     }
 
@@ -512,7 +517,6 @@ abstract class DatabaseTables {
 
     static async dropDidacticActivityTable() {
         const query = `DROP TABLE IF EXISTS didactic_activity`;
-
         await QueryDB(query, []);
     }
 }

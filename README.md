@@ -61,4 +61,6 @@
 * Query Parameters Endpoint : https://stackoverflow.com/a/67937272/10805602
 * JWT : https://jwt.io/
 * JWT With ExpressJs : https://www.digitalocean.com/community/tutorials/nodejs-jwt-expressjs
+* JWY Verify Token : https://medium.com/swlh/using-the-jsonwebtoken-node-package-to-verify-json-web-tokens-497ecdaba830
+* JWY Synchronous Verify Token : https://stackoverflow.com/a/54419385/10805602
 

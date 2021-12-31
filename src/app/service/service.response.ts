@@ -28,4 +28,12 @@ export const Responses = {
     INVALID_KEY: 'Invalid key or user already activated.',
     INVALID_KEY_USER_NOT_FOUND: 'User not found.',
     USER_ACTIVATED: 'User was activated. You can now log in.',
+    INVALID_CREDENTIALS: 'Invalid credentials.',
+    INACTIVE_ACCOUNT: 'Your account was not validated yet. Look into your email address.',
+    AUTH_EMAIL_SENT: 'An email was sent with your account.',
+    INVALID_AUTH_KEY: 'Invalid key.',
+    SOMETHING_WRONG: "This shouldn't happen",
+    SUCCESS: 'Success',
+    MISSING_KEY: 'Missing key',
+    INVALID_USER: 'Invalid user.',
 }

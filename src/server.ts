@@ -6,6 +6,8 @@ import config from '../config.json';
 import {graphqlHTTP} from 'express-graphql';
 import {resolvers, schema} from "./app/graphql/export";
 import {UserService} from "./app/service/user.service";
+import {Responses} from "./app/service/service.response";
+import {FormService} from "./app/service/form.service";
 
 const app: Express = express();
 
@@ -43,7 +45,7 @@ app.get('/activate', async (req, res) => {
   const key = req.query.key as string;
 
   if (!key) {
-    res.end(JSON.stringify({message: 'Key not provided'}));
+    res.end(JSON.stringify({message: Responses.MISSING_KEY}));
     return;
   }
 

@@ -1,5 +1,5 @@
 import {
-    AcademyMember, Activation,
+    AcademyMember, Activation, Authentication,
     AwardAndNomination,
     Citation, DidacticActivity, EditorialMember,
     Information,
@@ -14,6 +14,46 @@ import {QueryDB} from "../../connection";
  * Every method throws an exception if something is wrong.
  * The exception is handled in the Service layer.*/
 export abstract class TablesCrudRepository {
+    /* ----==== Authentication ====---- */
+
+    /** Authentication - CREATE */
+    static async addAuthentication(payload: Authentication): Promise<Authentication[]> {
+        const query = `INSERT INTO authentication(user_id, auth_key) VALUES ($1, $2) RETURNING *`;
+        const params = [payload.userId, payload.authKey];
+
+        const {rows} = await QueryDB(query, params);
+        const list: Authentication[] = [];
+
+        for (const row of rows) {
+            list.push(new Authentication(row));
+        }
+
+        return list;
+    }
+
+    /** Authentication - READ */
+    static async getAuthentication(id: number): Promise<Authentication[]> {
+        const query = `SELECT * FROM authentication WHERE id = $1`;
+        const params = [id];
+
+        const {rows} = await QueryDB(query, params);
+        const list: Authentication[] = [];
+
+        for (const row of rows) {
+            list.push(new Authentication(row));
+        }
+
+        return list;
+    }
+
+    /** Authentication - DELETE */
+    static async deleteAuthentication(payload: Authentication) {
+        const query = `DELETE FROM authentication WHERE id = $1`;
+        const params = [payload.id];
+
+        await QueryDB(query, params);
+    }
+
     /* ----==== Activare ====---- */
 
     /** Activation - CREATE */

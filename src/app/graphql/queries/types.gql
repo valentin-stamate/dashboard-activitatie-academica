@@ -12,10 +12,18 @@ type User {
     activated: Boolean!
 }
 
+type AuthToken {
+    token: String!
+}
+
 # ----------========== Input Types ==========---------- #
 
-input NewUser {
+input BaseUser {
     identifier: String!
     email: String!
+}
+
+input AuthTokenInput {
+    token: String!
 }
 

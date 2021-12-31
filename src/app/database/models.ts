@@ -32,6 +32,22 @@ export class Activation {
     }
 }
 
+export class Authentication {
+    id: number;
+    userId: number;
+    authKey: string;
+
+    constructor(props: any) {
+        this.id = props.id;
+        this.userId = props.user_id;
+        this.authKey = props.auth_key;
+    }
+}
+
+export class AuthToken {
+    constructor(public token: string) { }
+}
+
 /* ----==== Forms ====---- */
 
 /* Informații */

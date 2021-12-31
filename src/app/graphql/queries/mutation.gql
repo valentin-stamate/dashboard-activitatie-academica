@@ -1,4 +1,6 @@
 type Mutation {
-    addUser(user: NewUser!): String
+    signUpUser(user: BaseUser!): String
+    sendAuthKey(user: BaseUser!): String
+    logInUser(user: BaseUser!, authKey: String!): AuthToken
 }
 

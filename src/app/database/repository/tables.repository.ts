@@ -1,6 +1,6 @@
 import {TablesCrudRepository} from "./crud/tables.crud.repository";
 import {
-    AcademyMember, Activation,
+    AcademyMember, Activation, Authentication,
     AwardAndNomination,
     Citation, DidacticActivity, EditorialMember,
     Information,
@@ -18,22 +18,37 @@ import {QueryDB} from "../connection";
  * The exception is handled in the Service layer.*/
 export class TablesRepository extends TablesCrudRepository {
 
-    /* Informații */
-    static async deleteInformationByOwner(user: User) {
-      const query = `DELETE FROM information WHERE owner = $1`;
+    /* Autentificare */
+    static async deleteAuthenticationByUserId(userId: number) {
+        const query = `DELETE FROM authentication WHERE user_id = $1`;
+        const params = [userId];
 
-      await QueryDB(query, [user.id]);
+        await QueryDB(query, params);
     }
 
-    static async getInformationByOwner(user: User): Promise<Information[]> {
-        const query = `SELECT * FROM information WHERE owner = $1`;
+    static async getAuthenticationByUserId(userId: number): Promise<Authentication[]> {
+        const query = `SELECT * FROM authentication WHERE user_id = $1`;
+        const params = [userId];
 
-        const {rows} = await QueryDB(query, [user.id]);
-
-        const list: Information[] = [];
+        const {rows} = await QueryDB(query, params);
+        const list: Authentication[] = [];
 
         for (const row of rows) {
-            list.push(new Information(row));
+            list.push(new Authentication(row));
+        }
+
+        return list;
+    }
+
+    static async getAuthenticationByKey(key: string): Promise<Authentication[]> {
+        const query = `SELECT * FROM authentication WHERE auth_key = $1`;
+        const params = [key];
+
+        const {rows} = await QueryDB(query, params);
+        const list: Authentication[] = [];
+
+        for (const row of rows) {
+            list.push(new Authentication(row));
         }
 
         return list;
@@ -75,6 +90,26 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
+    /* Informații */
+    static async deleteInformationByOwner(user: User) {
+      const query = `DELETE FROM information WHERE owner = $1`;
+
+      await QueryDB(query, [user.id]);
+    }
+
+    static async getInformationByOwner(user: User): Promise<Information[]> {
+        const query = `SELECT * FROM information WHERE owner = $1`;
+
+        const {rows} = await QueryDB(query, [user.id]);
+
+        const list: Information[] = [];
+
+        for (const row of rows) {
+            list.push(new Information(row));
+        }
+
+        return list;
+    }
 
     /* Articole științifice publicate în extenso...(ISI) */
     static async deleteScientificArticleByOwner(user: User) {

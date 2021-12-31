@@ -77,8 +77,25 @@ export class ActivationMail extends MailOptions {
             In order to activate your email press on the following link: 
             <a href="http://localhost:8080/activation?key={1}" target="_blank">activate account</a>`;
 
-        const parsedHtml = UtilService.stringFormat(html, [props.identity, props.activationKey])
+        const parsedHtml = UtilService.stringFormat(html, [props.identity, props.activationKey]);
 
         super(from, to, cc, bcc, subject, text, parsedHtml);
+    }
+}
+
+export class AuthenticationMail extends MailOptions {
+    constructor(to: string[], cc: string[], bcc: string[], props: {identity: string, authKey: string}) {
+        const from = 'Doctoral School';
+        const subject = 'Log in';
+        const text = 'Welcome {0}. In order to log in copy the following code...';
+        const html = `
+            Welcome: <b>{0}</b><br>
+            In order to log in copy the following code: 
+            <b>{1}</b>`;
+
+        const parsedText = UtilService.stringFormat(text, [props.identity]);
+        const parsedHtml = UtilService.stringFormat(html, [props.identity, props.authKey]);
+
+        super(from, to, cc, bcc, subject, parsedText, parsedHtml);
     }
 }
