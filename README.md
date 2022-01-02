@@ -65,4 +65,7 @@
 * JWY Synchronous Verify Token : https://stackoverflow.com/a/54419385/10805602
 * Express Authentication Middlewares : https://graphql.org/graphql-js/authentication-and-express-middleware/
 * Express Middlewares (Also Useful For Limiting Requests) : https://blog.logrocket.com/express-middleware-a-complete-guide/
-
+* Get Request Header : https://stackoverflow.com/a/30302180/10805602
+* Request Response : https://flaviocopes.com/express-send-response/
+* Http Status Codes : https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+* Postman Variables : https://learning.postman.com/docs/sending-requests/variables/

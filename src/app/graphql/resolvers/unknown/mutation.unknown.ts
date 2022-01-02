@@ -1,8 +1,7 @@
-import {User} from "../../../database/models";
 import {UserService} from "../../../service/user.service";
 
 export const MutationUnknown = {
-    signUpUser: async ({user}: {user: User}) => {
+    signUpUser: async ({user}: any) => {
         const service = new UserService();
 
         const response = await service.signUpUser(user);
@@ -14,7 +13,7 @@ export const MutationUnknown = {
         return response.message;
     },
 
-    sendAuthKey: async ({user}: {user: User}) => {
+    sendAuthKey: async ({user}: any) => {
         const service = new UserService();
 
         const response = await service.sendAuthKey(user);
@@ -26,7 +25,7 @@ export const MutationUnknown = {
         return response.message;
     },
 
-    logInUser: async ({user, authKey}: {user: User, authKey: string}) => {
+    logInUser: async ({user, authKey}: any) => {
         const service = new UserService();
 
         const response = await service.logInUser(user, authKey);

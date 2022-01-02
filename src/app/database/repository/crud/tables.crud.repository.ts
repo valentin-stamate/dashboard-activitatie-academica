@@ -17,9 +17,9 @@ export abstract class TablesCrudRepository {
     /* ----==== Authentication ====---- */
 
     /** Authentication - CREATE */
-    static async addAuthentication(payload: Authentication): Promise<Authentication[]> {
+    static async addAuthentication(data: Authentication): Promise<Authentication[]> {
         const query = `INSERT INTO authentication(user_id, auth_key) VALUES ($1, $2) RETURNING *`;
-        const params = [payload.userId, payload.authKey];
+        const params = [data.userId, data.authKey];
 
         const {rows} = await QueryDB(query, params);
         const list: Authentication[] = [];
@@ -47,9 +47,9 @@ export abstract class TablesCrudRepository {
     }
 
     /** Authentication - DELETE */
-    static async deleteAuthentication(payload: Authentication) {
+    static async deleteAuthentication(data: Authentication) {
         const query = `DELETE FROM authentication WHERE id = $1`;
-        const params = [payload.id];
+        const params = [data.id];
 
         await QueryDB(query, params);
     }
@@ -57,9 +57,9 @@ export abstract class TablesCrudRepository {
     /* ----==== Activare ====---- */
 
     /** Activation - CREATE */
-    static async addActivation(payload: Activation): Promise<Activation[]> {
+    static async addActivation(data: Activation): Promise<Activation[]> {
         const query = `INSERT INTO activation(user_id, activation_key) VALUES ($1, $2) RETURNING *`;
-        const params = [payload.userId, payload.activationKey];
+        const params = [data.userId, data.activationKey];
 
         const {rows} = await QueryDB(query, params);
         const list: Activation[] = [];
@@ -87,9 +87,9 @@ export abstract class TablesCrudRepository {
     }
 
     /** Activation - DELETE */
-    static async deleteActivation(payload: Activation) {
+    static async deleteActivation(data: Activation) {
         const query = `DELETE FROM activation WHERE id = $1`;
-        const params = [payload.id];
+        const params = [data.id];
 
         await QueryDB(query, params);
     }
@@ -111,13 +111,13 @@ export abstract class TablesCrudRepository {
     }
 
     /** Information - CREATE */
-    static async addInformation(payload: Information): Promise<Information[]> {
+    static async addInformation(data: Information): Promise<Information[]> {
         const query = `INSERT INTO 
                        information(full_name, marriage_name, thesis_coordinator, founding, completion_date, owner) 
                        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
 
-        const params = [payload.fullName, payload.marriageName, payload.thesisCoordinator, payload.founding,
-                        payload.completionDate, payload.owner];
+        const params = [data.fullName, data.marriageName, data.thesisCoordinator, data.founding,
+                        data.completionDate, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: Information[] = [];
@@ -143,21 +143,21 @@ export abstract class TablesCrudRepository {
     }
 
     /** Information - UPDATE */
-    static async updateInformation(payload: Information) {
+    static async updateInformation(data: Information) {
         const query = `UPDATE information 
                        SET full_name = $2, marriage_name = $3, thesis_coordinator = $4, founding = $5, completion_date = $6 
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.fullName, payload.marriageName, payload.thesisCoordinator, payload.founding, payload.completionDate];
+        const params = [data.id, data.fullName, data.marriageName, data.thesisCoordinator, data.founding, data.completionDate];
 
         await QueryDB(query, params);
     }
 
     /** Information - DELETE */
-    static async deleteInformation(payload: Information) {
+    static async deleteInformation(data: Information) {
         const query = `DELETE FROM information WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Articole științifice publicate în extenso...(ISI) ====---- */
@@ -177,16 +177,16 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Articles ISI - CREATE */
-    static async addScientificArticleISI(payload: ScientificArticleISI): Promise<ScientificArticleISI[]> {
+    static async addScientificArticleISI(data: ScientificArticleISI): Promise<ScientificArticleISI[]> {
         const query = `INSERT INTO scientific_article_isi
                        (article_title, authors, publication_date, volume, issue, starting_page, ending_page, 
                         impact_factor, cnatdcu_classification, doi, conference_name, observations, owner) 
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`;
 
-        const params = [payload.articleTitle, payload.authors, payload.publicationDate, payload.volume,
-                        payload.issue, payload.startingPage, payload.endingPage, payload.impactFactor,
-                        payload.cnatdcuClassification, payload.doi, payload.conferenceName, payload.observations,
-                        payload.owner];
+        const params = [data.articleTitle, data.authors, data.publicationDate, data.volume,
+                        data.issue, data.startingPage, data.endingPage, data.impactFactor,
+                        data.cnatdcuClassification, data.doi, data.conferenceName, data.observations,
+                        data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: ScientificArticleISI[] = [];
@@ -212,24 +212,24 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Articles ISI - UPDATE */
-    static async updateScientificArticleISI(payload: ScientificArticleISI) {
+    static async updateScientificArticleISI(data: ScientificArticleISI) {
         const query = `UPDATE scientific_article_isi SET article_title = $2, authors = $3, publication_date = $4, 
                                   volume = $5, issue = $6, starting_page = $7, ending_page = $8, 
                                   impact_factor = $9, cnatdcu_classification = $10, doi = $11, conference_name = $12,
                                   observations = $13 WHERE id = $1`;
 
-        const params = [payload.id, payload.articleTitle, payload.authors, payload.publicationDate, payload.volume,
-                        payload.issue, payload.startingPage, payload.endingPage, payload.impactFactor,
-                        payload.cnatdcuClassification, payload.doi, payload.conferenceName, payload.observations];
+        const params = [data.id, data.articleTitle, data.authors, data.publicationDate, data.volume,
+                        data.issue, data.startingPage, data.endingPage, data.impactFactor,
+                        data.cnatdcuClassification, data.doi, data.conferenceName, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Scientific Articles ISI - DELETE */
-    static async deleteScientificArticleISI(payload: ScientificArticleISI) {
+    static async deleteScientificArticleISI(data: ScientificArticleISI) {
         const query = `DELETE FROM scientific_article_isi WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== ISI proceedings ====---- */
@@ -249,15 +249,15 @@ export abstract class TablesCrudRepository {
     }
 
     /** ISI Proceedings - CREATE */
-    static async addISIProceeding(payload: ISIProceeding): Promise<ISIProceeding[]> {
+    static async addISIProceeding(data: ISIProceeding): Promise<ISIProceeding[]> {
         const query = `INSERT INTO isi_proceedings 
                        (article_title, authors, conference_name, indexed_volume_type, publication_year, 
                         article_type, conference_type, conference_link, starting_page, ending_page, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`;
 
-        const params = [payload.articleTitle, payload.authors, payload.conferenceName, payload.indexedVolumeType,
-                        payload.publicationYear, payload.articleType, payload.conferenceType, payload.conferenceLink,
-                        payload.startingPage, payload.endingPage, payload.observations, payload.owner];
+        const params = [data.articleTitle, data.authors, data.conferenceName, data.indexedVolumeType,
+                        data.publicationYear, data.articleType, data.conferenceType, data.conferenceLink,
+                        data.startingPage, data.endingPage, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: ISIProceeding[] = [];
@@ -283,25 +283,25 @@ export abstract class TablesCrudRepository {
     }
 
     /** ISI Proceedings - UPDATE */
-    static async updateISIProceeding(payload: ISIProceeding) {
+    static async updateISIProceeding(data: ISIProceeding) {
         const query = `UPDATE isi_proceedings SET 
                        article_title = $2, authors = $3, conference_name = $4, indexed_volume_type = $5, publication_year = $6,
                        article_type = $7, conference_type = $8, conference_link = $9, starting_page = $10, ending_page = $11,
                        observations = $12
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.articleTitle, payload.authors, payload.conferenceName, payload.indexedVolumeType,
-                        payload.publicationYear, payload.articleType, payload.conferenceType, payload.conferenceLink,
-                        payload.startingPage, payload.endingPage, payload.observations];
+        const params = [data.id, data.articleTitle, data.authors, data.conferenceName, data.indexedVolumeType,
+                        data.publicationYear, data.articleType, data.conferenceType, data.conferenceLink,
+                        data.startingPage, data.endingPage, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** ISI Proceedings - DELETE */
-    static async deleteISIProceeding(payload: ISIProceeding) {
+    static async deleteISIProceeding(data: ISIProceeding) {
         const query = `DELETE FROM isi_proceedings WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Articole științifice publicate în extenso... (BDI) ====---- */
@@ -321,17 +321,17 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Articles BDI - CREATE */
-    static async addScientificArticleBDI(payload: ScientificArticleBDI): Promise<ScientificArticleBDI[]> {
+    static async addScientificArticleBDI(data: ScientificArticleBDI): Promise<ScientificArticleBDI[]> {
         const query = `INSERT INTO scientific_articles_bdi
                        (hierarchy_domains, article_title, authors, bdi_indexed_magazine, publication_year, volume, 
                         number, starting_page, ending_page, international_magazine, cnatdcu_classification, 
                         indexed_article_link, bdi_database, bdi_database_link, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING *`;
 
-        const params = [payload.hierarchyDomains, payload.articleTitle, payload.authors, payload.bdiIndexedMagazine,
-            payload.publicationYear, payload.volume, payload.number, payload.startingPage, payload.endingPage,
-            payload.internationalMagazine, payload.cnatdcuClassification, payload.indexedArticleLink, payload.bdiDatabase,
-            payload.bdiDatabaseLink, payload.observations, payload.owner];
+        const params = [data.hierarchyDomains, data.articleTitle, data.authors, data.bdiIndexedMagazine,
+            data.publicationYear, data.volume, data.number, data.startingPage, data.endingPage,
+            data.internationalMagazine, data.cnatdcuClassification, data.indexedArticleLink, data.bdiDatabase,
+            data.bdiDatabaseLink, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: ScientificArticleBDI[] = [];
@@ -357,7 +357,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Articles BDI - UPDATE */
-    static async updateScientificArticleBDI(payload: ScientificArticleBDI) {
+    static async updateScientificArticleBDI(data: ScientificArticleBDI) {
         const query = `UPDATE scientific_articles_bdi SET 
                        hierarchy_domains = $2, article_title = $3, authors = $4, bdi_indexed_magazine = $5,
                        publication_year = $6, volume = $7, number = $8, starting_page = $9, ending_page = $10,
@@ -365,19 +365,19 @@ export abstract class TablesCrudRepository {
                        bdi_database = $14, bdi_database_link = $15, observations = $16
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.hierarchyDomains, payload.articleTitle, payload.authors, payload.bdiIndexedMagazine,
-                        payload.publicationYear, payload.volume, payload.number, payload.startingPage, payload.endingPage,
-                        payload.internationalMagazine, payload.cnatdcuClassification, payload.indexedArticleLink, payload.bdiDatabase,
-                        payload.bdiDatabaseLink, payload.observations];
+        const params = [data.id, data.hierarchyDomains, data.articleTitle, data.authors, data.bdiIndexedMagazine,
+                        data.publicationYear, data.volume, data.number, data.startingPage, data.endingPage,
+                        data.internationalMagazine, data.cnatdcuClassification, data.indexedArticleLink, data.bdiDatabase,
+                        data.bdiDatabaseLink, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Scientific Articles BDI - DELETE */
-    static async deleteScientificArticleBDI(payload: ScientificArticleBDI) {
+    static async deleteScientificArticleBDI(data: ScientificArticleBDI) {
         const query = `DELETE FROM scientific_articles_bdi WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Cărți ştiinţifice sau capitole de cărți publicate în edituri ====---- */
@@ -397,15 +397,15 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Books - CREATE */
-    static async addScientificBook(payload: ScientificBook): Promise<ScientificBook[]> {
+    static async addScientificBook(data: ScientificBook): Promise<ScientificBook[]> {
         const query = `INSERT INTO scientific_books
                        (hierarchy_domains, chapter_title, authors, book_title, page_number, publication_year, 
                         publishing_house, publication_type, isbn, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`;
 
-        const params = [payload.hierarchyDomains, payload.chapterTitle, payload.authors, payload.bookTitle,
-                        payload.pageNumber, payload.publicationYear, payload.publishingHouse, payload.publicationType,
-                        payload.isbn, payload.observations, payload.owner];
+        const params = [data.hierarchyDomains, data.chapterTitle, data.authors, data.bookTitle,
+                        data.pageNumber, data.publicationYear, data.publishingHouse, data.publicationType,
+                        data.isbn, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: ScientificBook[] = [];
@@ -431,24 +431,24 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Books - UPDATE */
-    static async updateScientificBook(payload: ScientificBook) {
+    static async updateScientificBook(data: ScientificBook) {
         const query = `UPDATE scientific_books SET 
                        hierarchy_domains = $2, chapter_title = $3, authors = $4, book_title = $5, page_number = $6, 
                        publication_year = $7, publishing_house = $8, publication_type = $9, isbn = $10, observations = $11
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.hierarchyDomains, payload.chapterTitle, payload.authors, payload.bookTitle,
-            payload.pageNumber, payload.publicationYear, payload.publishingHouse, payload.publicationType,
-            payload.isbn, payload.observations];
+        const params = [data.id, data.hierarchyDomains, data.chapterTitle, data.authors, data.bookTitle,
+            data.pageNumber, data.publicationYear, data.publishingHouse, data.publicationType,
+            data.isbn, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Scientific Books - DELETE */
-    static async deleteScientificBook(payload: ScientificBook) {
+    static async deleteScientificBook(data: ScientificBook) {
         const query = `DELETE FROM scientific_books WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Traduceri ====---- */
@@ -468,15 +468,15 @@ export abstract class TablesCrudRepository {
     }
 
     /** Translations - CREATE */
-    static async addTranslation(payload: Translation): Promise<Translation[]> {
+    static async addTranslation(data: Translation): Promise<Translation[]> {
         const query = `INSERT INTO translations
                        (hierarchy_domains, translation_title, authors, translated_authors, publication_year, 
                         publishing_house, country, page_number, isbn, translation_type, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`;
 
-        const params = [payload.hierarchyDomains, payload.translationTitle, payload.authors, payload.translatedAuthors,
-                        payload.publicationYear, payload.publishingHouse, payload.country, payload.pageNumber, payload.isbn,
-                        payload.translationType, payload.observations, payload.owner];
+        const params = [data.hierarchyDomains, data.translationTitle, data.authors, data.translatedAuthors,
+                        data.publicationYear, data.publishingHouse, data.country, data.pageNumber, data.isbn,
+                        data.translationType, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: Translation[] = [];
@@ -502,25 +502,25 @@ export abstract class TablesCrudRepository {
     }
 
     /** Translations - UPDATE */
-    static async updateTranslation(payload: Translation) {
+    static async updateTranslation(data: Translation) {
         const query = `UPDATE translations SET 
                        hierarchy_domains = $2, translation_title = $3, authors = $4, translated_authors = $5, 
                        publication_year = $6, publishing_house = $7, country = $8, page_number = $9, isbn = $10,
                        translation_type = $11, observations = $12
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.hierarchyDomains, payload.translationTitle, payload.authors, payload.translatedAuthors,
-            payload.publicationYear, payload.publishingHouse, payload.country, payload.pageNumber, payload.isbn,
-            payload.translationType, payload.observations];
+        const params = [data.id, data.hierarchyDomains, data.translationTitle, data.authors, data.translatedAuthors,
+            data.publicationYear, data.publishingHouse, data.country, data.pageNumber, data.isbn,
+            data.translationType, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Translations - DELETE */
-    static async deleteTranslation(payload: Translation) {
+    static async deleteTranslation(data: Translation) {
         const query = `DELETE FROM translations WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Comunicări în manifestări științifice ====---- */
@@ -540,14 +540,14 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific communications - CREATE */
-    static async addScientificCommunication(payload: ScientificCommunication): Promise<ScientificCommunication[]> {
+    static async addScientificCommunication(data: ScientificCommunication): Promise<ScientificCommunication[]> {
         const query = `INSERT INTO scientific_communications
                        (authors, communication_type, presentation_year, scientific_manifestation_name, 
                         manifestation_type, scientific_manifestation_link, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
 
-        const params = [payload.authors, payload.communicationType, payload.presentationYear, payload.scientificManifestationName,
-                        payload.manifestationType, payload.scientificManifestationLink, payload.observations, payload.owner];
+        const params = [data.authors, data.communicationType, data.presentationYear, data.scientificManifestationName,
+                        data.manifestationType, data.scientificManifestationLink, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: ScientificCommunication[] = [];
@@ -573,23 +573,23 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific communications - UPDATE */
-    static async updateScientificCommunication(payload: ScientificCommunication) {
+    static async updateScientificCommunication(data: ScientificCommunication) {
         const query = `UPDATE scientific_communications SET 
                        authors = $2, communication_type = $3, presentation_year = $4, scientific_manifestation_name = $5,
                        manifestation_type = $6, scientific_manifestation_link = $7, observations = $8
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.authors, payload.communicationType, payload.presentationYear, payload.scientificManifestationName,
-            payload.manifestationType, payload.scientificManifestationLink, payload.observations];
+        const params = [data.id, data.authors, data.communicationType, data.presentationYear, data.scientificManifestationName,
+            data.manifestationType, data.scientificManifestationLink, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Scientific communications - DELETE */
-    static async deleteScientificCommunication(payload: ScientificCommunication) {
+    static async deleteScientificCommunication(data: ScientificCommunication) {
         const query = `DELETE FROM scientific_communications WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Brevete ====---- */
@@ -609,14 +609,14 @@ export abstract class TablesCrudRepository {
     }
 
     /** Patents - CREATE */
-    static async addPatent(payload: Patent): Promise<Patent[]> {
+    static async addPatent(data: Patent): Promise<Patent[]> {
         const query = `INSERT INTO patents
                        (patent_title_or_cbi, authors, year_of_obtaining_patent, patent_number, patent_type, 
                         authority, country, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
 
-        const params = [payload.patentTitleOrCBI, payload.authors, payload.yearOfObtainingPatent, payload.patentNumber,
-                        payload.patentType, payload.authority, payload.country, payload.observations];
+        const params = [data.patentTitleOrCBI, data.authors, data.yearOfObtainingPatent, data.patentNumber,
+                        data.patentType, data.authority, data.country, data.observations];
 
         const {rows} = await QueryDB(query, params);
         const list: Patent[] = [];
@@ -642,23 +642,23 @@ export abstract class TablesCrudRepository {
     }
 
     /** Patents - UPDATE */
-    static async updatePatent(payload: Patent) {
+    static async updatePatent(data: Patent) {
         const query = `UPDATE patents SET 
                        patent_title_or_cbi = $2, authors = $3, year_of_obtaining_patent = $4, patent_number = $5, 
                        patent_type = $6, authority = $7, country = $8, observations = $9
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.patentTitleOrCBI, payload.authors, payload.yearOfObtainingPatent, payload.patentNumber,
-            payload.patentType, payload.authority, payload.country, payload.observations];
+        const params = [data.id, data.patentTitleOrCBI, data.authors, data.yearOfObtainingPatent, data.patentNumber,
+            data.patentType, data.authority, data.country, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Patents - DELETE */
-    static async deletePatent(payload: Patent) {
+    static async deletePatent(data: Patent) {
         const query = `DELETE FROM patents WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Contracte de cercetare ====---- */
@@ -678,15 +678,15 @@ export abstract class TablesCrudRepository {
     }
 
     /** Research contracts - CREATE */
-    static async addResearchContract(payload: ResearchContract): Promise<ResearchContract[]> {
+    static async addResearchContract(data: ResearchContract): Promise<ResearchContract[]> {
         const query = `INSERT INTO research_contracts
                        (research_contract_name_or_project, project_code, financier, function, start_project_period, 
                         end_project_period, contract_type, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
 
-        const params = [payload.researchContractNameOrProject, payload.projectCode, payload.financier, payload.function,
-                        payload.startProjectPeriod, payload.endProjectPeriod, payload.contractType, payload.observations,
-                        payload.owner];
+        const params = [data.researchContractNameOrProject, data.projectCode, data.financier, data.function,
+                        data.startProjectPeriod, data.endProjectPeriod, data.contractType, data.observations,
+                        data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: ResearchContract[] = [];
@@ -712,23 +712,23 @@ export abstract class TablesCrudRepository {
     }
 
     /** Research contracts - UPDATE */
-    static async updateResearchContract(payload: ResearchContract) {
+    static async updateResearchContract(data: ResearchContract) {
         const query = `UPDATE research_contracts SET 
                        research_contract_name_or_project = $2, project_code = $3, financier = $4, function = $5,
                        start_project_period = $6, end_project_period = $7, contract_type = $8, observations = $9
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.researchContractNameOrProject, payload.projectCode, payload.financier, payload.function,
-            payload.startProjectPeriod, payload.endProjectPeriod, payload.contractType, payload.observations];
+        const params = [data.id, data.researchContractNameOrProject, data.projectCode, data.financier, data.function,
+            data.startProjectPeriod, data.endProjectPeriod, data.contractType, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Research contracts - DELETE */
-    static async deleteResearchContract(payload: ResearchContract) {
+    static async deleteResearchContract(data: ResearchContract) {
         const query = `DELETE FROM research_contracts WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Citări ====---- */
@@ -748,17 +748,17 @@ export abstract class TablesCrudRepository {
     }
 
     /** Citations - CREATE */
-    static async addCitation(payload: Citation): Promise<Citation[]> {
+    static async addCitation(data: Citation): Promise<Citation[]> {
         const query = `INSERT INTO citations
                        (article_title, authors, publication_title_where_referenced, authors_names_that_reference, 
                         citation_year, volume, impact_factor, issue, article_number, starting_page, ending_page, 
                         doi, cnatdcu_classification, citations, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING *`;
 
-        const params = [payload.articleTitle, payload.authors, payload.publicationTitleWhereReferenced,
-                        payload.authorsNamesThatReference, payload.citationYear, payload.volume, payload.impactFactor,
-                        payload.issue, payload.articleNumber, payload.startingPage, payload.endingPage, payload.doi,
-                        payload.cnatdcuClassification, payload.citations, payload.observations, payload.owner];
+        const params = [data.articleTitle, data.authors, data.publicationTitleWhereReferenced,
+                        data.authorsNamesThatReference, data.citationYear, data.volume, data.impactFactor,
+                        data.issue, data.articleNumber, data.startingPage, data.endingPage, data.doi,
+                        data.cnatdcuClassification, data.citations, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: Citation[] = [];
@@ -784,7 +784,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Citations - UPDATE */
-    static async updateCitation(payload: Citation) {
+    static async updateCitation(data: Citation) {
         const query = `UPDATE citations SET 
                        article_title = $2, authors = $3, publication_title_where_referenced = $4, 
                        authors_names_that_reference = $5, citation_year = $6, volume = $7, impact_factor = $8, 
@@ -792,19 +792,19 @@ export abstract class TablesCrudRepository {
                        cnatdcu_classification = $14, citations = $15, observations = $16
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.articleTitle, payload.authors, payload.publicationTitleWhereReferenced,
-            payload.authorsNamesThatReference, payload.citationYear, payload.volume, payload.impactFactor,
-            payload.issue, payload.articleNumber, payload.startingPage, payload.endingPage, payload.doi,
-            payload.cnatdcuClassification, payload.citations, payload.observations];
+        const params = [data.id, data.articleTitle, data.authors, data.publicationTitleWhereReferenced,
+            data.authorsNamesThatReference, data.citationYear, data.volume, data.impactFactor,
+            data.issue, data.articleNumber, data.startingPage, data.endingPage, data.doi,
+            data.cnatdcuClassification, data.citations, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Citations - DELETE */
-    static async deleteCitation(payload: Citation) {
+    static async deleteCitation(data: Citation) {
         const query = `DELETE FROM citations WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Premii si nominalizări ====---- */
@@ -824,14 +824,14 @@ export abstract class TablesCrudRepository {
     }
 
     /** Awards and nominations - CREATE */
-    static async addAwardAndNomination(payload: AwardAndNomination): Promise<AwardAndNomination[]> {
+    static async addAwardAndNomination(data: AwardAndNomination): Promise<AwardAndNomination[]> {
         const query = `INSERT INTO awards_and_nominations
                        (year_of_award, award_name, award_type, organization_that_give_the_award, country, 
                         awarded_for, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
 
-        const params = [payload.yearOfAward, payload.awardName, payload.awardType, payload.organizationThatGiveTheAward,
-                        payload.country, payload.awardedFor, payload.observations, payload.owner];
+        const params = [data.yearOfAward, data.awardName, data.awardType, data.organizationThatGiveTheAward,
+                        data.country, data.awardedFor, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: AwardAndNomination[] = [];
@@ -857,23 +857,23 @@ export abstract class TablesCrudRepository {
     }
 
     /** Awards and nominations - UPDATE */
-    static async updateAwardAndNomination(payload: AwardAndNomination) {
+    static async updateAwardAndNomination(data: AwardAndNomination) {
         const query = `UPDATE awards_and_nominations SET 
                        year_of_award = $2, award_name = $3, award_type = $4, organization_that_give_the_award = $5, 
                        country = $6, awarded_for = $7, observations = $8
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.yearOfAward, payload.awardName, payload.awardType, payload.organizationThatGiveTheAward,
-            payload.country, payload.awardedFor, payload.observations];
+        const params = [data.id, data.yearOfAward, data.awardName, data.awardType, data.organizationThatGiveTheAward,
+            data.country, data.awardedFor, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Awards and nominations - DELETE */
-    static async deleteAwardAndNomination(payload: AwardAndNomination) {
+    static async deleteAwardAndNomination(data: AwardAndNomination) {
         const query = `DELETE FROM awards_and_nominations WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Membru în academii ====---- */
@@ -893,12 +893,12 @@ export abstract class TablesCrudRepository {
     }
 
     /** Academy member - CREATE */
-    static async addAcademyMember(payload: AcademyMember): Promise<AcademyMember[]> {
+    static async addAcademyMember(data: AcademyMember): Promise<AcademyMember[]> {
         const query = `INSERT INTO academy_member
                        (admission_year, academy_name, member_type, observations, owner)
                        VALUES ($1, $2, $3, $4, $5) RETURNING *`;
 
-        const params = [payload.admissionYear, payload.academyName, payload.memberType, payload.observations];
+        const params = [data.admissionYear, data.academyName, data.memberType, data.observations];
 
         const {rows} = await QueryDB(query, params);
         const list: AcademyMember[] = [];
@@ -924,21 +924,21 @@ export abstract class TablesCrudRepository {
     }
 
     /** Academy member - UPDATE */
-    static async updateAcademyMember(payload: AcademyMember) {
+    static async updateAcademyMember(data: AcademyMember) {
         const query = `UPDATE academy_member SET 
                        admission_year = $2, academy_name = $3, member_type = $4, observations = $5
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.admissionYear, payload.academyName, payload.memberType, payload.observations];
+        const params = [data.id, data.admissionYear, data.academyName, data.memberType, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Academy member - DELETE */
-    static async deleteAcademyMember(payload: AcademyMember) {
+    static async deleteAcademyMember(data: AcademyMember) {
         const query = `DELETE FROM academy_member WHERE id = $1`;
         
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Membru în echipa editorială ====---- */
@@ -958,14 +958,14 @@ export abstract class TablesCrudRepository {
     }
 
     /** Editorial member - CREATE */
-    static async addEditorialMembers(payload: EditorialMember): Promise<EditorialMember[]> {
+    static async addEditorialMember(data: EditorialMember): Promise<EditorialMember[]> {
         const query = `INSERT INTO editorial_member
                        (committee_name, magazine_name, year_of_committee_attendance, quality, magazine_type, 
                         national_or_international, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
 
-        const params = [payload.committeeName, payload.magazineName, payload.yearOfCommitteeAttendance, payload.quality,
-                        payload.magazineType, payload.nationalOrInternational, payload.observations, payload.owner];
+        const params = [data.committeeName, data.magazineName, data.yearOfCommitteeAttendance, data.quality,
+                        data.magazineType, data.nationalOrInternational, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: EditorialMember[] = [];
@@ -991,23 +991,23 @@ export abstract class TablesCrudRepository {
     }
 
     /** Editorial member - UPDATE */
-    static async updateEditorialMember(payload: EditorialMember) {
+    static async updateEditorialMember(data: EditorialMember) {
         const query = `UPDATE editorial_member SET 
                        committee_name = $2, magazine_name = $3, year_of_committee_attendance = $4, quality = $5, 
                        magazine_type = $6, national_or_international = $7, observations = $8
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.committeeName, payload.magazineName, payload.yearOfCommitteeAttendance,
-                        payload.quality, payload.magazineType, payload.nationalOrInternational, payload.observations];
+        const params = [data.id, data.committeeName, data.magazineName, data.yearOfCommitteeAttendance,
+                        data.quality, data.magazineType, data.nationalOrInternational, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Editorial member - DELETE */
-    static async deleteEditorialMember(payload: EditorialMember) {
+    static async deleteEditorialMember(data: EditorialMember) {
         const query = `DELETE FROM editorial_member WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Evenimente organizate ====---- */
@@ -1027,15 +1027,15 @@ export abstract class TablesCrudRepository {
     }
 
     /** Organized events - CREATE */
-    static async addOrganizedEvent(payload: OrganizedEvent): Promise<OrganizedEvent[]> {
+    static async addOrganizedEvent(data: OrganizedEvent): Promise<OrganizedEvent[]> {
         const query = `INSERT INTO organized_events
                        (manifestation_name, start_date, end_date, manifestation_place, manifestation_type, 
                         manifestation_classification, manifestation_link, contact_person, observations, owner)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
 
-        const params = [payload.manifestationName, payload.startDate, payload.endDate, payload.manifestationPlace,
-                        payload.manifestationType, payload.manifestationClassification, payload.manifestationLink,
-                        payload.contactPerson, payload.observations, payload.owner];
+        const params = [data.manifestationName, data.startDate, data.endDate, data.manifestationPlace,
+                        data.manifestationType, data.manifestationClassification, data.manifestationLink,
+                        data.contactPerson, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: OrganizedEvent[] = [];
@@ -1061,25 +1061,25 @@ export abstract class TablesCrudRepository {
     }
 
     /** Organized events - UPDATE */
-    static async updateOrganizedEvent(payload: OrganizedEvent) {
+    static async updateOrganizedEvent(data: OrganizedEvent) {
         const query = `UPDATE organized_events SET 
                        manifestation_name = $2, start_date = $3, end_date = $4, manifestation_place = $5, 
                        manifestation_type = $6, manifestation_classification = $7, manifestation_link = $8, 
                        contact_person = $9, observations = $10
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.manifestationName, payload.startDate, payload.endDate,
-                        payload.manifestationPlace, payload.manifestationType, payload.manifestationClassification,
-                        payload.manifestationLink, payload.contactPerson, payload.observations];
+        const params = [data.id, data.manifestationName, data.startDate, data.endDate,
+                        data.manifestationPlace, data.manifestationType, data.manifestationClassification,
+                        data.manifestationLink, data.contactPerson, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Organized events - DELETE */
-    static async deleteOrganizedEvent(payload: OrganizedEvent) {
+    static async deleteOrganizedEvent(data: OrganizedEvent) {
         const query = `DELETE FROM organized_events WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Fără activitate științifică ====---- */
@@ -1099,12 +1099,12 @@ export abstract class TablesCrudRepository {
     }
 
     /** Without activity - CREATE */
-    static async addWithoutActivity(payload: WithoutActivity): Promise<WithoutActivity[]> {
+    static async addWithoutActivity(data: WithoutActivity): Promise<WithoutActivity[]> {
         const query = `INSERT INTO without_activity
                        (observations, owner)
                        VALUES ($1, $2) RETURNING *`;
 
-        const params = [payload.observations];
+        const params = [data.observations];
 
         const {rows} = await QueryDB(query, params);
         const list: WithoutActivity[] = [];
@@ -1130,21 +1130,21 @@ export abstract class TablesCrudRepository {
     }
 
     /** Without activity - UPDATE */
-    static async updateWithoutActivity(payload: WithoutActivity) {
+    static async updateWithoutActivity(data: WithoutActivity) {
         const query = `UPDATE without_activity SET 
                        observations = $2
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.observations];
+        const params = [data.id, data.observations];
 
         await QueryDB(query, params);
     }
 
     /** Without activity - DELETE */
-    static async deleteWithoutActivity(payload: WithoutActivity) {
+    static async deleteWithoutActivity(data: WithoutActivity) {
         const query = `DELETE FROM without_activity WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
     /* ----==== Activitate didactică ====---- */
@@ -1164,12 +1164,12 @@ export abstract class TablesCrudRepository {
     }
 
     /** Didactic activity - CREATE */
-    static async addDidacticActivity(payload: DidacticActivity): Promise<DidacticActivity[]> {
+    static async addDidacticActivity(data: DidacticActivity): Promise<DidacticActivity[]> {
         const query = `INSERT INTO didactic_activity
                        (class_name, activity_type, year_of_attending_activity, owner)
                        VALUES ($1, $2, $3, $4) RETURNING *`;
 
-        const params = [payload.className, payload.activityType, payload.yearOfAttendingActivity, payload.owner];
+        const params = [data.className, data.activityType, data.yearOfAttendingActivity, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: DidacticActivity[] = [];
@@ -1195,21 +1195,21 @@ export abstract class TablesCrudRepository {
     }
 
     /** Didactic activity - UPDATE */
-    static async updateDidacticActivity(payload: DidacticActivity) {
+    static async updateDidacticActivity(data: DidacticActivity) {
         const query = `UPDATE didactic_activity SET 
                        class_name = $2, activity_type = $3, year_of_attending_activity = $4
                        WHERE id = $1`;
 
-        const params = [payload.id, payload.className, payload.activityType, payload.yearOfAttendingActivity];
+        const params = [data.id, data.className, data.activityType, data.yearOfAttendingActivity];
 
         await QueryDB(query, params);
     }
 
     /** Didactic activity - DELETE */
-    static async deleteDidacticActivity(payload: DidacticActivity) {
+    static async deleteDidacticActivity(data: DidacticActivity) {
         const query = `DELETE FROM didactic_activity WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 
 }

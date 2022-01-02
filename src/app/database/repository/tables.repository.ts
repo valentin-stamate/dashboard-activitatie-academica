@@ -19,14 +19,14 @@ import {QueryDB} from "../connection";
 export class TablesRepository extends TablesCrudRepository {
 
     /* Autentificare */
-    static async deleteAuthenticationByUserId(userId: number) {
+    static async deleteAuthenticationByUser(userId: number) {
         const query = `DELETE FROM authentication WHERE user_id = $1`;
         const params = [userId];
 
         await QueryDB(query, params);
     }
 
-    static async getAuthenticationByUserId(userId: number): Promise<Authentication[]> {
+    static async getAuthenticationByUser(userId: number): Promise<Authentication[]> {
         const query = `SELECT * FROM authentication WHERE user_id = $1`;
         const params = [userId];
 
@@ -55,14 +55,14 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Activare */
-    static async deleteActivationByUserId(userId: number) {
+    static async deleteActivationByUser(userId: number) {
         const query = `DELETE FROM activation WHERE user_id = $1`;
         const params = [userId];
 
         await QueryDB(query, params);
     }
 
-    static async getActivationByUserId(userId: number): Promise<Activation[]> {
+    static async getActivationByUser(userId: number): Promise<Activation[]> {
         const query = `SELECT * FROM activation WHERE user_id = $1`;
         const params = [userId];
 
@@ -91,16 +91,17 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     /* Informații */
-    static async deleteInformationByOwner(user: User) {
-      const query = `DELETE FROM information WHERE owner = $1`;
+    static async deleteInformationByUser(userId: number) {
+      const query = `DELETE FROM information WHERE owner = $1 RETURNING *`;
 
-      await QueryDB(query, [user.id]);
+      const {rows} = await QueryDB(query, [userId]);
+      return rows;
     }
 
-    static async getInformationByOwner(user: User): Promise<Information[]> {
+    static async getInformationByUser(userId: number): Promise<Information[]> {
         const query = `SELECT * FROM information WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: Information[] = [];
 
@@ -110,18 +111,30 @@ export class TablesRepository extends TablesCrudRepository {
 
         return list;
     }
+    
+    static async addOrUpdateInformation(data: Information) {
+        const rows = await this.getInformationByUser(data.owner);
 
-    /* Articole științifice publicate în extenso...(ISI) */
-    static async deleteScientificArticleByOwner(user: User) {
-        const query = `DELETE FROM scientific_article_isi WHERE owner = $1`;
+        if (rows.length === 0) {
+            await this.addInformation(data);
+            return;
+        }
 
-        await QueryDB(query, [user.id]);
+        await this.updateInformation(data);
     }
 
-    static async getScientificArticleISIByOwner(user: User): Promise<ScientificArticleISI[]> {
+    /* Articole științifice publicate în extenso...(ISI) */
+    static async deleteScientificArticleISIByUser(userId: number) {
+        const query = `DELETE FROM scientific_article_isi WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getScientificArticleISIByUser(userId: number): Promise<ScientificArticleISI[]> {
         const query = `SELECT * FROM scientific_article_isi WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: ScientificArticleISI[] = [];
 
@@ -132,17 +145,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* ISI proceedings */
-    static async deleteISIProceedingsByOwner(user: User) {
-        const query = `DELETE FROM isi_proceedings WHERE owner = $1`;
+    static async addOrUpdateScientificArticleISI(data: ScientificArticleISI) {
+        const rows = await this.getScientificArticleISIByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addScientificArticleISI(data);
+            return;
+        }
+
+        await this.updateScientificArticleISI(data);
     }
 
-    static async getISIProceedingByOwner(user: User): Promise<ISIProceeding[]> {
+    /* ISI proceedings */
+    static async deleteISIProceedingByUser(userId: number) {
+        const query = `DELETE FROM isi_proceedings WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getISIProceedingByUser(userId: number): Promise<ISIProceeding[]> {
         const query = `SELECT * FROM isi_proceedings WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: ISIProceeding[] = [];
 
@@ -153,17 +178,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Articole științifice publicate în extenso... (BDI) */
-    static async deleteScientificArticleBDIByOwner(user: User) {
-        const query = `DELETE FROM scientific_articles_bdi WHERE owner = $1`;
+    static async addOrUpdateISIProceeding(data: ISIProceeding) {
+        const rows = await this.getISIProceedingByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addISIProceeding(data);
+            return;
+        }
+
+        await this.updateISIProceeding(data);
     }
 
-    static async getScientificArticleBDIByOwner(user: User): Promise<ScientificArticleBDI[]> {
+    /* Articole științifice publicate în extenso... (BDI) */
+    static async deleteScientificArticleBDIByUser(userId: number) {
+        const query = `DELETE FROM scientific_articles_bdi WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getScientificArticleBDIByUser(userId: number): Promise<ScientificArticleBDI[]> {
         const query = `SELECT * FROM scientific_articles_bdi WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: ScientificArticleBDI[] = [];
 
@@ -174,17 +211,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Cărți ştiinţifice sau capitole de cărți publicate în edituri */
-    static async deleteScientificBookByOwner(user: User) {
-        const query = `DELETE FROM scientific_books WHERE owner = $1`;
+    static async addOrUpdateScientificArticleBDI(data: ScientificArticleBDI) {
+        const rows = await this.getScientificArticleBDIByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addScientificArticleBDI(data);
+            return;
+        }
+
+        await this.updateScientificArticleBDI(data);
     }
 
-    static async getScientificBookByOwner(user: User): Promise<ScientificBook[]> {
+    /* Cărți ştiinţifice sau capitole de cărți publicate în edituri */
+    static async deleteScientificBookByUser(userId: number) {
+        const query = `DELETE FROM scientific_books WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getScientificBookByUser(userId: number): Promise<ScientificBook[]> {
         const query = `SELECT * FROM scientific_books WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: ScientificBook[] = [];
 
@@ -195,17 +244,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Traduceri */
-    static async deleteTranslationsByOwner(user: User) {
-        const query = `DELETE FROM translations WHERE owner = $1`;
+    static async addOrUpdateScientificBook(data: ScientificBook) {
+        const rows = await this.getScientificBookByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addScientificBook(data);
+            return;
+        }
+
+        await this.updateScientificBook(data);
     }
 
-    static async getTranslationByOwner(user: User): Promise<Translation[]> {
+    /* Traduceri */
+    static async deleteTranslationByUser(userId: number) {
+        const query = `DELETE FROM translations WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getTranslationByUser(userId: number): Promise<Translation[]> {
         const query = `SELECT * FROM translations WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: Translation[] = [];
 
@@ -216,17 +277,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Comunicări în manifestări științifice */
-    static async deleteScientificCommunicationByOwner(user: User) {
-        const query = `DELETE FROM scientific_communications WHERE owner = $1`;
+    static async addOrUpdateTranslation(data: Translation) {
+        const rows = await this.getTranslationByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addTranslation(data);
+            return;
+        }
+
+        await this.updateTranslation(data);
     }
 
-    static async getScientificCommunicationByOwner(user: User): Promise<ScientificCommunication[]> {
+    /* Comunicări în manifestări științifice */
+    static async deleteScientificCommunicationByUser(userId: number) {
+        const query = `DELETE FROM scientific_communications WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getScientificCommunicationByUser(userId: number): Promise<ScientificCommunication[]> {
         const query = `SELECT * FROM scientific_communications WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: ScientificCommunication[] = [];
 
@@ -237,17 +310,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Brevete */
-    static async deletePatenByOwner(user: User) {
-        const query = `DELETE FROM patents WHERE owner = $1`;
+    static async addOrUpdateScientificCommunication(data: ScientificCommunication) {
+        const rows = await this.getScientificCommunicationByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addScientificCommunication(data);
+            return;
+        }
+
+        await this.updateScientificCommunication(data);
     }
 
-    static async getPatentByOwner(user: User): Promise<Patent[]> {
+    /* Brevete */
+    static async deletePatentByUser(userId: number) {
+        const query = `DELETE FROM patents WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getPatentByUser(userId: number): Promise<Patent[]> {
         const query = `SELECT * FROM patents WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: Patent[] = [];
 
@@ -258,17 +343,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Contracte de cercetare */
-    static async deleteResearchContractByOwner(user: User) {
-        const query = `DELETE FROM research_contracts WHERE owner = $1`;
+    static async addOrUpdatePatent(data: Patent) {
+        const rows = await this.getPatentByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addPatent(data);
+            return;
+        }
+
+        await this.updatePatent(data);
     }
 
-    static async getResearchContractByOwner(user: User): Promise<ResearchContract[]> {
+    /* Contracte de cercetare */
+    static async deleteResearchContractByUser(userId: number) {
+        const query = `DELETE FROM research_contracts WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getResearchContractByUser(userId: number): Promise<ResearchContract[]> {
         const query = `SELECT * FROM research_contracts WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: ResearchContract[] = [];
 
@@ -279,17 +376,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Citări */
-    static async deleteCitationByOwner(user: User) {
-        const query = `DELETE FROM citations WHERE owner = $1`;
+    static async addOrUpdateResearchContract(data: ResearchContract) {
+        const rows = await this.getResearchContractByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addResearchContract(data);
+            return;
+        }
+
+        await this.updateResearchContract(data);
     }
 
-    static async getCitationByOwner(user: User): Promise<Citation[]> {
+    /* Citări */
+    static async deleteCitationByUser(userId: number) {
+        const query = `DELETE FROM citations WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getCitationByUser(userId: number): Promise<Citation[]> {
         const query = `SELECT * FROM citations WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: Citation[] = [];
 
@@ -300,17 +409,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Premii si nominalizări */
-    static async deleteAwardAndNominationByOwner(user: User) {
-        const query = `DELETE FROM awards_and_nominations WHERE owner = $1`;
+    static async addOrUpdateCitation(data: Citation) {
+        const rows = await this.getCitationByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addCitation(data);
+            return;
+        }
+
+        await this.updateCitation(data);
     }
 
-    static async getAwardAndNominationByOwner(user: User): Promise<AwardAndNomination[]> {
+    /* Premii si nominalizări */
+    static async deleteAwardAndNominationByUser(userId: number) {
+        const query = `DELETE FROM awards_and_nominations WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getAwardAndNominationByUser(userId: number): Promise<AwardAndNomination[]> {
         const query = `SELECT * FROM information WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: AwardAndNomination[] = [];
 
@@ -321,17 +442,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Membru în academii */
-    static async deleteAcademyMemberByOwner(user: User) {
-        const query = `DELETE FROM academy_member WHERE owner = $1`;
+    static async addOrUpdateAwardAndNomination(data: AwardAndNomination) {
+        const rows = await this.getAwardAndNominationByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addAwardAndNomination(data);
+            return;
+        }
+
+        await this.updateAwardAndNomination(data);
     }
 
-    static async getAcademyMemberByOwner(user: User): Promise<AcademyMember[]> {
+    /* Membru în academii */
+    static async deleteAcademyMemberByUser(userId: number) {
+        const query = `DELETE FROM academy_member WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getAcademyMemberByUser(userId: number): Promise<AcademyMember[]> {
         const query = `SELECT * FROM academy_member WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: AcademyMember[] = [];
 
@@ -342,17 +475,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Membru în echipa editorială */
-    static async deleteEditorialMemberByOwner(user: User) {
-        const query = `DELETE FROM editorial_member WHERE owner = $1`;
+    static async addOrUpdateAcademyMember(data: AcademyMember) {
+        const rows = await this.getAcademyMemberByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addAcademyMember(data);
+            return;
+        }
+
+        await this.updateAcademyMember(data);
     }
 
-    static async getEditorialMemberByOwner(user: User): Promise<EditorialMember[]> {
+    /* Membru în echipa editorială */
+    static async deleteEditorialMemberByUser(userId: number) {
+        const query = `DELETE FROM editorial_member WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getEditorialMemberByUser(userId: number): Promise<EditorialMember[]> {
         const query = `SELECT * FROM editorial_member WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: EditorialMember[] = [];
 
@@ -363,17 +508,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Evenimente organizate */
-    static async deleteOrganizedEventByOwner(user: User) {
-        const query = `DELETE FROM organized_events WHERE owner = $1`;
+    static async addOrUpdateEditorialMember(data: EditorialMember) {
+        const rows = await this.getEditorialMemberByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addEditorialMember(data);
+            return;
+        }
+
+        await this.updateEditorialMember(data);
     }
 
-    static async getOrganizedEventByOwner(user: User): Promise<OrganizedEvent[]> {
+    /* Evenimente organizate */
+    static async deleteOrganizedEventByUser(userId: number) {
+        const query = `DELETE FROM organized_events WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getOrganizedEventByUser(userId: number): Promise<OrganizedEvent[]> {
         const query = `SELECT * FROM organized_events WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: OrganizedEvent[] = [];
 
@@ -384,17 +541,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Fără activitate științifică */
-    static async deleteWithoutActivityByOwner(user: User) {
-        const query = `DELETE FROM without_activity WHERE owner = $1`;
+    static async addOrUpdateOrganizedEvent(data: OrganizedEvent) {
+        const rows = await this.getOrganizedEventByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addOrganizedEvent(data);
+            return;
+        }
+
+        await this.updateOrganizedEvent(data);
     }
 
-    static async getWithoutActivityByOwner(user: User): Promise<WithoutActivity[]> {
+    /* Fără activitate științifică */
+    static async deleteWithoutActivityByUser(userId: number) {
+        const query = `DELETE FROM without_activity WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getWithoutActivityByUser(userId: number): Promise<WithoutActivity[]> {
         const query = `SELECT * FROM without_activity WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: WithoutActivity[] = [];
 
@@ -405,17 +574,29 @@ export class TablesRepository extends TablesCrudRepository {
         return list;
     }
 
-    /* Activitate didactică */
-    static async deleteDidacticActivityByOwner(user: User) {
-        const query = `DELETE FROM didactic_activity WHERE owner = $1`;
+    static async addOrUpdateWithoutActivity(data: WithoutActivity) {
+        const rows = await this.getWithoutActivityByUser(data.owner);
 
-        await QueryDB(query, [user.id]);
+        if (rows.length === 0) {
+            await this.addWithoutActivity(data);
+            return;
+        }
+
+        await this.updateWithoutActivity(data);
     }
 
-    static async getDidacticActivityByOwner(user: User): Promise<DidacticActivity[]> {
+    /* Activitate didactică */
+    static async deleteDidacticActivityByUser(userId: number) {
+        const query = `DELETE FROM didactic_activity WHERE owner = $1 RETURNING *`;
+
+        const {rows} = await QueryDB(query, [userId]);
+        return rows;
+    }
+
+    static async getDidacticActivityByUser(userId: number): Promise<DidacticActivity[]> {
         const query = `SELECT * FROM didactic_activity WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [user.id]);
+        const {rows} = await QueryDB(query, [userId]);
 
         const list: DidacticActivity[] = [];
 
@@ -424,6 +605,17 @@ export class TablesRepository extends TablesCrudRepository {
         }
 
         return list;
+    }
+
+    static async addOrUpdateDidacticActivity(data: DidacticActivity) {
+        const rows = await this.getDidacticActivityByUser(data.owner);
+
+        if (rows.length === 0) {
+            await this.addDidacticActivity(data);
+            return;
+        }
+
+        await this.updateDidacticActivity(data);
     }
 
 }

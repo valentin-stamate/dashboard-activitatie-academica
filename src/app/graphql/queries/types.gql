@@ -16,6 +16,220 @@ type AuthToken {
     token: String!
 }
 
+type Information {
+    id: Int!
+    fullName: String!
+    marriageName: String!
+    thesisCoordinator: String!
+    founding: String!
+    completionDate: String!
+    owner: Int!
+
+}
+
+type ScientificArticleISI {
+    id: Int!
+    articleTitle: String!
+    authors: String!
+    publicationDate: String!
+    volume: String!
+    issue: String!
+    startingPage: String!
+    endingPage: String!
+    impactFactor: String!
+    cnatdcuClassification: String!
+    doi: String!
+    conferenceName: String!
+    observations: String!
+    owner: Int!
+}
+
+type ISIProceeding {
+    id: Int!
+    articleTitle: String!
+    authors: String!
+    conferenceName: String!
+    indexedVolumeType: String!
+    publicationYear: String!
+    articleType: String!
+    conferenceType: String!
+    conferenceLink: String!
+    startingPage: String!
+    endingPage: String!
+    observations: String!
+    owner: Int!
+}
+
+type ScientificArticleBDI {
+    id: Int!
+    hierarchyDomains: String!
+    articleTitle: String!
+    authors: String!
+    bdiIndexedMagazine: String!
+    publicationYear: String!
+    volume: String!
+    number: String!
+    startingPage: String!
+    endingPage: String!
+    internationalMagazine: String!
+    cnatdcuClassification: String!
+    indexedArticleLink: String!
+    bdiDatabase: String!
+    bdiDatabaseLink: String!
+    observations: String!
+    owner: Int!
+}
+
+type ScientificBook {
+    id: Int!
+    hierarchyDomains: String!
+    chapterTitle: String!
+    authors: String!
+    bookTitle: String!
+    pageNumber: String!
+    publicationYear: String!
+    publishingHouse: String!
+    publicationType: String!
+    isbn: String!
+    observations: String!
+    owner: Int!
+}
+
+type Translation {
+    id: Int!
+    hierarchyDomains: String!
+    translationTitle: String!
+    authors: String!
+    translatedAuthors: String!
+    publicationYear: String!
+    publishingHouse: String!
+    country: String!
+    pageNumber: String!
+    isbn: String!
+    translationType: String!
+    observations: String!
+    owner: Int!
+}
+
+type ScientificCommunication {
+    id: Int!
+    authors: String!
+    communicationType: String!
+    presentationYear: String!
+    scientificManifestationName: String!
+    manifestationType: String!
+    scientificManifestationLink: String!
+    observations: String!
+    owner: Int!
+}
+
+type Patent {
+    id: Int!
+    patentTitleOrCBI: String!
+    authors: String!
+    yearOfObtainingPatent: String!
+    patentNumber: String!
+    patentType: String!
+    authority: String!
+    country: String!
+    observations: String!
+    owner: Int!
+}
+
+type ResearchContract {
+    id: Int!
+    researchContractNameOrProject: String!
+    projectCode: String!
+    financier: String!
+    function: String!
+    startProjectPeriod: String!
+    endProjectPeriod: String!
+    contractType: String!
+    observations: String!
+    owner: Int!
+}
+
+type Citation {
+    id: Int!
+    articleTitle: String!
+    authors: String!
+    publicationTitleWhereReferenced: String!
+    authorsNamesThatReference: String!
+    citationYear: String!
+    volume: String!
+    impactFactor: String!
+    issue: String!
+    articleNumber: String!
+    startingPage: String!
+    endingPage: String!
+    doi: String!
+    cnatdcuClassification: String!
+    citations: String!
+    observations: String!
+    owner: Int!
+}
+
+type AwardAndNomination {
+    id: Int!
+    yearOfAward: String!
+    awardName: String!
+    awardType: String!
+    organizationThatGiveTheAward: String!
+    country: String!
+    awardedFor: String!
+    observations: String!
+    owner: Int!
+}
+
+type AcademyMember {
+    id: Int!
+    admissionYear: String!
+    academyName: String!
+    memberType: String!
+    observations: String!
+    owner: Int!
+}
+
+type EditorialMember {
+    id: Int!
+    committeeName: String!
+    magazineName: String!
+    yearOfCommitteeAttendance: String!
+    quality: String!
+    magazineType: String!
+    nationalOrInternational: String!
+    observations: String!
+    owner: Int!
+}
+
+type OrganizedEvent {
+    id: Int!
+    manifestationName: String!
+    startDate: String!
+    endDate: String!
+    manifestationPlace: String!
+    manifestationType: String!
+    manifestationClassification: String!
+    manifestationLink: String!
+    contactPerson: String!
+    observations: String!
+    owner: Int!
+}
+
+type WithoutActivity {
+    id: Int!
+    observations: String!
+    owner: Int!
+}
+
+type DidacticActivity {
+    id: Int!
+    className: String!
+    activityType: String!
+    yearOfAttendingActivity: String!
+    owner: Int!
+}
+
 # ----------========== Input Types ==========---------- #
 
 input BaseUser {
@@ -27,3 +241,216 @@ input AuthTokenInput {
     token: String!
 }
 
+input InformationInput {
+    id: Int
+    fullName: String
+    marriageName: String
+    thesisCoordinator: String
+    founding: String
+    completionDate: String
+    owner: Int
+    
+}
+
+input ScientificArticleISIInput {
+    id: Int
+    articleTitle: String
+    authors: String
+    publicationDate: String
+    volume: String
+    issue: String
+    startingPage: String
+    endingPage: String
+    impactFactor: String
+    cnatdcuClassification: String
+    doi: String
+    conferenceName: String
+    observations: String
+    owner: Int
+}
+
+input ISIProceedingInput {
+    id: Int
+    articleTitle: String
+    authors: String
+    conferenceName: String
+    indexedVolumeType: String
+    publicationYear: String
+    articleType: String
+    conferenceType: String
+    conferenceLink: String
+    startingPage: String
+    endingPage: String
+    observations: String
+    owner: Int
+}
+
+input ScientificArticleBDIInput {
+    id: Int
+    hierarchyDomains: String
+    articleTitle: String
+    authors: String
+    bdiIndexedMagazine: String
+    publicationYear: String
+    volume: String
+    number: String
+    startingPage: String
+    endingPage: String
+    internationalMagazine: String
+    cnatdcuClassification: String
+    indexedArticleLink: String
+    bdiDatabase: String
+    bdiDatabaseLink: String
+    observations: String
+    owner: Int
+}
+
+input ScientificBookInput {
+    id: Int
+    hierarchyDomains: String
+    chapterTitle: String
+    authors: String
+    bookTitle: String
+    pageNumber: String
+    publicationYear: String
+    publishingHouse: String
+    publicationType: String
+    isbn: String
+    observations: String
+    owner: Int
+}
+
+input TranslationInput {
+    id: Int
+    hierarchyDomains: String
+    translationTitle: String
+    authors: String
+    translatedAuthors: String
+    publicationYear: String
+    publishingHouse: String
+    country: String
+    pageNumber: String
+    isbn: String
+    translationType: String
+    observations: String
+    owner: Int
+}
+
+input ScientificCommunicationInput {
+    id: Int
+    authors: String
+    communicationType: String
+    presentationYear: String
+    scientificManifestationName: String
+    manifestationType: String
+    scientificManifestationLink: String
+    observations: String
+    owner: Int
+}
+
+input PatentInput {
+    id: Int
+    patentTitleOrCBI: String
+    authors: String
+    yearOfObtainingPatent: String
+    patentNumber: String
+    patentType: String
+    authority: String
+    country: String
+    observations: String
+    owner: Int
+}
+
+input ResearchContractInput {
+    id: Int
+    researchContractNameOrProject: String
+    projectCode: String
+    financier: String
+    function: String
+    startProjectPeriod: String
+    endProjectPeriod: String
+    contractType: String
+    observations: String
+    owner: Int
+}
+
+input CitationInput {
+    id: Int
+    articleTitle: String
+    authors: String
+    publicationTitleWhereReferenced: String
+    authorsNamesThatReference: String
+    citationYear: String
+    volume: String
+    impactFactor: String
+    issue: String
+    articleNumber: String
+    startingPage: String
+    endingPage: String
+    doi: String
+    cnatdcuClassification: String
+    citations: String
+    observations: String
+    owner: Int
+}
+
+input AwardAndNominationInput {
+    id: Int
+    yearOfAward: String
+    awardName: String
+    awardType: String
+    organizationThatGiveTheAward: String
+    country: String
+    awardedFor: String
+    observations: String
+    owner: Int
+}
+
+input AcademyMemberInput {
+    id: Int
+    admissionYear: String
+    academyName: String
+    memberType: String
+    observations: String
+    owner: Int
+}
+
+input EditorialMemberInput {
+    id: Int
+    committeeName: String
+    magazineName: String
+    yearOfCommitteeAttendance: String
+    quality: String
+    magazineType: String
+    nationalOrInternational: String
+    observations: String
+    owner: Int
+}
+
+input OrganizedEventInput {
+    id: Int
+    manifestationName: String
+    startDate: String
+    endDate: String
+    manifestationPlace: String
+    manifestationType: String
+    manifestationClassification: String
+    manifestationLink: String
+    contactPerson: String
+    observations: String
+    owner: Int
+}
+
+input WithoutActivityInput {
+    id: Int
+    observations: String
+    owner: Int
+}
+
+input DidacticActivityInput {
+    id: Int
+    className: String
+    activityType: String
+    yearOfAttendingActivity: String
+    owner: Int
+}

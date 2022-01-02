@@ -26,6 +26,7 @@ export const Responses = {
     USER_ALREADY_CREATED: 'User already created.',
     USER_CREATED: 'The user was created. Check your email for verification.',
     INVALID_KEY: 'Invalid key or user already activated.',
+    INVALID_TOKEN: 'Invalid token',
     INVALID_KEY_USER_NOT_FOUND: 'User not found.',
     USER_ACTIVATED: 'User was activated. You can now log in.',
     INVALID_CREDENTIALS: 'Invalid credentials.',
@@ -36,4 +37,8 @@ export const Responses = {
     SUCCESS: 'Success',
     MISSING_KEY: 'Missing key',
     INVALID_USER: 'Invalid user.',
+    UNAUTHORIZED: 'Unauthorized',
+    UNAUTHORIZED_ACTIVATE_FIRST: 'Unauthorized, activate your account first',
+    NOT_FOUND: 'Not found',
+
 }

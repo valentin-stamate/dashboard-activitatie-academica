@@ -23,10 +23,10 @@ export abstract class UserCrudRepository {
 
     /** Users - CREATE |
      * Adds a new user.test.ts to database. */
-    static async addUser(payload: User) {
+    static async addUser(data: User) {
         const query = `INSERT INTO users(identifier, email) VALUES ($1, $2) RETURNING *`;
 
-        const params = [payload.identifier, payload.email];
+        const params = [data.identifier, data.email];
         const {rows} = await QueryDB(query, params);
         return rows;
     }
@@ -47,19 +47,19 @@ export abstract class UserCrudRepository {
 
     /** Users - UPDATE |
      * Update the user.test.ts information. */
-    static async updateUser(payload: User) {
+    static async updateUser(data: User) {
         const query = `UPDATE users SET identifier = $2, email = $3 WHERE id = $1`;
 
-        const params = [payload.id, payload.identifier, payload.email];
+        const params = [data.id, data.identifier, data.email];
 
         await QueryDB(query, params);
     }
 
     /** Users - DELETE |
      * Deletes a user.test.ts. */
-    static async deleteUser(payload: User) {
+    static async deleteUser(data: User) {
         const query = `DELETE FROM users WHERE id = $1`;
 
-        await QueryDB(query, [payload.id]);
+        await QueryDB(query, [data.id]);
     }
 }

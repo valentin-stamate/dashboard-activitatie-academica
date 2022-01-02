@@ -12,7 +12,7 @@ const pool = new Pool({
 });
 
 export const QueryDB = (text: string, params: any) => {
-    console.log("Executing QueryUnknown: ", text);
+    console.log("Executing Query: ", text);
     console.log("Payload: ", params, '\n');
 
     return pool.query(text, params);
