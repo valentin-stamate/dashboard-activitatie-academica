@@ -13,15 +13,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editInformation: async ({authToken, data}: any) => {
+    updateInformation: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editInformation(authToken, data);
+        const response = await service.updateInformation(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteInformation: async ({authToken}: any) => {
@@ -48,15 +48,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editScientificArticleISI: async ({authToken, data}: any) => {
+    updateScientificArticleISI: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editScientificArticleISI(authToken, data);
+        const response = await service.updateScientificArticleISI(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteScientificArticleISI: async ({authToken}: any) => {
@@ -83,15 +83,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editISIProceeding: async ({authToken, data}: any) => {
+    updateISIProceeding: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editISIProceeding(authToken, data);
+        const response = await service.updateISIProceeding(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteISIProceeding: async ({authToken}: any) => {
@@ -118,15 +118,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editScientificArticleBDI: async ({authToken, data}: any) => {
+    updateScientificArticleBDI: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editScientificArticleBDI(authToken, data);
+        const response = await service.updateScientificArticleBDI(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteScientificArticleBDI: async ({authToken}: any) => {
@@ -153,15 +153,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editScientificBook: async ({authToken, data}: any) => {
+    updateScientificBook: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editScientificBook(authToken, data);
+        const response = await service.updateScientificBook(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteScientificBook: async ({authToken}: any) => {
@@ -188,15 +188,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editTranslation: async ({authToken, data}: any) => {
+    updateTranslation: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editTranslation(authToken, data);
+        const response = await service.updateTranslation(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteTranslation: async ({authToken}: any) => {
@@ -223,15 +223,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editScientificCommunication: async ({authToken, data}: any) => {
+    updateScientificCommunication: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editScientificCommunication(authToken, data);
+        const response = await service.updateScientificCommunication(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteScientificCommunication: async ({authToken}: any) => {
@@ -258,15 +258,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editPatent: async ({authToken, data}: any) => {
+    updatePatent: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editPatent(authToken, data);
+        const response = await service.updatePatent(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deletePatent: async ({authToken}: any) => {
@@ -293,15 +293,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editResearchContract: async ({authToken, data}: any) => {
+    updateResearchContract: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editResearchContract(authToken, data);
+        const response = await service.updateResearchContract(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteResearchContract: async ({authToken}: any) => {
@@ -328,15 +328,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editCitation: async ({authToken, data}: any) => {
+    updateCitation: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editCitation(authToken, data);
+        const response = await service.updateCitation(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteCitation: async ({authToken}: any) => {
@@ -363,15 +363,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editAwardAndNomination: async ({authToken, data}: any) => {
+    updateAwardAndNomination: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editAwardAndNomination(authToken, data);
+        const response = await service.updateAwardAndNomination(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteAwardAndNomination: async ({authToken}: any) => {
@@ -398,15 +398,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editAcademyMember: async ({authToken, data}: any) => {
+    updateAcademyMember: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editAcademyMember(authToken, data);
+        const response = await service.updateAcademyMember(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteAcademyMember: async ({authToken}: any) => {
@@ -433,15 +433,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editEditorialMember: async ({authToken, data}: any) => {
+    updateEditorialMember: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editEditorialMember(authToken, data);
+        const response = await service.updateEditorialMember(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteEditorialMember: async ({authToken}: any) => {
@@ -468,15 +468,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editOrganizedEvent: async ({authToken, data}: any) => {
+    updateOrganizedEvent: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editOrganizedEvent(authToken, data);
+        const response = await service.updateOrganizedEvent(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteOrganizedEvent: async ({authToken}: any) => {
@@ -503,15 +503,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editWithoutActivity: async ({authToken, data}: any) => {
+    updateWithoutActivity: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editWithoutActivity(authToken, data);
+        const response = await service.updateWithoutActivity(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteWithoutActivity: async ({authToken}: any) => {
@@ -538,15 +538,15 @@ export const MutationUser = {
         return response.payload;
     },
 
-    editDidacticActivity: async ({authToken, data}: any) => {
+    updateDidacticActivity: async ({authToken, data}: any) => {
         const service = new UserService();
 
-        const response = await service.editDidacticActivity(authToken, data);
+        const response = await service.updateDidacticActivity(authToken, data);
         if (!response.succes) {
             throw new Error(response.message);
         }
 
-        return response.message;
+        return response.payload;
     },
 
     deleteDidacticActivity: async ({authToken}: any) => {

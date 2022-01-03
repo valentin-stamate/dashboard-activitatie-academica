@@ -97,7 +97,7 @@ export class ScientificArticleISI {
         this.issue = props.issue;
         this.startingPage = props.starting_page;
         this.endingPage = props.ending_page;
-        this.impactFactor = props.impact_pactor;
+        this.impactFactor = props.impact_factor;
         this.cnatdcuClassification = props.cnatdcu_classification;
         this.doi = props.doi;
         this.conferenceName = props.conference_name;
@@ -128,7 +128,7 @@ export class ISIProceeding {
         this.authors = props.authors;
         this.conferenceName = props.conference_name;
         this.indexedVolumeType = props.indexed_volume_type;
-        this.publicationYear = props.publication_date;
+        this.publicationYear = props.publication_year;
         this.articleType = props.article_type;
         this.conferenceType = props.conference_name;
         this.conferenceLink = props.conference_link;
@@ -198,7 +198,7 @@ export class ScientificBook {
     constructor(props: any) {
         this.id = props.id;
         this.hierarchyDomains = props.hierarchy_domains;
-        this.chapterTitle = props.chapter_name;
+        this.chapterTitle = props.chapter_title;
         this.authors = props.authors;
         this.bookTitle = props.book_title;
         this.pageNumber = props.page_number;
@@ -392,12 +392,12 @@ export class AwardAndNomination {
 
 /* Membru în academii */
 export class AcademyMember {
-    id: number;
-    admissionYear: string;
-    academyName: string;
-    memberType: string;
-    observations: string;
-    owner: number;
+    id
+    admissionYear
+    academyName
+    memberType
+    observations
+    owner
 
     constructor(props: any) {
         this.id = props.id;
@@ -411,15 +411,15 @@ export class AcademyMember {
 
 /* Membru în echipa editorială */
 export class EditorialMember {
-    id: number;
-    committeeName: string;
-    magazineName: string;
-    yearOfCommitteeAttendance: string;
-    quality: string;
-    magazineType: string;
-    nationalOrInternational: string;
-    observations: string;
-    owner: number;
+    id
+    committeeName
+    magazineName
+    yearOfCommitteeAttendance
+    quality
+    magazineType
+    nationalOrInternational
+    observations
+    owner
 
     constructor(props: any) {
         this.id = props.id;

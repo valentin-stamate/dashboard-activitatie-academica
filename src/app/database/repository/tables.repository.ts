@@ -116,11 +116,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getInformationByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addInformation(data);
-            return;
+            return await this.addInformation(data);
         }
 
-        await this.updateInformation(data);
+        data.id = rows[0].id;
+        return await this.updateInformation(data);
     }
 
     /* Articole științifice publicate în extenso...(ISI) */
@@ -149,11 +149,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getScientificArticleISIByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addScientificArticleISI(data);
-            return;
+            return await this.addScientificArticleISI(data);
         }
 
-        await this.updateScientificArticleISI(data);
+        data.id = rows[0].id;
+        return await this.updateScientificArticleISI(data);
     }
 
     /* ISI proceedings */
@@ -182,11 +182,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getISIProceedingByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addISIProceeding(data);
-            return;
+            return await this.addISIProceeding(data);
         }
 
-        await this.updateISIProceeding(data);
+        data.id = rows[0].id;
+        return await this.updateISIProceeding(data);
     }
 
     /* Articole științifice publicate în extenso... (BDI) */
@@ -215,11 +215,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getScientificArticleBDIByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addScientificArticleBDI(data);
-            return;
+            return await this.addScientificArticleBDI(data);
         }
 
-        await this.updateScientificArticleBDI(data);
+        data.id = rows[0].id;
+        return await this.updateScientificArticleBDI(data);
     }
 
     /* Cărți ştiinţifice sau capitole de cărți publicate în edituri */
@@ -248,11 +248,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getScientificBookByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addScientificBook(data);
-            return;
+            return await this.addScientificBook(data);
         }
 
-        await this.updateScientificBook(data);
+        data.id = rows[0].id;
+        return await this.updateScientificBook(data);
     }
 
     /* Traduceri */
@@ -281,11 +281,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getTranslationByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addTranslation(data);
-            return;
+            return await this.addTranslation(data);
         }
 
-        await this.updateTranslation(data);
+        data.id = rows[0].id;
+        return await this.updateTranslation(data);
     }
 
     /* Comunicări în manifestări științifice */
@@ -314,11 +314,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getScientificCommunicationByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addScientificCommunication(data);
-            return;
+            return await this.addScientificCommunication(data);
         }
 
-        await this.updateScientificCommunication(data);
+        data.id = rows[0].id;
+        return await this.updateScientificCommunication(data);
     }
 
     /* Brevete */
@@ -347,11 +347,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getPatentByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addPatent(data);
-            return;
+            return await this.addPatent(data);
         }
 
-        await this.updatePatent(data);
+        data.id = rows[0].id;
+        return await this.updatePatent(data);
     }
 
     /* Contracte de cercetare */
@@ -380,11 +380,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getResearchContractByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addResearchContract(data);
-            return;
+            return await this.addResearchContract(data);
         }
 
-        await this.updateResearchContract(data);
+        data.id = rows[0].id;
+        return await this.updateResearchContract(data);
     }
 
     /* Citări */
@@ -413,11 +413,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getCitationByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addCitation(data);
-            return;
+            return await this.addCitation(data);
         }
 
-        await this.updateCitation(data);
+        data.id = rows[0].id;
+        return await this.updateCitation(data);
     }
 
     /* Premii si nominalizări */
@@ -429,7 +429,7 @@ export class TablesRepository extends TablesCrudRepository {
     }
 
     static async getAwardAndNominationByUser(userId: number): Promise<AwardAndNomination[]> {
-        const query = `SELECT * FROM information WHERE owner = $1`;
+        const query = `SELECT * FROM awards_and_nominations WHERE owner = $1`;
 
         const {rows} = await QueryDB(query, [userId]);
 
@@ -446,11 +446,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getAwardAndNominationByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addAwardAndNomination(data);
-            return;
+            return await this.addAwardAndNomination(data);
         }
 
-        await this.updateAwardAndNomination(data);
+        data.id = rows[0].id;
+        return await this.updateAwardAndNomination(data);
     }
 
     /* Membru în academii */
@@ -479,11 +479,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getAcademyMemberByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addAcademyMember(data);
-            return;
+            return await this.addAcademyMember(data);
         }
 
-        await this.updateAcademyMember(data);
+        data.id = rows[0].id;
+        return await this.updateAcademyMember(data);
     }
 
     /* Membru în echipa editorială */
@@ -512,11 +512,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getEditorialMemberByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addEditorialMember(data);
-            return;
+            return await this.addEditorialMember(data);
         }
 
-        await this.updateEditorialMember(data);
+        data.id = rows[0].id;
+        return await this.updateEditorialMember(data);
     }
 
     /* Evenimente organizate */
@@ -545,11 +545,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getOrganizedEventByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addOrganizedEvent(data);
-            return;
+            return await this.addOrganizedEvent(data);
         }
 
-        await this.updateOrganizedEvent(data);
+        data.id = rows[0].id;
+        return await this.updateOrganizedEvent(data);
     }
 
     /* Fără activitate științifică */
@@ -578,11 +578,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getWithoutActivityByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addWithoutActivity(data);
-            return;
+            return await this.addWithoutActivity(data);
         }
 
-        await this.updateWithoutActivity(data);
+        data.id = rows[0].id;
+        return await this.updateWithoutActivity(data);
     }
 
     /* Activitate didactică */
@@ -611,11 +611,11 @@ export class TablesRepository extends TablesCrudRepository {
         const rows = await this.getDidacticActivityByUser(data.owner);
 
         if (rows.length === 0) {
-            await this.addDidacticActivity(data);
-            return;
+            return await this.addDidacticActivity(data);
         }
 
-        await this.updateDidacticActivity(data);
+        data.id = rows[0].id;
+        return await this.updateDidacticActivity(data);
     }
 
 }

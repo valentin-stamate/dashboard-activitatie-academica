@@ -150,13 +150,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editInformation(authToken: AuthToken, data: Information): Promise<ServiceResponse> {
+    async updateInformation(authToken: AuthToken, data: Information): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateInformation(data);
+        const rows = await TablesRepository.addOrUpdateInformation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteInformation(authToken: AuthToken): Promise<ServiceResponse> {
@@ -174,13 +174,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editScientificArticleISI(authToken: AuthToken, data: ScientificArticleISI): Promise<ServiceResponse> {
+    async updateScientificArticleISI(authToken: AuthToken, data: ScientificArticleISI): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateScientificArticleISI(data);
+        const rows = await TablesRepository.addOrUpdateScientificArticleISI(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteScientificArticleISI(authToken: AuthToken): Promise<ServiceResponse> {
@@ -198,13 +198,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editISIProceeding(authToken: AuthToken, data: ISIProceeding): Promise<ServiceResponse> {
+    async updateISIProceeding(authToken: AuthToken, data: ISIProceeding): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateISIProceeding(data);
+        const rows = await TablesRepository.addOrUpdateISIProceeding(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteISIProceeding(authToken: AuthToken): Promise<ServiceResponse> {
@@ -222,13 +222,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editScientificArticleBDI(authToken: AuthToken, data: ScientificArticleBDI): Promise<ServiceResponse> {
+    async updateScientificArticleBDI(authToken: AuthToken, data: ScientificArticleBDI): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateScientificArticleBDI(data);
+        const rows = await TablesRepository.addOrUpdateScientificArticleBDI(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteScientificArticleBDI(authToken: AuthToken): Promise<ServiceResponse> {
@@ -246,13 +246,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editScientificBook(authToken: AuthToken, data: ScientificBook): Promise<ServiceResponse> {
+    async updateScientificBook(authToken: AuthToken, data: ScientificBook): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateScientificBook(data);
+        const rows = await TablesRepository.addOrUpdateScientificBook(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteScientificBook(authToken: AuthToken): Promise<ServiceResponse> {
@@ -270,13 +270,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editTranslation(authToken: AuthToken, data: Translation): Promise<ServiceResponse> {
+    async updateTranslation(authToken: AuthToken, data: Translation): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateTranslation(data);
+        const rows = await TablesRepository.addOrUpdateTranslation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteTranslation(authToken: AuthToken): Promise<ServiceResponse> {
@@ -294,13 +294,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editScientificCommunication(authToken: AuthToken, data: ScientificCommunication): Promise<ServiceResponse> {
+    async updateScientificCommunication(authToken: AuthToken, data: ScientificCommunication): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateScientificCommunication(data);
+        const rows = await TablesRepository.addOrUpdateScientificCommunication(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteScientificCommunication(authToken: AuthToken): Promise<ServiceResponse> {
@@ -318,13 +318,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editPatent(authToken: AuthToken, data: Patent): Promise<ServiceResponse> {
+    async updatePatent(authToken: AuthToken, data: Patent): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdatePatent(data);
+        const rows = await TablesRepository.addOrUpdatePatent(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deletePatent(authToken: AuthToken): Promise<ServiceResponse> {
@@ -342,13 +342,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editResearchContract(authToken: AuthToken, data: ResearchContract): Promise<ServiceResponse> {
+    async updateResearchContract(authToken: AuthToken, data: ResearchContract): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateResearchContract(data);
+        const rows = await TablesRepository.addOrUpdateResearchContract(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteResearchContract(authToken: AuthToken): Promise<ServiceResponse> {
@@ -366,13 +366,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editCitation(authToken: AuthToken, data: Citation): Promise<ServiceResponse> {
+    async updateCitation(authToken: AuthToken, data: Citation): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateCitation(data);
+        const rows = await TablesRepository.addOrUpdateCitation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteCitation(authToken: AuthToken): Promise<ServiceResponse> {
@@ -390,13 +390,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editAwardAndNomination(authToken: AuthToken, data: AwardAndNomination): Promise<ServiceResponse> {
+    async updateAwardAndNomination(authToken: AuthToken, data: AwardAndNomination): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateAwardAndNomination(data);
+        const rows = await TablesRepository.addOrUpdateAwardAndNomination(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteAwardAndNomination(authToken: AuthToken): Promise<ServiceResponse> {
@@ -414,13 +414,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editAcademyMember(authToken: AuthToken, data: AcademyMember): Promise<ServiceResponse> {
+    async updateAcademyMember(authToken: AuthToken, data: AcademyMember): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateAcademyMember(data);
+        const rows = await TablesRepository.addOrUpdateAcademyMember(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteAcademyMember(authToken: AuthToken): Promise<ServiceResponse> {
@@ -438,13 +438,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editEditorialMember(authToken: AuthToken, data: EditorialMember): Promise<ServiceResponse> {
+    async updateEditorialMember(authToken: AuthToken, data: EditorialMember): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateEditorialMember(data);
+        const rows = await TablesRepository.addOrUpdateEditorialMember(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteEditorialMember(authToken: AuthToken): Promise<ServiceResponse> {
@@ -462,13 +462,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editOrganizedEvent(authToken: AuthToken, data: OrganizedEvent): Promise<ServiceResponse> {
+    async updateOrganizedEvent(authToken: AuthToken, data: OrganizedEvent): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateOrganizedEvent(data);
+        const rows = await TablesRepository.addOrUpdateOrganizedEvent(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteOrganizedEvent(authToken: AuthToken): Promise<ServiceResponse> {
@@ -486,13 +486,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editWithoutActivity(authToken: AuthToken, data: WithoutActivity): Promise<ServiceResponse> {
+    async updateWithoutActivity(authToken: AuthToken, data: WithoutActivity): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateWithoutActivity(data);
+        const rows = await TablesRepository.addOrUpdateWithoutActivity(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteWithoutActivity(authToken: AuthToken): Promise<ServiceResponse> {
@@ -510,13 +510,13 @@ export class UserService implements UserServiceInterface {
         return new ServiceResponse(true, Responses.SUCCESS, rows);
     }
 
-    async editDidacticActivity(authToken: AuthToken, data: DidacticActivity): Promise<ServiceResponse> {
+    async updateDidacticActivity(authToken: AuthToken, data: DidacticActivity): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        await TablesRepository.addOrUpdateDidacticActivity(data);
+        const rows = await TablesRepository.addOrUpdateDidacticActivity(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, null);
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async deleteDidacticActivity(authToken: AuthToken): Promise<ServiceResponse> {

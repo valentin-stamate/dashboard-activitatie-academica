@@ -146,11 +146,12 @@ export abstract class TablesCrudRepository {
     static async updateInformation(data: Information) {
         const query = `UPDATE information 
                        SET full_name = $2, marriage_name = $3, thesis_coordinator = $4, founding = $5, completion_date = $6 
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.fullName, data.marriageName, data.thesisCoordinator, data.founding, data.completionDate];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Information - DELETE */
@@ -216,13 +217,14 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE scientific_article_isi SET article_title = $2, authors = $3, publication_date = $4, 
                                   volume = $5, issue = $6, starting_page = $7, ending_page = $8, 
                                   impact_factor = $9, cnatdcu_classification = $10, doi = $11, conference_name = $12,
-                                  observations = $13 WHERE id = $1`;
+                                  observations = $13 WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.articleTitle, data.authors, data.publicationDate, data.volume,
                         data.issue, data.startingPage, data.endingPage, data.impactFactor,
                         data.cnatdcuClassification, data.doi, data.conferenceName, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Scientific Articles ISI - DELETE */
@@ -288,13 +290,14 @@ export abstract class TablesCrudRepository {
                        article_title = $2, authors = $3, conference_name = $4, indexed_volume_type = $5, publication_year = $6,
                        article_type = $7, conference_type = $8, conference_link = $9, starting_page = $10, ending_page = $11,
                        observations = $12
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.articleTitle, data.authors, data.conferenceName, data.indexedVolumeType,
                         data.publicationYear, data.articleType, data.conferenceType, data.conferenceLink,
                         data.startingPage, data.endingPage, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** ISI Proceedings - DELETE */
@@ -363,14 +366,15 @@ export abstract class TablesCrudRepository {
                        publication_year = $6, volume = $7, number = $8, starting_page = $9, ending_page = $10,
                        international_magazine = $11, cnatdcu_classification = $12, indexed_article_link = $13, 
                        bdi_database = $14, bdi_database_link = $15, observations = $16
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.hierarchyDomains, data.articleTitle, data.authors, data.bdiIndexedMagazine,
                         data.publicationYear, data.volume, data.number, data.startingPage, data.endingPage,
                         data.internationalMagazine, data.cnatdcuClassification, data.indexedArticleLink, data.bdiDatabase,
                         data.bdiDatabaseLink, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Scientific Articles BDI - DELETE */
@@ -435,13 +439,14 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE scientific_books SET 
                        hierarchy_domains = $2, chapter_title = $3, authors = $4, book_title = $5, page_number = $6, 
                        publication_year = $7, publishing_house = $8, publication_type = $9, isbn = $10, observations = $11
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.hierarchyDomains, data.chapterTitle, data.authors, data.bookTitle,
             data.pageNumber, data.publicationYear, data.publishingHouse, data.publicationType,
             data.isbn, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Scientific Books - DELETE */
@@ -507,13 +512,14 @@ export abstract class TablesCrudRepository {
                        hierarchy_domains = $2, translation_title = $3, authors = $4, translated_authors = $5, 
                        publication_year = $6, publishing_house = $7, country = $8, page_number = $9, isbn = $10,
                        translation_type = $11, observations = $12
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.hierarchyDomains, data.translationTitle, data.authors, data.translatedAuthors,
             data.publicationYear, data.publishingHouse, data.country, data.pageNumber, data.isbn,
             data.translationType, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Translations - DELETE */
@@ -577,12 +583,13 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE scientific_communications SET 
                        authors = $2, communication_type = $3, presentation_year = $4, scientific_manifestation_name = $5,
                        manifestation_type = $6, scientific_manifestation_link = $7, observations = $8
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.authors, data.communicationType, data.presentationYear, data.scientificManifestationName,
             data.manifestationType, data.scientificManifestationLink, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Scientific communications - DELETE */
@@ -616,7 +623,7 @@ export abstract class TablesCrudRepository {
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
 
         const params = [data.patentTitleOrCBI, data.authors, data.yearOfObtainingPatent, data.patentNumber,
-                        data.patentType, data.authority, data.country, data.observations];
+                        data.patentType, data.authority, data.country, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: Patent[] = [];
@@ -646,12 +653,13 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE patents SET 
                        patent_title_or_cbi = $2, authors = $3, year_of_obtaining_patent = $4, patent_number = $5, 
                        patent_type = $6, authority = $7, country = $8, observations = $9
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.patentTitleOrCBI, data.authors, data.yearOfObtainingPatent, data.patentNumber,
             data.patentType, data.authority, data.country, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Patents - DELETE */
@@ -716,12 +724,13 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE research_contracts SET 
                        research_contract_name_or_project = $2, project_code = $3, financier = $4, function = $5,
                        start_project_period = $6, end_project_period = $7, contract_type = $8, observations = $9
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.researchContractNameOrProject, data.projectCode, data.financier, data.function,
             data.startProjectPeriod, data.endProjectPeriod, data.contractType, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Research contracts - DELETE */
@@ -790,14 +799,15 @@ export abstract class TablesCrudRepository {
                        authors_names_that_reference = $5, citation_year = $6, volume = $7, impact_factor = $8, 
                        issue = $9, article_number = $10, starting_page = $11, ending_page = $12, doi = $13, 
                        cnatdcu_classification = $14, citations = $15, observations = $16
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.articleTitle, data.authors, data.publicationTitleWhereReferenced,
             data.authorsNamesThatReference, data.citationYear, data.volume, data.impactFactor,
             data.issue, data.articleNumber, data.startingPage, data.endingPage, data.doi,
             data.cnatdcuClassification, data.citations, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Citations - DELETE */
@@ -861,12 +871,13 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE awards_and_nominations SET 
                        year_of_award = $2, award_name = $3, award_type = $4, organization_that_give_the_award = $5, 
                        country = $6, awarded_for = $7, observations = $8
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.yearOfAward, data.awardName, data.awardType, data.organizationThatGiveTheAward,
             data.country, data.awardedFor, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Awards and nominations - DELETE */
@@ -898,7 +909,7 @@ export abstract class TablesCrudRepository {
                        (admission_year, academy_name, member_type, observations, owner)
                        VALUES ($1, $2, $3, $4, $5) RETURNING *`;
 
-        const params = [data.admissionYear, data.academyName, data.memberType, data.observations];
+        const params = [data.admissionYear, data.academyName, data.memberType, data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: AcademyMember[] = [];
@@ -927,11 +938,12 @@ export abstract class TablesCrudRepository {
     static async updateAcademyMember(data: AcademyMember) {
         const query = `UPDATE academy_member SET 
                        admission_year = $2, academy_name = $3, member_type = $4, observations = $5
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.admissionYear, data.academyName, data.memberType, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Academy member - DELETE */
@@ -995,12 +1007,13 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE editorial_member SET 
                        committee_name = $2, magazine_name = $3, year_of_committee_attendance = $4, quality = $5, 
                        magazine_type = $6, national_or_international = $7, observations = $8
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.committeeName, data.magazineName, data.yearOfCommitteeAttendance,
                         data.quality, data.magazineType, data.nationalOrInternational, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Editorial member - DELETE */
@@ -1066,13 +1079,14 @@ export abstract class TablesCrudRepository {
                        manifestation_name = $2, start_date = $3, end_date = $4, manifestation_place = $5, 
                        manifestation_type = $6, manifestation_classification = $7, manifestation_link = $8, 
                        contact_person = $9, observations = $10
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.manifestationName, data.startDate, data.endDate,
                         data.manifestationPlace, data.manifestationType, data.manifestationClassification,
                         data.manifestationLink, data.contactPerson, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Organized events - DELETE */
@@ -1104,7 +1118,7 @@ export abstract class TablesCrudRepository {
                        (observations, owner)
                        VALUES ($1, $2) RETURNING *`;
 
-        const params = [data.observations];
+        const params = [data.observations, data.owner];
 
         const {rows} = await QueryDB(query, params);
         const list: WithoutActivity[] = [];
@@ -1133,11 +1147,12 @@ export abstract class TablesCrudRepository {
     static async updateWithoutActivity(data: WithoutActivity) {
         const query = `UPDATE without_activity SET 
                        observations = $2
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.observations];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Without activity - DELETE */
@@ -1198,11 +1213,12 @@ export abstract class TablesCrudRepository {
     static async updateDidacticActivity(data: DidacticActivity) {
         const query = `UPDATE didactic_activity SET 
                        class_name = $2, activity_type = $3, year_of_attending_activity = $4
-                       WHERE id = $1`;
+                       WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.className, data.activityType, data.yearOfAttendingActivity];
 
-        await QueryDB(query, params);
+        const {rows} = await QueryDB(query, params);
+        return rows;
     }
 
     /** Didactic activity - DELETE */
