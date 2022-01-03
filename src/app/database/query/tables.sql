@@ -19,8 +19,17 @@ DROP TABLE IF EXISTS didactic_activity;
 DROP TABLE IF EXISTS authentication;
 DROP TABLE IF EXISTS activation;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS ids;
 
 /* ----==== CREATE ====---- */
+
+/* Id'uri valide. Numai utilizatorii cu acele id'uri se pot loga. */
+CREATE TABLE ids (
+    id SERIAL,
+    identifier VARCHAR(30) UNIQUE NOT NULL ,
+
+    PRIMARY KEY (id)
+);
 
 /* Utilizatori */
 CREATE TABLE users (

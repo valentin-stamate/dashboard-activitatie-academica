@@ -2,7 +2,7 @@ import {TablesCrudRepository} from "./crud/tables.crud.repository";
 import {
     AcademyMember, Activation, Authentication,
     AwardAndNomination,
-    Citation, DidacticActivity, EditorialMember,
+    Citation, DidacticActivity, EditorialMember, Id,
     Information,
     ISIProceeding, OrganizedEvent, Patent, ResearchContract,
     ScientificArticleBDI,
@@ -17,6 +17,20 @@ import {QueryDB} from "../connection";
  * Every method throws an exception if something is wrong.
  * The exception is handled in the Service layer.*/
 export class TablesRepository extends TablesCrudRepository {
+
+    /* Id */
+    static async getIdByIdentifier(identifier: string) {
+        const query = `SELECT * FROM ids WHERE identifier = $1`;
+        const params = [identifier];
+
+        const {rows} = await QueryDB(query, params);
+
+        if (rows.length === 1) {
+            return new Id(rows[0])
+        }
+
+        return null;
+    }
 
     /* Autentificare */
     static async deleteAuthenticationByUser(userId: number) {

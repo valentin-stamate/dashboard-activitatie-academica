@@ -34,7 +34,7 @@ export abstract class UserCrudRepository {
     /** Users - READ |
      * @return a user.test.ts instance or null if is not found */
     static async getUserById(id: number): Promise<User | null> {
-        const query = "SELECT * FROM users WHERE id = $1";
+        const query = `SELECT * FROM users WHERE id = $1`;
 
         const {rows} = await QueryDB(query, [id]);
 
@@ -58,8 +58,9 @@ export abstract class UserCrudRepository {
     /** Users - DELETE |
      * Deletes a user.test.ts. */
     static async deleteUser(data: User) {
-        const query = `DELETE FROM users WHERE id = $1`;
+        const query = `DELETE FROM users WHERE id = $1 RETURNING *`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id]);
+        return rows;
     }
 }

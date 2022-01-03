@@ -33,6 +33,10 @@ export class UserService implements UserServiceInterface {
             return new ServiceResponse(false, Responses.USER_ALREADY_CREATED, null);
         }
 
+        if (!await TablesRepository.getIdByIdentifier(user.identifier)) {
+            return new ServiceResponse(false, Responses.INVALID_IDENTIFIER, null);
+        }
+
         const rows = await UserRepository.addUser(user);
         const newUser = new User(rows[0]);
 

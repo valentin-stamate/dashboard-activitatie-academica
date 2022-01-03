@@ -1,7 +1,7 @@
 import {
     AcademyMember, Activation, Authentication,
     AwardAndNomination,
-    Citation, DidacticActivity, EditorialMember,
+    Citation, DidacticActivity, EditorialMember, Id,
     Information,
     ISIProceeding, OrganizedEvent, Patent, ResearchContract,
     ScientificArticleBDI,
@@ -14,6 +14,39 @@ import {QueryDB} from "../../connection";
  * Every method throws an exception if something is wrong.
  * The exception is handled in the Service layer.*/
 export abstract class TablesCrudRepository {
+    /* ----==== Id ====---- */
+    /** Id - READ */
+    static async allIds() {
+        const query = `SELECT * FROM ids`;
+
+        const {rows} = await QueryDB(query, []);
+        const list: Id[] = [];
+
+        for (const row of rows) {
+            list.push(new Id(row));
+        }
+
+        return list;
+    }
+
+    /** Id - CREATE */
+    static async addId(data: Id) {
+        const query = `INSERT INTO ids(identifier) VALUES ($1) RETURNING *`;
+        const params = [data.identifier];
+
+        const {rows} = await QueryDB(query, params);
+        return rows;
+    }
+
+    /** Id - REMOVE */
+    static async removeId(data: Id) {
+        const query = `DELETE FROM ids WHERE identifier = $1 RETURNING *`;
+        const params = [data.identifier];
+
+        const {rows} = await QueryDB(query, params);
+        return rows;
+    }
+
     /* ----==== Authentication ====---- */
 
     /** Authentication - CREATE */

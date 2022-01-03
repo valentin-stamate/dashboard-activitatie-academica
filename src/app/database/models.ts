@@ -3,6 +3,17 @@ export class ErrorResponse {
     constructor(public message: string) { }
 }
 
+/* ----==== Ids ====---- */
+export class Id {
+    id: number;
+    identifier: string;
+
+    constructor(props: any){
+        this.id = props.id;
+        this.identifier = props.identifier;
+    }
+}
+
 /* ----==== User ====---- */
 export class User {
     id: number;

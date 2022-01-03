@@ -4,6 +4,11 @@ type GqlResponse {
     message: String
 }
 
+type Id {
+    id: Int!
+    identifier: String!
+}
+
 type User {
     id: Int
     identifier: String!
@@ -232,9 +237,21 @@ type DidacticActivity {
 
 # ----------========== Input Types ==========---------- #
 
+input IdInput {
+    identifier: String!
+}
+
 input BaseUser {
     identifier: String!
     email: String!
+}
+
+input UserInput {
+    id: Int!
+    identifier: String!
+    email: String!
+    admin: Boolean
+    activated: Boolean
 }
 
 input AuthTokenInput {
@@ -242,18 +259,14 @@ input AuthTokenInput {
 }
 
 input InformationInput {
-    id: Int
     fullName: String
     marriageName: String
     thesisCoordinator: String
     founding: String
     completionDate: String
-    owner: Int
-    
 }
 
 input ScientificArticleISIInput {
-    id: Int
     articleTitle: String
     authors: String
     publicationDate: String
@@ -266,11 +279,9 @@ input ScientificArticleISIInput {
     doi: String
     conferenceName: String
     observations: String
-    owner: Int
 }
 
 input ISIProceedingInput {
-    id: Int
     articleTitle: String
     authors: String
     conferenceName: String
@@ -282,11 +293,9 @@ input ISIProceedingInput {
     startingPage: String
     endingPage: String
     observations: String
-    owner: Int
 }
 
 input ScientificArticleBDIInput {
-    id: Int
     hierarchyDomains: String
     articleTitle: String
     authors: String
@@ -302,11 +311,9 @@ input ScientificArticleBDIInput {
     bdiDatabase: String
     bdiDatabaseLink: String
     observations: String
-    owner: Int
 }
 
 input ScientificBookInput {
-    id: Int
     hierarchyDomains: String
     chapterTitle: String
     authors: String
@@ -317,11 +324,9 @@ input ScientificBookInput {
     publicationType: String
     isbn: String
     observations: String
-    owner: Int
 }
 
 input TranslationInput {
-    id: Int
     hierarchyDomains: String
     translationTitle: String
     authors: String
@@ -333,11 +338,9 @@ input TranslationInput {
     isbn: String
     translationType: String
     observations: String
-    owner: Int
 }
 
 input ScientificCommunicationInput {
-    id: Int
     authors: String
     communicationType: String
     presentationYear: String
@@ -345,11 +348,9 @@ input ScientificCommunicationInput {
     manifestationType: String
     scientificManifestationLink: String
     observations: String
-    owner: Int
 }
 
 input PatentInput {
-    id: Int
     patentTitleOrCBI: String
     authors: String
     yearOfObtainingPatent: String
@@ -358,11 +359,9 @@ input PatentInput {
     authority: String
     country: String
     observations: String
-    owner: Int
 }
 
 input ResearchContractInput {
-    id: Int
     researchContractNameOrProject: String
     projectCode: String
     financier: String
@@ -371,11 +370,9 @@ input ResearchContractInput {
     endProjectPeriod: String
     contractType: String
     observations: String
-    owner: Int
 }
 
 input CitationInput {
-    id: Int
     articleTitle: String
     authors: String
     publicationTitleWhereReferenced: String
@@ -391,11 +388,9 @@ input CitationInput {
     cnatdcuClassification: String
     citations: String
     observations: String
-    owner: Int
 }
 
 input AwardAndNominationInput {
-    id: Int
     yearOfAward: String
     awardName: String
     awardType: String
@@ -403,20 +398,16 @@ input AwardAndNominationInput {
     country: String
     awardedFor: String
     observations: String
-    owner: Int
 }
 
 input AcademyMemberInput {
-    id: Int
     admissionYear: String
     academyName: String
     memberType: String
     observations: String
-    owner: Int
 }
 
 input EditorialMemberInput {
-    id: Int
     committeeName: String
     magazineName: String
     yearOfCommitteeAttendance: String
@@ -424,11 +415,9 @@ input EditorialMemberInput {
     magazineType: String
     nationalOrInternational: String
     observations: String
-    owner: Int
 }
 
 input OrganizedEventInput {
-    id: Int
     manifestationName: String
     startDate: String
     endDate: String
@@ -438,19 +427,14 @@ input OrganizedEventInput {
     manifestationLink: String
     contactPerson: String
     observations: String
-    owner: Int
 }
 
 input WithoutActivityInput {
-    id: Int
     observations: String
-    owner: Int
 }
 
 input DidacticActivityInput {
-    id: Int
     className: String
     activityType: String
     yearOfAttendingActivity: String
-    owner: Int
 }

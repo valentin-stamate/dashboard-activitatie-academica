@@ -1,3 +1,12 @@
 type Mutation {
-    hello: String
+    deactivateUser(user: UserInput!): Int
+    activateUser(user: UserInput!): Int
+
+    makeAdminUser(user: UserInput!): Int
+    removeAdminUser(user: UserInput!): Int
+
+    addId(id: IdInput!): Int
+    removeId(id: IdInput!): Int
+
+    removeUser(user: UserInput!): Int
 }

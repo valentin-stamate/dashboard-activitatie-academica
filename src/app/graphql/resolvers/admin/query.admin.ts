@@ -1,5 +1,27 @@
+import {UserAdminService} from "../../../service/user.admin.service";
+
 export const QueryAdmin = {
-    hello: async () => {
-        return 'Hello!';
+    allUsers: async ({authToken}: any) => {
+        const service = new UserAdminService();
+
+        const response = await service.getAllUsers(authToken);
+
+        if (!response.succes) {
+            throw new Error(response.message);
+        }
+
+        return response.payload;
+    },
+
+    allIds: async () => {
+        const service = new UserAdminService();
+
+        const response = await service.getAllIds();
+
+        if (!response.succes) {
+            throw new Error(response.message);
+        }
+
+        return response.payload;
     },
 }

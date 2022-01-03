@@ -1,5 +1,3 @@
-/** This interface contains only user specific operations.
- * The form association is defined in another interface. */
 import {
     AcademyMember,
     AuthToken, AwardAndNomination, Citation, DidacticActivity, EditorialMember,
@@ -11,6 +9,8 @@ import {
 } from "../../database/models";
 import {ServiceResponse} from "../service.response";
 
+/** This interface contains only user specific operations.
+ * The form association is defined in another interface. */
 export interface UserServiceInterface {
     /************************************************************
      *                    UNKNWON USER ONLY
@@ -112,23 +112,4 @@ export interface UserServiceInterface {
     getDidacticActivity(token: AuthToken): Promise<ServiceResponse>;
     updateDidacticActivity(token: AuthToken, data: DidacticActivity): Promise<ServiceResponse>;
     deleteDidacticActivity(token: AuthToken, data: DidacticActivity): Promise<ServiceResponse>;
-
-    /************************************************************
-     *                    ADMIN USER ONLY
-     * **********************************************************/
-
-    /** Admin permission only. Change user information. */
-    // updateUser(): void;
-
-    /** Admin permission only. Deactivates the user. It can be reactivated after. */
-    // deactivateUser(): void;
-
-    /** Admin permission only. Make another admin user. */
-    // makeAdminPermission(): void;
-
-    /** Admin permission only. Remove admin permission. */
-    // removeAdminPermission(): void;
-
-    /** Admin permission only. Remove user. */
-    // removeUser(): void;
 }

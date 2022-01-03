@@ -7,6 +7,7 @@ export abstract class DatabaseRepository {
 
     static async createDatabaseTables() {
         /* Tables */
+        await DatabaseTables.dropIdsTable();
         await DatabaseTables.createUserTable();
         await DatabaseTables.createActivationTable();
         await DatabaseTables.createAuthenticationTable();
@@ -49,12 +50,30 @@ export abstract class DatabaseRepository {
         await DatabaseTables.dropAuthenticationTable();
         await DatabaseTables.dropActivationTable();
         await DatabaseTables.dropUserTable();
+        await DatabaseTables.dropIdsTable();
     }
 
 }
 
 /** This class contains the methods to create the database schema */
 abstract class DatabaseTables {
+    /** Tabela de id-uri */
+    static async createIdsTable() {
+        const query = `CREATE TABLE ids (
+            id SERIAL,
+            identifier VARCHAR(30) UNIQUE NOT NULL ,
+            
+            PRIMARY KEY (id)
+        )`;
+
+        await QueryDB(query, []);
+    }
+
+    static async dropIdsTable() {
+        const query = `DROP TABLE ids`;
+        await QueryDB(query, []);
+    }
+
     /** Utilizatori */
     static async createUserTable() {
         const query = `CREATE TABLE users (
