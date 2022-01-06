@@ -146,8 +146,8 @@ export abstract class TablesCrudRepository {
     /** Information - CREATE */
     static async addInformation(data: Information): Promise<Information[]> {
         const query = `INSERT INTO 
-                       information(full_name, marriage_name, thesis_coordinator, founding, completion_date, owner) 
-                       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+                       information(full_name, marriage_name, thesis_coordinator, founding, completion_date, owner, updated) 
+                       VALUES ($1, $2, $3, $4, $5, $6, current_timestamp) RETURNING *`;
 
         const params = [data.fullName, data.marriageName, data.thesisCoordinator, data.founding,
                         data.completionDate, data.owner];
@@ -178,7 +178,8 @@ export abstract class TablesCrudRepository {
     /** Information - UPDATE */
     static async updateInformation(data: Information) {
         const query = `UPDATE information 
-                       SET full_name = $2, marriage_name = $3, thesis_coordinator = $4, founding = $5, completion_date = $6 
+                       SET full_name = $2, marriage_name = $3, thesis_coordinator = $4, founding = $5, completion_date = $6,
+                       updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.fullName, data.marriageName, data.thesisCoordinator, data.founding, data.completionDate];
@@ -214,8 +215,8 @@ export abstract class TablesCrudRepository {
     static async addScientificArticleISI(data: ScientificArticleISI): Promise<ScientificArticleISI[]> {
         const query = `INSERT INTO scientific_article_isi
                        (article_title, authors, publication_date, volume, issue, starting_page, ending_page, 
-                        impact_factor, cnatdcu_classification, doi, conference_name, observations, owner) 
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`;
+                        impact_factor, cnatdcu_classification, doi, conference_name, observations, owner, updated) 
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, current_timestamp) RETURNING *`;
 
         const params = [data.articleTitle, data.authors, data.publicationDate, data.volume,
                         data.issue, data.startingPage, data.endingPage, data.impactFactor,
@@ -250,7 +251,7 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE scientific_article_isi SET article_title = $2, authors = $3, publication_date = $4, 
                                   volume = $5, issue = $6, starting_page = $7, ending_page = $8, 
                                   impact_factor = $9, cnatdcu_classification = $10, doi = $11, conference_name = $12,
-                                  observations = $13 WHERE id = $1 RETURNING *`;
+                                  observations = $13, updated = current_timestamp WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.articleTitle, data.authors, data.publicationDate, data.volume,
                         data.issue, data.startingPage, data.endingPage, data.impactFactor,
@@ -287,8 +288,9 @@ export abstract class TablesCrudRepository {
     static async addISIProceeding(data: ISIProceeding): Promise<ISIProceeding[]> {
         const query = `INSERT INTO isi_proceedings 
                        (article_title, authors, conference_name, indexed_volume_type, publication_year, 
-                        article_type, conference_type, conference_link, starting_page, ending_page, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`;
+                        article_type, conference_type, conference_link, starting_page, ending_page, observations, owner,
+                        updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, current_timestamp) RETURNING *`;
 
         const params = [data.articleTitle, data.authors, data.conferenceName, data.indexedVolumeType,
                         data.publicationYear, data.articleType, data.conferenceType, data.conferenceLink,
@@ -322,7 +324,7 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE isi_proceedings SET 
                        article_title = $2, authors = $3, conference_name = $4, indexed_volume_type = $5, publication_year = $6,
                        article_type = $7, conference_type = $8, conference_link = $9, starting_page = $10, ending_page = $11,
-                       observations = $12
+                       observations = $12, updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.articleTitle, data.authors, data.conferenceName, data.indexedVolumeType,
@@ -361,8 +363,8 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO scientific_articles_bdi
                        (hierarchy_domains, article_title, authors, bdi_indexed_magazine, publication_year, volume, 
                         number, starting_page, ending_page, international_magazine, cnatdcu_classification, 
-                        indexed_article_link, bdi_database, bdi_database_link, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING *`;
+                        indexed_article_link, bdi_database, bdi_database_link, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, current_timestamp) RETURNING *`;
 
         const params = [data.hierarchyDomains, data.articleTitle, data.authors, data.bdiIndexedMagazine,
             data.publicationYear, data.volume, data.number, data.startingPage, data.endingPage,
@@ -398,7 +400,7 @@ export abstract class TablesCrudRepository {
                        hierarchy_domains = $2, article_title = $3, authors = $4, bdi_indexed_magazine = $5,
                        publication_year = $6, volume = $7, number = $8, starting_page = $9, ending_page = $10,
                        international_magazine = $11, cnatdcu_classification = $12, indexed_article_link = $13, 
-                       bdi_database = $14, bdi_database_link = $15, observations = $16
+                       bdi_database = $14, bdi_database_link = $15, observations = $16, updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.hierarchyDomains, data.articleTitle, data.authors, data.bdiIndexedMagazine,
@@ -437,8 +439,8 @@ export abstract class TablesCrudRepository {
     static async addScientificBook(data: ScientificBook): Promise<ScientificBook[]> {
         const query = `INSERT INTO scientific_books
                        (hierarchy_domains, chapter_title, authors, book_title, page_number, publication_year, 
-                        publishing_house, publication_type, isbn, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`;
+                        publishing_house, publication_type, isbn, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, current_timestamp) RETURNING *`;
 
         const params = [data.hierarchyDomains, data.chapterTitle, data.authors, data.bookTitle,
                         data.pageNumber, data.publicationYear, data.publishingHouse, data.publicationType,
@@ -471,7 +473,8 @@ export abstract class TablesCrudRepository {
     static async updateScientificBook(data: ScientificBook) {
         const query = `UPDATE scientific_books SET 
                        hierarchy_domains = $2, chapter_title = $3, authors = $4, book_title = $5, page_number = $6, 
-                       publication_year = $7, publishing_house = $8, publication_type = $9, isbn = $10, observations = $11
+                       publication_year = $7, publishing_house = $8, publication_type = $9, isbn = $10, observations = $11,
+                       updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.hierarchyDomains, data.chapterTitle, data.authors, data.bookTitle,
@@ -509,8 +512,8 @@ export abstract class TablesCrudRepository {
     static async addTranslation(data: Translation): Promise<Translation[]> {
         const query = `INSERT INTO translations
                        (hierarchy_domains, translation_title, authors, translated_authors, publication_year, 
-                        publishing_house, country, page_number, isbn, translation_type, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`;
+                        publishing_house, country, page_number, isbn, translation_type, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, current_timestamp) RETURNING *`;
 
         const params = [data.hierarchyDomains, data.translationTitle, data.authors, data.translatedAuthors,
                         data.publicationYear, data.publishingHouse, data.country, data.pageNumber, data.isbn,
@@ -544,7 +547,7 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE translations SET 
                        hierarchy_domains = $2, translation_title = $3, authors = $4, translated_authors = $5, 
                        publication_year = $6, publishing_house = $7, country = $8, page_number = $9, isbn = $10,
-                       translation_type = $11, observations = $12
+                       translation_type = $11, observations = $12, updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.hierarchyDomains, data.translationTitle, data.authors, data.translatedAuthors,
@@ -582,8 +585,8 @@ export abstract class TablesCrudRepository {
     static async addScientificCommunication(data: ScientificCommunication): Promise<ScientificCommunication[]> {
         const query = `INSERT INTO scientific_communications
                        (authors, communication_type, presentation_year, scientific_manifestation_name, 
-                        manifestation_type, scientific_manifestation_link, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+                        manifestation_type, scientific_manifestation_link, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp) RETURNING *`;
 
         const params = [data.authors, data.communicationType, data.presentationYear, data.scientificManifestationName,
                         data.manifestationType, data.scientificManifestationLink, data.observations, data.owner];
@@ -615,7 +618,7 @@ export abstract class TablesCrudRepository {
     static async updateScientificCommunication(data: ScientificCommunication) {
         const query = `UPDATE scientific_communications SET 
                        authors = $2, communication_type = $3, presentation_year = $4, scientific_manifestation_name = $5,
-                       manifestation_type = $6, scientific_manifestation_link = $7, observations = $8
+                       manifestation_type = $6, scientific_manifestation_link = $7, observations = $8, updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.authors, data.communicationType, data.presentationYear, data.scientificManifestationName,
@@ -652,8 +655,8 @@ export abstract class TablesCrudRepository {
     static async addPatent(data: Patent): Promise<Patent[]> {
         const query = `INSERT INTO patents
                        (patent_title_or_cbi, authors, year_of_obtaining_patent, patent_number, patent_type, 
-                        authority, country, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
+                        authority, country, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, current_timestamp) RETURNING *`;
 
         const params = [data.patentTitleOrCBI, data.authors, data.yearOfObtainingPatent, data.patentNumber,
                         data.patentType, data.authority, data.country, data.observations, data.owner];
@@ -685,7 +688,7 @@ export abstract class TablesCrudRepository {
     static async updatePatent(data: Patent) {
         const query = `UPDATE patents SET 
                        patent_title_or_cbi = $2, authors = $3, year_of_obtaining_patent = $4, patent_number = $5, 
-                       patent_type = $6, authority = $7, country = $8, observations = $9
+                       patent_type = $6, authority = $7, country = $8, observations = $9, updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.patentTitleOrCBI, data.authors, data.yearOfObtainingPatent, data.patentNumber,
@@ -722,8 +725,8 @@ export abstract class TablesCrudRepository {
     static async addResearchContract(data: ResearchContract): Promise<ResearchContract[]> {
         const query = `INSERT INTO research_contracts
                        (research_contract_name_or_project, project_code, financier, function, start_project_period, 
-                        end_project_period, contract_type, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
+                        end_project_period, contract_type, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, current_timestamp) RETURNING *`;
 
         const params = [data.researchContractNameOrProject, data.projectCode, data.financier, data.function,
                         data.startProjectPeriod, data.endProjectPeriod, data.contractType, data.observations,
@@ -756,7 +759,8 @@ export abstract class TablesCrudRepository {
     static async updateResearchContract(data: ResearchContract) {
         const query = `UPDATE research_contracts SET 
                        research_contract_name_or_project = $2, project_code = $3, financier = $4, function = $5,
-                       start_project_period = $6, end_project_period = $7, contract_type = $8, observations = $9
+                       start_project_period = $6, end_project_period = $7, contract_type = $8, observations = $9,
+                       updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.researchContractNameOrProject, data.projectCode, data.financier, data.function,
@@ -794,8 +798,8 @@ export abstract class TablesCrudRepository {
         const query = `INSERT INTO citations
                        (article_title, authors, publication_title_where_referenced, authors_names_that_reference, 
                         citation_year, volume, impact_factor, issue, article_number, starting_page, ending_page, 
-                        doi, cnatdcu_classification, citations, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) RETURNING *`;
+                        doi, cnatdcu_classification, citations, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, current_timestamp) RETURNING *`;
 
         const params = [data.articleTitle, data.authors, data.publicationTitleWhereReferenced,
                         data.authorsNamesThatReference, data.citationYear, data.volume, data.impactFactor,
@@ -831,7 +835,7 @@ export abstract class TablesCrudRepository {
                        article_title = $2, authors = $3, publication_title_where_referenced = $4, 
                        authors_names_that_reference = $5, citation_year = $6, volume = $7, impact_factor = $8, 
                        issue = $9, article_number = $10, starting_page = $11, ending_page = $12, doi = $13, 
-                       cnatdcu_classification = $14, citations = $15, observations = $16
+                       cnatdcu_classification = $14, citations = $15, observations = $16, updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.articleTitle, data.authors, data.publicationTitleWhereReferenced,
@@ -870,8 +874,8 @@ export abstract class TablesCrudRepository {
     static async addAwardAndNomination(data: AwardAndNomination): Promise<AwardAndNomination[]> {
         const query = `INSERT INTO awards_and_nominations
                        (year_of_award, award_name, award_type, organization_that_give_the_award, country, 
-                        awarded_for, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+                        awarded_for, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp) RETURNING *`;
 
         const params = [data.yearOfAward, data.awardName, data.awardType, data.organizationThatGiveTheAward,
                         data.country, data.awardedFor, data.observations, data.owner];
@@ -903,7 +907,7 @@ export abstract class TablesCrudRepository {
     static async updateAwardAndNomination(data: AwardAndNomination) {
         const query = `UPDATE awards_and_nominations SET 
                        year_of_award = $2, award_name = $3, award_type = $4, organization_that_give_the_award = $5, 
-                       country = $6, awarded_for = $7, observations = $8
+                       country = $6, awarded_for = $7, observations = $8, updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.yearOfAward, data.awardName, data.awardType, data.organizationThatGiveTheAward,
@@ -939,8 +943,8 @@ export abstract class TablesCrudRepository {
     /** Academy member - CREATE */
     static async addAcademyMember(data: AcademyMember): Promise<AcademyMember[]> {
         const query = `INSERT INTO academy_member
-                       (admission_year, academy_name, member_type, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+                       (admission_year, academy_name, member_type, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, current_timestamp) RETURNING *`;
 
         const params = [data.admissionYear, data.academyName, data.memberType, data.observations, data.owner];
 
@@ -970,7 +974,8 @@ export abstract class TablesCrudRepository {
     /** Academy member - UPDATE */
     static async updateAcademyMember(data: AcademyMember) {
         const query = `UPDATE academy_member SET 
-                       admission_year = $2, academy_name = $3, member_type = $4, observations = $5
+                       admission_year = $2, academy_name = $3, member_type = $4, observations = $5, 
+                       updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.admissionYear, data.academyName, data.memberType, data.observations];
@@ -1006,8 +1011,8 @@ export abstract class TablesCrudRepository {
     static async addEditorialMember(data: EditorialMember): Promise<EditorialMember[]> {
         const query = `INSERT INTO editorial_member
                        (committee_name, magazine_name, year_of_committee_attendance, quality, magazine_type, 
-                        national_or_international, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+                        national_or_international, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp) RETURNING *`;
 
         const params = [data.committeeName, data.magazineName, data.yearOfCommitteeAttendance, data.quality,
                         data.magazineType, data.nationalOrInternational, data.observations, data.owner];
@@ -1039,7 +1044,7 @@ export abstract class TablesCrudRepository {
     static async updateEditorialMember(data: EditorialMember) {
         const query = `UPDATE editorial_member SET 
                        committee_name = $2, magazine_name = $3, year_of_committee_attendance = $4, quality = $5, 
-                       magazine_type = $6, national_or_international = $7, observations = $8
+                       magazine_type = $6, national_or_international = $7, observations = $8, updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.committeeName, data.magazineName, data.yearOfCommitteeAttendance,
@@ -1076,8 +1081,8 @@ export abstract class TablesCrudRepository {
     static async addOrganizedEvent(data: OrganizedEvent): Promise<OrganizedEvent[]> {
         const query = `INSERT INTO organized_events
                        (manifestation_name, start_date, end_date, manifestation_place, manifestation_type, 
-                        manifestation_classification, manifestation_link, contact_person, observations, owner)
-                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
+                        manifestation_classification, manifestation_link, contact_person, observations, owner, updated)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, current_timestamp) RETURNING *`;
 
         const params = [data.manifestationName, data.startDate, data.endDate, data.manifestationPlace,
                         data.manifestationType, data.manifestationClassification, data.manifestationLink,
@@ -1111,7 +1116,7 @@ export abstract class TablesCrudRepository {
         const query = `UPDATE organized_events SET 
                        manifestation_name = $2, start_date = $3, end_date = $4, manifestation_place = $5, 
                        manifestation_type = $6, manifestation_classification = $7, manifestation_link = $8, 
-                       contact_person = $9, observations = $10
+                       contact_person = $9, observations = $10, updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.manifestationName, data.startDate, data.endDate,
@@ -1148,8 +1153,8 @@ export abstract class TablesCrudRepository {
     /** Without activity - CREATE */
     static async addWithoutActivity(data: WithoutActivity): Promise<WithoutActivity[]> {
         const query = `INSERT INTO without_activity
-                       (observations, owner)
-                       VALUES ($1, $2) RETURNING *`;
+                       (observations, owner, updated)
+                       VALUES ($1, $2, current_timestamp) RETURNING *`;
 
         const params = [data.observations, data.owner];
 
@@ -1179,7 +1184,7 @@ export abstract class TablesCrudRepository {
     /** Without activity - UPDATE */
     static async updateWithoutActivity(data: WithoutActivity) {
         const query = `UPDATE without_activity SET 
-                       observations = $2
+                       observations = $2, updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.observations];
@@ -1214,8 +1219,8 @@ export abstract class TablesCrudRepository {
     /** Didactic activity - CREATE */
     static async addDidacticActivity(data: DidacticActivity): Promise<DidacticActivity[]> {
         const query = `INSERT INTO didactic_activity
-                       (class_name, activity_type, year_of_attending_activity, owner)
-                       VALUES ($1, $2, $3, $4) RETURNING *`;
+                       (class_name, activity_type, year_of_attending_activity, owner, updated)
+                       VALUES ($1, $2, $3, $4, current_timestamp) RETURNING *`;
 
         const params = [data.className, data.activityType, data.yearOfAttendingActivity, data.owner];
 
@@ -1245,7 +1250,8 @@ export abstract class TablesCrudRepository {
     /** Didactic activity - UPDATE */
     static async updateDidacticActivity(data: DidacticActivity) {
         const query = `UPDATE didactic_activity SET 
-                       class_name = $2, activity_type = $3, year_of_attending_activity = $4
+                       class_name = $2, activity_type = $3, year_of_attending_activity = $4,
+                       updated = current_timestamp
                        WHERE id = $1 RETURNING *`;
 
         const params = [data.id, data.className, data.activityType, data.yearOfAttendingActivity];

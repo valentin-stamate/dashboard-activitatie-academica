@@ -1,3 +1,4 @@
+import {ParserSyncRowValidate} from "fast-csv";
 
 export class ErrorResponse {
     constructor(public message: string) { }
@@ -21,6 +22,7 @@ export class User {
     email: string;
     admin: boolean;
     activated: boolean;
+    updated: Date;
 
     constructor(props: any) {
         this.id = props.id;
@@ -28,6 +30,7 @@ export class User {
         this.email = props.email;
         this.admin = props.admin;
         this.activated = props.activated;
+        this.updated = props.updated;
     }
 }
 
@@ -60,6 +63,25 @@ export class AuthToken {
 }
 
 /* ----==== Forms ====---- */
+enum FormTypes {
+    INFORMATION,
+    SCIENTIFIC_ARTICLE_ISI,
+    ISI_PROCEEDINGS,
+    SCIENTIFIC_ARTICLE_BDI,
+    SCIENTIFIC_BOOK,
+    TRASNLATION,
+    SCIENTIFIC_COMMUNICATION,
+    PATENT,
+    RESEARCH_CONTRACT,
+    CITAION,
+    AWARDS_AND_NOMINATION,
+    ACADEMY_MEMBER,
+    EDITORIAL_MEMBER,
+    ORGANIZED_EVENT,
+    WITHOUT_ACTIVITY,
+    DIDACTIC_ACTIVITY,
+}
+
 
 /* Informații */
 export class Information {
@@ -70,6 +92,10 @@ export class Information {
     founding: string;
     completionDate: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'Information';
 
     constructor(props: any) {
         this.id = props.id;
@@ -79,6 +105,8 @@ export class Information {
         this.founding = props.founding;
         this.completionDate = props.completion_date;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.INFORMATION;
     }
 }
 
@@ -98,6 +126,10 @@ export class ScientificArticleISI {
     conferenceName: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'ScientificArticleISI';
 
     constructor(props: any) {
         this.id = props.id;
@@ -114,6 +146,8 @@ export class ScientificArticleISI {
         this.conferenceName = props.conference_name;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.SCIENTIFIC_ARTICLE_ISI;
     }
 }
 
@@ -132,6 +166,10 @@ export class ISIProceeding {
     endingPage: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'ISIProceeding';
 
     constructor(props: any) {
         this.id = props.id;
@@ -147,6 +185,8 @@ export class ISIProceeding {
         this.endingPage = props.ending_page;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.ISI_PROCEEDINGS;
     }
 }
 
@@ -169,6 +209,10 @@ export class ScientificArticleBDI {
     bdiDatabaseLink: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'ScientificArticleBDI';
 
     constructor(props: any) {
         this.id = props.id;
@@ -188,6 +232,8 @@ export class ScientificArticleBDI {
         this.bdiDatabaseLink = props.bdi_database_link;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.SCIENTIFIC_ARTICLE_BDI;
     }
 }
 
@@ -205,6 +251,10 @@ export class ScientificBook {
     isbn: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'ScientificBook';
 
     constructor(props: any) {
         this.id = props.id;
@@ -219,6 +269,8 @@ export class ScientificBook {
         this.isbn = props.isbn;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.SCIENTIFIC_BOOK;
     }
 }
 
@@ -237,6 +289,10 @@ export class Translation {
     translationType: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'Translation';
 
     constructor(props: any) {
         this.id = props.id;
@@ -252,6 +308,8 @@ export class Translation {
         this.translationType = props.translation_type;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.TRASNLATION;
     }
 }
 
@@ -266,6 +324,10 @@ export class ScientificCommunication {
     scientificManifestationLink: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'ScientificCommunication';
 
     constructor(props: any) {
         this.id = props.id;
@@ -277,6 +339,8 @@ export class ScientificCommunication {
         this.scientificManifestationLink = props.scientific_manifestation_link;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.SCIENTIFIC_COMMUNICATION;
     }
 
 }
@@ -293,6 +357,10 @@ export class Patent {
     country: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'Patent';
 
     constructor(props: any) {
         this.id = props.id;
@@ -305,6 +373,8 @@ export class Patent {
         this.country = props.country;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.PATENT;
     }
 }
 
@@ -320,6 +390,10 @@ export class ResearchContract {
     contractType: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'ResearchContract';
 
     constructor(props: any) {
         this.id = props.id;
@@ -332,6 +406,8 @@ export class ResearchContract {
         this.contractType = props.contract_type;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.RESEARCH_CONTRACT;
     }
 }
 
@@ -354,6 +430,10 @@ export class Citation {
     citations: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'Citation';
 
     constructor(props: any) {
         this.id = props.id;
@@ -373,6 +453,8 @@ export class Citation {
         this.citations = props.citations;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.CITAION;
     }
 }
 
@@ -387,6 +469,10 @@ export class AwardAndNomination {
     awardedFor: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'AwardAndNomination';
 
     constructor(props: any) {
         this.id = props.id;
@@ -398,17 +484,23 @@ export class AwardAndNomination {
         this.awardedFor = props.award_type;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.AWARDS_AND_NOMINATION;
     }
 }
 
 /* Membru în academii */
 export class AcademyMember {
-    id
-    admissionYear
-    academyName
-    memberType
-    observations
-    owner
+    id: number;
+    admissionYear: string;
+    academyName: string;
+    memberType: string;
+    observations: string;
+    owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'AcademyMember';
 
     constructor(props: any) {
         this.id = props.id;
@@ -417,20 +509,26 @@ export class AcademyMember {
         this.memberType = props.member_type;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.ACADEMY_MEMBER;
     }
 }
 
 /* Membru în echipa editorială */
 export class EditorialMember {
-    id
-    committeeName
-    magazineName
-    yearOfCommitteeAttendance
-    quality
-    magazineType
-    nationalOrInternational
-    observations
-    owner
+    id: number;
+    committeeName: string;
+    magazineName: string;
+    yearOfCommitteeAttendance: string;
+    quality: string;
+    magazineType: string;
+    nationalOrInternational: string;
+    observations: string;
+    owner: number
+    updated: Date;
+
+    type: number;
+    __typename = 'EditorialMember';
 
     constructor(props: any) {
         this.id = props.id;
@@ -442,6 +540,8 @@ export class EditorialMember {
         this.nationalOrInternational = props.national_or_international;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.EDITORIAL_MEMBER;
     }
 }
 
@@ -458,6 +558,10 @@ export class OrganizedEvent {
     contactPerson: string;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'OrganizedEvent';
 
     constructor(props: any) {
         this.id = props.id;
@@ -471,6 +575,8 @@ export class OrganizedEvent {
         this.contactPerson = props.contact_person;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.ORGANIZED_EVENT;
     }
 }
 
@@ -479,11 +585,17 @@ export class WithoutActivity {
     id: number;
     observations: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'WithoutActivity';
 
     constructor(props: any) {
         this.id = props.id;
         this.observations = props.observations;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.WITHOUT_ACTIVITY;
     }
 }
 
@@ -494,6 +606,10 @@ export class DidacticActivity {
     activityType: string;
     yearOfAttendingActivity: string;
     owner: number;
+    updated: Date;
+
+    type: number;
+    __typename = 'DidacticActivity';
 
     constructor(props: any) {
         this.id = props.id;
@@ -501,5 +617,7 @@ export class DidacticActivity {
         this.activityType = props.activity_type;
         this.yearOfAttendingActivity = props.year_of_attending_activity;
         this.owner = props.owner;
+        this.updated = props.updated;
+        this.type = FormTypes.DIDACTIC_ACTIVITY;
     }
 }

@@ -1,3 +1,12 @@
+# ----------========== Data Types ==========---------- #
+scalar Date
+
+# ----------========== Type ==========---------- #
+interface GenericForm {
+    id: Int
+    type: Int
+}
+
 # ----------========== Type ==========---------- #
 
 type GqlResponse {
@@ -15,13 +24,14 @@ type User {
     email: String!
     admin: Boolean!
     activated: Boolean!
+    updated: Date!
 }
 
 type AuthToken {
     token: String!
 }
 
-type Information {
+type Information implements GenericForm {
     id: Int!
     fullName: String!
     marriageName: String!
@@ -29,10 +39,11 @@ type Information {
     founding: String!
     completionDate: String!
     owner: Int!
-
+    updated: Date!
+    type: Int!
 }
 
-type ScientificArticleISI {
+type ScientificArticleISI implements GenericForm {
     id: Int!
     articleTitle: String!
     authors: String!
@@ -47,9 +58,11 @@ type ScientificArticleISI {
     conferenceName: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type ISIProceeding {
+type ISIProceeding implements GenericForm {
     id: Int!
     articleTitle: String!
     authors: String!
@@ -63,9 +76,11 @@ type ISIProceeding {
     endingPage: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type ScientificArticleBDI {
+type ScientificArticleBDI implements GenericForm {
     id: Int!
     hierarchyDomains: String!
     articleTitle: String!
@@ -83,9 +98,11 @@ type ScientificArticleBDI {
     bdiDatabaseLink: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type ScientificBook {
+type ScientificBook implements GenericForm {
     id: Int!
     hierarchyDomains: String!
     chapterTitle: String!
@@ -98,9 +115,11 @@ type ScientificBook {
     isbn: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type Translation {
+type Translation implements GenericForm {
     id: Int!
     hierarchyDomains: String!
     translationTitle: String!
@@ -114,9 +133,11 @@ type Translation {
     translationType: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type ScientificCommunication {
+type ScientificCommunication implements GenericForm {
     id: Int!
     authors: String!
     communicationType: String!
@@ -126,9 +147,11 @@ type ScientificCommunication {
     scientificManifestationLink: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type Patent {
+type Patent implements GenericForm {
     id: Int!
     patentTitleOrCBI: String!
     authors: String!
@@ -139,9 +162,11 @@ type Patent {
     country: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type ResearchContract {
+type ResearchContract implements GenericForm {
     id: Int!
     researchContractNameOrProject: String!
     projectCode: String!
@@ -152,9 +177,11 @@ type ResearchContract {
     contractType: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type Citation {
+type Citation implements GenericForm {
     id: Int!
     articleTitle: String!
     authors: String!
@@ -172,9 +199,11 @@ type Citation {
     citations: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type AwardAndNomination {
+type AwardAndNomination implements GenericForm {
     id: Int!
     yearOfAward: String!
     awardName: String!
@@ -184,18 +213,22 @@ type AwardAndNomination {
     awardedFor: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type AcademyMember {
+type AcademyMember implements GenericForm {
     id: Int!
     admissionYear: String!
     academyName: String!
     memberType: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type EditorialMember {
+type EditorialMember implements GenericForm {
     id: Int!
     committeeName: String!
     magazineName: String!
@@ -205,9 +238,11 @@ type EditorialMember {
     nationalOrInternational: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type OrganizedEvent {
+type OrganizedEvent implements GenericForm {
     id: Int!
     manifestationName: String!
     startDate: String!
@@ -219,20 +254,26 @@ type OrganizedEvent {
     contactPerson: String!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type WithoutActivity {
+type WithoutActivity implements GenericForm {
     id: Int!
     observations: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
-type DidacticActivity {
+type DidacticActivity implements GenericForm {
     id: Int!
     className: String!
     activityType: String!
     yearOfAttendingActivity: String!
     owner: Int!
+    updated: Date!
+    type: Int!
 }
 
 # ----------========== Input Types ==========---------- #

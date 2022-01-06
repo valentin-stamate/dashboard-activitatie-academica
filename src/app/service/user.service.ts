@@ -145,6 +145,32 @@ export class UserService implements UserServiceInterface {
     /** As a side note, we know that an auth token is valid because
      * the middleware allowed it to pass here.
      * For security reasons, the payload owner is set again.*/
+    /* All Forms */
+    async getAllForms(authToken: AuthToken): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+
+        const inf = await TablesRepository.getInformationByUser(user.id);
+        const scISI = await TablesRepository.getScientificArticleISIByUser(user.id);
+        const isiPr = await TablesRepository.getISIProceedingByUser(user.id);
+        const scBDI = await TablesRepository.getScientificArticleBDIByUser(user.id);
+        const scBook = await TablesRepository.getScientificArticleBDIByUser(user.id);
+        const tr = await TablesRepository.getTranslationByUser(user.id);
+        const scCom = await TablesRepository.getScientificArticleBDIByUser(user.id);
+        const patent = await TablesRepository.getPatentByUser(user.id);
+        const resCon = await TablesRepository.getResearchContractByUser(user.id);
+        const citat = await TablesRepository.getCitationByUser(user.id);
+        const awards = await TablesRepository.getAwardAndNominationByUser(user.id);
+        const academyM = await TablesRepository.getAcademyMemberByUser(user.id);
+        const editM = await TablesRepository.getEditorialMemberByUser(user.id);
+        const orgEv = await TablesRepository.getOrganizedEventByUser(user.id);
+        const without = await TablesRepository.getWithoutActivityByUser(user.id);
+        const didactic = await TablesRepository.getDidacticActivityByUser(user.id);
+
+        const list = UtilService.mergeArrays([inf, scISI, isiPr, scBDI, scBook, tr, scCom,
+                    patent, resCon, citat, awards, academyM, editM, orgEv, without, didactic]);
+
+        return new ServiceResponse(true, Responses.SUCCESS, list);
+    }
 
     /* Informații */
     async getInformation(authToken: AuthToken): Promise<ServiceResponse> {

@@ -40,8 +40,9 @@ export const Responses = {
     SUCCESS: 'Success',
     MISSING_KEY: 'Missing key',
     INVALID_USER: 'Invalid user.',
-    UNAUTHORIZED: 'Unauthorized',
-    UNAUTHORIZED_ACTIVATE_FIRST: 'Unauthorized, activate your account first',
-    NOT_FOUND: 'Not found',
+    UNAUTHORIZED: 'Unauthorized.',
+    UNAUTHORIZED_ACTIVATE_FIRST: 'Unauthorized, activate your account first.',
+    NOT_FOUND: 'Not found.',
+    USER_NOT_FOUND: 'User not found.',
 
 }

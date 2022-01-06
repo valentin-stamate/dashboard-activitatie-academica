@@ -33,6 +33,9 @@ export interface UserServiceInterface {
      *                       USER ONLY
      * **********************************************************/
 
+    /* All Forms */
+    getAllForms(authToken: AuthToken): Promise<ServiceResponse>
+
     /* Informații */
     getInformation(token: AuthToken): Promise<ServiceResponse>;
     updateInformation(token: AuthToken, data: Information): Promise<ServiceResponse>;

@@ -69,3 +69,9 @@
 * Request Response : https://flaviocopes.com/express-send-response/
 * Http Status Codes : https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 * Postman Variables : https://learning.postman.com/docs/sending-requests/variables/
+* Timestamp Column : https://stackoverflow.com/questions/9556474/how-do-i-automatically-update-a-timestamp-in-postgresql
+* Timestamp Data Type : https://node-postgres.com/features/types
+* GraphQl Data Types : https://graphql.org/learn/schema/
+* Any Type GraphQl : https://stackoverflow.com/a/44795767/10805602
+* GraphQl Interfaces : https://graphql.org/learn/schema/#interfaces
+* Type Error List of Multiple Objects : https://stackoverflow.com/a/60251577/10805602

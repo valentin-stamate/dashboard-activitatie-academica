@@ -36,8 +36,6 @@ export async function userRequestMiddleware (req: Request<any>, res: Response<an
         return;
     }
 
-    console.log(user);
-
     next();
 }
 

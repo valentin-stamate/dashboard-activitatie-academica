@@ -114,7 +114,6 @@ export class TablesRepository extends TablesCrudRepository {
 
     static async getInformationByUser(userId: number): Promise<Information[]> {
         const query = `SELECT * FROM information WHERE owner = $1`;
-
         const {rows} = await QueryDB(query, [userId]);
 
         const list: Information[] = [];

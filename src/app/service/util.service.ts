@@ -1,5 +1,15 @@
 
 export class UtilService {
+    static mergeArrays(arr: any[][]) {
+        let list: any = [];
+
+        for (const item of arr) {
+            list = list.concat(item);
+        }
+
+        return list;
+    }
+
     static mergeProperties(...args: any): any {
         let merged = {};
         for (let i in args) {

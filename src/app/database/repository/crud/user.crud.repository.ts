@@ -24,7 +24,7 @@ export abstract class UserCrudRepository {
     /** Users - CREATE |
      * Adds a new user.test.ts to database. */
     static async addUser(data: User) {
-        const query = `INSERT INTO users(identifier, email) VALUES ($1, $2) RETURNING *`;
+        const query = `INSERT INTO users(identifier, email, updated) VALUES ($1, $2, current_timestamp) RETURNING *`;
 
         const params = [data.identifier, data.email];
         const {rows} = await QueryDB(query, params);
@@ -48,7 +48,7 @@ export abstract class UserCrudRepository {
     /** Users - UPDATE |
      * Update the user.test.ts information. */
     static async updateUser(data: User) {
-        const query = `UPDATE users SET identifier = $2, email = $3 WHERE id = $1`;
+        const query = `UPDATE users SET identifier = $2, email = $3, updated = current_timestamp WHERE id = $1`;
 
         const params = [data.id, data.identifier, data.email];
 

@@ -33,14 +33,14 @@ export class UserRepository extends UserCrudRepository {
     }
 
     static async setUserActivationStatus(user: User, status: boolean) {
-        const query = `UPDATE users SET activated = $2 WHERE id = $1 RETURNING *`;
+        const query = `UPDATE users SET activated = $2, updated = current_timestamp WHERE id = $1 RETURNING *`;
 
         const {rows} = await QueryDB(query, [user.id, status]);
         return rows;
     }
 
     static async setUserAdminStatus(user: User, status: boolean) {
-        const query = `UPDATE users SET admin = $2 WHERE id = $1 RETURNING *`;
+        const query = `UPDATE users SET admin = $2, updated = current_timestamp WHERE id = $1 RETURNING *`;
 
         const {rows} = await QueryDB(query, [user.id, status]);
         return rows;
