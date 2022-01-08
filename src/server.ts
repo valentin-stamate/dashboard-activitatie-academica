@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 // Handle logs in console during development
 if (process.env.NODE_ENV === 'development' || config.NODE_ENV === 'development') {
   app.use(morgan('dev'));
-  app.use(cors({origin: 'http://localhost:4200'}));
+  app.use(cors({origin: ['http://localhost:4200', 'http://localhost:9876']}));
 }
 
 // Handle security and origin in production

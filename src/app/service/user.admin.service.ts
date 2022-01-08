@@ -5,6 +5,11 @@ import {AuthToken, Id, User} from "../database/models";
 import {JwtService} from "./jwt.service";
 import {TablesRepository} from "../database/repository/tables.repository";
 
+/************************************************************
+ *                    ADMIN USER ONLY
+ * **********************************************************/
+/** As a side note, we know that an auth token is valid because
+ * the middleware allowed it to pass here. */
 export class UserAdminService implements UserAdminServiceInterface {
 
     async getAllIds(): Promise<ServiceResponse> {

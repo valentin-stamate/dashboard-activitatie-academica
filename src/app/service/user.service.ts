@@ -145,6 +145,7 @@ export class UserService implements UserServiceInterface {
     /** As a side note, we know that an auth token is valid because
      * the middleware allowed it to pass here.
      * For security reasons, the payload owner is set again.*/
+
     /* All Forms */
     async getAllForms(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
@@ -555,11 +556,5 @@ export class UserService implements UserServiceInterface {
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
-
-    /************************************************************
-     *                    ADMIN USER ONLY
-     * **********************************************************/
-    /** As a side note, we know that an auth token is valid because
-     * the middleware allowed it to pass here. */
 
 }

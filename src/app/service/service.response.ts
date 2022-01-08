@@ -42,6 +42,7 @@ export const Responses = {
     INVALID_USER: 'Invalid user.',
     UNAUTHORIZED: 'Unauthorized.',
     UNAUTHORIZED_ACTIVATE_FIRST: 'Unauthorized, activate your account first.',
+    UNAUTHORIZED_ONLY_ADMIN: 'Unauthorized, only admin user only.',
     NOT_FOUND: 'Not found.',
     USER_NOT_FOUND: 'User not found.',
 

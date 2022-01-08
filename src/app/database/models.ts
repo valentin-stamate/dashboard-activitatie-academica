@@ -1,7 +1,21 @@
-import {ParserSyncRowValidate} from "fast-csv";
+/* Requests */
+class GraphQlError {
+    constructor(public message: string, public locations: any[] = [], public path: string[] = []) { }
+}
 
-export class ErrorResponse {
-    constructor(public message: string) { }
+export class GraphQlResponse {
+    constructor(public data: any, public errors: any = undefined) { }
+}
+
+export class GraphQlErrorResponse {
+    data = null;
+    errors: GraphQlError[] = [];
+
+    constructor(errors: string[]) {
+        for (const error of errors) {
+            this.errors.push(new GraphQlError(error));
+        }
+    }
 }
 
 /* ----==== Ids ====---- */
