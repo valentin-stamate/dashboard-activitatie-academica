@@ -62,7 +62,7 @@ app.use('/admin/graphql', adminUserRequestMiddleware, graphqlHTTP({
 /** User activation by email */
 app.get('/activate', async (req, res) => {
   const key = req.query.key as string;
-
+  console.log(key);
   if (!key) {
     res.end(JSON.stringify({message: Responses.MISSING_KEY}));
     return;

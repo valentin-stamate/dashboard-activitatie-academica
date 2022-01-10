@@ -305,6 +305,7 @@ input InformationInput {
     thesisCoordinator: String
     founding: String
     completionDate: String
+    type: Int
 }
 
 input ScientificArticleISIInput {
@@ -320,6 +321,7 @@ input ScientificArticleISIInput {
     doi: String
     conferenceName: String
     observations: String
+    type: Int
 }
 
 input ISIProceedingInput {
@@ -334,6 +336,7 @@ input ISIProceedingInput {
     startingPage: String
     endingPage: String
     observations: String
+    type: Int
 }
 
 input ScientificArticleBDIInput {
@@ -352,6 +355,7 @@ input ScientificArticleBDIInput {
     bdiDatabase: String
     bdiDatabaseLink: String
     observations: String
+    type: Int
 }
 
 input ScientificBookInput {
@@ -365,6 +369,7 @@ input ScientificBookInput {
     publicationType: String
     isbn: String
     observations: String
+    type: Int
 }
 
 input TranslationInput {
@@ -379,6 +384,7 @@ input TranslationInput {
     isbn: String
     translationType: String
     observations: String
+    type: Int
 }
 
 input ScientificCommunicationInput {
@@ -389,6 +395,7 @@ input ScientificCommunicationInput {
     manifestationType: String
     scientificManifestationLink: String
     observations: String
+    type: Int
 }
 
 input PatentInput {
@@ -400,6 +407,7 @@ input PatentInput {
     authority: String
     country: String
     observations: String
+    type: Int
 }
 
 input ResearchContractInput {
@@ -411,6 +419,7 @@ input ResearchContractInput {
     endProjectPeriod: String
     contractType: String
     observations: String
+    type: Int
 }
 
 input CitationInput {
@@ -429,6 +438,7 @@ input CitationInput {
     cnatdcuClassification: String
     citations: String
     observations: String
+    type: Int
 }
 
 input AwardAndNominationInput {
@@ -439,6 +449,7 @@ input AwardAndNominationInput {
     country: String
     awardedFor: String
     observations: String
+    type: Int
 }
 
 input AcademyMemberInput {
@@ -446,6 +457,7 @@ input AcademyMemberInput {
     academyName: String
     memberType: String
     observations: String
+    type: Int
 }
 
 input EditorialMemberInput {
@@ -456,6 +468,7 @@ input EditorialMemberInput {
     magazineType: String
     nationalOrInternational: String
     observations: String
+    type: Int
 }
 
 input OrganizedEventInput {
@@ -468,14 +481,17 @@ input OrganizedEventInput {
     manifestationLink: String
     contactPerson: String
     observations: String
+    type: Int
 }
 
 input WithoutActivityInput {
     observations: String
+    type: Int
 }
 
 input DidacticActivityInput {
     className: String
     activityType: String
     yearOfAttendingActivity: String
+    type: Int
 }

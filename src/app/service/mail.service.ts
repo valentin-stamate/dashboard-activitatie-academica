@@ -75,7 +75,7 @@ export class ActivationMail extends MailOptions {
         const html = `
             Your identity: <b>{0}</b><br>
             In order to activate your email press on the following link: 
-            <a href="http://localhost:8080/activation?key={1}" target="_blank">activate account</a>`;
+            <a href="${Env.SERVER_URL}/activate?key={1}" target="_blank">activate account</a>`;
 
         const parsedHtml = UtilService.stringFormat(html, [props.identity, props.activationKey]);
 

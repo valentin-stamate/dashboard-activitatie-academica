@@ -6,9 +6,11 @@ export class JwtService {
 
     static generateAccesToken(user: User) {
         return jwt.sign({
-            id: user.id,
-            identifier: user.identifier,
-            email: user.email},
+                id: user.id,
+                identifier: user.identifier,
+                email: user.email,
+                admin: user.admin,
+            },
             Env.TOKEN_SECRET);
     }
 
