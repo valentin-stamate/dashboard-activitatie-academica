@@ -150,22 +150,22 @@ export class UserService implements UserServiceInterface {
     async getAllForms(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
 
-        const inf = await TablesRepository.getInformationByUser(user.id);
-        const scISI = await TablesRepository.getScientificArticleISIByUser(user.id);
-        const isiPr = await TablesRepository.getISIProceedingByUser(user.id);
-        const scBDI = await TablesRepository.getScientificArticleBDIByUser(user.id);
-        const scBook = await TablesRepository.getScientificArticleBDIByUser(user.id);
-        const tr = await TablesRepository.getTranslationByUser(user.id);
-        const scCom = await TablesRepository.getScientificArticleBDIByUser(user.id);
-        const patent = await TablesRepository.getPatentByUser(user.id);
-        const resCon = await TablesRepository.getResearchContractByUser(user.id);
-        const citat = await TablesRepository.getCitationByUser(user.id);
-        const awards = await TablesRepository.getAwardAndNominationByUser(user.id);
-        const academyM = await TablesRepository.getAcademyMemberByUser(user.id);
-        const editM = await TablesRepository.getEditorialMemberByUser(user.id);
-        const orgEv = await TablesRepository.getOrganizedEventByUser(user.id);
-        const without = await TablesRepository.getWithoutActivityByUser(user.id);
-        const didactic = await TablesRepository.getDidacticActivityByUser(user.id);
+        const inf = await TablesRepository.getInformation(user.id);
+        const scISI = await TablesRepository.getScientificArticleISI(user.id);
+        const isiPr = await TablesRepository.getISIProceeding(user.id);
+        const scBDI = await TablesRepository.getScientificArticleBDI(user.id);
+        const scBook = await TablesRepository.getScientificArticleBDI(user.id);
+        const tr = await TablesRepository.getTranslation(user.id);
+        const scCom = await TablesRepository.getScientificArticleBDI(user.id);
+        const patent = await TablesRepository.getPatent(user.id);
+        const resCon = await TablesRepository.getResearchContract(user.id);
+        const citat = await TablesRepository.getCitation(user.id);
+        const awards = await TablesRepository.getAwardAndNomination(user.id);
+        const academyM = await TablesRepository.getAcademyMember(user.id);
+        const editM = await TablesRepository.getEditorialMember(user.id);
+        const orgEv = await TablesRepository.getOrganizedEvent(user.id);
+        const without = await TablesRepository.getWithoutActivity(user.id);
+        const didactic = await TablesRepository.getDidacticActivity(user.id);
 
         const list = UtilService.mergeArrays([inf, scISI, isiPr, scBDI, scBook, tr, scCom,
                     patent, resCon, citat, awards, academyM, editM, orgEv, without, didactic]);
@@ -176,23 +176,34 @@ export class UserService implements UserServiceInterface {
     /* Informații */
     async getInformation(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getInformationByUser(user.id);
+        const rows = await TablesRepository.getInformation(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addInformation(authToken: AuthToken, data: Information): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addInformation(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateInformation(authToken: AuthToken, data: Information): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateInformation(data);
+        const rows = await TablesRepository.updateInformation(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteInformation(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteInformation(authToken: AuthToken, data: Information): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteInformationByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteInformation(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -200,23 +211,34 @@ export class UserService implements UserServiceInterface {
     /* Articole științifice publicate în extenso în reviste cotate... (ISI) */
     async getScientificArticleISI(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getScientificArticleISIByUser(user.id);
+        const rows = await TablesRepository.getScientificArticleISI(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addScientificArticleISI(authToken: AuthToken, data: ScientificArticleISI): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addScientificArticleISI(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateScientificArticleISI(authToken: AuthToken, data: ScientificArticleISI): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateScientificArticleISI(data);
+        const rows = await TablesRepository.updateScientificArticleISI(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteScientificArticleISI(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteScientificArticleISI(authToken: AuthToken, data: ScientificArticleISI): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteScientificArticleISIByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteScientificArticleISI(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -224,23 +246,34 @@ export class UserService implements UserServiceInterface {
     /* ISI proceedings */
     async getISIProceeding(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getISIProceedingByUser(user.id);
+        const rows = await TablesRepository.getISIProceeding(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addISIProceeding(authToken: AuthToken, data: ISIProceeding): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addISIProceeding(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateISIProceeding(authToken: AuthToken, data: ISIProceeding): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateISIProceeding(data);
+        const rows = await TablesRepository.updateISIProceeding(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteISIProceeding(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteISIProceeding(authToken: AuthToken, data: ISIProceeding): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteISIProceedingByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteISIProceeding(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -248,23 +281,34 @@ export class UserService implements UserServiceInterface {
     /* Articole științifice publicate în extenso în revi... (BDI) */
     async getScientificArticleBDI(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getScientificArticleBDIByUser(user.id);
+        const rows = await TablesRepository.getScientificArticleBDI(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addScientificArticleBDI(authToken: AuthToken, data: ScientificArticleBDI): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addScientificArticleBDI(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateScientificArticleBDI(authToken: AuthToken, data: ScientificArticleBDI): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateScientificArticleBDI(data);
+        const rows = await TablesRepository.updateScientificArticleBDI(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteScientificArticleBDI(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteScientificArticleBDI(authToken: AuthToken, data: ScientificArticleBDI): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteScientificArticleBDIByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteScientificArticleBDI(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -272,23 +316,34 @@ export class UserService implements UserServiceInterface {
     /* Cărți ştiinţifice sau capitole de cărți publicate în edituri */
     async getScientificBook(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getScientificBookByUser(user.id);
+        const rows = await TablesRepository.getScientificBook(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addScientificBook(authToken: AuthToken, data: ScientificBook): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addScientificBook(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateScientificBook(authToken: AuthToken, data: ScientificBook): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateScientificBook(data);
+        const rows = await TablesRepository.updateScientificBook(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteScientificBook(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteScientificBook(authToken: AuthToken, data: ScientificBook): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteScientificBookByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteScientificBook(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -296,23 +351,34 @@ export class UserService implements UserServiceInterface {
     /* Traduceri */
     async getTranslation(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getTranslationByUser(user.id);
+        const rows = await TablesRepository.getTranslation(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addTranslation(authToken: AuthToken, data: Translation): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addTranslation(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateTranslation(authToken: AuthToken, data: Translation): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateTranslation(data);
+        const rows = await TablesRepository.updateTranslation(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteTranslation(authToken: AuthToken): Promise<ServiceResponse> {
-        const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteTranslationByUser(user.id);
+    async deleteTranslation(authToken: AuthToken, data: Translation): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteTranslation(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -320,23 +386,34 @@ export class UserService implements UserServiceInterface {
     /* Comunicări în manifestări științifice */
     async getScientificCommunication(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getScientificCommunicationByUser(user.id);
+        const rows = await TablesRepository.getScientificCommunication(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addScientificCommunication(authToken: AuthToken, data: ScientificCommunication): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addScientificCommunication(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateScientificCommunication(authToken: AuthToken, data: ScientificCommunication): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateScientificCommunication(data);
+        const rows = await TablesRepository.updateScientificCommunication(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteScientificCommunication(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteScientificCommunication(authToken: AuthToken, data: ScientificCommunication): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteScientificCommunicationByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteScientificCommunication(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -344,23 +421,34 @@ export class UserService implements UserServiceInterface {
     /* Brevete */
     async getPatent(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getPatentByUser(user.id);
+        const rows = await TablesRepository.getPatent(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addPatent(authToken: AuthToken, data: Patent): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addPatent(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updatePatent(authToken: AuthToken, data: Patent): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdatePatent(data);
+        const rows = await TablesRepository.updatePatent(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deletePatent(authToken: AuthToken): Promise<ServiceResponse> {
+    async deletePatent(authToken: AuthToken, data: Patent): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deletePatentByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deletePatent(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -368,23 +456,34 @@ export class UserService implements UserServiceInterface {
     /* Contracte de cercetare */
     async getResearchContract(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getResearchContractByUser(user.id);
+        const rows = await TablesRepository.getResearchContract(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addResearchContract(authToken: AuthToken, data: ResearchContract): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addResearchContract(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateResearchContract(authToken: AuthToken, data: ResearchContract): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateResearchContract(data);
+        const rows = await TablesRepository.updateResearchContract(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteResearchContract(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteResearchContract(authToken: AuthToken, data: ResearchContract): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteResearchContractByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteResearchContract(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -392,23 +491,34 @@ export class UserService implements UserServiceInterface {
     /* Citări */
     async getCitation(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getCitationByUser(user.id);
+        const rows = await TablesRepository.getCitation(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addCitation(authToken: AuthToken, data: Citation): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addCitation(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateCitation(authToken: AuthToken, data: Citation): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateCitation(data);
+        const rows = await TablesRepository.updateCitation(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteCitation(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteCitation(authToken: AuthToken, data: Citation): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteCitationByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteCitation(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -416,23 +526,34 @@ export class UserService implements UserServiceInterface {
     /* Premii si nominalizări */
     async getAwardAndNomination(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getAwardAndNominationByUser(user.id);
+        const rows = await TablesRepository.getAwardAndNomination(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addAwardAndNomination(authToken: AuthToken, data: AwardAndNomination): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addAwardAndNomination(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateAwardAndNomination(authToken: AuthToken, data: AwardAndNomination): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateAwardAndNomination(data);
+        const rows = await TablesRepository.updateAwardAndNomination(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteAwardAndNomination(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteAwardAndNomination(authToken: AuthToken, data: AwardAndNomination): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteAwardAndNominationByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteAwardAndNomination(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -440,23 +561,34 @@ export class UserService implements UserServiceInterface {
     /* Membru în academii */
     async getAcademyMember(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getAcademyMemberByUser(user.id);
+        const rows = await TablesRepository.getAcademyMember(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addAcademyMember(authToken: AuthToken, data: AcademyMember): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addAcademyMember(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateAcademyMember(authToken: AuthToken, data: AcademyMember): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateAcademyMember(data);
+        const rows = await TablesRepository.updateAcademyMember(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteAcademyMember(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteAcademyMember(authToken: AuthToken, data: AcademyMember): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteAcademyMemberByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteAcademyMember(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -464,23 +596,34 @@ export class UserService implements UserServiceInterface {
     /* Membru în echipa editorială */
     async getEditorialMember(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getEditorialMemberByUser(user.id);
+        const rows = await TablesRepository.getEditorialMember(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addEditorialMember(authToken: AuthToken, data: EditorialMember): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addEditorialMember(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateEditorialMember(authToken: AuthToken, data: EditorialMember): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateEditorialMember(data);
+        const rows = await TablesRepository.updateEditorialMember(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteEditorialMember(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteEditorialMember(authToken: AuthToken, data: EditorialMember): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteEditorialMemberByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteEditorialMember(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -488,23 +631,34 @@ export class UserService implements UserServiceInterface {
     /* Evenimente organizate */
     async getOrganizedEvent(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getOrganizedEventByUser(user.id);
+        const rows = await TablesRepository.getOrganizedEvent(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addOrganizedEvent(authToken: AuthToken, data: OrganizedEvent): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addOrganizedEvent(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateOrganizedEvent(authToken: AuthToken, data: OrganizedEvent): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateOrganizedEvent(data);
+        const rows = await TablesRepository.updateOrganizedEvent(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteOrganizedEvent(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteOrganizedEvent(authToken: AuthToken, data: OrganizedEvent): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteOrganizedEventByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteOrganizedEvent(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -512,23 +666,34 @@ export class UserService implements UserServiceInterface {
     /* Fără activitate științifică */
     async getWithoutActivity(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getWithoutActivityByUser(user.id);
+        const rows = await TablesRepository.getWithoutActivity(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addWithoutActivity(authToken: AuthToken, data: WithoutActivity): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addWithoutActivity(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateWithoutActivity(authToken: AuthToken, data: WithoutActivity): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateWithoutActivity(data);
+        const rows = await TablesRepository.updateWithoutActivity(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteWithoutActivity(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteWithoutActivity(authToken: AuthToken, data: WithoutActivity): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteWithoutActivityByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteWithoutActivity(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
@@ -536,23 +701,34 @@ export class UserService implements UserServiceInterface {
     /* Activitate didactică */
     async getDidacticActivity(authToken: AuthToken): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.getDidacticActivityByUser(user.id);
+        const rows = await TablesRepository.getDidacticActivity(user.id);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows);
+    }
+
+    async addDidacticActivity(authToken: AuthToken, data: DidacticActivity): Promise<ServiceResponse> {
+        const user = JwtService.verifyToken(authToken.token) as User;
+        data.owner = user.id;
+
+        const rows = await TablesRepository.addDidacticActivity(data);
+
+        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
     async updateDidacticActivity(authToken: AuthToken, data: DidacticActivity): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
         data.owner = user.id;
 
-        const rows = await TablesRepository.addOrUpdateDidacticActivity(data);
+        const rows = await TablesRepository.updateDidacticActivity(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
 
-    async deleteDidacticActivity(authToken: AuthToken): Promise<ServiceResponse> {
+    async deleteDidacticActivity(authToken: AuthToken, data: DidacticActivity): Promise<ServiceResponse> {
         const user = JwtService.verifyToken(authToken.token) as User;
-        const rows = await TablesRepository.deleteDidacticActivityByUser(user.id);
+        data.owner = user.id;
+
+        const rows = await TablesRepository.deleteDidacticActivity(data);
 
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }

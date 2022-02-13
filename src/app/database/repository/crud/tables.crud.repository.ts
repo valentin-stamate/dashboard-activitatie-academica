@@ -163,7 +163,7 @@ export abstract class TablesCrudRepository {
     }
 
     /** Information - READ */
-    static async getUserInformation(owner: number): Promise<Information[]> {
+    static async getInformation(owner: number): Promise<Information[]> {
         const query = `SELECT * FROM information WHERE owner = $1`;
         const {rows} = await QueryDB(query, [owner]);
 

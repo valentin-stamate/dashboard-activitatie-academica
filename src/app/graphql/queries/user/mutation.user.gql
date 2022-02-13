@@ -1,66 +1,81 @@
 type Mutation {
     getInformation(authToken: AuthTokenInput!): [Information]
+    addInformation(authToken: AuthTokenInput!, data: InformationInput!): Int
     updateInformation(authToken: AuthTokenInput!, data: InformationInput!): Int
-    deleteInformation(authToken: AuthTokenInput!): Int
+    deleteInformation(authToken: AuthTokenInput!, data: InformationInput!): Int
 
     getScientificArticleISI(authToken: AuthTokenInput!): [ScientificArticleISI]
+    addScientificArticleISI(authToken: AuthTokenInput!, data: ScientificArticleISIInput!): Int
     updateScientificArticleISI(authToken: AuthTokenInput!, data: ScientificArticleISIInput!): Int
-    deleteScientificArticleISI(authToken: AuthTokenInput!): Int
+    deleteScientificArticleISI(authToken: AuthTokenInput!, data: ScientificArticleISIInput!): Int
 
     getISIProceeding(authToken: AuthTokenInput!): [ISIProceeding]
+    addISIProceeding(authToken: AuthTokenInput!, data:ISIProceedingInput!): Int
     updateISIProceeding(authToken: AuthTokenInput!, data:ISIProceedingInput!): Int
-    deleteISIProceeding(authToken: AuthTokenInput!): Int
+    deleteISIProceeding(authToken: AuthTokenInput!, data: ISIProceedingInput!): Int
 
     getScientificArticleBDI(authToken: AuthTokenInput!): [ScientificArticleBDI]
+    addScientificArticleBDI(authToken: AuthTokenInput!, data: ScientificArticleBDIInput!): Int
     updateScientificArticleBDI(authToken: AuthTokenInput!, data: ScientificArticleBDIInput!): Int
-    deleteScientificArticleBDI(authToken: AuthTokenInput!): Int
+    deleteScientificArticleBDI(authToken: AuthTokenInput!, data: ScientificArticleBDIInput!): Int
 
     getScientificBook(authToken: AuthTokenInput!): [ScientificBook]
+    addScientificBook(authToken: AuthTokenInput!, data: ScientificBookInput!): Int
     updateScientificBook(authToken: AuthTokenInput!, data: ScientificBookInput!): Int
-    deleteScientificBook(authToken: AuthTokenInput!): Int
+    deleteScientificBook(authToken: AuthTokenInput!, data: ScientificBookInput!): Int
 
     getTranslation(authToken: AuthTokenInput!): [Translation]
+    addTranslation(authToken: AuthTokenInput!, data: TranslationInput!): Int
     updateTranslation(authToken: AuthTokenInput!, data: TranslationInput!): Int
-    deleteTranslation(authToken: AuthTokenInput!): Int
+    deleteTranslation(authToken: AuthTokenInput!, data: TranslationInput!): Int
 
     getScientificCommunication(authToken: AuthTokenInput!): [ScientificCommunication]
+    addScientificCommunication(authToken: AuthTokenInput!, data: ScientificCommunicationInput!): Int
     updateScientificCommunication(authToken: AuthTokenInput!, data: ScientificCommunicationInput!): Int
-    deleteScientificCommunication(authToken: AuthTokenInput!): Int
+    deleteScientificCommunication(authToken: AuthTokenInput!, data: ScientificCommunicationInput!): Int
 
     getPatent(authToken: AuthTokenInput!): [Patent]
+    addPatent(authToken: AuthTokenInput!, data: PatentInput!): Int
     updatePatent(authToken: AuthTokenInput!, data: PatentInput!): Int
-    deletePatent(authToken: AuthTokenInput!): Int
+    deletePatent(authToken: AuthTokenInput!, data: PatentInput!): Int
 
     getResearchContract(authToken: AuthTokenInput!): [ResearchContract]
+    addResearchContract(authToken: AuthTokenInput!, data: ResearchContractInput!): Int
     updateResearchContract(authToken: AuthTokenInput!, data: ResearchContractInput!): Int
-    deleteResearchContract(authToken: AuthTokenInput!): Int
+    deleteResearchContract(authToken: AuthTokenInput!, data: ResearchContractInput!): Int
 
     getCitation(authToken: AuthTokenInput!): [Citation]
+    addCitation(authToken: AuthTokenInput!, data: CitationInput!): Int
     updateCitation(authToken: AuthTokenInput!, data: CitationInput!): Int
-    deleteCitation(authToken: AuthTokenInput!): Int
+    deleteCitation(authToken: AuthTokenInput!, data: CitationInput!): Int
 
     getAwardAndNomination(authToken: AuthTokenInput!): [AwardAndNomination]
+    addAwardAndNomination(authToken: AuthTokenInput!, data: AwardAndNominationInput!): Int
     updateAwardAndNomination(authToken: AuthTokenInput!, data: AwardAndNominationInput!): Int
-    deleteAwardAndNomination(authToken: AuthTokenInput!): Int
+    deleteAwardAndNomination(authToken: AuthTokenInput!, data: AwardAndNominationInput!): Int
 
     getAcademyMember(authToken: AuthTokenInput!): [AcademyMember]
+    addAcademyMember(authToken: AuthTokenInput!, data: AcademyMemberInput!): Int
     updateAcademyMember(authToken: AuthTokenInput!, data: AcademyMemberInput!): Int
-    deleteAcademyMember(authToken: AuthTokenInput!): Int
+    deleteAcademyMember(authToken: AuthTokenInput!, data: AcademyMemberInput!): Int
 
     getEditorialMember(authToken: AuthTokenInput!): [EditorialMember]
+    addEditorialMember(authToken: AuthTokenInput!, data: EditorialMemberInput!): Int
     updateEditorialMember(authToken: AuthTokenInput!, data: EditorialMemberInput!): Int
-    deleteEditorialMember(authToken: AuthTokenInput!): Int
+    deleteEditorialMember(authToken: AuthTokenInput!, data: EditorialMemberInput!): Int
 
     getOrganizedEvent(authToken: AuthTokenInput!): [OrganizedEvent]
+    addOrganizedEvent(authToken: AuthTokenInput!, data: OrganizedEventInput!): Int
     updateOrganizedEvent(authToken: AuthTokenInput!, data: OrganizedEventInput!): Int
-    deleteOrganizedEvent(authToken: AuthTokenInput!): Int
+    deleteOrganizedEvent(authToken: AuthTokenInput!, data: OrganizedEventInput!): Int
 
     getWithoutActivity(authToken: AuthTokenInput!): [WithoutActivity]
+    addWithoutActivity(authToken: AuthTokenInput!, data: WithoutActivityInput!): Int
     updateWithoutActivity(authToken: AuthTokenInput!, data: WithoutActivityInput!): Int
-    deleteWithoutActivity(authToken: AuthTokenInput!): Int
+    deleteWithoutActivity(authToken: AuthTokenInput!, data: WithoutActivityInput!): Int
 
     getDidacticActivity(authToken: AuthTokenInput!): [DidacticActivity]
+    addDidacticActivity(authToken: AuthTokenInput!, data: DidacticActivityInput!): Int
     updateDidacticActivity(authToken: AuthTokenInput!, data: DidacticActivityInput!): Int
-    deleteDidacticActivity(authToken: AuthTokenInput!): Int
-
+    deleteDidacticActivity(authToken: AuthTokenInput!, data: DidacticActivityInput!): Int
 }
