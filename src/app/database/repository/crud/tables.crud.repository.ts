@@ -131,10 +131,10 @@ export abstract class TablesCrudRepository {
 
     /** Information - ALL */
     static async allInformation(): Promise<Information[]> {
-        const list: Information[] = [];
         const query = 'SELECT * FROM information';
 
         const {rows} = await QueryDB(query, []);
+        const list: Information[] = [];
 
         for (const row of rows) {
             list.push(new Information(row));
@@ -163,46 +163,60 @@ export abstract class TablesCrudRepository {
     }
 
     /** Information - READ */
-    static async getInformationById(id: number): Promise<Information | null> {
-        const query = "SELECT * FROM information WHERE id = $1";
+    static async getUserInformation(owner: number): Promise<Information[]> {
+        const query = `SELECT * FROM information WHERE owner = $1`;
+        const {rows} = await QueryDB(query, [owner]);
 
-        const {rows} = await QueryDB(query, [id]);
+        const list: Information[] = [];
 
-        if (rows.length === 1) {
-            return new Information(rows[0]);
+        for (const row of rows) {
+            list.push(new Information(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Information - UPDATE */
-    static async updateInformation(data: Information) {
+    static async updateInformation(data: Information): Promise<Information[]> {
         const query = `UPDATE information 
-                       SET full_name = $2, marriage_name = $3, thesis_coordinator = $4, founding = $5, completion_date = $6,
+                       SET full_name = $3, marriage_name = $4, thesis_coordinator = $5, founding = $6, completion_date = $7,
                        updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.fullName, data.marriageName, data.thesisCoordinator, data.founding, data.completionDate];
+        const params = [data.id, data.owner, data.fullName, data.marriageName, data.thesisCoordinator, data.founding, data.completionDate];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: Information[] = [];
+
+        for (const row of rows) {
+            list.push(new Information(row));
+        }
+
+        return list;
     }
 
     /** Information - DELETE */
-    static async deleteInformation(data: Information) {
-        const query = `DELETE FROM information WHERE id = $1`;
+    static async deleteInformation(data: Information): Promise<Information[]> {
+        const query = `DELETE FROM information WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: Information[] = [];
+
+        for (const row of rows) {
+            list.push(new Information(row));
+        }
+
+        return list;
     }
 
     /* ----==== Articole științifice publicate în extenso...(ISI) ====---- */
 
     /** Scientific Articles ISI - ALL */
     static async allScientificArticlesISI(): Promise<ScientificArticleISI[]> {
-        const list: ScientificArticleISI[] = [];
         const query = 'SELECT * FROM scientific_article_isi';
 
         const {rows} = await QueryDB(query, []);
+        const list: ScientificArticleISI[] = [];
 
         for (const row of rows) {
             list.push(new ScientificArticleISI(row));
@@ -234,48 +248,62 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Articles ISI - READ */
-    static async getScientificArticleISI(id: number): Promise<ScientificArticleISI | null> {
-        const query = "SELECT * FROM scientific_article_isi WHERE id = $1";
+    static async getScientificArticleISI(owner: number): Promise<ScientificArticleISI[]> {
+        const query = `SELECT * FROM scientific_article_isi WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: ScientificArticleISI[] = [];
 
-        if (rows.length === 1) {
-            return new ScientificArticleISI(rows[0]);
+        for (const row of rows) {
+            list.push(new ScientificArticleISI(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Scientific Articles ISI - UPDATE */
-    static async updateScientificArticleISI(data: ScientificArticleISI) {
-        const query = `UPDATE scientific_article_isi SET article_title = $2, authors = $3, publication_date = $4, 
-                                  volume = $5, issue = $6, starting_page = $7, ending_page = $8, 
-                                  impact_factor = $9, cnatdcu_classification = $10, doi = $11, conference_name = $12,
-                                  observations = $13, updated = current_timestamp WHERE id = $1 RETURNING *`;
+    static async updateScientificArticleISI(data: ScientificArticleISI): Promise<ScientificArticleISI[]> {
+        const query = `UPDATE scientific_article_isi SET article_title = $3, authors = $4, publication_date = $5, 
+                                  volume = $6, issue = $7, starting_page = $8, ending_page = $9, 
+                                  impact_factor = $10, cnatdcu_classification = $11, doi = $12, conference_name = $13,
+                                  observations = $14, updated = current_timestamp WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.articleTitle, data.authors, data.publicationDate, data.volume,
+        const params = [data.id, data.owner, data.articleTitle, data.authors, data.publicationDate, data.volume,
                         data.issue, data.startingPage, data.endingPage, data.impactFactor,
                         data.cnatdcuClassification, data.doi, data.conferenceName, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ScientificArticleISI[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificArticleISI(row));
+        }
+
+        return list;
     }
 
     /** Scientific Articles ISI - DELETE */
-    static async deleteScientificArticleISI(data: ScientificArticleISI) {
-        const query = `DELETE FROM scientific_article_isi WHERE id = $1`;
+    static async deleteScientificArticleISI(data: ScientificArticleISI): Promise<ScientificArticleISI[]> {
+        const query = `DELETE FROM scientific_article_isi WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: ScientificArticleISI[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificArticleISI(row));
+        }
+
+        return list;
     }
 
     /* ----==== ISI proceedings ====---- */
 
     /** ISI Proceedings - ALL */
     static async allISIProceedings(): Promise<ISIProceeding[]> {
-        const list: ISIProceeding[] = [];
         const query = 'SELECT * FROM isi_proceedings';
 
         const {rows} = await QueryDB(query, []);
+        const list: ISIProceeding[] = [];
 
         for (const row of rows) {
             list.push(new ISIProceeding(row));
@@ -307,49 +335,63 @@ export abstract class TablesCrudRepository {
     }
 
     /** ISI Proceedings - READ */
-    static async getISIProceeding(id: number): Promise<ISIProceeding | null> {
-        const query = "SELECT * FROM isi_proceedings WHERE id = $1";
+    static async getISIProceeding(owner: number): Promise<ISIProceeding[]> {
+        const query = `SELECT * FROM isi_proceedings WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: ISIProceeding[] = [];
 
-        if (rows.length === 1) {
-            return new ISIProceeding(rows[0]);
+        for (const row of rows) {
+            list.push(new ISIProceeding(row));
         }
 
-        return null;
+        return list;
     }
 
     /** ISI Proceedings - UPDATE */
-    static async updateISIProceeding(data: ISIProceeding) {
+    static async updateISIProceeding(data: ISIProceeding): Promise<ISIProceeding[]> {
         const query = `UPDATE isi_proceedings SET 
-                       article_title = $2, authors = $3, conference_name = $4, indexed_volume_type = $5, publication_year = $6,
-                       article_type = $7, conference_type = $8, conference_link = $9, starting_page = $10, ending_page = $11,
-                       observations = $12, updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       article_title = $3, authors = $4, conference_name = $5, indexed_volume_type = $6, publication_year = $7,
+                       article_type = $8, conference_type = $9, conference_link = $10, starting_page = $11, ending_page = $12,
+                       observations = $13, updated = current_timestamp
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.articleTitle, data.authors, data.conferenceName, data.indexedVolumeType,
+        const params = [data.id, data.owner, data.articleTitle, data.authors, data.conferenceName, data.indexedVolumeType,
                         data.publicationYear, data.articleType, data.conferenceType, data.conferenceLink,
                         data.startingPage, data.endingPage, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ISIProceeding[] = [];
+
+        for (const row of rows) {
+            list.push(new ISIProceeding(row));
+        }
+
+        return list;
     }
 
     /** ISI Proceedings - DELETE */
-    static async deleteISIProceeding(data: ISIProceeding) {
-        const query = `DELETE FROM isi_proceedings WHERE id = $1`;
+    static async deleteISIProceeding(data: ISIProceeding): Promise<ISIProceeding[]> {
+        const query = `DELETE FROM isi_proceedings WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: ISIProceeding[] = [];
+
+        for (const row of rows) {
+            list.push(new ISIProceeding(row));
+        }
+
+        return list;
     }
 
     /* ----==== Articole științifice publicate în extenso... (BDI) ====---- */
 
     /** Scientific Articles BDI - ALL */
     static async allScientificArticlesBDI(): Promise<ScientificArticleBDI[]> {
-        const list: ScientificArticleBDI[] = [];
         const query = `SELECT * FROM scientific_articles_bdi`;
 
         const {rows} = await QueryDB(query, []);
+        const list: ScientificArticleBDI[] = [];
 
         for (const row of rows) {
             list.push(new ScientificArticleBDI(row));
@@ -382,51 +424,65 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Articles BDI - READ */
-    static async getScientificArticleBDI(id: number): Promise<ScientificArticleBDI | null> {
-        const query = `SELECT * FROM scientific_articles_bdi WHERE id = $1`;
-        
-        const {rows} = await QueryDB(query, [id]);
+    static async getScientificArticleBDI(owner: number): Promise<ScientificArticleBDI[]> {
+        const query = `SELECT * FROM scientific_articles_bdi WHERE owner = $1`;
 
-        if (rows.length === 1) {
-            return new ScientificArticleBDI(rows[0]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: ScientificArticleBDI[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificArticleBDI(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Scientific Articles BDI - UPDATE */
-    static async updateScientificArticleBDI(data: ScientificArticleBDI) {
+    static async updateScientificArticleBDI(data: ScientificArticleBDI): Promise<ScientificArticleBDI[]> {
         const query = `UPDATE scientific_articles_bdi SET 
-                       hierarchy_domains = $2, article_title = $3, authors = $4, bdi_indexed_magazine = $5,
-                       publication_year = $6, volume = $7, number = $8, starting_page = $9, ending_page = $10,
-                       international_magazine = $11, cnatdcu_classification = $12, indexed_article_link = $13, 
-                       bdi_database = $14, bdi_database_link = $15, observations = $16, updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       hierarchy_domains = $3, article_title = $4, authors = $5, bdi_indexed_magazine = $6,
+                       publication_year = $7, volume = $8, number = $9, starting_page = $10, ending_page = $11,
+                       international_magazine = $12, cnatdcu_classification = $13, indexed_article_link = $14, 
+                       bdi_database = $15, bdi_database_link = $16, observations = $17, updated = current_timestamp
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.hierarchyDomains, data.articleTitle, data.authors, data.bdiIndexedMagazine,
+        const params = [data.id, data.owner, data.hierarchyDomains, data.articleTitle, data.authors, data.bdiIndexedMagazine,
                         data.publicationYear, data.volume, data.number, data.startingPage, data.endingPage,
                         data.internationalMagazine, data.cnatdcuClassification, data.indexedArticleLink, data.bdiDatabase,
                         data.bdiDatabaseLink, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ScientificArticleBDI[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificArticleBDI(row));
+        }
+
+        return list;
     }
 
     /** Scientific Articles BDI - DELETE */
-    static async deleteScientificArticleBDI(data: ScientificArticleBDI) {
-        const query = `DELETE FROM scientific_articles_bdi WHERE id = $1`;
+    static async deleteScientificArticleBDI(data: ScientificArticleBDI): Promise<ScientificArticleBDI[]> {
+        const query = `DELETE FROM scientific_articles_bdi WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: ScientificArticleBDI[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificArticleBDI(row));
+        }
+
+        return list;
     }
 
     /* ----==== Cărți ştiinţifice sau capitole de cărți publicate în edituri ====---- */
 
     /** Scientific Books - ALL */
     static async allScientificBooks(): Promise<ScientificBook[]> {
-        const list: ScientificBook[] = [];
         const query = `SELECT * FROM scientific_books`;
 
         const {rows} = await QueryDB(query, []);
+        const list: ScientificBook[] = [];
 
         for (const row of rows) {
             list.push(new ScientificBook(row));
@@ -457,49 +513,63 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific Books - READ */
-    static async getScientificBook(id: number): Promise<ScientificBook | null> {
-        const query = `SELECT * FROM scientific_books WHERE id = $1`;
+    static async getScientificBook(owner: number): Promise<ScientificBook[]> {
+        const query = `SELECT * FROM scientific_books WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: ScientificBook[] = [];
 
-        if (rows.length === 1) {
-            return new ScientificBook(rows[0]);
+        for (const row of rows) {
+            list.push(new ScientificBook(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Scientific Books - UPDATE */
-    static async updateScientificBook(data: ScientificBook) {
+    static async updateScientificBook(data: ScientificBook): Promise<ScientificBook[]> {
         const query = `UPDATE scientific_books SET 
-                       hierarchy_domains = $2, chapter_title = $3, authors = $4, book_title = $5, page_number = $6, 
-                       publication_year = $7, publishing_house = $8, publication_type = $9, isbn = $10, observations = $11,
+                       hierarchy_domains = $3, chapter_title = $4, authors = $5, book_title = $6, page_number = $7, 
+                       publication_year = $8, publishing_house = $9, publication_type = $10, isbn = $11, observations = $12,
                        updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.hierarchyDomains, data.chapterTitle, data.authors, data.bookTitle,
+        const params = [data.id, data.owner, data.hierarchyDomains, data.chapterTitle, data.authors, data.bookTitle,
             data.pageNumber, data.publicationYear, data.publishingHouse, data.publicationType,
             data.isbn, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ScientificBook[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificBook(row));
+        }
+
+        return list;
     }
 
     /** Scientific Books - DELETE */
-    static async deleteScientificBook(data: ScientificBook) {
-        const query = `DELETE FROM scientific_books WHERE id = $1`;
+    static async deleteScientificBook(data: ScientificBook): Promise<ScientificBook[]> {
+        const query = `DELETE FROM scientific_books WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: ScientificBook[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificBook(row));
+        }
+
+        return list;
     }
 
     /* ----==== Traduceri ====---- */
 
     /** Translations - ALL */
     static async allTranslations(): Promise<Translation[]> {
-        const list: Translation[] = [];
         const query = `SELECT * FROM translations`;
 
         const {rows} = await QueryDB(query, []);
+        const list: Translation[] = [];
 
         for (const row of rows) {
             list.push(new Translation(row));
@@ -530,49 +600,63 @@ export abstract class TablesCrudRepository {
     }
 
     /** Translations - READ */
-    static async getTranslation(id: number): Promise<Translation | null> {
-        const query = `SELECT * FROM translations WHERE id = $1`;
+    static async getTranslation(owner: number): Promise<Translation[]> {
+        const query = `SELECT * FROM translations WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: Translation[] = [];
 
-        if (rows.length === 1) {
-            return new Translation(rows[0]);
+        for (const row of rows) {
+            list.push(new Translation(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Translations - UPDATE */
-    static async updateTranslation(data: Translation) {
+    static async updateTranslation(data: Translation): Promise<Translation[]> {
         const query = `UPDATE translations SET 
-                       hierarchy_domains = $2, translation_title = $3, authors = $4, translated_authors = $5, 
-                       publication_year = $6, publishing_house = $7, country = $8, page_number = $9, isbn = $10,
-                       translation_type = $11, observations = $12, updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       hierarchy_domains = $3, translation_title = $4, authors = $5, translated_authors = $6, 
+                       publication_year = $7, publishing_house = $8, country = $9, page_number = $10, isbn = $11,
+                       translation_type = $12, observations = $13, updated = current_timestamp
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.hierarchyDomains, data.translationTitle, data.authors, data.translatedAuthors,
+        const params = [data.id, data.owner, data.hierarchyDomains, data.translationTitle, data.authors, data.translatedAuthors,
             data.publicationYear, data.publishingHouse, data.country, data.pageNumber, data.isbn,
             data.translationType, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: Translation[] = [];
+
+        for (const row of rows) {
+            list.push(new Translation(row));
+        }
+
+        return list;
     }
 
     /** Translations - DELETE */
-    static async deleteTranslation(data: Translation) {
-        const query = `DELETE FROM translations WHERE id = $1`;
+    static async deleteTranslation(data: Translation): Promise<Translation[]> {
+        const query = `DELETE FROM translations WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: Translation[] = [];
+
+        for (const row of rows) {
+            list.push(new Translation(row));
+        }
+
+        return list;
     }
 
     /* ----==== Comunicări în manifestări științifice ====---- */
 
     /** Scientific communications - ALL */
     static async allScientificCommunications(): Promise<ScientificCommunication[]> {
-        const list: ScientificCommunication[] = [];
         const query = `SELECT * FROM scientific_communications`;
 
         const {rows} = await QueryDB(query, []);
+        const list: ScientificCommunication[] = [];
 
         for (const row of rows) {
             list.push(new ScientificCommunication(row));
@@ -602,47 +686,61 @@ export abstract class TablesCrudRepository {
     }
 
     /** Scientific communications - READ */
-    static async getScientificCommunication(id: number): Promise<ScientificCommunication | null> {
-        const query = `SELECT * FROM scientific_communications WHERE id = $1`;
+    static async getScientificCommunication(owner: number): Promise<ScientificCommunication[]> {
+        const query = `SELECT * FROM scientific_communications WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: ScientificCommunication[] = [];
 
-        if (rows.length === 1) {
-            return new ScientificCommunication(rows[0]);
+        for (const row of rows) {
+            list.push(new ScientificCommunication(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Scientific communications - UPDATE */
-    static async updateScientificCommunication(data: ScientificCommunication) {
+    static async updateScientificCommunication(data: ScientificCommunication): Promise<ScientificCommunication[]> {
         const query = `UPDATE scientific_communications SET 
-                       authors = $2, communication_type = $3, presentation_year = $4, scientific_manifestation_name = $5,
-                       manifestation_type = $6, scientific_manifestation_link = $7, observations = $8, updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       authors = $3, communication_type = $4, presentation_year = $5, scientific_manifestation_name = $6,
+                       manifestation_type = $7, scientific_manifestation_link = $8, observations = $9, updated = current_timestamp
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.authors, data.communicationType, data.presentationYear, data.scientificManifestationName,
+        const params = [data.id, data.owner, data.authors, data.communicationType, data.presentationYear, data.scientificManifestationName,
             data.manifestationType, data.scientificManifestationLink, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ScientificCommunication[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificCommunication(row));
+        }
+
+        return list;
     }
 
     /** Scientific communications - DELETE */
-    static async deleteScientificCommunication(data: ScientificCommunication) {
-        const query = `DELETE FROM scientific_communications WHERE id = $1`;
+    static async deleteScientificCommunication(data: ScientificCommunication): Promise<ScientificCommunication[]> {
+        const query = `DELETE FROM scientific_communications WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: ScientificCommunication[] = [];
+
+        for (const row of rows) {
+            list.push(new ScientificCommunication(row));
+        }
+
+        return list;
     }
 
     /* ----==== Brevete ====---- */
 
     /** Patents - ALL */
     static async allPatents(): Promise<Patent[]> {
-        const list: Patent[] = [];
         const query = `SELECT * FROM patents`;
 
         const {rows} = await QueryDB(query, []);
+        const list: Patent[] = [];
 
         for (const row of rows) {
             list.push(new Patent(row));
@@ -672,47 +770,61 @@ export abstract class TablesCrudRepository {
     }
 
     /** Patents - READ */
-    static async getPatent(id: number): Promise<Patent | null> {
-        const query = `SELECT * FROM patents WHERE id = $1`;
+    static async getPatent(owner: number): Promise<Patent[]> {
+        const query = `SELECT * FROM patents WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: Patent[] = [];
 
-        if (rows.length === 1) {
-            return new Patent(rows[0]);
+        for (const row of rows) {
+            list.push(new Patent(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Patents - UPDATE */
-    static async updatePatent(data: Patent) {
+    static async updatePatent(data: Patent): Promise<Patent[]> {
         const query = `UPDATE patents SET 
-                       patent_title_or_cbi = $2, authors = $3, year_of_obtaining_patent = $4, patent_number = $5, 
-                       patent_type = $6, authority = $7, country = $8, observations = $9, updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       patent_title_or_cbi = $3, authors = $4, year_of_obtaining_patent = $5, patent_number = $6, 
+                       patent_type = $7, authority = $8, country = $9, observations = $10, updated = current_timestamp
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.patentTitleOrCBI, data.authors, data.yearOfObtainingPatent, data.patentNumber,
+        const params = [data.id, data.owner, data.patentTitleOrCBI, data.authors, data.yearOfObtainingPatent, data.patentNumber,
             data.patentType, data.authority, data.country, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: Patent[] = [];
+
+        for (const row of rows) {
+            list.push(new Patent(row));
+        }
+
+        return list;
     }
 
     /** Patents - DELETE */
-    static async deletePatent(data: Patent) {
-        const query = `DELETE FROM patents WHERE id = $1`;
+    static async deletePatent(data: Patent): Promise<Patent[]> {
+        const query = `DELETE FROM patents WHERE id = $1 AND owner =  $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: Patent[] = [];
+
+        for (const row of rows) {
+            list.push(new Patent(row));
+        }
+
+        return list;
     }
 
     /* ----==== Contracte de cercetare ====---- */
 
     /** Research contracts - ALL */
     static async allResearchContracts(): Promise<ResearchContract[]> {
-        const list: ResearchContract[] = [];
         const query = `SELECT * FROM research_contracts`;
 
         const {rows} = await QueryDB(query, []);
+        const list: ResearchContract[] = [];
 
         for (const row of rows) {
             list.push(new ResearchContract(row));
@@ -743,48 +855,62 @@ export abstract class TablesCrudRepository {
     }
 
     /** Research contracts - READ */
-    static async getResearchContract(id: number): Promise<ResearchContract | null> {
-        const query = `SELECT * FROM research_contracts WHERE id = $1`;
+    static async getResearchContract(owner: number): Promise<ResearchContract[]> {
+        const query = `SELECT * FROM research_contracts WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: ResearchContract[] = [];
 
-        if (rows.length === 1) {
-            return new ResearchContract(rows[0]);
+        for (const row of rows) {
+            list.push(new ResearchContract(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Research contracts - UPDATE */
-    static async updateResearchContract(data: ResearchContract) {
+    static async updateResearchContract(data: ResearchContract): Promise<ResearchContract[]> {
         const query = `UPDATE research_contracts SET 
-                       research_contract_name_or_project = $2, project_code = $3, financier = $4, function = $5,
-                       start_project_period = $6, end_project_period = $7, contract_type = $8, observations = $9,
+                       research_contract_name_or_project = $3, project_code = $4, financier = $5, function = $6,
+                       start_project_period = $7, end_project_period = $8, contract_type = $9, observations = $10,
                        updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       WHERE id = $1 and owner = $2 RETURNING *`;
 
-        const params = [data.id, data.researchContractNameOrProject, data.projectCode, data.financier, data.function,
+        const params = [data.id, data.owner, data.researchContractNameOrProject, data.projectCode, data.financier, data.function,
             data.startProjectPeriod, data.endProjectPeriod, data.contractType, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: ResearchContract[] = [];
+
+        for (const row of rows) {
+            list.push(new ResearchContract(row));
+        }
+
+        return list;
     }
 
     /** Research contracts - DELETE */
-    static async deleteResearchContract(data: ResearchContract) {
-        const query = `DELETE FROM research_contracts WHERE id = $1`;
+    static async deleteResearchContract(data: ResearchContract): Promise<ResearchContract[]> {
+        const query = `DELETE FROM research_contracts WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: ResearchContract[] = [];
+
+        for (const row of rows) {
+            list.push(new ResearchContract(row));
+        }
+
+        return list;
     }
 
     /* ----==== Citări ====---- */
 
     /** Citations - ALL */
     static async allCitations(): Promise<Citation[]> {
-        const list: Citation[] = [];
         const query = `SELECT * FROM citations`;
 
         const {rows} = await QueryDB(query, []);
+        const list: Citation[] = [];
 
         for (const row of rows) {
             list.push(new Citation(row));
@@ -817,51 +943,65 @@ export abstract class TablesCrudRepository {
     }
 
     /** Citations - READ */
-    static async getCitation(id: number): Promise<Citation | null> {
-        const query = `SELECT * FROM citations WHERE id = $1`;
+    static async getCitation(owner: number): Promise<Citation[]> {
+        const query = `SELECT * FROM citations WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: Citation[] = [];
 
-        if (rows.length === 1) {
-            return new Citation(rows[0]);
+        for (const row of rows) {
+            list.push(new Citation(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Citations - UPDATE */
-    static async updateCitation(data: Citation) {
+    static async updateCitation(data: Citation): Promise<Citation[]> {
         const query = `UPDATE citations SET 
-                       article_title = $2, authors = $3, publication_title_where_referenced = $4, 
-                       authors_names_that_reference = $5, citation_year = $6, volume = $7, impact_factor = $8, 
-                       issue = $9, article_number = $10, starting_page = $11, ending_page = $12, doi = $13, 
-                       cnatdcu_classification = $14, citations = $15, observations = $16, updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       article_title = $3, authors = $4, publication_title_where_referenced = $5, 
+                       authors_names_that_reference = $6, citation_year = $7, volume = $8, impact_factor = $9, 
+                       issue = $10, article_number = $11, starting_page = $12, ending_page = $13, doi = $14, 
+                       cnatdcu_classification = $15, citations = $16, observations = $17, updated = current_timestamp
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.articleTitle, data.authors, data.publicationTitleWhereReferenced,
+        const params = [data.id, data.owner, data.articleTitle, data.authors, data.publicationTitleWhereReferenced,
             data.authorsNamesThatReference, data.citationYear, data.volume, data.impactFactor,
             data.issue, data.articleNumber, data.startingPage, data.endingPage, data.doi,
             data.cnatdcuClassification, data.citations, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: Citation[] = [];
+
+        for (const row of rows) {
+            list.push(new Citation(row));
+        }
+
+        return list;
     }
 
     /** Citations - DELETE */
-    static async deleteCitation(data: Citation) {
-        const query = `DELETE FROM citations WHERE id = $1`;
+    static async deleteCitation(data: Citation): Promise<Citation[]> {
+        const query = `DELETE FROM citations WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: Citation[] = [];
+
+        for (const row of rows) {
+            list.push(new Citation(row));
+        }
+
+        return list;
     }
 
     /* ----==== Premii si nominalizări ====---- */
 
     /** Awards and nominations - ALL */
     static async allAwardAndNominations(): Promise<AwardAndNomination[]> {
-        const list: AwardAndNomination[] = [];
         const query = `SELECT * FROM awards_and_nominations`;
 
         const {rows} = await QueryDB(query, []);
+        const list: AwardAndNomination[] = [];
 
         for (const row of rows) {
             list.push(new AwardAndNomination(row));
@@ -891,47 +1031,61 @@ export abstract class TablesCrudRepository {
     }
 
     /** Awards and nominations - READ */
-    static async getAwardAndNomination(id: number): Promise<AwardAndNomination | null> {
-        const query = `SELECT * FROM awards_and_nominations WHERE id = $1`;
+    static async getAwardAndNomination(owner: number): Promise<AwardAndNomination[]> {
+        const query = `SELECT * FROM awards_and_nominations WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: AwardAndNomination[] = [];
 
-        if (rows.length === 1) {
-            return new AwardAndNomination(rows[0]);
+        for (const row of rows) {
+            list.push(new AwardAndNomination(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Awards and nominations - UPDATE */
-    static async updateAwardAndNomination(data: AwardAndNomination) {
+    static async updateAwardAndNomination(data: AwardAndNomination): Promise<AwardAndNomination[]> {
         const query = `UPDATE awards_and_nominations SET 
-                       year_of_award = $2, award_name = $3, award_type = $4, organization_that_give_the_award = $5, 
-                       country = $6, awarded_for = $7, observations = $8, updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       year_of_award = $3, award_name = $4, award_type = $5, organization_that_give_the_award = $6, 
+                       country = $7, awarded_for = $8, observations = $9, updated = current_timestamp
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.yearOfAward, data.awardName, data.awardType, data.organizationThatGiveTheAward,
+        const params = [data.id, data.owner, data.yearOfAward, data.awardName, data.awardType, data.organizationThatGiveTheAward,
             data.country, data.awardedFor, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: AwardAndNomination[] = [];
+
+        for (const row of rows) {
+            list.push(new AwardAndNomination(row));
+        }
+
+        return list;
     }
 
     /** Awards and nominations - DELETE */
-    static async deleteAwardAndNomination(data: AwardAndNomination) {
-        const query = `DELETE FROM awards_and_nominations WHERE id = $1`;
+    static async deleteAwardAndNomination(data: AwardAndNomination): Promise<AwardAndNomination[]> {
+        const query = `DELETE FROM awards_and_nominations WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: AwardAndNomination[] = [];
+
+        for (const row of rows) {
+            list.push(new AwardAndNomination(row));
+        }
+
+        return list;
     }
 
     /* ----==== Membru în academii ====---- */
 
     /** Academy member - ALL */
     static async allAcademyMembers(): Promise<AcademyMember[]> {
-        const list: AcademyMember[] = [];
         const query = `SELECT * FROM academy_member`;
 
         const {rows} = await QueryDB(query, []);
+        const list: AcademyMember[] = [];
 
         for (const row of rows) {
             list.push(new AcademyMember(row));
@@ -959,46 +1113,60 @@ export abstract class TablesCrudRepository {
     }
 
     /** Academy member - READ */
-    static async getAcademyMember(id: number): Promise<AcademyMember | null> {
-        const query = `SELECT * FROM academy_member WHERE id = $1`;
+    static async getAcademyMember(owner: number): Promise<AcademyMember[]> {
+        const query = `SELECT * FROM academy_member WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: AcademyMember[] = [];
 
-        if (rows.length === 1) {
-            return new AcademyMember(rows[0]);
+        for (const row of rows) {
+            list.push(new AcademyMember(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Academy member - UPDATE */
-    static async updateAcademyMember(data: AcademyMember) {
+    static async updateAcademyMember(data: AcademyMember): Promise<AcademyMember[]> {
         const query = `UPDATE academy_member SET 
-                       admission_year = $2, academy_name = $3, member_type = $4, observations = $5, 
+                       admission_year = $3, academy_name = $4, member_type = $5, observations = $6, 
                        updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.admissionYear, data.academyName, data.memberType, data.observations];
+        const params = [data.id, data.owner, data.admissionYear, data.academyName, data.memberType, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: AcademyMember[] = [];
+
+        for (const row of rows) {
+            list.push(new AcademyMember(row));
+        }
+
+        return list;
     }
 
     /** Academy member - DELETE */
-    static async deleteAcademyMember(data: AcademyMember) {
-        const query = `DELETE FROM academy_member WHERE id = $1`;
+    static async deleteAcademyMember(data: AcademyMember): Promise<AcademyMember[]> {
+        const query = `DELETE FROM academy_member WHERE id = $1 AND owner = $2`;
         
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: AcademyMember[] = [];
+
+        for (const row of rows) {
+            list.push(new AcademyMember(row));
+        }
+
+        return list;
     }
 
     /* ----==== Membru în echipa editorială ====---- */
 
     /** Editorial member - ALL */
     static async allEditorialMember(): Promise<EditorialMember[]> {
-        const list: EditorialMember[] = [];
         const query = `SELECT * FROM editorial_member`;
 
         const {rows} = await QueryDB(query, []);
+        const list: EditorialMember[] = [];
 
         for (const row of rows) {
             list.push(new EditorialMember(row));
@@ -1028,47 +1196,61 @@ export abstract class TablesCrudRepository {
     }
 
     /** Editorial member - READ */
-    static async getEditorialMember(id: number): Promise<EditorialMember | null> {
-        const query = `SELECT * FROM academy_member WHERE id = $1`;
+    static async getEditorialMember(owner: number): Promise<EditorialMember[]> {
+        const query = `SELECT * FROM editorial_member WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: EditorialMember[] = [];
 
-        if (rows.length === 1) {
-            return new EditorialMember(rows[0]);
+        for (const row of rows) {
+            list.push(new EditorialMember(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Editorial member - UPDATE */
-    static async updateEditorialMember(data: EditorialMember) {
+    static async updateEditorialMember(data: EditorialMember): Promise<EditorialMember[]> {
         const query = `UPDATE editorial_member SET 
-                       committee_name = $2, magazine_name = $3, year_of_committee_attendance = $4, quality = $5, 
-                       magazine_type = $6, national_or_international = $7, observations = $8, updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       committee_name = $3, magazine_name = $4, year_of_committee_attendance = $5, quality = $6, 
+                       magazine_type = $7, national_or_international = $8, observations = $9, updated = current_timestamp
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.committeeName, data.magazineName, data.yearOfCommitteeAttendance,
+        const params = [data.id, data.owner, data.committeeName, data.magazineName, data.yearOfCommitteeAttendance,
                         data.quality, data.magazineType, data.nationalOrInternational, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: EditorialMember[] = [];
+
+        for (const row of rows) {
+            list.push(new EditorialMember(row));
+        }
+
+        return list;
     }
 
     /** Editorial member - DELETE */
-    static async deleteEditorialMember(data: EditorialMember) {
-        const query = `DELETE FROM editorial_member WHERE id = $1`;
+    static async deleteEditorialMember(data: EditorialMember): Promise<EditorialMember[]> {
+        const query = `DELETE FROM editorial_member WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: EditorialMember[] = [];
+
+        for (const row of rows) {
+            list.push(new EditorialMember(row));
+        }
+
+        return list;
     }
 
     /* ----==== Evenimente organizate ====---- */
 
     /** Organized events - ALL */
     static async allOrganizedEvents(): Promise<OrganizedEvent[]> {
-        const list: OrganizedEvent[] = [];
         const query = `SELECT * FROM organized_events`;
 
         const {rows} = await QueryDB(query, []);
+        const list: OrganizedEvent[] = [];
 
         for (const row of rows) {
             list.push(new OrganizedEvent(row));
@@ -1099,49 +1281,63 @@ export abstract class TablesCrudRepository {
     }
 
     /** Organized events - READ */
-    static async getOrganizedEvent(id: number): Promise<OrganizedEvent | null> {
-        const query = `SELECT * FROM organized_events WHERE id = $1`;
+    static async getOrganizedEvent(owner: number): Promise<OrganizedEvent[]> {
+        const query = `SELECT * FROM organized_events WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: OrganizedEvent[] = [];
 
-        if (rows.length === 1) {
-            return new OrganizedEvent(rows[0]);
+        for (const row of rows) {
+            list.push(new OrganizedEvent(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Organized events - UPDATE */
-    static async updateOrganizedEvent(data: OrganizedEvent) {
+    static async updateOrganizedEvent(data: OrganizedEvent): Promise<OrganizedEvent[]> {
         const query = `UPDATE organized_events SET 
-                       manifestation_name = $2, start_date = $3, end_date = $4, manifestation_place = $5, 
-                       manifestation_type = $6, manifestation_classification = $7, manifestation_link = $8, 
-                       contact_person = $9, observations = $10, updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       manifestation_name = $3, start_date = $4, end_date = $5, manifestation_place = $6, 
+                       manifestation_type = $7, manifestation_classification = $8, manifestation_link = $9, 
+                       contact_person = $10, observations = $11, updated = current_timestamp
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.manifestationName, data.startDate, data.endDate,
+        const params = [data.id, data.owner, data.manifestationName, data.startDate, data.endDate,
                         data.manifestationPlace, data.manifestationType, data.manifestationClassification,
                         data.manifestationLink, data.contactPerson, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: OrganizedEvent[] = [];
+
+        for (const row of rows) {
+            list.push(new OrganizedEvent(row));
+        }
+
+        return list;
     }
 
     /** Organized events - DELETE */
-    static async deleteOrganizedEvent(data: OrganizedEvent) {
-        const query = `DELETE FROM organized_events WHERE id = $1`;
+    static async deleteOrganizedEvent(data: OrganizedEvent): Promise<OrganizedEvent[]> {
+        const query = `DELETE FROM organized_events WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: OrganizedEvent[] = [];
+
+        for (const row of rows) {
+            list.push(new OrganizedEvent(row));
+        }
+
+        return list;
     }
 
     /* ----==== Fără activitate științifică ====---- */
 
     /** Without activity - ALL */
     static async allWithoutActivities(): Promise<WithoutActivity[]> {
-        const list: WithoutActivity[] = [];
         const query = `SELECT * FROM without_activity`;
 
         const {rows} = await QueryDB(query, []);
+        const list: WithoutActivity[] = [];
 
         for (const row of rows) {
             list.push(new WithoutActivity(row));
@@ -1169,45 +1365,59 @@ export abstract class TablesCrudRepository {
     }
 
     /** Without activity - READ */
-    static async getWithoutActivity(id: number): Promise<WithoutActivity | null> {
-        const query = `SELECT * FROM without_activity WHERE id = $1`;
+    static async getWithoutActivity(owner: number): Promise<WithoutActivity[]> {
+        const query = `SELECT * FROM without_activity WHERE owner = $1`;
 
-        const {rows} = await QueryDB(query, [id]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: WithoutActivity[] = [];
 
-        if (rows.length === 1) {
-            return new WithoutActivity(rows[0]);
+        for (const row of rows) {
+            list.push(new WithoutActivity(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Without activity - UPDATE */
-    static async updateWithoutActivity(data: WithoutActivity) {
+    static async updateWithoutActivity(data: WithoutActivity): Promise<WithoutActivity[]> {
         const query = `UPDATE without_activity SET 
-                       observations = $2, updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       observations = $3, updated = current_timestamp
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.observations];
+        const params = [data.id, data.owner, data.observations];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: WithoutActivity[] = [];
+
+        for (const row of rows) {
+            list.push(new WithoutActivity(row));
+        }
+
+        return list;
     }
 
     /** Without activity - DELETE */
-    static async deleteWithoutActivity(data: WithoutActivity) {
-        const query = `DELETE FROM without_activity WHERE id = $1`;
+    static async deleteWithoutActivity(data: WithoutActivity): Promise<WithoutActivity[]> {
+        const query = `DELETE FROM without_activity WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: WithoutActivity[] = [];
+
+        for (const row of rows) {
+            list.push(new WithoutActivity(row));
+        }
+
+        return list;
     }
 
     /* ----==== Activitate didactică ====---- */
 
     /** Didactic activity - ALL */
     static async allDidacticActivities(): Promise<DidacticActivity[]> {
-        const list: DidacticActivity[] = [];
         const query = `SELECT * FROM didactic_activity`;
 
         const {rows} = await QueryDB(query, []);
+        const list: DidacticActivity[] = [];
 
         for (const row of rows) {
             list.push(new DidacticActivity(row));
@@ -1235,36 +1445,50 @@ export abstract class TablesCrudRepository {
     }
 
     /** Didactic activity - READ */
-    static async getDidacticActivity(id: number): Promise<DidacticActivity | null> {
-        const query = `SELECT * FROM didactic_activity WHERE id = $1`;
-        
-        const {rows} = await QueryDB(query, [id]);
+    static async getDidacticActivity(owner: number): Promise<DidacticActivity[]> {
+        const query = `SELECT * FROM didactic_activity WHERE owner = $1`;
 
-        if (rows.length === 1) {
-            return new DidacticActivity(rows[0]);
+        const {rows} = await QueryDB(query, [owner]);
+        const list: DidacticActivity[] = [];
+
+        for (const row of rows) {
+            list.push(new DidacticActivity(row));
         }
 
-        return null;
+        return list;
     }
 
     /** Didactic activity - UPDATE */
-    static async updateDidacticActivity(data: DidacticActivity) {
+    static async updateDidacticActivity(data: DidacticActivity): Promise<DidacticActivity[]> {
         const query = `UPDATE didactic_activity SET 
-                       class_name = $2, activity_type = $3, year_of_attending_activity = $4,
+                       class_name = $3, activity_type = $4, year_of_attending_activity = $5,
                        updated = current_timestamp
-                       WHERE id = $1 RETURNING *`;
+                       WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const params = [data.id, data.className, data.activityType, data.yearOfAttendingActivity];
 
         const {rows} = await QueryDB(query, params);
-        return rows;
+        const list: DidacticActivity[] = [];
+
+        for (const row of rows) {
+            list.push(new DidacticActivity(row));
+        }
+
+        return list;
     }
 
     /** Didactic activity - DELETE */
-    static async deleteDidacticActivity(data: DidacticActivity) {
-        const query = `DELETE FROM didactic_activity WHERE id = $1`;
+    static async deleteDidacticActivity(data: DidacticActivity): Promise<DidacticActivity[]> {
+        const query = `DELETE FROM didactic_activity WHERE id = $1 AND owner = $2`;
 
-        await QueryDB(query, [data.id]);
+        const {rows} = await QueryDB(query, [data.id, data.owner]);
+        const list: DidacticActivity[] = [];
+
+        for (const row of rows) {
+            list.push(new DidacticActivity(row));
+        }
+
+        return list;
     }
 
 }

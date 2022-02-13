@@ -75,7 +75,7 @@ CREATE TABLE information (
     thesis_coordinator VARCHAR(60) NOT NULL ,
     founding VARCHAR(20) NOT NULL ,
     completion_date VARCHAR(30) NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -98,7 +98,7 @@ CREATE TABLE scientific_article_isi (
     doi VARCHAR(128) NOT NULL ,
     conference_name VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -120,7 +120,7 @@ CREATE TABLE isi_proceedings (
     starting_page VARCHAR(128) NOT NULL ,
     ending_page VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -146,7 +146,7 @@ CREATE TABLE scientific_articles_bdi (
     bdi_database VARCHAR(128) NOT NULL ,
     bdi_database_link VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -167,7 +167,7 @@ CREATE TABLE scientific_books (
     publication_type VARCHAR(128) NOT NULL ,
     isbn VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -189,7 +189,7 @@ CREATE TABLE translations (
     isbn VARCHAR(128) NOT NULL ,
     translation_type VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -207,7 +207,7 @@ CREATE TABLE scientific_communications (
     manifestation_type VARCHAR(128) NOT NULL ,
     scientific_manifestation_link VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -226,7 +226,7 @@ CREATE TABLE patents (
     authority VARCHAR(128) NOT NULL ,
     country VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -245,7 +245,7 @@ CREATE TABLE research_contracts (
     end_project_period VARCHAR(128) NOT NULL ,
     contract_type VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -271,7 +271,7 @@ CREATE TABLE citations (
     cnatdcu_classification VARCHAR(128) NOT NULL ,
     citations VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -289,7 +289,7 @@ CREATE TABLE awards_and_nominations (
     country VARCHAR(128) NOT NULL ,
     awarded_for VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -304,7 +304,7 @@ CREATE TABLE academy_member (
     academy_name VARCHAR(128) NOT NULL ,
     member_type VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -322,7 +322,7 @@ CREATE TABLE editorial_member (
     magazine_type VARCHAR(128) NOT NULL ,
     national_or_international VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -342,7 +342,7 @@ CREATE TABLE organized_events (
     manifestation_link VARCHAR(128) NOT NULL ,
     contact_person VARCHAR(128) NOT NULL ,
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -354,7 +354,7 @@ CREATE TABLE without_activity (
     id SERIAL ,
 
     observations TEXT NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
@@ -368,7 +368,7 @@ CREATE TABLE didactic_activity (
     class_name VARCHAR(128) NOT NULL ,
     activity_type VARCHAR(128) NOT NULL ,
     year_of_attending_activity VARCHAR(128) NOT NULL ,
-    owner INTEGER NOT NULL UNIQUE ,
+    owner INTEGER NOT NULL ,
     updated TIMESTAMP NOT NULL ,
 
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
