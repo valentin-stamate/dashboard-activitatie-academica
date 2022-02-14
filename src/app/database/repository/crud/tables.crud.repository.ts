@@ -81,7 +81,7 @@ export abstract class TablesCrudRepository {
 
     /** Authentication - DELETE */
     static async deleteAuthentication(data: Authentication) {
-        const query = `DELETE FROM authentication WHERE id = $1`;
+        const query = `DELETE FROM authentication WHERE id = $1 RETURNING *`;
         const params = [data.id];
 
         await QueryDB(query, params);
@@ -121,7 +121,7 @@ export abstract class TablesCrudRepository {
 
     /** Activation - DELETE */
     static async deleteActivation(data: Activation) {
-        const query = `DELETE FROM activation WHERE id = $1`;
+        const query = `DELETE FROM activation WHERE id = $1 RETURNING *`;
         const params = [data.id];
 
         await QueryDB(query, params);
@@ -197,7 +197,7 @@ export abstract class TablesCrudRepository {
 
     /** Information - DELETE */
     static async deleteInformation(data: Information): Promise<Information[]> {
-        const query = `DELETE FROM information WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM information WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: Information[] = [];
@@ -284,7 +284,7 @@ export abstract class TablesCrudRepository {
 
     /** Scientific Articles ISI - DELETE */
     static async deleteScientificArticleISI(data: ScientificArticleISI): Promise<ScientificArticleISI[]> {
-        const query = `DELETE FROM scientific_article_isi WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM scientific_article_isi WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: ScientificArticleISI[] = [];
@@ -372,7 +372,7 @@ export abstract class TablesCrudRepository {
 
     /** ISI Proceedings - DELETE */
     static async deleteISIProceeding(data: ISIProceeding): Promise<ISIProceeding[]> {
-        const query = `DELETE FROM isi_proceedings WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM isi_proceedings WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: ISIProceeding[] = [];
@@ -463,7 +463,7 @@ export abstract class TablesCrudRepository {
 
     /** Scientific Articles BDI - DELETE */
     static async deleteScientificArticleBDI(data: ScientificArticleBDI): Promise<ScientificArticleBDI[]> {
-        const query = `DELETE FROM scientific_articles_bdi WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM scientific_articles_bdi WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: ScientificArticleBDI[] = [];
@@ -550,7 +550,7 @@ export abstract class TablesCrudRepository {
 
     /** Scientific Books - DELETE */
     static async deleteScientificBook(data: ScientificBook): Promise<ScientificBook[]> {
-        const query = `DELETE FROM scientific_books WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM scientific_books WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: ScientificBook[] = [];
@@ -637,7 +637,7 @@ export abstract class TablesCrudRepository {
 
     /** Translations - DELETE */
     static async deleteTranslation(data: Translation): Promise<Translation[]> {
-        const query = `DELETE FROM translations WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM translations WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: Translation[] = [];
@@ -721,7 +721,7 @@ export abstract class TablesCrudRepository {
 
     /** Scientific communications - DELETE */
     static async deleteScientificCommunication(data: ScientificCommunication): Promise<ScientificCommunication[]> {
-        const query = `DELETE FROM scientific_communications WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM scientific_communications WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: ScientificCommunication[] = [];
@@ -805,7 +805,7 @@ export abstract class TablesCrudRepository {
 
     /** Patents - DELETE */
     static async deletePatent(data: Patent): Promise<Patent[]> {
-        const query = `DELETE FROM patents WHERE id = $1 AND owner =  $2`;
+        const query = `DELETE FROM patents WHERE id = $1 AND owner =  $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: Patent[] = [];
@@ -891,7 +891,7 @@ export abstract class TablesCrudRepository {
 
     /** Research contracts - DELETE */
     static async deleteResearchContract(data: ResearchContract): Promise<ResearchContract[]> {
-        const query = `DELETE FROM research_contracts WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM research_contracts WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: ResearchContract[] = [];
@@ -982,7 +982,7 @@ export abstract class TablesCrudRepository {
 
     /** Citations - DELETE */
     static async deleteCitation(data: Citation): Promise<Citation[]> {
-        const query = `DELETE FROM citations WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM citations WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: Citation[] = [];
@@ -1066,7 +1066,7 @@ export abstract class TablesCrudRepository {
 
     /** Awards and nominations - DELETE */
     static async deleteAwardAndNomination(data: AwardAndNomination): Promise<AwardAndNomination[]> {
-        const query = `DELETE FROM awards_and_nominations WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM awards_and_nominations WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: AwardAndNomination[] = [];
@@ -1147,7 +1147,7 @@ export abstract class TablesCrudRepository {
 
     /** Academy member - DELETE */
     static async deleteAcademyMember(data: AcademyMember): Promise<AcademyMember[]> {
-        const query = `DELETE FROM academy_member WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM academy_member WHERE id = $1 AND owner = $2 RETURNING *`;
         
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: AcademyMember[] = [];
@@ -1231,7 +1231,7 @@ export abstract class TablesCrudRepository {
 
     /** Editorial member - DELETE */
     static async deleteEditorialMember(data: EditorialMember): Promise<EditorialMember[]> {
-        const query = `DELETE FROM editorial_member WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM editorial_member WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: EditorialMember[] = [];
@@ -1318,7 +1318,7 @@ export abstract class TablesCrudRepository {
 
     /** Organized events - DELETE */
     static async deleteOrganizedEvent(data: OrganizedEvent): Promise<OrganizedEvent[]> {
-        const query = `DELETE FROM organized_events WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM organized_events WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: OrganizedEvent[] = [];
@@ -1398,7 +1398,7 @@ export abstract class TablesCrudRepository {
 
     /** Without activity - DELETE */
     static async deleteWithoutActivity(data: WithoutActivity): Promise<WithoutActivity[]> {
-        const query = `DELETE FROM without_activity WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM without_activity WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: WithoutActivity[] = [];
@@ -1479,7 +1479,7 @@ export abstract class TablesCrudRepository {
 
     /** Didactic activity - DELETE */
     static async deleteDidacticActivity(data: DidacticActivity): Promise<DidacticActivity[]> {
-        const query = `DELETE FROM didactic_activity WHERE id = $1 AND owner = $2`;
+        const query = `DELETE FROM didactic_activity WHERE id = $1 AND owner = $2 RETURNING *`;
 
         const {rows} = await QueryDB(query, [data.id, data.owner]);
         const list: DidacticActivity[] = [];

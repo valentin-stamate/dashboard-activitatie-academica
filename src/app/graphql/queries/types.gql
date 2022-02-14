@@ -300,6 +300,7 @@ input AuthTokenInput {
 }
 
 input InformationInput {
+    id: Int
     fullName: String
     marriageName: String
     thesisCoordinator: String
@@ -309,6 +310,7 @@ input InformationInput {
 }
 
 input ScientificArticleISIInput {
+    id: Int
     articleTitle: String
     authors: String
     publicationDate: String
@@ -325,6 +327,7 @@ input ScientificArticleISIInput {
 }
 
 input ISIProceedingInput {
+    id: Int
     articleTitle: String
     authors: String
     conferenceName: String
@@ -340,6 +343,7 @@ input ISIProceedingInput {
 }
 
 input ScientificArticleBDIInput {
+    id: Int
     hierarchyDomains: String
     articleTitle: String
     authors: String
@@ -359,6 +363,7 @@ input ScientificArticleBDIInput {
 }
 
 input ScientificBookInput {
+    id: Int
     hierarchyDomains: String
     chapterTitle: String
     authors: String
@@ -373,6 +378,7 @@ input ScientificBookInput {
 }
 
 input TranslationInput {
+    id: Int
     hierarchyDomains: String
     translationTitle: String
     authors: String
@@ -388,6 +394,7 @@ input TranslationInput {
 }
 
 input ScientificCommunicationInput {
+    id: Int
     authors: String
     communicationType: String
     presentationYear: String
@@ -399,6 +406,7 @@ input ScientificCommunicationInput {
 }
 
 input PatentInput {
+    id: Int
     patentTitleOrCBI: String
     authors: String
     yearOfObtainingPatent: String
@@ -411,6 +419,7 @@ input PatentInput {
 }
 
 input ResearchContractInput {
+    id: Int
     researchContractNameOrProject: String
     projectCode: String
     financier: String
@@ -423,6 +432,7 @@ input ResearchContractInput {
 }
 
 input CitationInput {
+    id: Int
     articleTitle: String
     authors: String
     publicationTitleWhereReferenced: String
@@ -442,6 +452,7 @@ input CitationInput {
 }
 
 input AwardAndNominationInput {
+    id: Int
     yearOfAward: String
     awardName: String
     awardType: String
@@ -453,6 +464,7 @@ input AwardAndNominationInput {
 }
 
 input AcademyMemberInput {
+    id: Int
     admissionYear: String
     academyName: String
     memberType: String
@@ -461,6 +473,7 @@ input AcademyMemberInput {
 }
 
 input EditorialMemberInput {
+    id: Int
     committeeName: String
     magazineName: String
     yearOfCommitteeAttendance: String
@@ -472,6 +485,7 @@ input EditorialMemberInput {
 }
 
 input OrganizedEventInput {
+    id: Int
     manifestationName: String
     startDate: String
     endDate: String
@@ -485,11 +499,13 @@ input OrganizedEventInput {
 }
 
 input WithoutActivityInput {
+    id: Int
     observations: String
     type: Int
 }
 
 input DidacticActivityInput {
+    id: Int
     className: String
     activityType: String
     yearOfAttendingActivity: String
