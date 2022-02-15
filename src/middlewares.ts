@@ -27,7 +27,7 @@ export async function userRequestMiddleware (req: Request<any>, res: Response<an
     const user = await UserRepository.getUserByEmail(decoded.email);
 
     if (!user) {
-        res.status(404).end(JSON.stringify(new GraphQlErrorResponse([Responses.NOT_FOUND])));
+        res.status(404).end(JSON.stringify(new GraphQlErrorResponse([Responses.USER_NOT_FOUND])));
         return;
     }
 
@@ -58,7 +58,7 @@ export async function adminUserRequestMiddleware (req: Request<any>, res: Respon
     const user = await UserRepository.getUserByEmail(decoded.email);
 
     if (!user) {
-        res.status(404).end(JSON.stringify(new GraphQlErrorResponse([Responses.NOT_FOUND])));
+        res.status(404).end(JSON.stringify(new GraphQlErrorResponse([Responses.USER_NOT_FOUND])));
         return;
     }
 

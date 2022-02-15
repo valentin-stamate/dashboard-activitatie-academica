@@ -37,7 +37,7 @@ type Information implements GenericForm {
     marriageName: String!
     thesisCoordinator: String!
     founding: String!
-    completionDate: String!
+    completionDate: Date!
     owner: Int!
     updated: Date!
     type: Int!
@@ -47,11 +47,11 @@ type ScientificArticleISI implements GenericForm {
     id: Int!
     articleTitle: String!
     authors: String!
-    publicationDate: String!
+    publicationDate: Date!
     volume: String!
     issue: String!
-    startingPage: String!
-    endingPage: String!
+    startingPage: Int!
+    endingPage: Int!
     impactFactor: String!
     cnatdcuClassification: String!
     doi: String!
@@ -68,12 +68,12 @@ type ISIProceeding implements GenericForm {
     authors: String!
     conferenceName: String!
     indexedVolumeType: String!
-    publicationYear: String!
+    publicationYear: Int!
     articleType: String!
     conferenceType: String!
     conferenceLink: String!
-    startingPage: String!
-    endingPage: String!
+    startingPage: Int!
+    endingPage: Int!
     observations: String!
     owner: Int!
     updated: Date!
@@ -86,11 +86,11 @@ type ScientificArticleBDI implements GenericForm {
     articleTitle: String!
     authors: String!
     bdiIndexedMagazine: String!
-    publicationYear: String!
+    publicationYear: Int!
     volume: String!
-    number: String!
-    startingPage: String!
-    endingPage: String!
+    number: Int!
+    startingPage: Int!
+    endingPage: Int!
     internationalMagazine: String!
     cnatdcuClassification: String!
     indexedArticleLink: String!
@@ -108,8 +108,8 @@ type ScientificBook implements GenericForm {
     chapterTitle: String!
     authors: String!
     bookTitle: String!
-    pageNumber: String!
-    publicationYear: String!
+    pageNumber: Int!
+    publicationYear: Int!
     publishingHouse: String!
     publicationType: String!
     isbn: String!
@@ -125,10 +125,10 @@ type Translation implements GenericForm {
     translationTitle: String!
     authors: String!
     translatedAuthors: String!
-    publicationYear: String!
+    publicationYear: Int!
     publishingHouse: String!
     country: String!
-    pageNumber: String!
+    pageNumber: Int!
     isbn: String!
     translationType: String!
     observations: String!
@@ -141,7 +141,7 @@ type ScientificCommunication implements GenericForm {
     id: Int!
     authors: String!
     communicationType: String!
-    presentationYear: String!
+    presentationYear: Int!
     scientificManifestationName: String!
     manifestationType: String!
     scientificManifestationLink: String!
@@ -155,8 +155,8 @@ type Patent implements GenericForm {
     id: Int!
     patentTitleOrCBI: String!
     authors: String!
-    yearOfObtainingPatent: String!
-    patentNumber: String!
+    yearOfObtainingPatent: Int!
+    patentNumber: Int!
     patentType: String!
     authority: String!
     country: String!
@@ -172,8 +172,8 @@ type ResearchContract implements GenericForm {
     projectCode: String!
     financier: String!
     function: String!
-    startProjectPeriod: String!
-    endProjectPeriod: String!
+    startProjectPeriod: Date!
+    endProjectPeriod: Date!
     contractType: String!
     observations: String!
     owner: Int!
@@ -187,13 +187,13 @@ type Citation implements GenericForm {
     authors: String!
     publicationTitleWhereReferenced: String!
     authorsNamesThatReference: String!
-    citationYear: String!
+    citationYear: Int!
     volume: String!
     impactFactor: String!
     issue: String!
-    articleNumber: String!
-    startingPage: String!
-    endingPage: String!
+    articleNumber: Int!
+    startingPage: Int!
+    endingPage: Int!
     doi: String!
     cnatdcuClassification: String!
     citations: String!
@@ -205,7 +205,7 @@ type Citation implements GenericForm {
 
 type AwardAndNomination implements GenericForm {
     id: Int!
-    yearOfAward: String!
+    yearOfAward: Int!
     awardName: String!
     awardType: String!
     organizationThatGiveTheAward: String!
@@ -219,7 +219,7 @@ type AwardAndNomination implements GenericForm {
 
 type AcademyMember implements GenericForm {
     id: Int!
-    admissionYear: String!
+    admissionYear: Int!
     academyName: String!
     memberType: String!
     observations: String!
@@ -232,7 +232,7 @@ type EditorialMember implements GenericForm {
     id: Int!
     committeeName: String!
     magazineName: String!
-    yearOfCommitteeAttendance: String!
+    yearOfCommitteeAttendance: Int!
     quality: String!
     magazineType: String!
     nationalOrInternational: String!
@@ -245,8 +245,8 @@ type EditorialMember implements GenericForm {
 type OrganizedEvent implements GenericForm {
     id: Int!
     manifestationName: String!
-    startDate: String!
-    endDate: String!
+    startDate: Date!
+    endDate: Date!
     manifestationPlace: String!
     manifestationType: String!
     manifestationClassification: String!
@@ -270,7 +270,7 @@ type DidacticActivity implements GenericForm {
     id: Int!
     className: String!
     activityType: String!
-    yearOfAttendingActivity: String!
+    yearOfAttendingActivity: Int!
     owner: Int!
     updated: Date!
     type: Int!
@@ -305,25 +305,31 @@ input InformationInput {
     marriageName: String
     thesisCoordinator: String
     founding: String
-    completionDate: String
+    completionDate: Date
     type: Int
+    
+    updated: Date
+    owner: Int
 }
 
 input ScientificArticleISIInput {
     id: Int
     articleTitle: String
     authors: String
-    publicationDate: String
+    publicationDate: Date
     volume: String
     issue: String
-    startingPage: String
-    endingPage: String
+    startingPage: Int
+    endingPage: Int
     impactFactor: String
     cnatdcuClassification: String
     doi: String
     conferenceName: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input ISIProceedingInput {
@@ -332,14 +338,17 @@ input ISIProceedingInput {
     authors: String
     conferenceName: String
     indexedVolumeType: String
-    publicationYear: String
+    publicationYear: Int
     articleType: String
     conferenceType: String
     conferenceLink: String
-    startingPage: String
-    endingPage: String
+    startingPage: Int
+    endingPage: Int
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input ScientificArticleBDIInput {
@@ -348,11 +357,11 @@ input ScientificArticleBDIInput {
     articleTitle: String
     authors: String
     bdiIndexedMagazine: String
-    publicationYear: String
+    publicationYear: Int
     volume: String
-    number: String
-    startingPage: String
-    endingPage: String
+    number: Int
+    startingPage: Int
+    endingPage: Int
     internationalMagazine: String
     cnatdcuClassification: String
     indexedArticleLink: String
@@ -360,6 +369,9 @@ input ScientificArticleBDIInput {
     bdiDatabaseLink: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input ScientificBookInput {
@@ -368,13 +380,16 @@ input ScientificBookInput {
     chapterTitle: String
     authors: String
     bookTitle: String
-    pageNumber: String
-    publicationYear: String
+    pageNumber: Int
+    publicationYear: Int
     publishingHouse: String
     publicationType: String
     isbn: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input TranslationInput {
@@ -383,39 +398,48 @@ input TranslationInput {
     translationTitle: String
     authors: String
     translatedAuthors: String
-    publicationYear: String
+    publicationYear: Int
     publishingHouse: String
     country: String
-    pageNumber: String
+    pageNumber: Int
     isbn: String
     translationType: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input ScientificCommunicationInput {
     id: Int
     authors: String
     communicationType: String
-    presentationYear: String
+    presentationYear: Int
     scientificManifestationName: String
     manifestationType: String
     scientificManifestationLink: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input PatentInput {
     id: Int
     patentTitleOrCBI: String
     authors: String
-    yearOfObtainingPatent: String
-    patentNumber: String
+    yearOfObtainingPatent: Int
+    patentNumber: Int
     patentType: String
     authority: String
     country: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input ResearchContractInput {
@@ -424,11 +448,14 @@ input ResearchContractInput {
     projectCode: String
     financier: String
     function: String
-    startProjectPeriod: String
-    endProjectPeriod: String
+    startProjectPeriod: Date
+    endProjectPeriod: Date
     contractType: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input CitationInput {
@@ -437,23 +464,26 @@ input CitationInput {
     authors: String
     publicationTitleWhereReferenced: String
     authorsNamesThatReference: String
-    citationYear: String
+    citationYear: Int
     volume: String
     impactFactor: String
     issue: String
-    articleNumber: String
-    startingPage: String
-    endingPage: String
+    articleNumber: Int
+    startingPage: Int
+    endingPage: Int
     doi: String
     cnatdcuClassification: String
     citations: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input AwardAndNominationInput {
     id: Int
-    yearOfAward: String
+    yearOfAward: Int
     awardName: String
     awardType: String
     organizationThatGiveTheAward: String
@@ -461,34 +491,43 @@ input AwardAndNominationInput {
     awardedFor: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input AcademyMemberInput {
     id: Int
-    admissionYear: String
+    admissionYear: Int
     academyName: String
     memberType: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input EditorialMemberInput {
     id: Int
     committeeName: String
     magazineName: String
-    yearOfCommitteeAttendance: String
+    yearOfCommitteeAttendance: Int
     quality: String
     magazineType: String
     nationalOrInternational: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input OrganizedEventInput {
     id: Int
     manifestationName: String
-    startDate: String
-    endDate: String
+    startDate: Date
+    endDate: Date
     manifestationPlace: String
     manifestationType: String
     manifestationClassification: String
@@ -496,18 +535,27 @@ input OrganizedEventInput {
     contactPerson: String
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input WithoutActivityInput {
     id: Int
     observations: String
     type: Int
+
+    updated: Date
+    owner: Int
 }
 
 input DidacticActivityInput {
     id: Int
     className: String
     activityType: String
-    yearOfAttendingActivity: String
+    yearOfAttendingActivity: Int
     type: Int
+
+    updated: Date
+    owner: Int
 }

@@ -10,16 +10,19 @@ export class ServiceResponse {
     message: string;
     payload: any;
 
-    constructor(succes: boolean, message: string, payload: any) {
-        this.succes = succes;
+    constructor(success: boolean, message: string, payload: any = null) {
+        this.succes = success;
         this.message = message;
         this.payload = payload;
     }
 }
 
 export const Responses = {
-    OK: 'Successful request.',
-    ERROR: 'Request was unsuccessful.',
+    REQUEST_SUCCESS: 'Successful request.',
+    REQUEST_ERROR: 'Request was unsuccessful.',
+
+    SUCCESS: 'Success',
+    ERROR: 'Error',
 
     EMAIL_TAKEN: 'Email is taken',
     USERNAME_TAKEN: 'Username is already used.',
@@ -37,7 +40,6 @@ export const Responses = {
     AUTH_EMAIL_SENT: 'An email was sent with your account.',
     INVALID_AUTH_KEY: 'Invalid key.',
     SOMETHING_WRONG: "This shouldn't happen.",
-    SUCCESS: 'Success',
     MISSING_KEY: 'Missing key',
     INVALID_USER: 'Invalid user.',
     UNAUTHORIZED: 'Unauthorized.',

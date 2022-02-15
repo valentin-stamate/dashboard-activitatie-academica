@@ -1,81 +1,81 @@
 type Mutation {
     getInformation(authToken: AuthTokenInput!): [Information]
-    addInformation(authToken: AuthTokenInput!, data: InformationInput!): Int
-    updateInformation(authToken: AuthTokenInput!, data: InformationInput!): Int
-    deleteInformation(authToken: AuthTokenInput!, data: InformationInput!): Int
+    addInformation(authToken: AuthTokenInput!, data: InformationInput!): String
+    updateInformation(authToken: AuthTokenInput!, data: InformationInput!): String
+    deleteInformation(authToken: AuthTokenInput!, data: InformationInput!): String
 
     getScientificArticleISI(authToken: AuthTokenInput!): [ScientificArticleISI]
-    addScientificArticleISI(authToken: AuthTokenInput!, data: ScientificArticleISIInput!): Int
-    updateScientificArticleISI(authToken: AuthTokenInput!, data: ScientificArticleISIInput!): Int
-    deleteScientificArticleISI(authToken: AuthTokenInput!, data: ScientificArticleISIInput!): Int
+    addScientificArticleISI(authToken: AuthTokenInput!, data: ScientificArticleISIInput!): String
+    updateScientificArticleISI(authToken: AuthTokenInput!, data: ScientificArticleISIInput!): String
+    deleteScientificArticleISI(authToken: AuthTokenInput!, data: ScientificArticleISIInput!): String
 
     getISIProceeding(authToken: AuthTokenInput!): [ISIProceeding]
-    addISIProceeding(authToken: AuthTokenInput!, data:ISIProceedingInput!): Int
-    updateISIProceeding(authToken: AuthTokenInput!, data:ISIProceedingInput!): Int
-    deleteISIProceeding(authToken: AuthTokenInput!, data: ISIProceedingInput!): Int
+    addISIProceeding(authToken: AuthTokenInput!, data:ISIProceedingInput!): String
+    updateISIProceeding(authToken: AuthTokenInput!, data:ISIProceedingInput!): String
+    deleteISIProceeding(authToken: AuthTokenInput!, data: ISIProceedingInput!): String
 
     getScientificArticleBDI(authToken: AuthTokenInput!): [ScientificArticleBDI]
-    addScientificArticleBDI(authToken: AuthTokenInput!, data: ScientificArticleBDIInput!): Int
-    updateScientificArticleBDI(authToken: AuthTokenInput!, data: ScientificArticleBDIInput!): Int
-    deleteScientificArticleBDI(authToken: AuthTokenInput!, data: ScientificArticleBDIInput!): Int
+    addScientificArticleBDI(authToken: AuthTokenInput!, data: ScientificArticleBDIInput!): String
+    updateScientificArticleBDI(authToken: AuthTokenInput!, data: ScientificArticleBDIInput!): String
+    deleteScientificArticleBDI(authToken: AuthTokenInput!, data: ScientificArticleBDIInput!): String
 
     getScientificBook(authToken: AuthTokenInput!): [ScientificBook]
-    addScientificBook(authToken: AuthTokenInput!, data: ScientificBookInput!): Int
-    updateScientificBook(authToken: AuthTokenInput!, data: ScientificBookInput!): Int
-    deleteScientificBook(authToken: AuthTokenInput!, data: ScientificBookInput!): Int
+    addScientificBook(authToken: AuthTokenInput!, data: ScientificBookInput!): String
+    updateScientificBook(authToken: AuthTokenInput!, data: ScientificBookInput!): String
+    deleteScientificBook(authToken: AuthTokenInput!, data: ScientificBookInput!): String
 
     getTranslation(authToken: AuthTokenInput!): [Translation]
-    addTranslation(authToken: AuthTokenInput!, data: TranslationInput!): Int
-    updateTranslation(authToken: AuthTokenInput!, data: TranslationInput!): Int
-    deleteTranslation(authToken: AuthTokenInput!, data: TranslationInput!): Int
+    addTranslation(authToken: AuthTokenInput!, data: TranslationInput!): String
+    updateTranslation(authToken: AuthTokenInput!, data: TranslationInput!): String
+    deleteTranslation(authToken: AuthTokenInput!, data: TranslationInput!): String
 
     getScientificCommunication(authToken: AuthTokenInput!): [ScientificCommunication]
-    addScientificCommunication(authToken: AuthTokenInput!, data: ScientificCommunicationInput!): Int
-    updateScientificCommunication(authToken: AuthTokenInput!, data: ScientificCommunicationInput!): Int
-    deleteScientificCommunication(authToken: AuthTokenInput!, data: ScientificCommunicationInput!): Int
+    addScientificCommunication(authToken: AuthTokenInput!, data: ScientificCommunicationInput!): String
+    updateScientificCommunication(authToken: AuthTokenInput!, data: ScientificCommunicationInput!): String
+    deleteScientificCommunication(authToken: AuthTokenInput!, data: ScientificCommunicationInput!): String
 
     getPatent(authToken: AuthTokenInput!): [Patent]
-    addPatent(authToken: AuthTokenInput!, data: PatentInput!): Int
-    updatePatent(authToken: AuthTokenInput!, data: PatentInput!): Int
-    deletePatent(authToken: AuthTokenInput!, data: PatentInput!): Int
+    addPatent(authToken: AuthTokenInput!, data: PatentInput!): String
+    updatePatent(authToken: AuthTokenInput!, data: PatentInput!): String
+    deletePatent(authToken: AuthTokenInput!, data: PatentInput!): String
 
     getResearchContract(authToken: AuthTokenInput!): [ResearchContract]
-    addResearchContract(authToken: AuthTokenInput!, data: ResearchContractInput!): Int
-    updateResearchContract(authToken: AuthTokenInput!, data: ResearchContractInput!): Int
-    deleteResearchContract(authToken: AuthTokenInput!, data: ResearchContractInput!): Int
+    addResearchContract(authToken: AuthTokenInput!, data: ResearchContractInput!): String
+    updateResearchContract(authToken: AuthTokenInput!, data: ResearchContractInput!): String
+    deleteResearchContract(authToken: AuthTokenInput!, data: ResearchContractInput!): String
 
     getCitation(authToken: AuthTokenInput!): [Citation]
-    addCitation(authToken: AuthTokenInput!, data: CitationInput!): Int
-    updateCitation(authToken: AuthTokenInput!, data: CitationInput!): Int
-    deleteCitation(authToken: AuthTokenInput!, data: CitationInput!): Int
+    addCitation(authToken: AuthTokenInput!, data: CitationInput!): String
+    updateCitation(authToken: AuthTokenInput!, data: CitationInput!): String
+    deleteCitation(authToken: AuthTokenInput!, data: CitationInput!): String
 
     getAwardAndNomination(authToken: AuthTokenInput!): [AwardAndNomination]
-    addAwardAndNomination(authToken: AuthTokenInput!, data: AwardAndNominationInput!): Int
-    updateAwardAndNomination(authToken: AuthTokenInput!, data: AwardAndNominationInput!): Int
-    deleteAwardAndNomination(authToken: AuthTokenInput!, data: AwardAndNominationInput!): Int
+    addAwardAndNomination(authToken: AuthTokenInput!, data: AwardAndNominationInput!): String
+    updateAwardAndNomination(authToken: AuthTokenInput!, data: AwardAndNominationInput!): String
+    deleteAwardAndNomination(authToken: AuthTokenInput!, data: AwardAndNominationInput!): String
 
     getAcademyMember(authToken: AuthTokenInput!): [AcademyMember]
-    addAcademyMember(authToken: AuthTokenInput!, data: AcademyMemberInput!): Int
-    updateAcademyMember(authToken: AuthTokenInput!, data: AcademyMemberInput!): Int
-    deleteAcademyMember(authToken: AuthTokenInput!, data: AcademyMemberInput!): Int
+    addAcademyMember(authToken: AuthTokenInput!, data: AcademyMemberInput!): String
+    updateAcademyMember(authToken: AuthTokenInput!, data: AcademyMemberInput!): String
+    deleteAcademyMember(authToken: AuthTokenInput!, data: AcademyMemberInput!): String
 
     getEditorialMember(authToken: AuthTokenInput!): [EditorialMember]
-    addEditorialMember(authToken: AuthTokenInput!, data: EditorialMemberInput!): Int
-    updateEditorialMember(authToken: AuthTokenInput!, data: EditorialMemberInput!): Int
-    deleteEditorialMember(authToken: AuthTokenInput!, data: EditorialMemberInput!): Int
+    addEditorialMember(authToken: AuthTokenInput!, data: EditorialMemberInput!): String
+    updateEditorialMember(authToken: AuthTokenInput!, data: EditorialMemberInput!): String
+    deleteEditorialMember(authToken: AuthTokenInput!, data: EditorialMemberInput!): String
 
     getOrganizedEvent(authToken: AuthTokenInput!): [OrganizedEvent]
-    addOrganizedEvent(authToken: AuthTokenInput!, data: OrganizedEventInput!): Int
-    updateOrganizedEvent(authToken: AuthTokenInput!, data: OrganizedEventInput!): Int
-    deleteOrganizedEvent(authToken: AuthTokenInput!, data: OrganizedEventInput!): Int
+    addOrganizedEvent(authToken: AuthTokenInput!, data: OrganizedEventInput!): String
+    updateOrganizedEvent(authToken: AuthTokenInput!, data: OrganizedEventInput!): String
+    deleteOrganizedEvent(authToken: AuthTokenInput!, data: OrganizedEventInput!): String
 
     getWithoutActivity(authToken: AuthTokenInput!): [WithoutActivity]
-    addWithoutActivity(authToken: AuthTokenInput!, data: WithoutActivityInput!): Int
-    updateWithoutActivity(authToken: AuthTokenInput!, data: WithoutActivityInput!): Int
-    deleteWithoutActivity(authToken: AuthTokenInput!, data: WithoutActivityInput!): Int
+    addWithoutActivity(authToken: AuthTokenInput!, data: WithoutActivityInput!): String
+    updateWithoutActivity(authToken: AuthTokenInput!, data: WithoutActivityInput!): String
+    deleteWithoutActivity(authToken: AuthTokenInput!, data: WithoutActivityInput!): String
 
     getDidacticActivity(authToken: AuthTokenInput!): [DidacticActivity]
-    addDidacticActivity(authToken: AuthTokenInput!, data: DidacticActivityInput!): Int
-    updateDidacticActivity(authToken: AuthTokenInput!, data: DidacticActivityInput!): Int
-    deleteDidacticActivity(authToken: AuthTokenInput!, data: DidacticActivityInput!): Int
+    addDidacticActivity(authToken: AuthTokenInput!, data: DidacticActivityInput!): String
+    updateDidacticActivity(authToken: AuthTokenInput!, data: DidacticActivityInput!): String
+    deleteDidacticActivity(authToken: AuthTokenInput!, data: DidacticActivityInput!): String
 }

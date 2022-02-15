@@ -75,3 +75,4 @@
 * Any Type GraphQl : https://stackoverflow.com/a/44795767/10805602
 * GraphQl Interfaces : https://graphql.org/learn/schema/#interfaces
 * Type Error List of Multiple Objects : https://stackoverflow.com/a/60251577/10805602
+* To Know : https://sequelize.org/v7/

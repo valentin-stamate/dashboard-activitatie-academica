@@ -104,7 +104,7 @@ export class Information {
     marriageName: string;
     thesisCoordinator: string;
     founding: string;
-    completionDate: string;
+    completionDate: Date;
     owner: number;
     updated: Date;
 
@@ -129,11 +129,11 @@ export class ScientificArticleISI {
     id: number;
     articleTitle: string;
     authors: string;
-    publicationDate: string;
+    publicationDate: Date;
     volume: string;
     issue: string;
-    startingPage: string;
-    endingPage: string;
+    startingPage: number;
+    endingPage: number;
     impactFactor: string;
     cnatdcuClassification: string;
     doi: string;
@@ -172,12 +172,12 @@ export class ISIProceeding {
     authors: string;
     conferenceName: string;
     indexedVolumeType: string;
-    publicationYear: string;
+    publicationYear: number;
     articleType: string;
     conferenceType: string;
     conferenceLink: string;
-    startingPage: string;
-    endingPage: string;
+    startingPage: number;
+    endingPage: number;
     observations: string;
     owner: number;
     updated: Date;
@@ -211,11 +211,11 @@ export class ScientificArticleBDI {
     articleTitle: string;
     authors: string;
     bdiIndexedMagazine: string;
-    publicationYear: string;
+    publicationYear: number;
     volume: string;
-    number: string;
-    startingPage: string;
-    endingPage: string;
+    number: number;
+    startingPage: number;
+    endingPage: number;
     internationalMagazine: string;
     cnatdcuClassification: string;
     indexedArticleLink: string;
@@ -259,7 +259,7 @@ export class ScientificBook {
     authors: string;
     bookTitle: string;
     pageNumber: string;
-    publicationYear: string;
+    publicationYear: number;
     publishingHouse: string;
     publicationType: string;
     isbn: string;
@@ -295,10 +295,10 @@ export class Translation {
     translationTitle: string;
     authors: string;
     translatedAuthors: string;
-    publicationYear: string;
+    publicationYear: number;
     publishingHouse: string;
     country: string;
-    pageNumber: string;
+    pageNumber: number;
     isbn: string;
     translationType: string;
     observations: string;
@@ -332,7 +332,7 @@ export class ScientificCommunication {
     id: number;
     authors: string;
     communicationType: string;
-    presentationYear: string;
+    presentationYear: number;
     scientificManifestationName: string;
     manifestationType: string;
     scientificManifestationLink: string;
@@ -364,8 +364,8 @@ export class Patent {
     id: number;
     patentTitleOrCBI: string;
     authors: string;
-    yearOfObtainingPatent: string;
-    patentNumber: string;
+    yearOfObtainingPatent: number;
+    patentNumber: number;
     patentType: string;
     authority: string;
     country: string;
@@ -399,8 +399,8 @@ export class ResearchContract {
     projectCode: string;
     financier: string;
     function: string;
-    startProjectPeriod: string;
-    endProjectPeriod: string;
+    startProjectPeriod: Date;
+    endProjectPeriod: Date;
     contractType: string;
     observations: string;
     owner: number;
@@ -432,13 +432,13 @@ export class Citation {
     authors: string;
     publicationTitleWhereReferenced: string;
     authorsNamesThatReference: string;
-    citationYear: string;
+    citationYear: number;
     volume: string;
     impactFactor: string;
     issue: string;
-    articleNumber: string;
-    startingPage: string;
-    endingPage: string;
+    articleNumber: number;
+    startingPage: number;
+    endingPage: number;
     doi: string;
     cnatdcuClassification: string;
     citations: string;
@@ -475,7 +475,7 @@ export class Citation {
 /* Premii si nominalizări */
 export class AwardAndNomination {
     id: number;
-    yearOfAward: string;
+    yearOfAward: number;
     awardName: string;
     awardType: string;
     organizationThatGiveTheAward: string;
@@ -506,7 +506,7 @@ export class AwardAndNomination {
 /* Membru în academii */
 export class AcademyMember {
     id: number;
-    admissionYear: string;
+    admissionYear: number;
     academyName: string;
     memberType: string;
     observations: string;
@@ -533,7 +533,7 @@ export class EditorialMember {
     id: number;
     committeeName: string;
     magazineName: string;
-    yearOfCommitteeAttendance: string;
+    yearOfCommitteeAttendance: number;
     quality: string;
     magazineType: string;
     nationalOrInternational: string;
@@ -563,8 +563,8 @@ export class EditorialMember {
 export class OrganizedEvent {
     id: number;
     manifestationName: string;
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     manifestationPlace: string;
     manifestationType: string;
     manifestationClassification: string;
@@ -618,7 +618,7 @@ export class DidacticActivity {
     id: number;
     className: string;
     activityType: string;
-    yearOfAttendingActivity: string;
+    yearOfAttendingActivity: number;
     owner: number;
     updated: Date;
 

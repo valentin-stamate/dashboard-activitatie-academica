@@ -1465,7 +1465,7 @@ export abstract class TablesCrudRepository {
                        updated = current_timestamp
                        WHERE id = $1 AND owner = $2 RETURNING *`;
 
-        const params = [data.id, data.className, data.activityType, data.yearOfAttendingActivity];
+        const params = [data.id, data.owner, data.className, data.activityType, data.yearOfAttendingActivity];
 
         const {rows} = await QueryDB(query, params);
         const list: DidacticActivity[] = [];

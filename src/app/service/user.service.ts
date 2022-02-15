@@ -26,15 +26,15 @@ export class UserService implements UserServiceInterface {
     async signUpUser(user: User): Promise<ServiceResponse> {
 
         if (await UserRepository.getUserByEmail(user.email)) {
-            return new ServiceResponse(false, Responses.USER_ALREADY_CREATED, null);
+            return new ServiceResponse(false, Responses.USER_ALREADY_CREATED);
         }
 
         if (await UserRepository.getUserByIdentifier(user.identifier)) {
-            return new ServiceResponse(false, Responses.USER_ALREADY_CREATED, null);
+            return new ServiceResponse(false, Responses.USER_ALREADY_CREATED);
         }
 
         if (!await TablesRepository.getIdByIdentifier(user.identifier)) {
-            return new ServiceResponse(false, Responses.INVALID_IDENTIFIER, null);
+            return new ServiceResponse(false, Responses.INVALID_IDENTIFIER);
         }
 
         const rows = await UserRepository.addUser(user);
@@ -53,42 +53,42 @@ export class UserService implements UserServiceInterface {
             activationKey: generatedKey,
         }));
 
-        return new ServiceResponse(true, Responses.USER_CREATED, null);
+        return new ServiceResponse(true, Responses.USER_CREATED);
     }
 
     async activateUser(activationKey: string): Promise<ServiceResponse> {
         const activationRows = await TablesRepository.getActivationByKey(activationKey);
 
         if (activationRows.length === 0) {
-            return new ServiceResponse(false, Responses.INVALID_KEY, null);
+            return new ServiceResponse(false, Responses.INVALID_KEY);
         }
 
         const activation = activationRows[0];
         const user = await UserRepository.getUserById(activation.userId);
 
         if (!user) {
-            return new ServiceResponse(false, Responses.INVALID_KEY_USER_NOT_FOUND, null);
+            return new ServiceResponse(false, Responses.INVALID_KEY_USER_NOT_FOUND);
         }
 
         await UserRepository.setUserActivationStatus(user, true);
         await TablesRepository.deleteActivationByUser(user.id);
 
-        return new ServiceResponse(true, Responses.USER_ACTIVATED, null);
+        return new ServiceResponse(true, Responses.USER_ACTIVATED);
     }
 
     async sendAuthKey(user: User): Promise<ServiceResponse> {
         const existingUser = await UserRepository.getUserByIdentifier(user.identifier);
 
         if (!existingUser) {
-            return new ServiceResponse(false, Responses.INVALID_CREDENTIALS, null);
+            return new ServiceResponse(false, Responses.INVALID_CREDENTIALS);
         }
 
         if (existingUser.email !== user.email) {
-            return new ServiceResponse(false, Responses.INVALID_CREDENTIALS, null);
+            return new ServiceResponse(false, Responses.INVALID_CREDENTIALS);
         }
 
         if (!existingUser.activated) {
-            return new ServiceResponse(false, Responses.INACTIVE_ACCOUNT, null);
+            return new ServiceResponse(false, Responses.INACTIVE_ACCOUNT);
         }
 
         const authKey = UtilService.generateRandomString(64);
@@ -110,14 +110,14 @@ export class UserService implements UserServiceInterface {
             authKey: authKey,
         }));
 
-        return new ServiceResponse(true, Responses.AUTH_EMAIL_SENT, null);
+        return new ServiceResponse(true, Responses.AUTH_EMAIL_SENT);
     }
 
     async logInUser(user: User, authKey: string): Promise<ServiceResponse> {
         const rows = await TablesRepository.getAuthenticationByKey(authKey);
 
         if (rows.length === 0) {
-            return new ServiceResponse(false, Responses.INVALID_AUTH_KEY, null);
+            return new ServiceResponse(false, Responses.INVALID_AUTH_KEY);
         }
 
         const auth = rows[0];
@@ -125,11 +125,11 @@ export class UserService implements UserServiceInterface {
         const existingUser = await UserRepository.getUserById(auth.userId);
 
         if (!existingUser) {
-            return new ServiceResponse(false, Responses.SOMETHING_WRONG, null);
+            return new ServiceResponse(false, Responses.SOMETHING_WRONG);
         }
 
         if (existingUser.identifier !== user.identifier || existingUser.email !== user.email) {
-            return new ServiceResponse(false, Responses.INVALID_USER, null);
+            return new ServiceResponse(false, Responses.INVALID_USER);
         }
 
         await TablesRepository.deleteAuthenticationByUser(existingUser.id);
@@ -187,7 +187,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addInformation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateInformation(authToken: AuthToken, data: Information): Promise<ServiceResponse> {
@@ -196,7 +200,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateInformation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteInformation(authToken: AuthToken, data: Information): Promise<ServiceResponse> {
@@ -205,7 +213,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteInformation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Articole științifice publicate în extenso în reviste cotate... (ISI) */
@@ -222,7 +234,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addScientificArticleISI(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateScientificArticleISI(authToken: AuthToken, data: ScientificArticleISI): Promise<ServiceResponse> {
@@ -231,7 +247,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateScientificArticleISI(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteScientificArticleISI(authToken: AuthToken, data: ScientificArticleISI): Promise<ServiceResponse> {
@@ -240,7 +260,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteScientificArticleISI(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* ISI proceedings */
@@ -257,7 +281,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addISIProceeding(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateISIProceeding(authToken: AuthToken, data: ISIProceeding): Promise<ServiceResponse> {
@@ -266,7 +294,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateISIProceeding(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteISIProceeding(authToken: AuthToken, data: ISIProceeding): Promise<ServiceResponse> {
@@ -275,7 +307,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteISIProceeding(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Articole științifice publicate în extenso în revi... (BDI) */
@@ -292,7 +328,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addScientificArticleBDI(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateScientificArticleBDI(authToken: AuthToken, data: ScientificArticleBDI): Promise<ServiceResponse> {
@@ -301,7 +341,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateScientificArticleBDI(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteScientificArticleBDI(authToken: AuthToken, data: ScientificArticleBDI): Promise<ServiceResponse> {
@@ -310,7 +354,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteScientificArticleBDI(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Cărți ştiinţifice sau capitole de cărți publicate în edituri */
@@ -327,7 +375,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addScientificBook(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateScientificBook(authToken: AuthToken, data: ScientificBook): Promise<ServiceResponse> {
@@ -336,7 +388,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateScientificBook(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteScientificBook(authToken: AuthToken, data: ScientificBook): Promise<ServiceResponse> {
@@ -345,7 +401,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteScientificBook(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Traduceri */
@@ -362,7 +422,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addTranslation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateTranslation(authToken: AuthToken, data: Translation): Promise<ServiceResponse> {
@@ -371,7 +435,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateTranslation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteTranslation(authToken: AuthToken, data: Translation): Promise<ServiceResponse> {
@@ -380,7 +448,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteTranslation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Comunicări în manifestări științifice */
@@ -397,7 +469,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addScientificCommunication(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateScientificCommunication(authToken: AuthToken, data: ScientificCommunication): Promise<ServiceResponse> {
@@ -406,7 +482,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateScientificCommunication(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteScientificCommunication(authToken: AuthToken, data: ScientificCommunication): Promise<ServiceResponse> {
@@ -415,7 +495,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteScientificCommunication(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Brevete */
@@ -432,7 +516,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addPatent(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updatePatent(authToken: AuthToken, data: Patent): Promise<ServiceResponse> {
@@ -441,7 +529,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updatePatent(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deletePatent(authToken: AuthToken, data: Patent): Promise<ServiceResponse> {
@@ -450,7 +542,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deletePatent(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Contracte de cercetare */
@@ -467,7 +563,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addResearchContract(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateResearchContract(authToken: AuthToken, data: ResearchContract): Promise<ServiceResponse> {
@@ -476,7 +576,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateResearchContract(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteResearchContract(authToken: AuthToken, data: ResearchContract): Promise<ServiceResponse> {
@@ -485,7 +589,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteResearchContract(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Citări */
@@ -502,7 +610,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addCitation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateCitation(authToken: AuthToken, data: Citation): Promise<ServiceResponse> {
@@ -511,7 +623,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateCitation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteCitation(authToken: AuthToken, data: Citation): Promise<ServiceResponse> {
@@ -520,7 +636,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteCitation(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Premii si nominalizări */
@@ -537,7 +657,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addAwardAndNomination(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateAwardAndNomination(authToken: AuthToken, data: AwardAndNomination): Promise<ServiceResponse> {
@@ -546,7 +670,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateAwardAndNomination(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteAwardAndNomination(authToken: AuthToken, data: AwardAndNomination): Promise<ServiceResponse> {
@@ -555,7 +683,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteAwardAndNomination(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Membru în academii */
@@ -572,7 +704,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addAcademyMember(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateAcademyMember(authToken: AuthToken, data: AcademyMember): Promise<ServiceResponse> {
@@ -581,7 +717,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateAcademyMember(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteAcademyMember(authToken: AuthToken, data: AcademyMember): Promise<ServiceResponse> {
@@ -590,7 +730,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteAcademyMember(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Membru în echipa editorială */
@@ -607,7 +751,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addEditorialMember(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateEditorialMember(authToken: AuthToken, data: EditorialMember): Promise<ServiceResponse> {
@@ -616,7 +764,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateEditorialMember(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteEditorialMember(authToken: AuthToken, data: EditorialMember): Promise<ServiceResponse> {
@@ -625,7 +777,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteEditorialMember(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Evenimente organizate */
@@ -642,7 +798,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addOrganizedEvent(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateOrganizedEvent(authToken: AuthToken, data: OrganizedEvent): Promise<ServiceResponse> {
@@ -651,7 +811,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateOrganizedEvent(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteOrganizedEvent(authToken: AuthToken, data: OrganizedEvent): Promise<ServiceResponse> {
@@ -660,7 +824,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteOrganizedEvent(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Fără activitate științifică */
@@ -677,7 +845,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addWithoutActivity(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateWithoutActivity(authToken: AuthToken, data: WithoutActivity): Promise<ServiceResponse> {
@@ -686,7 +858,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateWithoutActivity(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteWithoutActivity(authToken: AuthToken, data: WithoutActivity): Promise<ServiceResponse> {
@@ -695,7 +871,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteWithoutActivity(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     /* Activitate didactică */
@@ -712,7 +892,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.addDidacticActivity(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async updateDidacticActivity(authToken: AuthToken, data: DidacticActivity): Promise<ServiceResponse> {
@@ -721,7 +905,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.updateDidacticActivity(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
     async deleteDidacticActivity(authToken: AuthToken, data: DidacticActivity): Promise<ServiceResponse> {
@@ -730,7 +918,11 @@ export class UserService implements UserServiceInterface {
 
         const rows = await TablesRepository.deleteDidacticActivity(data);
 
-        return new ServiceResponse(true, Responses.SUCCESS, rows.length);
+        if (rows.length === 0) {
+            return new ServiceResponse(false, Responses.ERROR);
+        }
+
+        return new ServiceResponse(true, '', Responses.SUCCESS);
     }
 
 }
