@@ -1,9 +1,19 @@
 import {UserAdminServiceInterface} from "./interface/user.admin.service.interface";
 import {Responses, ServiceResponse} from "./service.response";
 import {UserRepository} from "../database/repository/user.repository";
-import {AuthToken, Id, User} from "../database/models";
+import {
+    AcademyMember,
+    AuthToken, AwardAndNomination, Citation, DidacticActivity, EditorialMember,
+    Id,
+    Information,
+    ISIProceeding, OrganizedEvent, Patent, ResearchContract,
+    ScientificArticleBDI,
+    ScientificArticleISI, ScientificBook, ScientificCommunication, Translation,
+    User, WithoutActivity
+} from "../database/models";
 import {JwtService} from "./jwt.service";
 import {TablesRepository} from "../database/repository/tables.repository";
+import {CSVService} from "./csv.service";
 
 /************************************************************
  *                    ADMIN USER ONLY
@@ -65,4 +75,5 @@ export class UserAdminService implements UserAdminServiceInterface {
         const rows = await UserRepository.deleteUser(user);
         return new ServiceResponse(true, Responses.SUCCESS, rows.length);
     }
+
 }

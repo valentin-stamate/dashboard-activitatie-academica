@@ -1,20 +1,23 @@
-import express, { Express } from 'express';
+import express, {Express} from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import config from '../config.json';
 import {graphqlHTTP} from 'express-graphql';
 import {
-  resolversUnknown,
   resolversAdmin,
-  schemaUnknown,
+  resolversUnknown,
+  resolversUser,
   schemaAdmin,
-  schemaUser,
-  resolversUser
+  schemaUnknown,
+  schemaUser
 } from "./app/graphql/export";
 import {UserService} from "./app/service/user.service";
 import {Responses} from "./app/service/service.response";
 import {adminUserRequestMiddleware, unknownUserRequestMiddleware, userRequestMiddleware} from "./middlewares";
+import {RestService} from "./app/rest/rest";
+import {WorkBook, WorkSheet} from "xlsx";
+import {UtilService} from "./app/service/util.service";
 
 const app: Express = express();
 
@@ -41,6 +44,7 @@ if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
  *                               Register all routes
  ***********************************************************************************/
 
+/** ----------------================= GRAPHQL =================---------------- */
 app.use('/unknown/graphql', unknownUserRequestMiddleware, graphqlHTTP({
   schema: schemaUnknown,
   rootValue: resolversUnknown,
@@ -59,6 +63,8 @@ app.use('/admin/graphql', adminUserRequestMiddleware, graphqlHTTP({
   graphiql: true,
 }));
 
+/** ----------------================= REST =================---------------- */
+
 /** User activation by email */
 app.get('/activate', async (req, res) => {
   const key = req.query.key as string;
@@ -72,6 +78,21 @@ app.get('/activate', async (req, res) => {
   const serviceResponse = await userService.activateUser(key);
 
   res.end(JSON.stringify({message:serviceResponse.message}));
+});
+
+const XLSX = require('XLSX');
+app.get('/download-forms', adminUserRequestMiddleware, async (req, res) => {
+
+  const workBook: WorkBook = (await RestService.getFormsWorkBook()).getInstance();
+
+  const date = new Date();
+  const fileName = `data_${UtilService.stringDate(date)}.xlsx`;
+
+  res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+  res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+  const wbOut = XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'});
+  res.send(new Buffer(wbOut));
 });
 
 /************************************************************************************

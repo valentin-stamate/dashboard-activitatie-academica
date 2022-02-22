@@ -39,4 +39,19 @@ export class UtilService {
             return typeof args[index] == 'undefined' ? match : args[index];
         });
     }
+
+    static stringDate(date: Date) {
+        const d = date;
+        return `${this.dateNumber(d.getDate())}.${this.dateNumber(d.getMonth() + 1)}.${d.getFullYear()} `
+            + `${this.dateNumber(d.getHours())}:${this.dateNumber(d.getMinutes())}:${this.dateNumber(d.getSeconds())}`;
+    }
+
+    /* 6 -> 06 */
+    static dateNumber(number: number):string {
+        if (number < 10) {
+            return `0${number}`;
+        }
+
+        return '' + number;
+    }
 }

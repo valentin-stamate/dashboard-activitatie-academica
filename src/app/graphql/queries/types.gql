@@ -279,6 +279,7 @@ type DidacticActivity implements GenericForm {
 # ----------========== Input Types ==========---------- #
 
 input IdInput {
+    id: Int
     identifier: String!
 }
 

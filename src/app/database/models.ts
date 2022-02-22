@@ -99,6 +99,17 @@ enum FormTypes {
 
 /* Informații */
 export class Information {
+    static sheetName = 'Informații';
+
+    static col = ['Numar Matricol', 'Nume prenume', 'Nume dupa casatorie',
+        'Coordonator', 'Finantare', 'Data completarii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'fullName'],
+        [this.col[2], 'marriageName'], [this.col[3], 'thesisCoordinator'],
+        [this.col[4], 'founding'], [this.col[5], 'completionDate'],
+        [this.col[6], 'updated']
+    ]);
+
     id: number;
     fullName: string;
     marriageName: string;
@@ -107,6 +118,8 @@ export class Information {
     completionDate: Date;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'Information';
@@ -120,12 +133,28 @@ export class Information {
         this.completionDate = props.completion_date;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.INFORMATION;
     }
 }
 
 /* Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
 export class ScientificArticleISI {
+    static sheetName = 'Articole ştiintifice...ISI...';
+
+    static col = ['Numar Matricol', 'Titlul articolului', 'Autori', 'Data publicarii',
+        'Volum', 'ISSUE', 'Nr. pagina de start', 'Nr. pagina de sfarsit', 'Factor de impact',
+        'Clasificare CNATDCU', 'DOI', 'Denumire conferința', 'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'articleTitle'],
+        [this.col[2], 'authors'], [this.col[3], 'publicationDate'],
+        [this.col[4], 'volume'], [this.col[5], 'issue'],
+        [this.col[6], 'startingPage'], [this.col[7], 'endingPage'],
+        [this.col[8], 'impactFactor'], [this.col[9], 'cnatdcuClassification'],
+        [this.col[10], 'doi'], [this.col[11], 'conferenceName'],
+        [this.col[12], 'observations'], [this.col[13], 'updated'],
+    ]);
+
     id: number;
     articleTitle: string;
     authors: string;
@@ -141,6 +170,8 @@ export class ScientificArticleISI {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'ScientificArticleISI';
@@ -161,12 +192,28 @@ export class ScientificArticleISI {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.SCIENTIFIC_ARTICLE_ISI;
     }
 }
 
 /* ISI proceedings */
 export class ISIProceeding {
+    static sheetName = 'ISI proceedings';
+
+    static col = ['Numar Matricol', 'Titlul articolului', 'Autori', 'Denumire conferinta',
+        'Tip volum indexat', 'Anul publicarii', 'Tipul lucrarii', 'Tip conferinta', 'Linkul conferintei',
+        'Nr. pagina de start', 'Nr. pagina de sfarsit', 'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'articleTitle'],
+        [this.col[2], 'authors'], [this.col[3], 'conferenceName'],
+        [this.col[4], 'indexedVolumeType'], [this.col[5], 'publicationYear'],
+        [this.col[6], 'articleType'], [this.col[7], 'conferenceType'],
+        [this.col[8], 'conferenceLink'], [this.col[9], 'startingPage'],
+        [this.col[10], 'endingPage'], [this.col[11], 'observations'],
+        [this.col[12], 'updated'],
+    ]);
+
     id: number;
     articleTitle: string;
     authors: string;
@@ -181,6 +228,8 @@ export class ISIProceeding {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'ISIProceeding';
@@ -200,12 +249,34 @@ export class ISIProceeding {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.ISI_PROCEEDINGS;
     }
 }
 
 /* Articole științifice publicate în extenso în reviste indexate BDI și reviste de specialitate neindexate */
 export class ScientificArticleBDI {
+    static sheetName = 'Articole științifice...BDI..';
+
+    static col = ['Numar Matricol', 'Domenii de ierarhizare', 'Titlul articolului', 'Autori',
+        'Denumire revista indexata BDI', 'Anul publicarii', 'Volum', 'Numar',
+        'Nr. pagina de start', 'Nr. pagina de sfarsit',
+        'Revista internationala', 'Clasificare CNATDCU',
+        'Link articol indexat', 'Baza de date BDI',
+        'Linkul bazei de date BDI',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'hierarchyDomains'],
+        [this.col[2], 'articleTitle'], [this.col[3], 'authors'],
+        [this.col[4], 'bdiIndexedMagazine'], [this.col[5], 'publicationYear'],
+        [this.col[6], 'volume'], [this.col[7], 'number'],
+        [this.col[8], 'startingPage'], [this.col[9], 'endingPage'],
+        [this.col[10], 'internationalMagazine'], [this.col[11], 'cnatdcuClassification'],
+        [this.col[12], 'indexedArticleLink'], [this.col[13], 'bdiDatabase'],
+        [this.col[14], 'bdiDatabaseLink'],
+        [this.col[15], 'observations'], [this.col[16], 'updated'],
+    ]);
+
     id: number;
     hierarchyDomains: string;
     articleTitle: string;
@@ -224,6 +295,8 @@ export class ScientificArticleBDI {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'ScientificArticleBDI';
@@ -247,12 +320,28 @@ export class ScientificArticleBDI {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.SCIENTIFIC_ARTICLE_BDI;
     }
 }
 
 /* Cărți ştiinţifice sau capitole de cărți publicate în edituri */
 export class ScientificBook {
+    static sheetName = 'Cărţi ştiinţifice...';
+
+    static col = ['Numar Matricol', 'Domenii de ierarhizare', 'Titlul capitolului', 'Autori',
+        'Titlul cartii', 'Numarul de pagini', 'Anul publicarii', 'Editura',
+        'Tipul publicatiei', 'ISBN',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'hierarchyDomains'],
+        [this.col[2], 'chapterTitle'], [this.col[3], 'authors'],
+        [this.col[4], 'bookTitle'], [this.col[5], 'pageNumber'],
+        [this.col[6], 'publicationYear'], [this.col[7], 'publishingHouse'],
+        [this.col[8], 'publicationType'], [this.col[9], 'isbn'],
+        [this.col[10], 'observations'], [this.col[11], 'updated'],
+    ]);
+
     id: number;
     hierarchyDomains: string;
     chapterTitle: string;
@@ -266,6 +355,8 @@ export class ScientificBook {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'ScientificBook';
@@ -284,12 +375,30 @@ export class ScientificBook {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.SCIENTIFIC_BOOK;
     }
 }
 
 /* Traduceri */
 export class Translation {
+    static sheetName = 'Traduceri';
+
+    static col = ['Numar Matricol', 'Domenii de ierarhizare', 'Titlul traducerii', 'Autori',
+        'Autorii tradusi', 'Anul publicarii', 'Editura', 'Tara',
+        'Numarul de pagini', 'ISBN',
+        'Tipul traducerii',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'hierarchyDomains'],
+        [this.col[2], 'translationTitle'], [this.col[3], 'authors'],
+        [this.col[4], 'translatedAuthors'], [this.col[5], 'publicationYear'],
+        [this.col[6], 'publishingHouse'], [this.col[7], 'country'],
+        [this.col[8], 'pageNumber'], [this.col[9], 'isbn'],
+        [this.col[10], 'translationType'],
+        [this.col[11], 'observations'], [this.col[12], 'updated'],
+    ]);
+
     id: number;
     hierarchyDomains: string;
     translationTitle: string;
@@ -304,6 +413,8 @@ export class Translation {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'Translation';
@@ -323,12 +434,26 @@ export class Translation {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.TRASNLATION;
     }
 }
 
 /* Comunicări în manifestări științifice */
 export class ScientificCommunication {
+    static sheetName = 'Comunicări...';
+
+    static col = ['Numar Matricol', 'Autori', 'Tipul comunicarii', 'Anul prezentarii',
+        'Denumirea manifestarii stiintifice', 'Tipul manifestarii', 'Link către site-ul manifestării',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'authors'],
+        [this.col[2], 'communicationType'], [this.col[3], 'presentationYear'],
+        [this.col[4], 'scientificManifestationName'], [this.col[5], 'manifestationType'],
+        [this.col[6], 'scientificManifestationLink'],
+        [this.col[7], 'observations'], [this.col[8], 'updated'],
+    ]);
+
     id: number;
     authors: string;
     communicationType: string;
@@ -339,6 +464,8 @@ export class ScientificCommunication {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'ScientificCommunication';
@@ -354,6 +481,7 @@ export class ScientificCommunication {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.SCIENTIFIC_COMMUNICATION;
     }
 
@@ -361,6 +489,20 @@ export class ScientificCommunication {
 
 /* Brevete */
 export class Patent {
+    static sheetName = 'Brevete';
+
+    static col = ['Numar Matricol', 'Titlul brevetului / CBI', 'Autori',
+        'Anul obținerii brevetului / depunerii CBI', 'Numar brevet', 'Tipul brevetului',
+        'Autoritate eminenta', 'Tara',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'patentTitleOrCBI'],
+        [this.col[2], 'authors'], [this.col[3], 'yearOfObtainingPatent'],
+        [this.col[4], 'patentNumber'], [this.col[5], 'patentType'],
+        [this.col[6], 'authority'], [this.col[7], 'country'],
+        [this.col[8], 'observations'], [this.col[9], 'updated'],
+    ]);
+
     id: number;
     patentTitleOrCBI: string;
     authors: string;
@@ -372,6 +514,8 @@ export class Patent {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'Patent';
@@ -388,12 +532,34 @@ export class Patent {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.PATENT;
     }
 }
 
 /* Contracte de cercetare */
 export class ResearchContract {
+    static sheetName = 'Contracte de cercetare';
+
+    static col = ['Numar Matricol', 'Domenii de ierarhizare', 'Titlul articolului', 'Autori',
+        'Denumire revista indexata BDI', 'Anul publicarii', 'Volum', 'Numar',
+        'Nr. pagina de start', 'Nr. pagina de sfarsit',
+        'Revista internationala', 'Clasificare CNATDCU',
+        'Link articol indexat', 'Baza de date BDI',
+        'Linkul bazei de date BDI',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'hierarchyDomains'],
+        [this.col[2], 'articleTitle'], [this.col[3], 'authors'],
+        [this.col[4], 'bdiIndexedMagazine'], [this.col[5], 'publicationYear'],
+        [this.col[6], 'volume'], [this.col[7], 'number'],
+        [this.col[8], 'startingPage'], [this.col[9], 'endingPage'],
+        [this.col[10], 'internationalMagazine'], [this.col[11], 'cnatdcuClassification'],
+        [this.col[12], 'indexedArticleLink'], [this.col[13], 'bdiDatabase'],
+        [this.col[14], 'bdiDatabaseLink'],
+        [this.col[15], 'observations'], [this.col[16], 'updated'],
+    ]);
+
     id: number;
     researchContractNameOrProject: string;
     projectCode: string;
@@ -405,6 +571,8 @@ export class ResearchContract {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'ResearchContract';
@@ -421,12 +589,34 @@ export class ResearchContract {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.RESEARCH_CONTRACT;
     }
 }
 
 /* Citări */
 export class Citation {
+    static sheetName = 'Citări';
+
+    static col = ['Numar Matricol', 'Titlul articolului', 'Autori', 'Titlul publicației unde este citat articolul',
+        'Numele autorilor care citeaza', 'Anul citarii', 'Volum', 'Factor de impact',
+        'Issue', 'Numărul articolului',
+        'Nr. pagina de start', 'Nr. pagina de sfarsit',
+        'Link articol indexat', 'Baza de date BDI',
+        'DOI', 'Clasificare CNATDCU', 'Citari',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'articleTitle'],
+        [this.col[2], 'authors'], [this.col[3], 'publicationTitleWhereReferenced'],
+        [this.col[4], 'authorsNamesThatReference'], [this.col[5], 'citationYear'],
+        [this.col[6], 'volume'], [this.col[7], 'impactFactor'],
+        [this.col[8], 'issue'], [this.col[9], 'articleNumber'],
+        [this.col[10], 'startingPage'], [this.col[11], 'endingPage'],
+        [this.col[12], 'doi'], [this.col[13], 'cnatdcuClassification'],
+        [this.col[14], 'citations'],
+        [this.col[15], 'observations'], [this.col[16], 'updated'],
+    ]);
+
     id: number;
     articleTitle: string;
     authors: string;
@@ -445,6 +635,8 @@ export class Citation {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'Citation';
@@ -468,12 +660,26 @@ export class Citation {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.CITAION;
     }
 }
 
 /* Premii si nominalizări */
 export class AwardAndNomination {
+    static sheetName = 'Premii si nominalizari';
+
+    static col = ['Numar Matricol', 'Anul acordarii premiului', 'Denumirea premiului', 'Tipul premiului',
+        'Organizația care a acordat premiul', 'Tara', 'Acordat pentru activitatea didactică / cercetare',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'yearOfAward'],
+        [this.col[2], 'awardName'], [this.col[3], 'awardType'],
+        [this.col[4], 'organizationThatGiveTheAward'], [this.col[5], 'country'],
+        [this.col[6], 'awardedFor'],
+        [this.col[7], 'observations'], [this.col[8], 'updated'],
+    ]);
+
     id: number;
     yearOfAward: number;
     awardName: string;
@@ -484,6 +690,8 @@ export class AwardAndNomination {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'AwardAndNomination';
@@ -499,12 +707,23 @@ export class AwardAndNomination {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.AWARDS_AND_NOMINATION;
     }
 }
 
 /* Membru în academii */
 export class AcademyMember {
+    static sheetName = 'Membru în academii';
+
+    static col = ['Numar Matricol', 'Anul admiterii', 'Denumirea academiei', 'Tip membru',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'admissionYear'],
+        [this.col[2], 'academyName'], [this.col[3], 'memberType'],
+        [this.col[4], 'observations'], [this.col[5], 'updated'],
+    ]);
+
     id: number;
     admissionYear: number;
     academyName: string;
@@ -512,6 +731,8 @@ export class AcademyMember {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'AcademyMember';
@@ -524,12 +745,26 @@ export class AcademyMember {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.ACADEMY_MEMBER;
     }
 }
 
 /* Membru în echipa editorială */
 export class EditorialMember {
+    static sheetName = 'Membru în echipa editorială';
+
+    static col = ['Numar Matricol', 'Denumire comitet', 'Denumire revista / editura', 'Anul intrarii în comitet',
+        'Calitatea', 'Tipul revistei', 'National / International',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'committeeName'],
+        [this.col[2], 'magazineName'], [this.col[3], 'yearOfCommitteeAttendance'],
+        [this.col[4], 'quality'], [this.col[5], 'magazineType'],
+        [this.col[6], 'nationalOrInternational'],
+        [this.col[7], 'observations'], [this.col[8], 'updated'],
+    ]);
+
     id: number;
     committeeName: string;
     magazineName: string;
@@ -540,6 +775,8 @@ export class EditorialMember {
     observations: string;
     owner: number
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'EditorialMember';
@@ -555,12 +792,28 @@ export class EditorialMember {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.EDITORIAL_MEMBER;
     }
 }
 
 /* Evenimente organizate */
 export class OrganizedEvent {
+    static sheetName = 'Evenimente organizate';
+
+    static col = ['Numar Matricol', 'Denumirea manifestarii', 'Data de inceput', 'Data de sfarsit',
+        'Locul de desfasurare', 'Tipul manifestării', 'Clasificarea manifestării în funcție de participare', 'Link-ul manifestarii',
+        'Persoana de contact',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'manifestationName'],
+        [this.col[2], 'startDate'], [this.col[3], 'endDate'],
+        [this.col[4], 'manifestationPlace'], [this.col[5], 'manifestationType'],
+        [this.col[6], 'manifestationClassification'], [this.col[7], 'manifestationLink'],
+        [this.col[8], 'contactPerson'],
+        [this.col[9], 'observations'], [this.col[10], 'updated'],
+    ]);
+
     id: number;
     manifestationName: string;
     startDate: Date;
@@ -573,6 +826,8 @@ export class OrganizedEvent {
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'OrganizedEvent';
@@ -590,16 +845,28 @@ export class OrganizedEvent {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.ORGANIZED_EVENT;
     }
 }
 
 /* Fără activitate științifică */
 export class WithoutActivity {
+    static sheetName = 'Fără activitate științifică';
+
+    static col = ['Numar Matricol',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'],
+        [this.col[1], 'observations'], [this.col[2], 'updated'],
+    ]);
+
     id: number;
     observations: string;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'WithoutActivity';
@@ -609,18 +876,31 @@ export class WithoutActivity {
         this.observations = props.observations;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.WITHOUT_ACTIVITY;
     }
 }
 
 /* Activitate didactică */
 export class DidacticActivity {
+    static sheetName = 'Activitate didactică';
+
+    static col = ['Numar Matricol', 'Denumire disciplina', 'Tipul activitatii', 'Anul sustinerii activitatii',
+        'Observatii', 'Ultima modificare'];
+    static columnsMap: Map<string, string> = new Map([
+        [this.col[0], 'identifier'], [this.col[1], 'className'],
+        [this.col[2], 'activityType'], [this.col[3], 'yearOfAttendingActivity'],
+        [this.col[4], 'updated'],
+    ]);
+
     id: number;
     className: string;
     activityType: string;
     yearOfAttendingActivity: number;
     owner: number;
     updated: Date;
+
+    identifier: string;
 
     type: number;
     __typename = 'DidacticActivity';
@@ -632,6 +912,7 @@ export class DidacticActivity {
         this.yearOfAttendingActivity = props.year_of_attending_activity;
         this.owner = props.owner;
         this.updated = props.updated;
+        this.identifier = props.identifier;
         this.type = FormTypes.DIDACTIC_ACTIVITY;
     }
 }

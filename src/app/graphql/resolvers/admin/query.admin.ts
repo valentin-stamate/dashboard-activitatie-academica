@@ -24,4 +24,5 @@ export const QueryAdmin = {
 
         return response.payload;
     },
+
 }

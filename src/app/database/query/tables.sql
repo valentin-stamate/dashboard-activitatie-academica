@@ -374,3 +374,5 @@ CREATE TABLE didactic_activity (
     CONSTRAINT owner_ FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE ,
     PRIMARY KEY (id)
 );
+
+INSERT INTO users(identifier, email, admin, activated, updated) VALUES ('valentin', 'stamatevalentin125@gmail.com', true, true, current_timestamp);

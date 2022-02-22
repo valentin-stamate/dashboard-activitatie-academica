@@ -76,3 +76,10 @@
 * GraphQl Interfaces : https://graphql.org/learn/schema/#interfaces
 * Type Error List of Multiple Objects : https://stackoverflow.com/a/60251577/10805602
 * To Know : https://sequelize.org/v7/
+* CSV format : https://en.wikipedia.org/wiki/Comma-separated_values
+* Download file : https://stackoverflow.com/a/7288883/10805602
+* XLSX : https://www.npmjs.com/package/xlsx
+* XLSX Library : https://www.npmjs.com/package/xlsx
+* Append content to XLSX : https://github.com/SheetJS/sheetjs/issues/876
+* Typescript Generics : https://www.typescriptlang.org/docs/handbook/2/generics.html
+* Send XLSX to client : https://github.com/SheetJS/sheetjs/issues/366#issuecomment-192567070

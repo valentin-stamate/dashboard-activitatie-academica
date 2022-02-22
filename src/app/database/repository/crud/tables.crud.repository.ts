@@ -131,7 +131,7 @@ export abstract class TablesCrudRepository {
 
     /** Information - ALL */
     static async allInformation(): Promise<Information[]> {
-        const query = 'SELECT * FROM information';
+        const query = 'SELECT * FROM information j JOIN users u ON u.id = j.owner';
 
         const {rows} = await QueryDB(query, []);
         const list: Information[] = [];
@@ -213,7 +213,7 @@ export abstract class TablesCrudRepository {
 
     /** Scientific Articles ISI - ALL */
     static async allScientificArticlesISI(): Promise<ScientificArticleISI[]> {
-        const query = 'SELECT * FROM scientific_article_isi';
+        const query = 'SELECT * FROM scientific_article_isi j JOIN users u ON u.id = j.owner';
 
         const {rows} = await QueryDB(query, []);
         const list: ScientificArticleISI[] = [];
@@ -300,7 +300,7 @@ export abstract class TablesCrudRepository {
 
     /** ISI Proceedings - ALL */
     static async allISIProceedings(): Promise<ISIProceeding[]> {
-        const query = 'SELECT * FROM isi_proceedings';
+        const query = 'SELECT * FROM isi_proceedings j JOIN users u ON u.id = j.owner';
 
         const {rows} = await QueryDB(query, []);
         const list: ISIProceeding[] = [];
@@ -388,7 +388,7 @@ export abstract class TablesCrudRepository {
 
     /** Scientific Articles BDI - ALL */
     static async allScientificArticlesBDI(): Promise<ScientificArticleBDI[]> {
-        const query = `SELECT * FROM scientific_articles_bdi`;
+        const query = `SELECT * FROM scientific_articles_bdi j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: ScientificArticleBDI[] = [];
@@ -479,7 +479,7 @@ export abstract class TablesCrudRepository {
 
     /** Scientific Books - ALL */
     static async allScientificBooks(): Promise<ScientificBook[]> {
-        const query = `SELECT * FROM scientific_books`;
+        const query = `SELECT * FROM scientific_books j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: ScientificBook[] = [];
@@ -566,7 +566,7 @@ export abstract class TablesCrudRepository {
 
     /** Translations - ALL */
     static async allTranslations(): Promise<Translation[]> {
-        const query = `SELECT * FROM translations`;
+        const query = `SELECT * FROM translations j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: Translation[] = [];
@@ -653,7 +653,7 @@ export abstract class TablesCrudRepository {
 
     /** Scientific communications - ALL */
     static async allScientificCommunications(): Promise<ScientificCommunication[]> {
-        const query = `SELECT * FROM scientific_communications`;
+        const query = `SELECT * FROM scientific_communications j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: ScientificCommunication[] = [];
@@ -737,7 +737,7 @@ export abstract class TablesCrudRepository {
 
     /** Patents - ALL */
     static async allPatents(): Promise<Patent[]> {
-        const query = `SELECT * FROM patents`;
+        const query = `SELECT * FROM patents j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: Patent[] = [];
@@ -821,7 +821,7 @@ export abstract class TablesCrudRepository {
 
     /** Research contracts - ALL */
     static async allResearchContracts(): Promise<ResearchContract[]> {
-        const query = `SELECT * FROM research_contracts`;
+        const query = `SELECT * FROM research_contracts j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: ResearchContract[] = [];
@@ -907,7 +907,7 @@ export abstract class TablesCrudRepository {
 
     /** Citations - ALL */
     static async allCitations(): Promise<Citation[]> {
-        const query = `SELECT * FROM citations`;
+        const query = `SELECT * FROM citations j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: Citation[] = [];
@@ -998,7 +998,7 @@ export abstract class TablesCrudRepository {
 
     /** Awards and nominations - ALL */
     static async allAwardAndNominations(): Promise<AwardAndNomination[]> {
-        const query = `SELECT * FROM awards_and_nominations`;
+        const query = `SELECT * FROM awards_and_nominations j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: AwardAndNomination[] = [];
@@ -1082,7 +1082,7 @@ export abstract class TablesCrudRepository {
 
     /** Academy member - ALL */
     static async allAcademyMembers(): Promise<AcademyMember[]> {
-        const query = `SELECT * FROM academy_member`;
+        const query = `SELECT * FROM academy_member j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: AcademyMember[] = [];
@@ -1163,7 +1163,7 @@ export abstract class TablesCrudRepository {
 
     /** Editorial member - ALL */
     static async allEditorialMember(): Promise<EditorialMember[]> {
-        const query = `SELECT * FROM editorial_member`;
+        const query = `SELECT * FROM editorial_member j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: EditorialMember[] = [];
@@ -1247,7 +1247,7 @@ export abstract class TablesCrudRepository {
 
     /** Organized events - ALL */
     static async allOrganizedEvents(): Promise<OrganizedEvent[]> {
-        const query = `SELECT * FROM organized_events`;
+        const query = `SELECT * FROM organized_events j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: OrganizedEvent[] = [];
@@ -1334,7 +1334,7 @@ export abstract class TablesCrudRepository {
 
     /** Without activity - ALL */
     static async allWithoutActivities(): Promise<WithoutActivity[]> {
-        const query = `SELECT * FROM without_activity`;
+        const query = `SELECT * FROM without_activity j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: WithoutActivity[] = [];
@@ -1414,7 +1414,7 @@ export abstract class TablesCrudRepository {
 
     /** Didactic activity - ALL */
     static async allDidacticActivities(): Promise<DidacticActivity[]> {
-        const query = `SELECT * FROM didactic_activity`;
+        const query = `SELECT * FROM didactic_activity j JOIN users u ON u.id = j.owner`;
 
         const {rows} = await QueryDB(query, []);
         const list: DidacticActivity[] = [];
