@@ -20,7 +20,7 @@ export class TablesRepository extends TablesCrudRepository {
 
     /* Id */
     static async getIdByIdentifier(identifier: string) {
-        const query = `SELECT * FROM ids WHERE identifier = $1`;
+        const query = `SELECT * FROM ids WHERE identifier = $1 ORDER BY id`;
         const params = [identifier];
 
         const {rows} = await QueryDB(query, params);

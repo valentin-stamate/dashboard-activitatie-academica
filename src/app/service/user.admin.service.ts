@@ -55,6 +55,7 @@ export class UserAdminService implements UserAdminServiceInterface {
     async getAllUsers(authToken: AuthToken): Promise<ServiceResponse> {
         const user = await JwtService.verifyToken(authToken.token) as User;
         const users = await UserRepository.allUsersExcept(user.id);
+
         return new ServiceResponse(true, Responses.SUCCESS, users);
     }
 

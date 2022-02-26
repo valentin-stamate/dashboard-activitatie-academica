@@ -1,14 +1,4 @@
-import {
-    AcademyMember,
-    AwardAndNomination,
-    Citation, DidacticActivity, EditorialMember,
-    Information,
-    ISIProceeding, OrganizedEvent, Patent, ResearchContract,
-    ScientificArticleBDI,
-    ScientificArticleISI,
-    ScientificBook, ScientificCommunication, Translation,
-    User, WithoutActivity
-} from "../models";
+import {User} from "../models";
 import {QueryDB} from "../connection";
 import {UserCrudRepository} from "./crud/user.crud.repository";
 
@@ -21,7 +11,7 @@ export class UserRepository extends UserCrudRepository {
      * Returns a list of all the users exept the one given. */
     static async allUsersExcept(exceptId: number): Promise<User[]> {
         const list: User[] = [];
-        const query = 'SELECT * FROM users WHERE id != $1';
+        const query = 'SELECT * FROM users WHERE id != $1 ORDER BY id';
 
         const {rows} = await QueryDB(query, [exceptId]);
 

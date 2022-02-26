@@ -154,9 +154,9 @@ export class UserService implements UserServiceInterface {
         const scISI = await TablesRepository.getScientificArticleISI(user.id);
         const isiPr = await TablesRepository.getISIProceeding(user.id);
         const scBDI = await TablesRepository.getScientificArticleBDI(user.id);
-        const scBook = await TablesRepository.getScientificArticleBDI(user.id);
+        const scBook = await TablesRepository.getScientificBook(user.id);
         const tr = await TablesRepository.getTranslation(user.id);
-        const scCom = await TablesRepository.getScientificArticleBDI(user.id);
+        const scCom = await TablesRepository.getScientificCommunication(user.id);
         const patent = await TablesRepository.getPatent(user.id);
         const resCon = await TablesRepository.getResearchContract(user.id);
         const citat = await TablesRepository.getCitation(user.id);

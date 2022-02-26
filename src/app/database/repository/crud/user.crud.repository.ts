@@ -10,7 +10,7 @@ export abstract class UserCrudRepository {
      * Returns a list of all the users. */
     static async allUsers(): Promise<User[]> {
         const list: User[] = [];
-        const query = 'SELECT * FROM users';
+        const query = 'SELECT * FROM users ORDER BY id';
 
         const {rows} = await QueryDB(query, []);
 
