@@ -23,8 +23,15 @@ import {CSVService} from "./csv.service";
 export class UserAdminService implements UserAdminServiceInterface {
 
     async getAllIds(): Promise<ServiceResponse> {
-        const rows = await TablesRepository.allIds();
-        return new ServiceResponse(true, Responses.SUCCESS, rows);
+        const rows: Id[] = await TablesRepository.allIds();
+        const parsedRows = [];
+
+        for (let row of rows) {
+            const activated = await TablesRepository.idUsed(row.identifier);
+            parsedRows.push({...row, activated: activated});
+        }
+
+        return new ServiceResponse(true, Responses.SUCCESS, parsedRows);
     }
 
     async addId(id: Id): Promise<ServiceResponse> {

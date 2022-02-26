@@ -29,10 +29,18 @@ export abstract class TablesCrudRepository {
         return list;
     }
 
+    static async idUsed(identifier: string) {
+        const query = `SELECT * FROM users WHERE identifier = $1`;
+        const params = [identifier];
+
+        const {rows} = await QueryDB(query, params);
+        return rows.length !== 0;
+    }
+
     /** Id - CREATE */
     static async addId(data: Id) {
-        const query = `INSERT INTO ids(identifier) VALUES ($1) RETURNING *`;
-        const params = [data.identifier];
+        const query = `INSERT INTO ids(identifier, full_name) VALUES ($1, $2) RETURNING *`;
+        const params = [data.identifier, data.fullName];
 
         const {rows} = await QueryDB(query, params);
         return rows;

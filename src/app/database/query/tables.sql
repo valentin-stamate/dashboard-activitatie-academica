@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS ids;
 CREATE TABLE ids (
     id SERIAL,
     identifier VARCHAR(30) UNIQUE NOT NULL ,
+    full_name VARCHAR(60) NOT NULL ,
 
     PRIMARY KEY (id)
 );

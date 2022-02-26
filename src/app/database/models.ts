@@ -22,10 +22,12 @@ export class GraphQlErrorResponse {
 export class Id {
     id: number;
     identifier: string;
+    fullName: string;
 
     constructor(props: any){
         this.id = props.id;
         this.identifier = props.identifier;
+        this.fullName = props.full_name;
     }
 }
 
@@ -885,8 +887,7 @@ export class WithoutActivity {
 export class DidacticActivity {
     static sheetName = 'Activitate didactică';
 
-    static col = ['Numar Matricol', 'Denumire disciplina', 'Tipul activitatii', 'Anul sustinerii activitatii',
-        'Observatii', 'Ultima modificare'];
+    static col = ['Numar Matricol', 'Denumire disciplina', 'Tipul activitatii', 'Anul sustinerii activitatii', 'Ultima modificare'];
     static columnsMap: Map<string, string> = new Map([
         [this.col[0], 'identifier'], [this.col[1], 'className'],
         [this.col[2], 'activityType'], [this.col[3], 'yearOfAttendingActivity'],
