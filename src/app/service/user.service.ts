@@ -48,7 +48,7 @@ export class UserService implements UserServiceInterface {
             activationKey: generatedKey,
         });
 
-        await new MailService().sendMail(new ActivationMail([user.email], [], [], {
+        await MailService.sendMail(new ActivationMail([user.email], [], [], {
             identity: newUser.identifier,
             activationKey: generatedKey,
         }));
@@ -105,7 +105,7 @@ export class UserService implements UserServiceInterface {
             authKey: authKey,
         });
 
-        await new MailService().sendMail(new AuthenticationMail([user.email], [], [], {
+        await MailService.sendMail(new AuthenticationMail([user.email], [], [], {
             identity: existingUser.identifier,
             authKey: authKey,
         }));

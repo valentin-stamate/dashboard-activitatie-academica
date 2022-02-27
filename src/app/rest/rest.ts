@@ -4,6 +4,13 @@ import {AcademyMember, AwardAndNomination, Citation, DidacticActivity, Editorial
     OrganizedEvent, Patent, ResearchContract, ScientificArticleBDI, ScientificArticleISI, ScientificBook,
     ScientificCommunication, Translation, WithoutActivity
 } from "../database/models";
+import XLSX, {WorkBook, WorkSheet} from "xlsx";
+import {UtilService} from "../service/util.service";
+import {Request, Response} from "express";
+import {Responses} from "../service/service.response";
+import {UserService} from "../service/user.service";
+import {UploadedFile} from "express-fileupload";
+import {MailOptions, MailService} from "../service/mail.service";
 
 export class RestService {
     private static getWorkSheet(rows: any[], headers: string[], headersMap: Map<string, string>, name: string): XLSXWorkSheetService {
@@ -43,5 +50,103 @@ export class RestService {
         sheetBook.appendSheets(sheets);
 
         return sheetBook;
+    }
+
+    static async getForms(req: Request<any>, res: Response<any>) {
+        const XLSX = require('XLSX');
+
+        const workBook: WorkBook = (await RestService.getFormsWorkBook()).getInstance();
+
+        const date = new Date();
+        const fileName = `data_${UtilService.stringDate(date)}.xlsx`;
+
+        res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+        res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        const wbOut = XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'});
+        res.send(new Buffer(wbOut));
+    }
+
+    /* Activate user with email */
+    static async activateUser(req: Request<any>, res: Response<any>) {
+        const key = req.query.key as string;
+
+        if (!key) {
+            res.end(JSON.stringify({message: Responses.MISSING_KEY}));
+        }
+
+        const userService = new UserService();
+        const serviceResponse = await userService.activateUser(key);
+
+        res.end(JSON.stringify({message:serviceResponse.message}));
+    }
+
+    static async email(req: Request<any>, res: Response<any>) {
+        if (req.files === undefined) {
+            res.statusCode = 406; // Not Acceptable
+            res.end('Provide the XLSX file');
+            return;
+        }
+
+        const body = JSON.parse(req.body.email);
+        const template = body.template;
+
+        const excelBuffer = req.files.excel as UploadedFile;
+        const workBook = XLSX.read(excelBuffer.data);
+        const sheet = workBook.Sheets[workBook.SheetNames[0]];
+
+        const rows: any[] = XLSX.utils.sheet_to_json(sheet);
+
+        const emailKey = 'Email';
+
+        const emailRowsMap: Map<string, any[]> = new Map();
+
+        const headers = Object.keys(rows[0]);
+
+        for (let row of rows) {
+            const rowMap: Map<string, any> = new Map(Object.entries(row));
+            const email = rowMap.get(emailKey);
+
+            const emailRows = emailRowsMap.get(email);
+            if (emailRows === undefined) {
+                emailRowsMap.set(email, [row]);
+                continue;
+            }
+
+            emailRows.push(row);
+        }
+
+        for (const [email, rows] of emailRowsMap.entries()) {
+            const sheet: WorkSheet = XLSX.utils.aoa_to_sheet([
+                headers
+            ]);
+
+            XLSX.utils.sheet_add_aoa(sheet, rows.map(item => Object.values(item)), {origin: -1});
+
+            const workBook: WorkBook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workBook, sheet);
+
+            const buffer: Buffer = XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'});
+
+            const dateStr = UtilService.stringDate(new Date());
+
+            MailService.sendMail(new MailOptions(
+                'Secretariat FII',
+                [email],
+                [],
+                [],
+                '[Secretariat FII] Organizare Orar',
+                template,
+                template,
+                [{content: buffer, filename: `organizare_${dateStr}.xlsx`}]
+
+            )).catch(error => {
+                console.log("Mail Error:")
+                console.log(error);
+            });
+        }
+
+        res.statusCode = 200;
+        res.send('Ana re mere');
     }
 }

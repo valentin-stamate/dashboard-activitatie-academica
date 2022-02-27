@@ -284,7 +284,7 @@ type DidacticActivity implements GenericForm {
 input IdInput {
     id: Int
     identifier: String!
-    fullName: String!
+    fullName: String
 }
 
 input BaseUser {

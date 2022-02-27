@@ -12,12 +12,9 @@ import {
   schemaUnknown,
   schemaUser
 } from "./app/graphql/export";
-import {UserService} from "./app/service/user.service";
-import {Responses} from "./app/service/service.response";
 import {adminUserRequestMiddleware, unknownUserRequestMiddleware, userRequestMiddleware} from "./middlewares";
 import {RestService} from "./app/rest/rest";
-import {WorkBook, WorkSheet} from "xlsx";
-import {UtilService} from "./app/service/util.service";
+import fileUpload from "express-fileupload";
 
 const app: Express = express();
 
@@ -64,36 +61,11 @@ app.use('/admin/graphql', adminUserRequestMiddleware, graphqlHTTP({
 }));
 
 /** ----------------================= REST =================---------------- */
+app.use(fileUpload());
 
-/** User activation by email */
-app.get('/activate', async (req, res) => {
-  const key = req.query.key as string;
-  console.log(key);
-  if (!key) {
-    res.end(JSON.stringify({message: Responses.MISSING_KEY}));
-    return;
-  }
-
-  const userService = new UserService();
-  const serviceResponse = await userService.activateUser(key);
-
-  res.end(JSON.stringify({message:serviceResponse.message}));
-});
-
-const XLSX = require('XLSX');
-app.get('/download-forms', adminUserRequestMiddleware, async (req, res) => {
-
-  const workBook: WorkBook = (await RestService.getFormsWorkBook()).getInstance();
-
-  const date = new Date();
-  const fileName = `data_${UtilService.stringDate(date)}.xlsx`;
-
-  res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-  res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-
-  const wbOut = XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'});
-  res.send(new Buffer(wbOut));
-});
+app.get('/activate', RestService.activateUser);
+app.get('/download-forms', adminUserRequestMiddleware, RestService.getForms);
+app.post('/admin/email', adminUserRequestMiddleware, RestService.email);
 
 /************************************************************************************
  *                               Express Error Handling

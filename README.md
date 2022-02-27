@@ -83,3 +83,7 @@
 * Append content to XLSX : https://github.com/SheetJS/sheetjs/issues/876
 * Typescript Generics : https://www.typescriptlang.org/docs/handbook/2/generics.html
 * Send XLSX to client : https://github.com/SheetJS/sheetjs/issues/366#issuecomment-192567070
+* SheetJs : https://github.com/SheetJS/sheetjs
+* Get file from request : https://stackoverflow.com/a/52957895/10805602
+* Send file and body at the same time in Postman : https://stackoverflow.com/a/67325344/10805602
+* Save Buffer object as file : https://nodejs.org/en/knowledge/file-system/how-to-write-files-in-nodejs/

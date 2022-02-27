@@ -1,11 +1,11 @@
 import nodemailer from 'nodemailer';
 import {Env} from "../../../env";
-import {strict} from "assert";
 import {UtilService} from "./util.service";
+import {Attachment} from "nodemailer/lib/mailer";
 
 export class MailService {
 
-    async sendMail(options: MailOptions) {
+    static async sendMail(options: MailOptions) {
         const transporter = nodemailer.createTransport({
             host: Env.SMTP_HOST,
             port: Env.SMTP_PORT,
@@ -13,34 +13,38 @@ export class MailService {
             auth: {
                 user: Env.SMTP_USER,
                 pass: Env.SMTP_PASS,
-            }
+            },
         });
 
         const info = await transporter.sendMail(options);
 
-        console.log("Email send: %s", info.messageId);
+        console.log(`Mail send to: ${options.to}`);
+        console.log(info.messageId);
+
+        return info;
     }
 
 }
 
-abstract class MailOptions {
+export class MailOptions {
     from: string;
     to: string[];
-    cc: string[] | undefined;
-    bcc: string[] | undefined;
+    cc: string[];
+    bcc: string[];
     subject: string;
     text: string;
     html: string;
-    // attachments: any;
+    attachments: Attachment[];
 
-    protected constructor(from: string, to: string[], cc: string[], bcc: string[], subject: string, text: string, html: string) {
+    constructor(from: string, to: string[], cc: string[], bcc: string[], subject: string, text: string, html: string, attachments: Attachment[] = []) {
         this.from = from;
         this.to = [];
-        this.cc = undefined;
-        this.bcc = undefined;
+        this.cc = [];
+        this.bcc = [];
         this.subject = subject;
         this.text = text;
         this.html = html;
+        this.attachments = attachments;
 
         for (const e of to) {
             this.to.push(e + ',');
