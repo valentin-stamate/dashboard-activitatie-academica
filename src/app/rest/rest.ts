@@ -88,8 +88,9 @@ export class RestService {
             return;
         }
 
-        const body = JSON.parse(req.body.email);
-        const template = body.template;
+        const emailTemplate = req.body.email;
+        const subject = req.body.subject;
+        const from = req.body.from;
 
         const excelBuffer = req.files.excel as UploadedFile;
         const workBook = XLSX.read(excelBuffer.data);
@@ -131,13 +132,13 @@ export class RestService {
             const dateStr = UtilService.stringDate(new Date());
 
             MailService.sendMail(new MailOptions(
-                'Secretariat FII',
+                from,
                 [email],
                 [],
                 [],
-                '[Secretariat FII] Organizare Orar',
-                template,
-                template,
+                subject,
+                emailTemplate,
+                emailTemplate,
                 [{content: buffer, filename: `organizare_${dateStr}.xlsx`}]
 
             )).catch(error => {
@@ -147,6 +148,6 @@ export class RestService {
         }
 
         res.statusCode = 200;
-        res.send('Ana re mere');
+        res.send('Ana are mere');
     }
 }
