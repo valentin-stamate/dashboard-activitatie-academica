@@ -15,8 +15,10 @@ import {
 import {adminUserRequestMiddleware, unknownUserRequestMiddleware, userRequestMiddleware} from "./middlewares";
 import {RestService} from "./app/rest/rest";
 import fileUpload from "express-fileupload";
+import {sequelizeInit} from "./app/database/sequelize/sequelize";
 
 const app: Express = express();
+sequelizeInit();
 
 /************************************************************************************
  *                              Basic Express Middlewares
@@ -65,7 +67,8 @@ app.use(fileUpload());
 
 app.get('/activate', RestService.activateUser);
 app.get('/download-forms', adminUserRequestMiddleware, RestService.getForms);
-app.post('/admin/email', adminUserRequestMiddleware, RestService.email);
+app.post('/admin/organization-email', adminUserRequestMiddleware, RestService.sendOrganizationEmail);
+app.post('/admin/send-faz', adminUserRequestMiddleware, RestService.sendFAZ);
 
 /************************************************************************************
  *                               Express Error Handling

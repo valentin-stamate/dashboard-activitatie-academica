@@ -11,6 +11,9 @@ import {Responses} from "../service/service.response";
 import {UserService} from "../service/user.service";
 import {UploadedFile} from "express-fileupload";
 import {MailOptions, MailService} from "../service/mail.service";
+import {MailResponse} from "./rest.responses";
+import axios from "axios";
+import html = Mocha.reporters.html;
 
 export class RestService {
     private static getWorkSheet(rows: any[], headers: string[], headersMap: Map<string, string>, name: string): XLSXWorkSheetService {
@@ -81,7 +84,7 @@ export class RestService {
         res.end(JSON.stringify({message:serviceResponse.message}));
     }
 
-    static async email(req: Request<any>, res: Response<any>) {
+    static async sendOrganizationEmail(req: Request<any>, res: Response<any>) {
         if (req.files === undefined) {
             res.statusCode = 406; // Not Acceptable
             res.end('Provide the XLSX file');
@@ -91,6 +94,12 @@ export class RestService {
         const emailTemplate = req.body.email;
         const subject = req.body.subject;
         const from = req.body.from;
+
+        if (emailTemplate === undefined || subject === undefined || from === undefined) {
+            res.statusCode = 406; // Not Acceptable
+            res.end('Provide all the information: from, subject, email template');
+            return;
+        }
 
         const excelBuffer = req.files.excel as UploadedFile;
         const workBook = XLSX.read(excelBuffer.data);
@@ -104,6 +113,7 @@ export class RestService {
 
         const headers = Object.keys(rows[0]);
 
+        let totalMails: string[] = [];
         for (let row of rows) {
             const rowMap: Map<string, any> = new Map(Object.entries(row));
             const email = rowMap.get(emailKey);
@@ -111,11 +121,15 @@ export class RestService {
             const emailRows = emailRowsMap.get(email);
             if (emailRows === undefined) {
                 emailRowsMap.set(email, [row]);
+                totalMails.push(email);
                 continue;
             }
 
             emailRows.push(row);
         }
+
+        let successfulSend: string[] = [];
+        let unsuccessfulSend: string[] = [];
 
         for (const [email, rows] of emailRowsMap.entries()) {
             const sheet: WorkSheet = XLSX.utils.aoa_to_sheet([
@@ -131,23 +145,58 @@ export class RestService {
 
             const dateStr = UtilService.stringDate(new Date());
 
-            MailService.sendMail(new MailOptions(
-                from,
-                [email],
-                [],
-                [],
-                subject,
-                emailTemplate,
-                emailTemplate,
-                [{content: buffer, filename: `organizare_${dateStr}.xlsx`}]
+            try {
+                const response = await MailService.sendMail(new MailOptions(
+                    from,
+                    [email],
+                    [],
+                    [],
+                    subject,
+                    emailTemplate,
+                    emailTemplate,
+                    [{content: buffer, filename: `organizare_${dateStr}.xlsx`}]
 
-            )).catch(error => {
-                console.log("Mail Error:")
-                console.log(error);
-            });
+                ));
+                successfulSend.push(email);
+            } catch (e) {
+                console.log(`Mail Error: ${email}`);
+                console.log(e);
+                unsuccessfulSend.push(email);
+            }
         }
 
         res.statusCode = 200;
-        res.send('Ana are mere');
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(new MailResponse(totalMails, successfulSend, unsuccessfulSend)));
+    }
+
+    static async sendFAZ(req: Request<any>, res: Response<any>) {
+
+        const response = await axios.get('https://profs.info.uaic.ro/~orar/participanti/orar_alboaie.html');
+        const htmlPage = response.data;
+
+        const tableLineRegEx = new RegExp(/<tr.*>(.|\n|\r|\u2028|\u2029)*?<\/tr>/g);
+        const tableCellRegex = new RegExp(/<td.*?>((.|\n|\r|\u2028|\u2029)*?)<\/td>/g);
+        const clearHtmlRegex = new RegExp(/<.*?>|\n|\r|\u2028|\u2029|&nbsp/g, 'g');
+
+        const lines = htmlPage.match(tableLineRegEx);
+
+        for (const line of lines) {
+            const cols = line.match(tableCellRegex);
+
+            if (cols !== null) {
+
+                let s = '';
+                for (const col of cols) {
+                    const cellValue = UtilService.fullTrim(col.replace(clearHtmlRegex, ''));
+                    s += `${cellValue}    `;
+                }
+
+                console.log(s);
+            }
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        res.end('Done');
     }
 }

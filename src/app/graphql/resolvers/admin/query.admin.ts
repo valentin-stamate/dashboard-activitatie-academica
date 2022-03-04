@@ -13,16 +13,4 @@ export const QueryAdmin = {
         return response.payload;
     },
 
-    allIds: async () => {
-        const service = new UserAdminService();
-
-        const response = await service.getAllIds();
-
-        if (!response.succes) {
-            throw new Error(response.message);
-        }
-
-        return response.payload;
-    },
-
 }

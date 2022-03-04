@@ -1,4 +1,3 @@
-import {UserService} from "../../../service/user.service";
 import {UserAdminService} from "../../../service/user.admin.service";
 
 export const MutationAdmin = {
@@ -39,28 +38,6 @@ export const MutationAdmin = {
         const service = new UserAdminService();
 
         const response = await service.removeUserAdmin(user);
-        if (!response.succes) {
-            throw new Error(response.message);
-        }
-
-        return response.payload;
-    },
-
-    addId: async ({id}: any) => {
-        const service = new UserAdminService();
-
-        const response = await service.addId(id);
-        if (!response.succes) {
-            throw new Error(response.message);
-        }
-
-        return response.payload;
-    },
-
-    removeId: async ({id}: any) => {
-        const service = new UserAdminService();
-
-        const response = await service.removeId(id);
         if (!response.succes) {
             throw new Error(response.message);
         }

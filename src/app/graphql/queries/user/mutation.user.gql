@@ -1,8 +1,4 @@
 type Mutation {
-    getInformation(authToken: AuthTokenInput!): [Information]
-    addInformation(authToken: AuthTokenInput!, data: InformationInput!): String
-    updateInformation(authToken: AuthTokenInput!, data: InformationInput!): String
-    deleteInformation(authToken: AuthTokenInput!, data: InformationInput!): String
 
     getScientificArticleISI(authToken: AuthTokenInput!): [ScientificArticleISI]
     addScientificArticleISI(authToken: AuthTokenInput!, data: ScientificArticleISIInput!): String

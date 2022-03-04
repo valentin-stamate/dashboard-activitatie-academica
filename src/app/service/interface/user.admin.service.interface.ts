@@ -1,5 +1,5 @@
 import {ServiceResponse} from "../service.response";
-import {AuthToken, Id, User} from "../../database/models";
+import {AuthToken, User} from "../../database/models";
 
 /** User admin interface that describes how an admin user
  * interacts with other users. */
@@ -7,15 +7,6 @@ export interface UserAdminServiceInterface {
     /************************************************************
      *                    ADMIN USER ONLY
      * **********************************************************/
-
-    /** Read all Id's */
-    getAllIds(): Promise<ServiceResponse>;
-
-    /** Add an Id */
-    addId(id: Id): Promise<ServiceResponse>;
-
-    /** Remove an Id */
-    removeId(id: Id): Promise<ServiceResponse>;
 
     /** Read all users */
     getAllUsers(authToken: AuthToken): Promise<ServiceResponse>;

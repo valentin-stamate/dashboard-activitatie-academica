@@ -54,4 +54,8 @@ export class UtilService {
 
         return '' + number;
     }
+
+    static fullTrim(str: string) {
+        return str.replace(/\s+/g, ' ').trim();
+    }
 }

@@ -18,19 +18,6 @@ export class GraphQlErrorResponse {
     }
 }
 
-/* ----==== Ids ====---- */
-export class Id {
-    id: number;
-    identifier: string;
-    fullName: string;
-
-    constructor(props: any){
-        this.id = props.id;
-        this.identifier = props.identifier;
-        this.fullName = props.full_name;
-    }
-}
-
 /* ----==== User ====---- */
 export class User {
     id: number;

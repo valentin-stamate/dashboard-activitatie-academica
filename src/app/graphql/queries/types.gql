@@ -13,14 +13,6 @@ type GqlResponse {
     message: String
 }
 
-type Id {
-    id: Int!
-    identifier: String!
-    fullName: String!
-
-    activated: Boolean
-}
-
 type User {
     id: Int
     identifier: String!
@@ -280,12 +272,6 @@ type DidacticActivity implements GenericForm {
 }
 
 # ----------========== Input Types ==========---------- #
-
-input IdInput {
-    id: Int
-    identifier: String!
-    fullName: String
-}
 
 input BaseUser {
     identifier: String!

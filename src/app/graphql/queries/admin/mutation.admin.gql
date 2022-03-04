@@ -5,8 +5,5 @@ type Mutation {
     makeAdminUser(user: UserInput!): Int
     removeAdminUser(user: UserInput!): Int
 
-    addId(id: IdInput!): Int
-    removeId(id: IdInput!): Int
-
     removeUser(user: UserInput!): Int
 }

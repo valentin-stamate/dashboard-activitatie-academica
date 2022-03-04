@@ -87,3 +87,11 @@
 * Get file from request : https://stackoverflow.com/a/52957895/10805602
 * Send file and body at the same time in Postman : https://stackoverflow.com/a/67325344/10805602
 * Save Buffer object as file : https://nodejs.org/en/knowledge/file-system/how-to-write-files-in-nodejs/
+* RegEx : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+* Verifying RegEx : https://regexr.com/
+* RegEx cheat sheet : https://www.jetbrains.com/help/idea/regular-expression-syntax-reference.html
+* Match first RegEx occurrence | Lazy operator RegEx : https://stackoverflow.com/a/2503438/10805602
+* Regex cheat sheet for javascript : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Cheatsheet
+* RegEx groups : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Groups_and_Ranges
+* Sequelize Getting Started : https://sequelize.org/master/manual/getting-started.html
+* Sequelize docs : https://sequelize.org/master/manual/model-basics.html

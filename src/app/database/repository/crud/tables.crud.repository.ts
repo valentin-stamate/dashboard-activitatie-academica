@@ -1,7 +1,7 @@
 import {
     AcademyMember, Activation, Authentication,
     AwardAndNomination,
-    Citation, DidacticActivity, EditorialMember, Id,
+    Citation, DidacticActivity, EditorialMember,
     Information,
     ISIProceeding, OrganizedEvent, Patent, ResearchContract,
     ScientificArticleBDI,
@@ -14,46 +14,6 @@ import {QueryDB} from "../../connection";
  * Every method throws an exception if something is wrong.
  * The exception is handled in the Service layer.*/
 export abstract class TablesCrudRepository {
-    /* ----==== Id ====---- */
-    /** Id - READ */
-    static async allIds() {
-        const query = `SELECT * FROM ids`;
-
-        const {rows} = await QueryDB(query, []);
-        const list: Id[] = [];
-
-        for (const row of rows) {
-            list.push(new Id(row));
-        }
-
-        return list;
-    }
-
-    static async idUsed(identifier: string) {
-        const query = `SELECT * FROM users WHERE identifier = $1`;
-        const params = [identifier];
-
-        const {rows} = await QueryDB(query, params);
-        return rows.length !== 0;
-    }
-
-    /** Id - CREATE */
-    static async addId(data: Id) {
-        const query = `INSERT INTO ids(identifier, full_name) VALUES ($1, $2) RETURNING *`;
-        const params = [data.identifier, data.fullName];
-
-        const {rows} = await QueryDB(query, params);
-        return rows;
-    }
-
-    /** Id - REMOVE */
-    static async removeId(data: Id) {
-        const query = `DELETE FROM ids WHERE identifier = $1 RETURNING *`;
-        const params = [data.identifier];
-
-        const {rows} = await QueryDB(query, params);
-        return rows;
-    }
 
     /* ----==== Authentication ====---- */
 
