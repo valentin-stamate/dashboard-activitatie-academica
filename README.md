@@ -95,3 +95,13 @@
 * RegEx groups : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Groups_and_Ranges
 * Sequelize Getting Started : https://sequelize.org/master/manual/getting-started.html
 * Sequelize docs : https://sequelize.org/master/manual/model-basics.html
+* Express concurrency : https://tsh.io/blog/simple-guide-concurrency-node-js/
+* It's ok using await : https://stackoverflow.com/a/57529076/10805602
+* Project structure for an express app : https://www.coreycleary.me/project-structure-for-an-express-rest-api-when-there-is-no-standard-way
+* Project structure for an express app : https://www.toptal.com/express-js/nodejs-typescript-rest-api-pt-2
+* HTTP status codes : https://httpstatuses.com/
+* Best practices for building a rest api : https://blog.risingstack.com/10-best-practices-for-writing-node-js-rest-apis/
+* Error handler middleware : https://www.becomebetterprogrammer.com/how-to-use-error-handler-middleware-with-express-js-and-typescript/
+* Throw error inside async function : https://stackoverflow.com/a/59090983/10805602
+* Handling errors in async/await functions : https://itnext.io/error-handling-with-async-await-in-js-26c3f20bc06a
+* CRUD mapping to Http Verbs : https://medium.com/@ritika.atal.work/crud-mapping-to-http-verbs-354a3c0009f5

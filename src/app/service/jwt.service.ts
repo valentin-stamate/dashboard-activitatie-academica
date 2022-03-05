@@ -1,22 +1,24 @@
 import jwt from 'jsonwebtoken';
 import {User} from "../database/models";
-import {Env} from "../../../env";
+
+require('dotenv').config();
+const env = process.env as any;
 
 export class JwtService {
 
-    static generateAccesToken(user: User) {
+    static generateAccessToken(user: User) {
         return jwt.sign({
                 id: user.id,
                 identifier: user.identifier,
                 email: user.email,
                 admin: user.admin,
             },
-            Env.TOKEN_SECRET);
+            env.TOKEN_SECRET);
     }
 
     static verifyToken(token: string) {
         try {
-            return jwt.verify(token, Env.TOKEN_SECRET);
+            return jwt.verify(token, env.TOKEN_SECRET);
         } catch (e) {
             return null;
         }

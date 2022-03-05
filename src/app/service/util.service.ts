@@ -1,4 +1,3 @@
-
 export class UtilService {
     static mergeArrays(arr: any[][]) {
         let list: any = [];
@@ -58,4 +57,21 @@ export class UtilService {
     static fullTrim(str: string) {
         return str.replace(/\s+/g, ' ').trim();
     }
+
+    static arrayToString(array: any[], delimiter: string = ',') {
+        let str = '';
+
+        if (array.length === 0) {
+            return str;
+        }
+
+        for (let i = 0; i < array.length - 1; i++) {
+            str += `${array[i]}${delimiter}`;
+        }
+
+        str += `${array[array.length - 1]}`;
+        return str;
+    }
+
+
 }

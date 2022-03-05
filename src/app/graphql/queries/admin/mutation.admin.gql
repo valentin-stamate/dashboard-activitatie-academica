@@ -1,9 +1,0 @@
-type Mutation {
-    deactivateUser(user: UserInput!): Int
-    activateUser(user: UserInput!): Int
-
-    makeAdminUser(user: UserInput!): Int
-    removeAdminUser(user: UserInput!): Int
-
-    removeUser(user: UserInput!): Int
-}

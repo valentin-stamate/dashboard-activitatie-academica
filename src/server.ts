@@ -3,21 +3,19 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import config from '../config.json';
-import {graphqlHTTP} from 'express-graphql';
-import {
-  resolversAdmin,
-  resolversUnknown,
-  resolversUser,
-  schemaAdmin,
-  schemaUnknown,
-  schemaUser
-} from "./app/graphql/export";
-import {adminUserRequestMiddleware, unknownUserRequestMiddleware, userRequestMiddleware} from "./middlewares";
-import {RestService} from "./app/rest/rest";
 import fileUpload from "express-fileupload";
-import {sequelizeInit} from "./app/database/sequelize/sequelize";
+import {sequelizeInit} from "./app/database/sequelize";
+import {RestController} from "./app/rest/rest.controller";
+import {Middleware} from "./app/rest/rest.middlewares";
+import {RestEndpoints} from "./app/rest/rest.endpoints";
 
+/** ENV */
+require('dotenv').config();
+
+/** Initialize Express App */
 const app: Express = express();
+
+/** Initialize Database */
 sequelizeInit();
 
 /************************************************************************************
@@ -40,47 +38,24 @@ if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
 }
 
 /************************************************************************************
- *                               Register all routes
+ *                               Register all REST routes
  ***********************************************************************************/
-
-/** ----------------================= GRAPHQL =================---------------- */
-app.use('/unknown/graphql', unknownUserRequestMiddleware, graphqlHTTP({
-  schema: schemaUnknown,
-  rootValue: resolversUnknown,
-  graphiql: true,
-}));
-
-app.use('/user/graphql', userRequestMiddleware, graphqlHTTP({
-  schema: schemaUser,
-  rootValue: resolversUser,
-  graphiql: true,
-}));
-
-app.use('/admin/graphql', adminUserRequestMiddleware, graphqlHTTP({
-  schema: schemaAdmin,
-  rootValue: resolversAdmin,
-  graphiql: true,
-}));
-
-/** ----------------================= REST =================---------------- */
 app.use(fileUpload());
 
-app.get('/activate', RestService.activateUser);
-app.get('/download-forms', adminUserRequestMiddleware, RestService.getForms);
-app.post('/admin/organization-email', adminUserRequestMiddleware, RestService.sendOrganizationEmail);
-app.post('/admin/send-faz', adminUserRequestMiddleware, RestService.sendFAZ);
+/** Visitor only */
+app.post(RestEndpoints.USER, Middleware.visitorMiddleware, RestController.signup);
+app.post(RestEndpoints.USER_LOGIN, Middleware.visitorMiddleware, RestController.login);
+app.post(RestEndpoints.USER_AUTH, Middleware.visitorMiddleware, RestController.authenticate);
+
+/** User only */
+
+/** Admin only */
+app.get(RestEndpoints.USER, Middleware.adminMiddleware, RestController.allUsers);
+app.post(RestEndpoints.BASE_INFORMATION, Middleware.adminMiddleware, RestController.importBaseInformation)
 
 /************************************************************************************
  *                               Express Error Handling
  ***********************************************************************************/
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  return res.status(500).json({
-    errorName: err.name,
-    message: err.message,
-    stack: err.stack || 'no stack defined'
-  });
-});
+app.use(Middleware.errorHandler);
 
 export default app;

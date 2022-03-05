@@ -1,6 +1,0 @@
-type Mutation {
-    signUpUser(user: BaseUser!): String
-    sendAuthKey(user: BaseUser!): String
-    logInUser(user: BaseUser!, authKey: String!): AuthToken
-}
-
