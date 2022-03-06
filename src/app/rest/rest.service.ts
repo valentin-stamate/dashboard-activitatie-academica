@@ -57,7 +57,7 @@ export class RestService {
         return new ResponseData(ResponseMessage.SUCCESS);
     }
 
-    static async authenticate(userKey: UserKey) {
+    static async authenticate(userKey: UserKey): Promise<any> {
         const row = await UserKeyModel.findOne({where: {key: userKey.key}});
 
         if (row === null) {
@@ -79,6 +79,15 @@ export class RestService {
     /************************************************************************************
      *                               User only
      ***********************************************************************************/
+    static async getInformation(user: User): Promise<any> {
+        const row = await BaseInformationModel.findOne({where: {identifier: user.identifier}});
+
+        if (!row) {
+            return {};
+        }
+
+        return row.toJSON();
+    }
 
     /************************************************************************************
      *                               Admin only
@@ -88,7 +97,7 @@ export class RestService {
         return rows.map(item => item.toJSON());
     }
 
-    static async importBaseInformation(file: UploadedFile) {
+    static async importBaseInformation(file: UploadedFile): Promise<any> {
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
 

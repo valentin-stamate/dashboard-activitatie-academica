@@ -3,4 +3,8 @@ export enum RestEndpoints {
     USER_LOGIN = '/api/user-login',
     BASE_INFORMATION = '/api/base-information',
     USER_AUTH = '/api/user-auth',
+
+    INFORMATION = '/api/information',
+
+
 }

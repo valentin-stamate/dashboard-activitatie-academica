@@ -105,3 +105,4 @@
 * Throw error inside async function : https://stackoverflow.com/a/59090983/10805602
 * Handling errors in async/await functions : https://itnext.io/error-handling-with-async-await-in-js-26c3f20bc06a
 * CRUD mapping to Http Verbs : https://medium.com/@ritika.atal.work/crud-mapping-to-http-verbs-354a3c0009f5
+* Sequelize with Typescript : https://dev.to/jctaveras/sequelize-typescript-what-you-need-to-know-41mj

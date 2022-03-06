@@ -2,6 +2,8 @@ import {NextFunction, Request, Response} from "express";
 import {ResponseMessage, RestService, StatusCode} from "./rest.service";
 import {UploadedFile} from "express-fileupload";
 import {ResponseError} from "./rest.middlewares";
+import {JwtService} from "../service/jwt.service";
+import {User} from "../database/models";
 
 /** The lowest layer that have access to req & res
  * It uses RestService to handle logic stuff */
@@ -40,6 +42,17 @@ export class RestController {
     /************************************************************************************
      *                               User only
      ***********************************************************************************/
+    static async getInformation(req: Request<any>, res: Response, next: NextFunction) {
+        try {
+            const token = req.get('Authorization') as string;
+            const user = JwtService.verifyToken(token) as User;
+
+            const data = await RestService.getInformation(user);
+            res.end(JSON.stringify(data));
+        } catch (err) {
+            next(err);
+        }
+    }
 
     /************************************************************************************
      *                               Admin only

@@ -48,6 +48,7 @@ app.post(RestEndpoints.USER_LOGIN, Middleware.visitorMiddleware, RestController.
 app.post(RestEndpoints.USER_AUTH, Middleware.visitorMiddleware, RestController.authenticate);
 
 /** User only */
+app.get(RestEndpoints.INFORMATION, Middleware.userMiddleware, RestController.getInformation);
 
 /** Admin only */
 app.get(RestEndpoints.USER, Middleware.adminMiddleware, RestController.allUsers);
