@@ -40,36 +40,17 @@ BaseInformationModel.init( {
 }, {...options, modelName: 'base_information'});
 
 export class UserModel extends Model {
-    declare getProjects: HasManyGetAssociationsMixin<Project>; // Note the null assertions!
-    declare addProject: HasManyAddAssociationMixin<Project, number>;
-    declare addProjects: HasManyAddAssociationMixin<Project, number>;
-    declare setProjects: HasManySetAssociationsMixin<Project, number>;
-    declare removeProject: HasManyRemoveAssociationMixin<Project, number>;
-    declare removeProjects: HasManyRemoveAssociationsMixin<Project, number>;
-    declare hasProject: HasManyHasAssociationMixin<Project, number>;
-    declare hasProjects: HasManyHasAssociationsMixin<Project, number>;
-    declare countProjects: HasManyCountAssociationsMixin;
-    declare createProject: HasManyCreateAssociationMixin<Project, 'ownerId'>;
-
-    declare projects?: NonAttribute<Project[]>; // Note this is optional since it's only populated when explicitly requested in code
+    declare getISIArticles: HasManyGetAssociationsMixin<ScientificArticleISIModel>; // Note the null assertions!
+    declare addISIArticle: HasManyAddAssociationMixin<ScientificArticleISIModel, number>;
+    declare addISIArticles: HasManyAddAssociationMixin<ScientificArticleISIModel, number>;
+    declare setISIArticles: HasManySetAssociationsMixin<ScientificArticleISIModel, number>;
+    declare removeISIArticle: HasManyRemoveAssociationMixin<ScientificArticleISIModel, number>;
+    declare removeISIArticles: HasManyRemoveAssociationsMixin<ScientificArticleISIModel, number>;
+    declare hasISIArticle: HasManyHasAssociationMixin<ScientificArticleISIModel, number>;
+    declare hasISIArticles: HasManyHasAssociationsMixin<ScientificArticleISIModel, number>;
+    declare countISIArticles: HasManyCountAssociationsMixin;
+    declare createISIArticle: HasManyCreateAssociationMixin<ScientificArticleISIModel, 'ownerId'>;
 }
-
-class Project extends Model { }
-Project.init({
-        ownerId: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false
-        },
-        name: {
-            type: new DataTypes.STRING(128),
-            allowNull: false
-        },
-    },
-    {
-        sequelize,
-        tableName: 'projects'
-    }
-);
 
 UserModel.init(
     {
@@ -101,10 +82,25 @@ UserModel.init(
     }
 );
 
-UserModel.hasMany(Project, {
+class ScientificArticleISIModel extends Model { }
+ScientificArticleISIModel.init({
+        observations: {type: DataTypes.STRING,},
+    },
+    {
+        sequelize,
+        tableName: 'sc_articles_isi'
+    }
+);
+
+UserModel.hasMany(ScientificArticleISIModel, {
     sourceKey: 'id',
-    foreignKey: 'ownerId',
-    as: 'projects' // this determines the name in `associations`!
+    foreignKey: {
+        name: 'user_id',
+        allowNull: false,
+    },
+    as: 'ISIArticles', // this determines the name in `associations`!
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
 });
 
 
@@ -122,10 +118,10 @@ UserKeyModel.init({
 }, {...options, modelName: 'user_key'});
 
 /** --------------------============== Forms ==============-------------------- */
-export class ScientificArticleISIModel extends Model {}
-ScientificArticleISIModel.init({
-    observations: {type: DataTypes.STRING,},
-}, {...options, modelName: 'sc_article_isi'});
+// export class ScientificArticleISIModel extends Model {}
+// ScientificArticleISIModel.init({
+//     observations: {type: DataTypes.STRING,},
+// }, {...options, modelName: 'sc_article_isi'});
 
 export async function sequelizeInit() {
     try {
@@ -135,24 +131,21 @@ export async function sequelizeInit() {
         console.error('Unable to connect to the database:', error);
     }
 
-    UserModel.hasMany(ScientificArticleISIModel);
-
     await sequelize.sync({ force: true });
 
     await BaseInformationModel.build({fullName: 'Stamate Valentin', identifier: 'valentin'}).save();
     const user = await UserModel.build({identifier: 'valentin',
         email: 'stamatevalentin125@gmail.com', alternativeEmail: 'valentin.stamate@info.uaic.ro', admin: true}).save();
-    const isiRow = await ScientificArticleISIModel.build({observations: 'Artical', userId: 1}).save();
 
-    const project = await user.createProject({
-        name: 'first!'
+    const project = await user.createISIArticle({
+        observations: 'first!'
     });
 
     const ourUser = await UserModel.findByPk(1, {
-        include: [UserModel.associations.projects],
+        include: [UserModel.associations.ISIArticles],
         rejectOnEmpty: true,
     })
 
     console.log(ourUser.toJSON());
-    console.log(await ourUser.getProjects());
+    console.log(await ourUser.getISIArticles());
 }
