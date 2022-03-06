@@ -20,6 +20,7 @@ export class RestService {
         }
 
         newUser = {...newUser, admin: false};
+        // @ts-ignore
         await UserModel.build({...newUser}).save();
 
         return new ResponseData(ResponseMessage.SUCCESS);
