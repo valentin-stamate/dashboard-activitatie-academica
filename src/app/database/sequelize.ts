@@ -1,21 +1,4 @@
-import {
-    Association,
-    CreationOptional,
-    DataTypes,
-    HasManyAddAssociationMixin,
-    HasManyCountAssociationsMixin,
-    HasManyCreateAssociationMixin,
-    HasManyGetAssociationsMixin,
-    HasManyHasAssociationMixin, HasManyHasAssociationsMixin,
-    HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin,
-    HasManySetAssociationsMixin,
-    InferAttributes,
-    InferCreationAttributes,
-    Model,
-    NonAttribute,
-    Sequelize
-} from '@sequelize/core';
-import {BaseInformation, ScientificArticleISI, User, UserKey} from "./models";
+import {DataTypes, Model, Sequelize} from '@sequelize/core';
 
 require('dotenv').config();
 const env = process.env as any;
@@ -32,97 +15,70 @@ const options = {
     underscored: true,
 };
 
-/** --------------------============== Table Initialization ==============-------------------- */
 export class BaseInformationModel extends Model {}
-BaseInformationModel.init( {
-    fullName:   {type: DataTypes.STRING, allowNull: false,},
-    identifier: {type: DataTypes.STRING, allowNull: false, unique: true,},
-}, {...options, modelName: 'base_information'});
+export class UserModel extends Model {}
+export class UserKeyModel extends Model {}
+export class ScientificArticleISIModel extends Model {}
 
-export class UserModel extends Model {
-    declare getISIArticles: HasManyGetAssociationsMixin<ScientificArticleISIModel>; // Note the null assertions!
-    declare addISIArticle: HasManyAddAssociationMixin<ScientificArticleISIModel, number>;
-    declare addISIArticles: HasManyAddAssociationMixin<ScientificArticleISIModel, number>;
-    declare setISIArticles: HasManySetAssociationsMixin<ScientificArticleISIModel, number>;
-    declare removeISIArticle: HasManyRemoveAssociationMixin<ScientificArticleISIModel, number>;
-    declare removeISIArticles: HasManyRemoveAssociationsMixin<ScientificArticleISIModel, number>;
-    declare hasISIArticle: HasManyHasAssociationMixin<ScientificArticleISIModel, number>;
-    declare hasISIArticles: HasManyHasAssociationsMixin<ScientificArticleISIModel, number>;
-    declare countISIArticles: HasManyCountAssociationsMixin;
-    declare createISIArticle: HasManyCreateAssociationMixin<ScientificArticleISIModel, 'ownerId'>;
+async function initializeTables() {
+    /************************************************************************************
+     *                               Table Initialization
+     ***********************************************************************************/
+
+    BaseInformationModel.init( {
+        fullName:   {type: DataTypes.STRING, allowNull: false,},
+        identifier: {type: DataTypes.STRING, allowNull: false, unique: true,},
+    }, {...options, modelName: 'base_information'});
+
+    UserModel.init({
+            identifier:       {type: DataTypes.STRING, unique: true, allowNull: false,},
+            email:            {type: DataTypes.STRING, unique: true, allowNull: false,},
+            alternativeEmail: {type: DataTypes.STRING, unique: true, allowNull: false,},
+            admin:            {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false,},
+        },
+        {...options, tableName: 'users',}
+    );
+
+    UserKeyModel.init({
+        identifier: {type: DataTypes.STRING, unique: true, allowNull: false,},
+        key:        {type: DataTypes.STRING, unique: true, allowNull: false,},
+    }, {...options, modelName: 'user_key'});
+
+    /************************************************************************************
+     *                                    Forms
+     ***********************************************************************************/
+
+    /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
+    ScientificArticleISIModel.init({
+            articleTitle: {type: DataTypes.STRING,},
+            authors: {type: DataTypes.STRING,},
+            publicationDate: {type: DataTypes.DATE,},
+            volume: {type: DataTypes.STRING,},
+            issue: {type: DataTypes.STRING,},
+            startingPage: {type: DataTypes.INTEGER,},
+            endingPage: {type: DataTypes.INTEGER,},
+            impactFactor: {type: DataTypes.STRING,},
+            cnatdcuClassification: {type: DataTypes.STRING,},
+            doi: {type: DataTypes.STRING,},
+            conferenceName: {type: DataTypes.STRING,},
+            observations: {type: DataTypes.STRING,},
+        },
+        {...options, tableName: 'sc_article_isi',}
+    );
+    UserModel.hasMany(ScientificArticleISIModel, {
+        sourceKey: 'id',
+        foreignKey: {name: 'userId', allowNull: false,},
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    });
+
+    await sequelize.sync({ force: true });
 }
 
-UserModel.init(
-    {
-        identifier: {
-            type: new DataTypes.STRING(128),
-            allowNull: false
-        },
-        admin: {
-            type: new DataTypes.BOOLEAN,
-            allowNull: false
-        },
-        email: {
-            type: new DataTypes.STRING(128),
-            allowNull: false
-        },
-        alternativeEmail: {
-            type: new DataTypes.STRING(128),
-            allowNull: false
-        },
-        id: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            autoIncrement: true,
-            primaryKey: true
-        },
-    },
-    {
-        tableName: 'users',
-        sequelize // passing the `sequelize` instance is required
-    }
-);
 
-class ScientificArticleISIModel extends Model { }
-ScientificArticleISIModel.init({
-        observations: {type: DataTypes.STRING,},
-    },
-    {
-        sequelize,
-        tableName: 'sc_articles_isi'
-    }
-);
-
-UserModel.hasMany(ScientificArticleISIModel, {
-    sourceKey: 'id',
-    foreignKey: {
-        name: 'user_id',
-        allowNull: false,
-    },
-    as: 'ISIArticles', // this determines the name in `associations`!
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-});
-
-
-
-
-
-
-
-
-
-export class UserKeyModel extends Model {}
-UserKeyModel.init({
-    identifier: {type: DataTypes.STRING, unique: true, allowNull: false,},
-    key:        {type: DataTypes.STRING, unique: true, allowNull: false,},
-}, {...options, modelName: 'user_key'});
-
-/** --------------------============== Forms ==============-------------------- */
-// export class ScientificArticleISIModel extends Model {}
-// ScientificArticleISIModel.init({
-//     observations: {type: DataTypes.STRING,},
-// }, {...options, modelName: 'sc_article_isi'});
-
+/************************************************************************************
+ *                                 Init Function
+ ***********************************************************************************/
 export async function sequelizeInit() {
     try {
         await sequelize.authenticate();
@@ -131,21 +87,17 @@ export async function sequelizeInit() {
         console.error('Unable to connect to the database:', error);
     }
 
-    await sequelize.sync({ force: true });
+    await initializeTables();
 
-    await BaseInformationModel.build({fullName: 'Stamate Valentin', identifier: 'valentin'}).save();
-    const user = await UserModel.build({identifier: 'valentin',
-        email: 'stamatevalentin125@gmail.com', alternativeEmail: 'valentin.stamate@info.uaic.ro', admin: true}).save();
-
-    const project = await user.createISIArticle({
-        observations: 'first!'
+    const baseInformation = await BaseInformationModel.create({fullName: 'Stamate Valentin', identifier: 'valentin'});
+    const user = await UserModel.create({
+        identifier: 'valentin',
+        email: 'stamatevalentin125@gmail.com',
+        alternativeEmail: 'valentin.stamate@info.uaic.ro',
+        admin: true
     });
-
-    const ourUser = await UserModel.findByPk(1, {
-        include: [UserModel.associations.ISIArticles],
-        rejectOnEmpty: true,
-    })
-
-    console.log(ourUser.toJSON());
-    console.log(await ourUser.getISIArticles());
+    const scArticleISI = await ScientificArticleISIModel.create({
+        observations: 'Ana are mere',
+        userId: 1,
+    });
 }

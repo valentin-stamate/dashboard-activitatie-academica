@@ -33,7 +33,7 @@ export interface UserKey {
  *                               Forms
  ***********************************************************************************/
 
-/* Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
+/** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
 export interface ScientificArticleISI {
     sheetName: 'Articole ştiintifice...ISI...';
 
@@ -41,7 +41,6 @@ export interface ScientificArticleISI {
         'Volum', 'ISSUE', 'Nr. pagina de start', 'Nr. pagina de sfarsit', 'Factor de impact',
         'Clasificare CNATDCU', 'DOI', 'Denumire conferința', 'Observatii', 'Ultima modificare', 'Data crearii', 'Data crearii'];
 
-    id: number;
     articleTitle: string;
     authors: string;
     publicationDate: Date;
@@ -55,11 +54,13 @@ export interface ScientificArticleISI {
     conferenceName: string;
     observations: string;
 
+    id: number;
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* ISI proceedings */
+/** ISI proceedings */
 export interface ISIProceeding {
     sheetName: 'ISI proceedings';
 
@@ -79,12 +80,13 @@ export interface ISIProceeding {
     startingPage: number;
     endingPage: number;
     observations: string;
-
+    
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Articole științifice publicate în extenso în reviste indexate BDI și reviste de specialitate neindexate */
+/** Articole științifice publicate în extenso în reviste indexate BDI și reviste de specialitate neindexate */
 export interface ScientificArticleBDI {
     sheetName: 'Articole științifice...BDI..';
 
@@ -113,11 +115,12 @@ export interface ScientificArticleBDI {
     bdiDatabaseLink: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Cărți ştiinţifice sau capitole de cărți publicate în edituri */
+/** Cărți ştiinţifice sau capitole de cărți publicate în edituri */
 export interface ScientificBook {
     sheetName: 'Cărţi ştiinţifice...';
 
@@ -138,11 +141,12 @@ export interface ScientificBook {
     isbn: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Traduceri */
+/** Traduceri */
 export interface Translation {
     sheetName: 'Traduceri';
 
@@ -165,11 +169,12 @@ export interface Translation {
     translationType: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Comunicări în manifestări științifice */
+/** Comunicări în manifestări științifice */
 export interface ScientificCommunication {
     sheetName: 'Comunicări...';
 
@@ -186,11 +191,12 @@ export interface ScientificCommunication {
     scientificManifestationLink: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Brevete */
+/** Brevete */
 export interface Patent {
     sheetName: 'Brevete';
 
@@ -209,11 +215,12 @@ export interface Patent {
     country: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Contracte de cercetare */
+/** Contracte de cercetare */
 export interface ResearchContract {
     sheetName: 'Contracte de cercetare';
 
@@ -235,11 +242,12 @@ export interface ResearchContract {
     contractType: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Citări */
+/** Citări */
 export interface Citation {
     sheetName: 'Citări';
 
@@ -268,11 +276,12 @@ export interface Citation {
     citations: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Premii si nominalizări */
+/** Premii si nominalizări */
 export interface AwardAndNomination {
     sheetName: 'Premii si nominalizari';
 
@@ -289,11 +298,12 @@ export interface AwardAndNomination {
     awardedFor: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Membru în academii */
+/** Membru în academii */
 export interface AcademyMember {
     sheetName: 'Membru în academii';
 
@@ -306,11 +316,12 @@ export interface AcademyMember {
     memberType: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Membru în echipa editorială */
+/** Membru în echipa editorială */
 export interface EditorialMember {
     sheetName: 'Membru în echipa editorială';
 
@@ -327,11 +338,12 @@ export interface EditorialMember {
     nationalOrInternational: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Evenimente organizate */
+/** Evenimente organizate */
 export interface OrganizedEvent {
     sheetName: 'Evenimente organizate';
 
@@ -351,11 +363,12 @@ export interface OrganizedEvent {
     contactPerson: string;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Fără activitate științifică */
+/** Fără activitate științifică */
 export interface WithoutActivity {
     sheetName: 'Fără activitate științifică';
 
@@ -365,11 +378,12 @@ export interface WithoutActivity {
     id: number;
     observations: string;
     
+    userId: number;
     updatedAt: Date;
     createdAt: Date;
 }
 
-/* Activitate didactică */
+/** Activitate didactică */
 export interface DidacticActivity {
     sheetName: 'Activitate didactică';
 

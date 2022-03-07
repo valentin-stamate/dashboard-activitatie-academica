@@ -50,9 +50,15 @@ app.post(RestEndpoints.USER_AUTH, Middleware.visitorMiddleware, RestController.a
 /** User only */
 app.get(RestEndpoints.INFORMATION, Middleware.userMiddleware, RestController.getInformation);
 
+app.get(RestEndpoints.SCIENTIFIC_ARTICLE_ISI, Middleware.userMiddleware, RestController.getScientificArticleISI);
+app.post(RestEndpoints.SCIENTIFIC_ARTICLE_ISI, Middleware.userMiddleware, RestController.addScientificArticleISI);
+app.patch(RestEndpoints.SCIENTIFIC_ARTICLE_ISI, Middleware.userMiddleware, RestController.updateScientificArticleISI);
+app.delete(RestEndpoints.SCIENTIFIC_ARTICLE_ISI, Middleware.userMiddleware, RestController.deleteScientificArticleISI);
+
 /** Admin only */
 app.get(RestEndpoints.USER, Middleware.adminMiddleware, RestController.allUsers);
 app.post(RestEndpoints.BASE_INFORMATION, Middleware.adminMiddleware, RestController.importBaseInformation)
+app.post(RestEndpoints.ORGANIZATION_EMAIL, Middleware.adminMiddleware, RestController.sendOrganizationEmail)
 
 /************************************************************************************
  *                               Express Error Handling

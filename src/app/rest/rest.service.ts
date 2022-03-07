@@ -1,5 +1,5 @@
-import {User, UserKey} from "../database/models";
-import {BaseInformationModel, UserKeyModel, UserModel} from "../database/sequelize";
+import {ScientificArticleISI, User, UserKey} from "../database/models";
+import {BaseInformationModel, ScientificArticleISIModel, UserKeyModel, UserModel} from "../database/sequelize";
 import {UploadedFile} from "express-fileupload";
 import XLSX, {WorkBook, WorkSheet} from "xlsx";
 import {UtilService} from "../service/util.service";
@@ -20,7 +20,6 @@ export class RestService {
         }
 
         newUser = {...newUser, admin: false};
-        // @ts-ignore
         await UserModel.build({...newUser}).save();
 
         return new ResponseData(ResponseMessage.SUCCESS);
@@ -88,6 +87,39 @@ export class RestService {
         }
 
         return row.toJSON();
+    }
+
+    /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
+    static async getScientificArticleISI(user: User) {
+        return (await ScientificArticleISIModel.findAll({where: {userId: user.id}}))
+            .map(item => item.toJSON());
+    }
+
+    static async addScientificArticleISI(user: User, data: ScientificArticleISI) {
+        await ScientificArticleISIModel.create({...data, userId: user.id});
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateScientificArticleISI(user: User, data: ScientificArticleISI) {
+        const row = await ScientificArticleISIModel.findOne({where: {userId: user.id, id: data.id,}});
+
+        if (!row) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteScientificArticleISI(user: User, data: ScientificArticleISI) {
+        const row = await ScientificArticleISIModel.findOne({where: {userId: user.id, id: data.id,}});
+
+        if (!row) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
     }
 
     /************************************************************************************
@@ -196,6 +228,7 @@ export enum ResponseMessage {
     INVALID_TOKEN = 'Invalid token',
     USER_NOT_EXISTS = 'Valid token, but user doesn\'t exist',
     ADMIN_ONLY = 'Unauthorized, admin permission only',
+    DATA_NOT_FOUND = 'Data not found',
 }
 
 /** Contains the request responses */
