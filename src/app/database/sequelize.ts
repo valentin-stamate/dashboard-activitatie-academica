@@ -89,8 +89,9 @@ export async function sequelizeInit() {
 
     await initializeTables();
 
-    const baseInformation = await BaseInformationModel.create({fullName: 'Stamate Valentin', identifier: 'valentin'});
-    const user = await UserModel.create({
+    const infoA = await BaseInformationModel.create({fullName: 'Stamate Valentin', identifier: 'valentin'});
+    const infoB = await BaseInformationModel.create({fullName: 'Andrei Amariei', identifier: 'andrei'});
+    const userA = await UserModel.create({
         identifier: 'valentin',
         email: 'stamatevalentin125@gmail.com',
         alternativeEmail: 'valentin.stamate@info.uaic.ro',

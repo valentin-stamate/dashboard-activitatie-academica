@@ -6,26 +6,51 @@ import {UtilService} from "../service/util.service";
 import {EmailDefaults, EmailTemplates, MailOptions, MailService} from "../service/email.service";
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
+import {Op} from "@sequelize/core";
 
 /** The layer where the logic holds */
 export class RestService {
     /************************************************************************************
      *                               Visitor only
      ***********************************************************************************/
-    static async signup(newUser: User): Promise<any> {
-        const row = await BaseInformationModel.findOne({where: {identifier: newUser.identifier}});
+    static async signup(user: User): Promise<any> {
+        if (!user.identifier || !user.email || !user.alternativeEmail) {
+            throw new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST);
+        }
+
+        const options = {
+            where: {
+                [Op.or]: [
+                    {identifier: user.identifier},
+                    {email: user.email},
+                    {alternativeEmail: user.alternativeEmail},
+                ]
+            }
+        };
+
+        const existingUser = await UserModel.findOne(options);
+
+        if (existingUser !== null) {
+            throw new ResponseError(ResponseMessage.DATA_TAKEN, StatusCode.BAD_REQUEST);
+        }
+
+        const row = await BaseInformationModel.findOne({where: {identifier: user.identifier}});
 
         if (row === null) {
             throw new ResponseError(ResponseMessage.USER_NOT_REGISTERED, StatusCode.NOT_ACCEPTABLE);
         }
 
-        newUser = {...newUser, admin: false};
-        await UserModel.build({...newUser}).save();
+        user = {...user, admin: false};
+        await UserModel.build({...user}).save();
 
         return new ResponseData(ResponseMessage.SUCCESS);
     }
 
     static async login(user: User): Promise<any> {
+        if (!user.identifier || !user.email) {
+            throw new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST);
+        }
+
         const row = await UserModel.findOne({where: {identifier: user.identifier, email: user.email}});
 
         if (row === null) {
@@ -82,7 +107,7 @@ export class RestService {
     static async getInformation(user: User): Promise<any> {
         const row = await BaseInformationModel.findOne({where: {identifier: user.identifier}});
 
-        if (!row) {
+        if (row === null) {
             return {};
         }
 
@@ -103,7 +128,7 @@ export class RestService {
     static async updateScientificArticleISI(user: User, data: ScientificArticleISI) {
         const row = await ScientificArticleISIModel.findOne({where: {userId: user.id, id: data.id,}});
 
-        if (!row) {
+        if (row === null) {
             throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
         }
 
@@ -114,7 +139,7 @@ export class RestService {
     static async deleteScientificArticleISI(user: User, data: ScientificArticleISI) {
         const row = await ScientificArticleISIModel.findOne({where: {userId: user.id, id: data.id,}});
 
-        if (!row) {
+        if (row === null) {
             throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
         }
 
@@ -229,6 +254,7 @@ export enum ResponseMessage {
     USER_NOT_EXISTS = 'Valid token, but user doesn\'t exist',
     ADMIN_ONLY = 'Unauthorized, admin permission only',
     DATA_NOT_FOUND = 'Data not found',
+    DATA_TAKEN = 'Some data is already taken',
 }
 
 /** Contains the request responses */

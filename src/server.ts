@@ -43,9 +43,9 @@ if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
 app.use(fileUpload());
 
 /** Visitor only */
-app.post(RestEndpoints.USER, Middleware.visitorMiddleware, RestController.signup);
-app.post(RestEndpoints.USER_LOGIN, Middleware.visitorMiddleware, RestController.login);
-app.post(RestEndpoints.USER_AUTH, Middleware.visitorMiddleware, RestController.authenticate);
+app.post(RestEndpoints.SIGNUP, Middleware.visitorMiddleware, RestController.signup);
+app.post(RestEndpoints.LOGIN, Middleware.visitorMiddleware, RestController.login);
+app.post(RestEndpoints.AUTH, Middleware.visitorMiddleware, RestController.authenticate);
 
 /** User only */
 app.get(RestEndpoints.INFORMATION, Middleware.userMiddleware, RestController.getInformation);

@@ -22,14 +22,14 @@ export class Middleware {
 
         const decoded = JwtService.verifyToken(token) as User;
 
-        if (!decoded) {
+        if (decoded === null) {
             next(new ResponseError(ResponseMessage.INVALID_TOKEN, StatusCode.IM_A_TEAPOT));
             return;
         }
 
         const user = await UserModel.findOne({where: {id: decoded.id}});
 
-        if (!user) {
+        if (user === null) {
             next(new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.IM_A_TEAPOT));
             return;
         }
@@ -56,7 +56,7 @@ export class Middleware {
 
         const user = await UserModel.findOne({where: {id: decoded.id}});
 
-        if (!user) {
+        if (user === null) {
             next(new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.IM_A_TEAPOT));
             return;
         }
