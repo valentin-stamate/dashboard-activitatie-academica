@@ -4,6 +4,8 @@ export interface BaseInformation {
     id: number;
     fullName: string;
     identifier: string;
+    founding: string;
+    coordinator: string;
 
     createdAt: Date;
     updatedAt: Date;

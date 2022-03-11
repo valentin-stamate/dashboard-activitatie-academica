@@ -129,17 +129,40 @@ export class RestController {
         }
     }
 
-
     /************************************************************************************
      *                               Admin only
      ***********************************************************************************/
     static async allUsers(req: Request<any>, res: Response, next: NextFunction) {
         try {
-            const data = await RestService.allUsers();
+            const token = req.get('Authorization') as string;
+            const user = JwtService.verifyToken(token) as User;
+
+            const data = await RestService.allUsers(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
         }
+    }
+
+    static async deleteUser(req: Request<any>, res: Response, next: NextFunction) {
+        try {
+            const id = req.params.id;
+
+            const data = await RestService.deleteUser(id);
+            res.end(JSON.stringify(data));
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async getBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
+        try {
+            const data = await RestService.getBaseInformation();
+            res.end(JSON.stringify(data));
+        } catch (err) {
+            next(err);
+        }
+
     }
 
     static async importBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
@@ -156,7 +179,17 @@ export class RestController {
         } catch (err) {
             next(err);
         }
+    }
 
+    static async deleteBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
+        try {
+            const id = req.params.id;
+
+            const data = await RestService.deleteBaseInformation(id);
+            res.end(JSON.stringify(data));
+        } catch (err) {
+            next(err);
+        }
     }
 
     static async sendOrganizationEmail(req: Request<any>, res: Response, next: NextFunction) {

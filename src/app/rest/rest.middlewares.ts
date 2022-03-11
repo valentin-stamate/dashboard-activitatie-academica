@@ -89,6 +89,7 @@ export class Middleware {
         }
 
         console.log(err);
+        res.setHeader('Content-Type', 'text/plain');
         res.status(statusError).send(err.message);
     }
 }

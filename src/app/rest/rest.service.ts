@@ -6,7 +6,7 @@ import {UtilService} from "../service/util.service";
 import {EmailDefaults, EmailTemplates, MailOptions, MailService} from "../service/email.service";
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
-import {literal, Op} from "@sequelize/core";
+import {Op} from "@sequelize/core";
 
 /** The layer where the logic holds */
 export class RestService {
@@ -14,7 +14,8 @@ export class RestService {
      *                               Visitor only
      ***********************************************************************************/
     static async check(user: User): Promise<any> {
-        const row = await UserModel.findOne({where: {
+        const row = await UserModel.findOne({
+            where: {
                 id: user.id,
                 identifier: user.identifier,
                 email: user.email,
@@ -49,7 +50,11 @@ export class RestService {
             throw new ResponseError(ResponseMessage.DATA_TAKEN, StatusCode.BAD_REQUEST);
         }
 
-        const row = await BaseInformationModel.findOne({where: {identifier: user.identifier}});
+        const row = await BaseInformationModel.findOne({
+            where: {
+                identifier: user.identifier
+            }
+        });
 
         if (row === null) {
             throw new ResponseError(ResponseMessage.USER_NOT_REGISTERED, StatusCode.NOT_ACCEPTABLE);
@@ -66,7 +71,12 @@ export class RestService {
             throw new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST);
         }
 
-        const row = await UserModel.findOne({where: {identifier: user.identifier, email: user.email}});
+        const row = await UserModel.findOne({
+            where: {
+                identifier: user.identifier,
+                email: user.email
+            }
+        });
 
         if (row === null) {
             throw new ResponseError(ResponseMessage.NO_USER_FOUND, StatusCode.NOT_FOUND);
@@ -75,7 +85,11 @@ export class RestService {
         const realUser = row.toJSON() as User;
         const key = UtilService.generateRandomString();
 
-        let dbKey = await UserKeyModel.findOne({where: {identifier: realUser.identifier}});
+        let dbKey = await UserKeyModel.findOne({
+            where: {
+                identifier: realUser.identifier
+            }
+        });
 
         if (dbKey === null) {
             await UserKeyModel.create({identifier: realUser.identifier, key: key});
@@ -98,13 +112,21 @@ export class RestService {
     }
 
     static async authenticate(userKey: UserKey): Promise<any> {
-        const row = await UserKeyModel.findOne({where: {key: userKey.key}});
+        const row = await UserKeyModel.findOne({
+            where: {
+                key: userKey.key
+            }
+        });
 
         if (row === null) {
             throw new ResponseError(ResponseMessage.INVALID_AUTH_KEY, StatusCode.NOT_FOUND);
         }
 
-        const user = await UserModel.findOne({where: {identifier: row.toJSON().identifier}});
+        const user = await UserModel.findOne({
+            where: {
+                identifier: row.toJSON().identifier
+            }
+        });
 
         if (user === null) {
             throw new ResponseError(ResponseMessage.SOMETHING_WRONG, StatusCode.EXPECTATION_FAILED);
@@ -120,8 +142,16 @@ export class RestService {
      *                               User only
      ***********************************************************************************/
     static async getInformation(user: User): Promise<any> {
-        const infoRow = await BaseInformationModel.findOne({where: {identifier: user.identifier}});
-        const userRow = await UserModel.findOne({where: {id: user.id}});
+        const infoRow = await BaseInformationModel.findOne({
+            where: {
+                identifier: user.identifier
+            }
+        });
+        const userRow = await UserModel.findOne({
+            where: {
+                id: user.id
+            }
+        });
 
         if (infoRow === null || userRow === null) {
             return {};
@@ -133,7 +163,7 @@ export class RestService {
     static async getForms(user: User): Promise<any> {
         const scArticleISI = (await ScientificArticleISIModel.findAll({
             where: {userId: user.id},
-            order: ['createdAt'],
+            order: ['id'],
         })).map(item => item.toJSON());
 
         return {
@@ -145,18 +175,25 @@ export class RestService {
     static async getScientificArticleISI(user: User) {
         return (await ScientificArticleISIModel.findAll({
             where: {userId: user.id},
-            order: ['createdAt'],
-        }))
-            .map(item => item.toJSON());
+            order: ['id'],
+        })).map(item => item.toJSON());
     }
 
     static async addScientificArticleISI(user: User, data: ScientificArticleISI) {
-        await ScientificArticleISIModel.create({...data, userId: user.id});
+        await ScientificArticleISIModel.create({
+            ...data,
+            userId: user.id
+        });
         return new ResponseData(ResponseMessage.SUCCESS);
     }
 
     static async updateScientificArticleISI(user: User, data: ScientificArticleISI) {
-        const row = await ScientificArticleISIModel.findOne({where: {userId: user.id, id: data.id,}});
+        const row = await ScientificArticleISIModel.findOne({
+            where: {
+                userId: user.id,
+                id: data.id,
+            }
+        });
 
         if (row === null) {
             throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
@@ -167,7 +204,12 @@ export class RestService {
     }
 
     static async deleteScientificArticleISI(user: User, id: number) {
-        const row = await ScientificArticleISIModel.findOne({where: {userId: user.id, id: id,}});
+        const row = await ScientificArticleISIModel.findOne({
+            where: {
+                userId: user.id,
+                id: id,
+            }
+        });
 
         if (row === null) {
             throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
@@ -180,22 +222,73 @@ export class RestService {
     /************************************************************************************
      *                               Admin only
      ***********************************************************************************/
-    static async allUsers(): Promise<any> {
-        const rows = await UserModel.findAll();
+    static async allUsers(userExcept: User): Promise<any> {
+        const rows = await UserModel.findAll({
+            where: {
+                id: {[Op.not]: userExcept.id},
+            }
+        });
+
         return rows.map(item => item.toJSON());
+    }
+
+    static async deleteUser(id: number): Promise<any> {
+        const row = await UserModel.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async getBaseInformation() {
+        return (await BaseInformationModel.findAll({order: ['id']}))
+            .map(item => item.toJSON());
     }
 
     static async importBaseInformation(file: UploadedFile): Promise<any> {
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
 
-        (await BaseInformationModel.findAll()).map(item => item.destroy());
+        await BaseInformationModel.destroy({where: {}});
 
-        XLSX.utils.sheet_to_json(sheet)
-            .map(item => Object.values(item as any))
-            .map(item => BaseInformationModel.build({fullName: item[0], identifier: item[1]}))
-            .map(item => item.save());
+        const sheetRows = XLSX.utils.sheet_to_json(sheet)
+            .map(item => Object.values(item as any));
 
+        const dbRows: BaseInformationModel[] = [];
+
+        for (const item of sheetRows) {
+            const rowItem = await BaseInformationModel.create({
+                fullName: item[0],
+                identifier: item[1],
+                coordinator: item[2],
+                founding: item[3],
+            });
+            dbRows.push(rowItem);
+        }
+
+        const jsonRows = dbRows.map(item => item.toJSON());
+        return new ResponseData(jsonRows);
+    }
+
+    static async deleteBaseInformation(id: number) {
+        const row = await BaseInformationModel.findOne({
+            where: {
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
         return new ResponseData(ResponseMessage.SUCCESS);
     }
 

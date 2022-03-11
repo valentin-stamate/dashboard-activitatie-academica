@@ -26,8 +26,10 @@ async function initializeTables() {
      ***********************************************************************************/
 
     BaseInformationModel.init( {
-        fullName:   {type: DataTypes.STRING, allowNull: false,},
-        identifier: {type: DataTypes.STRING, allowNull: false, unique: true,},
+        fullName:    {type: DataTypes.STRING, allowNull: false,},
+        identifier:  {type: DataTypes.STRING, allowNull: false, unique: true,},
+        founding:    {type: DataTypes.STRING, allowNull: false,},
+        coordinator: {type: DataTypes.STRING, allowNull: false,},
     }, {...options, modelName: 'base_information'});
 
     UserModel.init({
@@ -89,14 +91,31 @@ export async function sequelizeInit() {
 
     await initializeTables();
 
-    const infoA = await BaseInformationModel.create({fullName: 'Stamate Valentin', identifier: 'valentin'});
-    const infoB = await BaseInformationModel.create({fullName: 'Andrei Amariei', identifier: 'andrei'});
+    const infoA = await BaseInformationModel.create({
+        fullName: 'Stamate Valentin',
+        identifier: 'valentin',
+        founding: 'Bursa',
+        coordinator: 'Lenuta Alboaie',
+    });
+    const infoB = await BaseInformationModel.create({
+        fullName: 'Andrei Amariei',
+        identifier: 'andrei',
+        founding: 'Taxa',
+        coordinator: 'Aries Marin',
+    });
+
     const userA = await UserModel.create({
         identifier: 'valentin',
         email: 'stamatevalentin125@gmail.com',
         alternativeEmail: 'valentin.stamate@info.uaic.ro',
-        admin: true
+        admin: true,
     });
+    const userB = await UserModel.create({
+        identifier: 'marin',
+        email: 'marin@gmail.com',
+        alternativeEmail: 'avramescu.marin@info.uaic.ro',
+    });
+
     const scArticleISI = await ScientificArticleISIModel.create({
         observations: 'Ana are mere',
         userId: 1,

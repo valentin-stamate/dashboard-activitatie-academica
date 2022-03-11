@@ -61,8 +61,13 @@ app.delete(`${RestEndpoints.SCIENTIFIC_ARTICLE_ISI}/:id`, Middleware.userMiddlew
 
 /** Admin only */
 app.get(RestEndpoints.USER, Middleware.adminMiddleware, RestController.allUsers);
-app.post(RestEndpoints.BASE_INFORMATION, Middleware.adminMiddleware, RestController.importBaseInformation)
-app.post(RestEndpoints.ORGANIZATION_EMAIL, Middleware.adminMiddleware, RestController.sendOrganizationEmail)
+app.delete(`${RestEndpoints.USER}/:id`, Middleware.adminMiddleware, RestController.deleteUser);
+
+app.get(RestEndpoints.BASE_INFORMATION, Middleware.adminMiddleware, RestController.getBaseInformation);
+app.post(RestEndpoints.BASE_INFORMATION, Middleware.adminMiddleware, RestController.importBaseInformation);
+app.delete(`${RestEndpoints.BASE_INFORMATION}/:id`, Middleware.adminMiddleware, RestController.deleteBaseInformation);
+
+app.post(RestEndpoints.ORGANIZATION_EMAIL, Middleware.adminMiddleware, RestController.sendOrganizationEmail);
 
 /************************************************************************************
  *                               Express Error Handling
