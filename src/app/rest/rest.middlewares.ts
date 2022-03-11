@@ -20,16 +20,21 @@ export class Middleware {
             return;
         }
 
-        const decoded = JwtService.verifyToken(token) as User;
+        const user = JwtService.verifyToken(token) as User;
 
-        if (decoded === null) {
+        if (user === null) {
             next(new ResponseError(ResponseMessage.INVALID_TOKEN, StatusCode.IM_A_TEAPOT));
             return;
         }
 
-        const user = await UserModel.findOne({where: {id: decoded.id}});
+        const row = await UserModel.findOne({where: {
+                id: user.id,
+                identifier: user.identifier,
+                email: user.email,
+                admin: user.admin,
+            }});
 
-        if (user === null) {
+        if (row === null) {
             next(new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.IM_A_TEAPOT));
             return;
         }
@@ -47,21 +52,26 @@ export class Middleware {
             return;
         }
 
-        const decoded = JwtService.verifyToken(token) as User;
+        const user = JwtService.verifyToken(token) as User;
 
-        if (!decoded) {
+        if (user === null) {
             next(new ResponseError(ResponseMessage.INVALID_TOKEN, StatusCode.IM_A_TEAPOT));
             return;
         }
 
-        const user = await UserModel.findOne({where: {id: decoded.id}});
+        const row = await UserModel.findOne({where: {
+                id: user.id,
+                identifier: user.identifier,
+                email: user.email,
+                admin: user.admin,
+            }});
 
-        if (user === null) {
+        if (row === null) {
             next(new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.IM_A_TEAPOT));
             return;
         }
 
-        if (!user.toJSON().admin) {
+        if (!row.toJSON().admin) {
             next(new ResponseError(ResponseMessage.ADMIN_ONLY, StatusCode.IM_A_TEAPOT));
             return;
         }

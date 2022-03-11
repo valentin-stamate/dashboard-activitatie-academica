@@ -8,10 +8,21 @@ import {ScientificArticleISI, User} from "../database/models";
 /** The lowest layer that have access to req & res
  * It uses RestService to handle logic stuff */
 export class RestController {
-
     /************************************************************************************
      *                               Visitor user only
      ***********************************************************************************/
+    static async check(req: Request<any>, res: Response, next: NextFunction) {
+        try {
+            const token = req.get('Authorization') as string;
+            const user = JwtService.verifyToken(token) as User;
+
+            const data = await RestService.check(user);
+            res.end(JSON.stringify(data));
+        } catch (err) {
+            next(err);
+        }
+    }
+
     static async signup(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const data = await RestService.signup(req.body);
@@ -48,6 +59,18 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
 
             const data = await RestService.getInformation(user);
+            res.end(JSON.stringify(data));
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async getForms(req: Request<any>, res: Response, next: NextFunction) {
+        try {
+            const token = req.get('Authorization') as string;
+            const user = JwtService.verifyToken(token) as User;
+
+            const data = await RestService.getForms(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -97,9 +120,9 @@ export class RestController {
         try {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as User;
-            const body = req.body as ScientificArticleISI;
+            const id = req.params.id;
 
-            const data = await RestService.deleteScientificArticleISI(user, body);
+            const data = await RestService.deleteScientificArticleISI(user, id);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);

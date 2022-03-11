@@ -42,6 +42,9 @@ if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
  ***********************************************************************************/
 app.use(fileUpload());
 
+/** Check the user */
+app.get(RestEndpoints.CHECK, RestController.check);
+
 /** Visitor only */
 app.post(RestEndpoints.SIGNUP, Middleware.visitorMiddleware, RestController.signup);
 app.post(RestEndpoints.LOGIN, Middleware.visitorMiddleware, RestController.login);
@@ -49,11 +52,12 @@ app.post(RestEndpoints.AUTH, Middleware.visitorMiddleware, RestController.authen
 
 /** User only */
 app.get(RestEndpoints.INFORMATION, Middleware.userMiddleware, RestController.getInformation);
+app.get(RestEndpoints.FORMS, Middleware.userMiddleware, RestController.getForms);
 
 app.get(RestEndpoints.SCIENTIFIC_ARTICLE_ISI, Middleware.userMiddleware, RestController.getScientificArticleISI);
 app.post(RestEndpoints.SCIENTIFIC_ARTICLE_ISI, Middleware.userMiddleware, RestController.addScientificArticleISI);
 app.patch(RestEndpoints.SCIENTIFIC_ARTICLE_ISI, Middleware.userMiddleware, RestController.updateScientificArticleISI);
-app.delete(RestEndpoints.SCIENTIFIC_ARTICLE_ISI, Middleware.userMiddleware, RestController.deleteScientificArticleISI);
+app.delete(`${RestEndpoints.SCIENTIFIC_ARTICLE_ISI}/:id`, Middleware.userMiddleware, RestController.deleteScientificArticleISI);
 
 /** Admin only */
 app.get(RestEndpoints.USER, Middleware.adminMiddleware, RestController.allUsers);

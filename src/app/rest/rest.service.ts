@@ -6,13 +6,28 @@ import {UtilService} from "../service/util.service";
 import {EmailDefaults, EmailTemplates, MailOptions, MailService} from "../service/email.service";
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
-import {Op} from "@sequelize/core";
+import {literal, Op} from "@sequelize/core";
 
 /** The layer where the logic holds */
 export class RestService {
     /************************************************************************************
      *                               Visitor only
      ***********************************************************************************/
+    static async check(user: User): Promise<any> {
+        const row = await UserModel.findOne({where: {
+                id: user.id,
+                identifier: user.identifier,
+                email: user.email,
+                admin: user.admin,
+            }});
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.NOT_FOUND);
+        }
+
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
     static async signup(user: User): Promise<any> {
         if (!user.identifier || !user.email || !user.alternativeEmail) {
             throw new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST);
@@ -105,18 +120,33 @@ export class RestService {
      *                               User only
      ***********************************************************************************/
     static async getInformation(user: User): Promise<any> {
-        const row = await BaseInformationModel.findOne({where: {identifier: user.identifier}});
+        const infoRow = await BaseInformationModel.findOne({where: {identifier: user.identifier}});
+        const userRow = await UserModel.findOne({where: {id: user.id}});
 
-        if (row === null) {
+        if (infoRow === null || userRow === null) {
             return {};
         }
 
-        return row.toJSON();
+        return {...infoRow.toJSON(), ...userRow.toJSON()};
+    }
+
+    static async getForms(user: User): Promise<any> {
+        const scArticleISI = (await ScientificArticleISIModel.findAll({
+            where: {userId: user.id},
+            order: ['createdAt'],
+        })).map(item => item.toJSON());
+
+        return {
+            scArticlesISI: scArticleISI,
+        };
     }
 
     /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
     static async getScientificArticleISI(user: User) {
-        return (await ScientificArticleISIModel.findAll({where: {userId: user.id}}))
+        return (await ScientificArticleISIModel.findAll({
+            where: {userId: user.id},
+            order: ['createdAt'],
+        }))
             .map(item => item.toJSON());
     }
 
@@ -136,8 +166,8 @@ export class RestService {
         return new ResponseData(ResponseMessage.SUCCESS);
     }
 
-    static async deleteScientificArticleISI(user: User, data: ScientificArticleISI) {
-        const row = await ScientificArticleISIModel.findOne({where: {userId: user.id, id: data.id,}});
+    static async deleteScientificArticleISI(user: User, id: number) {
+        const row = await ScientificArticleISIModel.findOne({where: {userId: user.id, id: id,}});
 
         if (row === null) {
             throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);

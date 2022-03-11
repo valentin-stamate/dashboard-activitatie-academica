@@ -1,10 +1,14 @@
 export enum RestEndpoints {
+    /** Check */
+    CHECK = '/api/check',
+
     /** Visitor */
     SIGNUP = '/api/signup',
     LOGIN = '/api/login',
     AUTH = '/api/auth',
 
     /** User */
+    FORMS = `/api/forms`,
     INFORMATION = '/api/information',
     SCIENTIFIC_ARTICLE_ISI = '/api/sc-article-isi',
 
