@@ -198,18 +198,18 @@ export class RestController {
             return;
         }
 
-        const emailTemplate = req.body.emailTemplate;
+        const email = req.body.email;
         const subject = req.body.subject;
         const from = req.body.from;
         const file = req.files.file as UploadedFile;
 
-        if (emailTemplate === undefined || subject === undefined || from === undefined) {
+        if (email === undefined || subject === undefined || from === undefined) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
         try {
-            const data = await RestService.sendOrganizationEmail(emailTemplate, from, subject, file);
+            const data = await RestService.sendOrganizationEmail(email, subject, from, file);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);

@@ -292,7 +292,7 @@ export class RestService {
         return new ResponseData(ResponseMessage.SUCCESS);
     }
 
-    static async sendOrganizationEmail(email: string, subject: string, from: string, file: UploadedFile): Promise<any> {
+    static async sendOrganizationEmail(htmlEmail: string, subject: string, from: string, file: UploadedFile): Promise<any> {
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
 
@@ -302,7 +302,6 @@ export class RestService {
 
         const headers = Object.keys(rows[0]);
 
-        let totalMails: string[] = [];
         for (let row of rows) {
             const rowMap: Map<string, any> = new Map(Object.entries(row));
             const email = rowMap.get(emailKey);
@@ -310,17 +309,19 @@ export class RestService {
             const emailRows = emailRowsMap.get(email);
             if (emailRows === undefined) {
                 emailRowsMap.set(email, [row]);
-                totalMails.push(email);
                 continue;
             }
 
             emailRows.push(row);
         }
 
-        let successfulSend: string[] = [];
-        let unsuccessfulSend: string[] = [];
+        const emailResults: {email: string, send: boolean}[] = [];
 
         for (const [email, rows] of emailRowsMap.entries()) {
+            if (email === undefined) {
+                throw new ResponseError(ResponseMessage.ALL_EMAILS_SHOULD_BE_PRESENT, StatusCode.NOT_FOUND);
+            }
+
             const sheet: WorkSheet = XLSX.utils.aoa_to_sheet([
                 headers
             ]);
@@ -341,20 +342,27 @@ export class RestService {
                     [],
                     [],
                     subject,
-                    email,
-                    email,
+                    htmlEmail,
+                    htmlEmail,
+                    [],
                     [{content: buffer, filename: `organizare_${dateStr}.xlsx`}]
 
                 ));
-                successfulSend.push(email);
+                emailResults.push({
+                    email: email,
+                    send: true,
+                });
             } catch (e) {
                 console.log(`Mail Error: ${email}`);
                 console.log(e);
-                unsuccessfulSend.push(email);
+                emailResults.push({
+                    email: email,
+                    send: false,
+                });
             }
         }
 
-        return {totalMails, successfulSend, unsuccessfulSend};
+        return emailResults;
     }
 }
 
@@ -378,6 +386,7 @@ export enum ResponseMessage {
     ADMIN_ONLY = 'Unauthorized, admin permission only',
     DATA_NOT_FOUND = 'Data not found',
     DATA_TAKEN = 'Some data is already taken',
+    ALL_EMAILS_SHOULD_BE_PRESENT = 'All emails should be completed in the column',
 }
 
 /** Contains the request responses */

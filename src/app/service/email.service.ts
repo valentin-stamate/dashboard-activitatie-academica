@@ -20,7 +20,7 @@ export class MailService {
 
         const info = await transporter.sendMail(options);
 
-        console.log(`Mail send to: ${options.to}`);
+        console.log(`Mail send to: ${options.to}, from ${options.from}`);
         console.log(info.messageId);
 
         return info;
