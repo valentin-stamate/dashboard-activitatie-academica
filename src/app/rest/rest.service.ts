@@ -1,5 +1,23 @@
-import {ScientificArticleISI, User, UserKey} from "../database/models";
-import {BaseInformationModel, ScientificArticleISIModel, UserKeyModel, UserModel} from "../database/sequelize";
+import {
+    AcademyMember,
+    AwardAndNomination,
+    Citation, DidacticActivity, EditorialMember,
+    ISIProceeding, OrganizedEvent, Patent, ResearchContract,
+    ScientificArticleBDI,
+    ScientificArticleISI,
+    ScientificBook, ScientificCommunication, Translation,
+    User,
+    UserKey, WithoutActivity
+} from "../database/models";
+import {
+    AcademyMemberModel,
+    AwardAndNominationModel,
+    BaseInformationModel, CitationModel, DidacticActivityModel, EditorialMemberModel,
+    ISIProceedingModel, OrganizedEventModel, PatentModel, ResearchContractModel, ScientificArticleBDIModel,
+    ScientificArticleISIModel, ScientificBookModel, ScientificCommunicationModel, TranslationModel,
+    UserKeyModel,
+    UserModel, WithoutActivityModel
+} from "../database/sequelize";
 import {UploadedFile} from "express-fileupload";
 import XLSX, {WorkBook, WorkSheet} from "xlsx";
 import {UtilService} from "../service/util.service";
@@ -162,7 +180,7 @@ export class RestService {
 
     static async getForms(user: User): Promise<any> {
         const scArticleISI = (await ScientificArticleISIModel.findAll({
-            where: {userId: user.id},
+            where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
 
@@ -174,7 +192,7 @@ export class RestService {
     /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
     static async getScientificArticleISI(user: User) {
         return (await ScientificArticleISIModel.findAll({
-            where: {userId: user.id},
+            where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
@@ -182,16 +200,16 @@ export class RestService {
     static async addScientificArticleISI(user: User, data: ScientificArticleISI) {
         await ScientificArticleISIModel.create({
             ...data,
-            userId: user.id
+            owner: user.identifier
         });
         return new ResponseData(ResponseMessage.SUCCESS);
     }
 
-    static async updateScientificArticleISI(user: User, data: ScientificArticleISI) {
+    static async updateScientificArticleISI(user: User, formId: number, data: ScientificArticleISI) {
         const row = await ScientificArticleISIModel.findOne({
             where: {
-                userId: user.id,
-                id: data.id,
+                owner: user.identifier,
+                id: formId,
             }
         });
 
@@ -206,7 +224,679 @@ export class RestService {
     static async deleteScientificArticleISI(user: User, id: number) {
         const row = await ScientificArticleISIModel.findOne({
             where: {
-                userId: user.id,
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** ISI proceedings */
+    static async getISIProceeding(user: User) {
+        return (await ISIProceedingModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addISIProceeding(user: User, data: ISIProceeding) {
+        await ISIProceedingModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateISIProceeding(user: User, formId: number, data: ISIProceeding) {
+        const row = await ISIProceedingModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteISIProceeding(user: User, id: number) {
+        const row = await ISIProceedingModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Articole științifice publicate în extenso în reviste indexate BDI și reviste de specialitate neindexate */
+    static async getScientificArticleBDI(user: User) {
+        return (await ScientificArticleBDIModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addScientificArticleBDI(user: User, data: ScientificArticleBDI) {
+        await ScientificArticleBDIModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateScientificArticleBDI(user: User, formId: number, data: ScientificArticleBDI) {
+        const row = await ScientificArticleBDIModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteScientificArticleBDI(user: User, id: number) {
+        const row = await ScientificArticleBDIModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Cărți ştiinţifice sau capitole de cărți publicate în edituri */
+    static async getScientificBook(user: User) {
+        return (await ScientificBookModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addScientificBook(user: User, data: ScientificBook) {
+        await ScientificBookModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateScientificBook(user: User, formId: number, data: ScientificBook) {
+        const row = await ScientificBookModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteScientificBook(user: User, id: number) {
+        const row = await ScientificBookModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Traduceri */
+    static async getTranslation(user: User) {
+        return (await TranslationModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addTranslation(user: User, data: Translation) {
+        await TranslationModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateTranslation(user: User, formId: number, data: Translation) {
+        const row = await TranslationModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteTranslation(user: User, id: number) {
+        const row = await TranslationModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Comunicări în manifestări științifice */
+    static async getScientificCommunication(user: User) {
+        return (await ScientificCommunicationModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addScientificCommunication(user: User, data: ScientificCommunication) {
+        await ScientificCommunicationModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateScientificCommunication(user: User, formId: number, data: ScientificCommunication) {
+        const row = await ScientificCommunicationModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteScientificCommunication(user: User, id: number) {
+        const row = await ScientificCommunicationModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Brevete */
+    static async getPatent(user: User) {
+        return (await PatentModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addPatent(user: User, data: Patent) {
+        await PatentModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updatePatent(user: User, formId: number, data: Patent) {
+        const row = await PatentModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deletePatent(user: User, id: number) {
+        const row = await PatentModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Contracte de cercetare */
+    static async getResearchContract(user: User) {
+        return (await ResearchContractModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addResearchContract(user: User, data: ResearchContract) {
+        await ResearchContractModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateResearchContract(user: User, formId: number, data: ResearchContract) {
+        const row = await ResearchContractModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteResearchContract(user: User, id: number) {
+        const row = await ResearchContractModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Citări */
+    static async getCitation(user: User) {
+        return (await CitationModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addCitation(user: User, data: Citation) {
+        await CitationModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateCitation(user: User, formId: number, data: Citation) {
+        const row = await CitationModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteCitation(user: User, id: number) {
+        const row = await CitationModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Premii si nominalizări */
+    static async getAwardAndNomination(user: User) {
+        return (await AwardAndNominationModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addAwardAndNomination(user: User, data: AwardAndNomination) {
+        await AwardAndNominationModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateAwardAndNomination(user: User, formId: number, data: AwardAndNomination) {
+        const row = await AwardAndNominationModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteAwardAndNomination(user: User, id: number) {
+        const row = await AwardAndNominationModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Membru în academii */
+    static async getAcademyMember(user: User) {
+        return (await AcademyMemberModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addAcademyMember(user: User, data: AcademyMember) {
+        await AcademyMemberModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateAcademyMember(user: User, formId: number, data: AcademyMember) {
+        const row = await AcademyMemberModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteAcademyMember(user: User, id: number) {
+        const row = await AcademyMemberModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Membru în echipa editorială */
+    static async getEditorialMember(user: User) {
+        return (await EditorialMemberModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addEditorialMember(user: User, data: EditorialMember) {
+        await EditorialMemberModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateEditorialMember(user: User, formId: number, data: EditorialMember) {
+        const row = await EditorialMemberModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteEditorialMember(user: User, id: number) {
+        const row = await EditorialMemberModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Evenimente organizate */
+    static async getOrganizedEvent(user: User) {
+        return (await OrganizedEventModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addOrganizedEvent(user: User, data: OrganizedEvent) {
+        await OrganizedEventModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateOrganizedEvent(user: User, formId: number, data: OrganizedEvent) {
+        const row = await OrganizedEventModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteOrganizedEvent(user: User, id: number) {
+        const row = await OrganizedEventModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Fără activitate științifică */
+    static async getWithoutActivity(user: User) {
+        return (await WithoutActivityModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addWithoutActivity(user: User, data: WithoutActivity) {
+        await WithoutActivityModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateWithoutActivity(user: User, formId: number, data: WithoutActivity) {
+        const row = await WithoutActivityModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteWithoutActivity(user: User, id: number) {
+        const row = await WithoutActivityModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: id,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.destroy();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    /** Activitate didactică */
+    static async getDidacticActivity(user: User) {
+        return (await DidacticActivityModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+    }
+
+    static async addDidacticActivity(user: User, data: DidacticActivity) {
+        await DidacticActivityModel.create({
+            ...data,
+            owner: user.identifier
+        });
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async updateDidacticActivity(user: User, formId: number, data: DidacticActivity) {
+        const row = await DidacticActivityModel.findOne({
+            where: {
+                owner: user.identifier,
+                id: formId,
+            }
+        });
+
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        await row.set({...data}).save();
+        return new ResponseData(ResponseMessage.SUCCESS);
+    }
+
+    static async deleteDidacticActivity(user: User, id: number) {
+        const row = await DidacticActivityModel.findOne({
+            where: {
+                owner: user.identifier,
                 id: id,
             }
         });

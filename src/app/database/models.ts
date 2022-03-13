@@ -57,7 +57,7 @@ export interface ScientificArticleISI {
     observations: string;
 
     id: number;
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -83,7 +83,7 @@ export interface ISIProceeding {
     endingPage: number;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -117,7 +117,7 @@ export interface ScientificArticleBDI {
     bdiDatabaseLink: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -143,7 +143,7 @@ export interface ScientificBook {
     isbn: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -171,7 +171,7 @@ export interface Translation {
     translationType: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -193,7 +193,7 @@ export interface ScientificCommunication {
     scientificManifestationLink: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -217,7 +217,7 @@ export interface Patent {
     country: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -244,7 +244,7 @@ export interface ResearchContract {
     contractType: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -278,7 +278,7 @@ export interface Citation {
     citations: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -300,7 +300,7 @@ export interface AwardAndNomination {
     awardedFor: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -318,7 +318,7 @@ export interface AcademyMember {
     memberType: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -340,7 +340,7 @@ export interface EditorialMember {
     nationalOrInternational: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -365,7 +365,7 @@ export interface OrganizedEvent {
     contactPerson: string;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -380,7 +380,7 @@ export interface WithoutActivity {
     id: number;
     observations: string;
     
-    userId: number;
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
@@ -395,8 +395,8 @@ export interface DidacticActivity {
     className: string;
     activityType: string;
     yearOfAttendingActivity: number;
-    identifier: string;
-    
+
+    owner: string;
     updatedAt: Date;
     createdAt: Date;
 }
