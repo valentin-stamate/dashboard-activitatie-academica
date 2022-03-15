@@ -1,13 +1,27 @@
 import {
-    AcademyMember,
-    AwardAndNomination,
-    Citation, DidacticActivity, EditorialMember,
-    ISIProceeding, OrganizedEvent, Patent, ResearchContract,
+    AcademyMember, AcademyMemberSheet,
+    AwardAndNomination, AwardAndNominationSheet,
+    Citation, CitationSheet,
+    DidacticActivity, DidacticActivitySheet,
+    EditorialMember, EditorialMemberSheet,
+    ISIProceeding,
+    ISIProceedingSheet,
+    OrganizedEvent, OrganizedEventSheet,
+    Patent, PatentSheet,
+    ResearchContract, ResearchContractSheet,
     ScientificArticleBDI,
+    ScientificArticleBDISheet,
     ScientificArticleISI,
-    ScientificBook, ScientificCommunication, Translation,
+    ScientificArticleISISheet,
+    ScientificBook,
+    ScientificBookSheet,
+    ScientificCommunication,
+    ScientificCommunicationSheet,
+    Translation,
+    TranslationSheet,
     User,
-    UserKey, WithoutActivity
+    UserKey,
+    WithoutActivity, WithoutActivitySheet
 } from "../database/models";
 import {
     AcademyMemberModel,
@@ -25,6 +39,7 @@ import {EmailDefaults, EmailTemplates, MailOptions, MailService} from "../servic
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
+import {XLSXWorkBookService, XLSXWorkSheetService} from "../service/xlsx.service";
 
 /** The layer where the logic holds */
 export class RestService {
@@ -183,9 +198,66 @@ export class RestService {
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
-
+        const isiProceedings = (await ISIProceedingModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const scArticleBDI = (await ScientificArticleBDIModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const scBook = (await ScientificBookModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const translation = (await TranslationModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const scCommunication = (await ScientificCommunicationModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const patent = (await PatentModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const researchContract = (await ResearchContractModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const citation = (await CitationModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const awardsNomination = (await AwardAndNominationModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const academyMember = (await AcademyMemberModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const editorialMember = (await EditorialMemberModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const organizedEvent = (await OrganizedEventModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const withoutActivity = (await WithoutActivityModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
+        const didacticActivity = (await DidacticActivityModel.findAll({
+            where: {owner: user.identifier},
+            order: ['id'],
+        })).map(item => item.toJSON());
         return {
-            scArticlesISI: scArticleISI,
+            scArticleISI,isiProceedings, scArticleBDI, scBook, translation, scCommunication,
+            patent, researchContract, citation, awardsNomination, academyMember, editorialMember,
+            organizedEvent, withoutActivity, didacticActivity,
         };
     }
 
@@ -1054,6 +1126,71 @@ export class RestService {
 
         return emailResults;
     }
+
+    static async exportForms() {
+        const XLSX = require('XLSX');
+
+        let scArticleISI =     (await ScientificArticleISIModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let isiProceedings =   (await ISIProceedingModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let scArticleBDI =     (await ScientificArticleBDIModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let scBook =           (await ScientificBookModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let translation =      (await TranslationModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let scCommunication =  (await ScientificCommunicationModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let patent =           (await PatentModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let researchContract = (await ResearchContractModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let citation =         (await CitationModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let awardsNomination = (await AwardAndNominationModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let academyMember =    (await AcademyMemberModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let editorialMember =  (await EditorialMemberModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let organizedEvent =   (await OrganizedEventModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let withoutActivity =  (await WithoutActivityModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let didacticActivity = (await DidacticActivityModel.findAll({order: ['id'],})).map(item => item.toJSON());
+
+        scArticleISI = scArticleISI.map(item => {delete item.id; return item});
+        isiProceedings = isiProceedings.map(item => {delete item.id; return item});
+        scArticleBDI = scArticleBDI.map(item => {delete item.id; return item});
+        scBook = scBook.map(item => {delete item.id; return item});
+        translation = translation.map(item => {delete item.id; return item});
+        scCommunication = scCommunication.map(item => {delete item.id; return item});
+        patent = patent.map(item => {delete item.id; return item});
+        researchContract = researchContract.map(item => {delete item.id; return item});
+        citation = citation.map(item => {delete item.id; return item});
+        awardsNomination = awardsNomination.map(item => {delete item.id; return item});
+        academyMember = academyMember.map(item => {delete item.id; return item});
+        editorialMember = editorialMember.map(item => {delete item.id; return item});
+        organizedEvent = organizedEvent.map(item => {delete item.id; return item});
+        withoutActivity = withoutActivity.map(item => {delete item.id; return item});
+        didacticActivity = didacticActivity.map(item => {delete item.id; return item});
+
+        const scISISheet = new XLSXWorkSheetService(ScientificArticleISISheet.header, ScientificArticleISISheet.sheetName, scArticleISI);
+        const isiProceedingsSheet = new XLSXWorkSheetService(ISIProceedingSheet.header, ISIProceedingSheet.sheetName, isiProceedings);
+        const scArticleBDISheet = new XLSXWorkSheetService(ScientificArticleBDISheet.header, ScientificArticleBDISheet.sheetName, scArticleBDI);
+        const scBookSheet = new XLSXWorkSheetService(ScientificBookSheet.header, ScientificBookSheet.sheetName, scBook);
+        const translationSheet = new XLSXWorkSheetService(TranslationSheet.header, TranslationSheet.sheetName, translation);
+        const scCommunicationSheet = new XLSXWorkSheetService(ScientificCommunicationSheet.header, ScientificCommunicationSheet.sheetName, scCommunication);
+        const patentSheet = new XLSXWorkSheetService(PatentSheet.header, PatentSheet.sheetName, patent);
+        const researchContractSheet = new XLSXWorkSheetService(ResearchContractSheet.header, ResearchContractSheet.sheetName, researchContract);
+        const citationSheet = new XLSXWorkSheetService(CitationSheet.header, CitationSheet.sheetName, citation);
+        const awardsNominationSheet = new XLSXWorkSheetService(AwardAndNominationSheet.header, AwardAndNominationSheet.sheetName, awardsNomination);
+        const academyMemberSheet = new XLSXWorkSheetService(AcademyMemberSheet.header, AcademyMemberSheet.sheetName, academyMember);
+        const editorialMemberSheet = new XLSXWorkSheetService(EditorialMemberSheet.header, EditorialMemberSheet.sheetName, editorialMember);
+        const organizedEventSheet = new XLSXWorkSheetService(OrganizedEventSheet.header, OrganizedEventSheet.sheetName, organizedEvent);
+        const withoutActivitySheet = new XLSXWorkSheetService(WithoutActivitySheet.header, WithoutActivitySheet.sheetName, withoutActivity);
+        const didacticActivitySheet = new XLSXWorkSheetService(DidacticActivitySheet.header, DidacticActivitySheet.sheetName, didacticActivity);
+
+        const sheets: XLSXWorkSheetService[] = [
+            scISISheet, isiProceedingsSheet, scArticleBDISheet, scBookSheet, translationSheet, scCommunicationSheet, patentSheet, researchContractSheet,
+            citationSheet, awardsNominationSheet, academyMemberSheet, editorialMemberSheet, organizedEventSheet, withoutActivitySheet, didacticActivitySheet
+        ];
+
+        const sheetBook = new XLSXWorkBookService();
+        sheetBook.appendSheets(sheets);
+
+        const workBook: WorkBook = sheetBook.getInstance();
+        const buffer = XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'});
+        return new Buffer(buffer);
+    }
+
 }
 
 /** The purpose of this class is to wrap the text messages returned

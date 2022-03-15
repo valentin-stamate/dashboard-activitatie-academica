@@ -14,6 +14,7 @@ import {
     Translation,
     User, WithoutActivity
 } from "../database/models";
+import {UtilService} from "../service/util.service";
 
 /** The lowest layer that have access to req & res
  * It uses RestService to handle logic stuff */
@@ -968,6 +969,20 @@ export class RestController {
         } catch (err) {
             next(err);
         }
+    }
 
+    static async exportForms(req: Request<any>, res: Response, next: NextFunction) {
+        try {
+            const fileBuffer: Buffer = await RestService.exportForms();
+
+            const fileName = `data_${UtilService.stringDate(new Date())}.xlsx`;
+
+            res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+            res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+            res.end(fileBuffer);
+        } catch (err) {
+            next(err);
+        }
     }
 }

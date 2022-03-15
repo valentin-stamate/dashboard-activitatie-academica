@@ -8,16 +8,6 @@ import {sequelizeInit} from "./app/database/sequelize";
 import {RestController} from "./app/rest/rest.controller";
 import {Middleware} from "./app/rest/rest.middlewares";
 import {RestEndpoints} from "./app/rest/rest.endpoints";
-import {
-  AcademyMember,
-  AwardAndNomination,
-  Citation, DidacticActivity, EditorialMember,
-  ISIProceeding, OrganizedEvent, Patent, ResearchContract,
-  ScientificArticleBDI,
-  ScientificBook,
-  ScientificCommunication,
-  Translation, WithoutActivity
-} from "./app/database/models";
 
 /** ENV */
 require('dotenv').config();
@@ -34,17 +24,17 @@ sequelizeInit();
 
 app.set('json spaces', 4);
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 // Handle logs in console during development
 if (process.env.NODE_ENV === 'development' || config.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-  app.use(cors({origin: ['http://localhost:4200', 'http://localhost:9876']}));
+    app.use(morgan('dev'));
+    app.use(cors({origin: ['http://localhost:4200', 'http://localhost:9876']}));
 }
 
 // Handle security and origin in production
 if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
-  app.use(helmet());
+    app.use(helmet());
 }
 
 /************************************************************************************
@@ -152,6 +142,7 @@ app.get(RestEndpoints.DIDACTIC_ACTIVITY, Middleware.userMiddleware, RestControll
 app.post(RestEndpoints.DIDACTIC_ACTIVITY, Middleware.userMiddleware, RestController.addDidacticActivity);
 app.patch(`${RestEndpoints.DIDACTIC_ACTIVITY}/:id`, Middleware.userMiddleware, RestController.updateDidacticActivity);
 app.delete(`${RestEndpoints.DIDACTIC_ACTIVITY}/:id`, Middleware.userMiddleware, RestController.deleteDidacticActivity);
+
 /** ------------------======================= Admin only =======================------------------ */
 app.get(RestEndpoints.USER, Middleware.adminMiddleware, RestController.allUsers);
 app.delete(`${RestEndpoints.USER}/:id`, Middleware.adminMiddleware, RestController.deleteUser);
@@ -161,6 +152,7 @@ app.post(RestEndpoints.BASE_INFORMATION, Middleware.adminMiddleware, RestControl
 app.delete(`${RestEndpoints.BASE_INFORMATION}/:id`, Middleware.adminMiddleware, RestController.deleteBaseInformation);
 
 app.post(RestEndpoints.ORGANIZATION_EMAIL, Middleware.adminMiddleware, RestController.sendOrganizationEmail);
+app.get(RestEndpoints.EXPORT_FORMS, Middleware.adminMiddleware, RestController.exportForms);
 
 /************************************************************************************
  *                               Express Error Handling
