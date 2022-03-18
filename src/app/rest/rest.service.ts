@@ -26,11 +26,23 @@ import {
 import {
     AcademyMemberModel,
     AwardAndNominationModel,
-    BaseInformationModel, CitationModel, DidacticActivityModel, EditorialMemberModel,
-    ISIProceedingModel, OrganizedEventModel, PatentModel, ResearchContractModel, ScientificArticleBDIModel,
-    ScientificArticleISIModel, ScientificBookModel, ScientificCommunicationModel, TranslationModel,
+    BaseInformationModel,
+    CitationModel,
+    DidacticActivityModel,
+    EditorialMemberModel,
+    ISIProceedingModel,
+    OrganizedEventModel,
+    PatentModel,
+    ProfessorModel,
+    ResearchContractModel,
+    ScientificArticleBDIModel,
+    ScientificArticleISIModel,
+    ScientificBookModel,
+    ScientificCommunicationModel,
+    TranslationModel,
     UserKeyModel,
-    UserModel, WithoutActivityModel
+    UserModel,
+    WithoutActivityModel
 } from "../database/sequelize";
 import {UploadedFile} from "express-fileupload";
 import XLSX, {WorkBook, WorkSheet} from "xlsx";
@@ -39,14 +51,14 @@ import {EmailDefaults, EmailTemplates, MailOptions, MailService} from "../servic
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
-import {XLSXWorkBookService, XLSXWorkSheetService} from "../service/xlsx.service";
+import {XLSXKeys, XLSXWorkBookService, XLSXWorkSheetService} from "../service/xlsx.service";
 
 /** The layer where the logic holds */
 export class RestService {
     /************************************************************************************
      *                               Visitor only
      ***********************************************************************************/
-    static async check(user: User): Promise<any> {
+    static async check(user: User): Promise<void> {
         const row = await UserModel.findOne({
             where: {
                 id: user.id,
@@ -59,10 +71,10 @@ export class RestService {
             throw new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.NOT_FOUND);
         }
 
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async signup(user: User): Promise<any> {
+    static async signup(user: User): Promise<void> {
         if (!user.identifier || !user.email || !user.alternativeEmail) {
             throw new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST);
         }
@@ -96,10 +108,10 @@ export class RestService {
         user = {...user, admin: false};
         await UserModel.build({...user}).save();
 
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async login(user: User): Promise<any> {
+    static async login(user: User): Promise<void> {
         if (!user.identifier || !user.email) {
             throw new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST);
         }
@@ -116,7 +128,7 @@ export class RestService {
         }
 
         const realUser = row.toJSON() as User;
-        const key = UtilService.generateRandomString();
+        const key = UtilService.generateRandomString(16);
 
         let dbKey = await UserKeyModel.findOne({
             where: {
@@ -141,13 +153,13 @@ export class RestService {
             [key],
             ));
 
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async authenticate(userKey: UserKey): Promise<any> {
+    static async authenticate(key: string): Promise<string> {
         const row = await UserKeyModel.findOne({
             where: {
-                key: userKey.key
+                key: key
             }
         });
 
@@ -166,9 +178,8 @@ export class RestService {
         }
 
         await row.destroy();
-        const jwt = JwtService.generateAccessToken(user.toJSON() as User);
 
-        return new ResponseData(jwt);
+        return JwtService.generateAccessToken(user.toJSON() as User);
     }
 
     /************************************************************************************
@@ -269,15 +280,15 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addScientificArticleISI(user: User, data: ScientificArticleISI) {
+    static async addScientificArticleISI(user: User, data: ScientificArticleISI): Promise<void> {
         await ScientificArticleISIModel.create({
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async updateScientificArticleISI(user: User, formId: number, data: ScientificArticleISI) {
+    static async updateScientificArticleISI(user: User, formId: number, data: ScientificArticleISI): Promise<void> {
         const row = await ScientificArticleISIModel.findOne({
             where: {
                 owner: user.identifier,
@@ -290,10 +301,10 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async deleteScientificArticleISI(user: User, id: number) {
+    static async deleteScientificArticleISI(user: User, id: number): Promise<void> {
         const row = await ScientificArticleISIModel.findOne({
             where: {
                 owner: user.identifier,
@@ -306,11 +317,11 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** ISI proceedings */
-    static async getISIProceeding(user: User) {
+    static async getISIProceeding(user: User): Promise<any> {
         return (await ISIProceedingModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
@@ -322,10 +333,10 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async updateISIProceeding(user: User, formId: number, data: ISIProceeding) {
+    static async updateISIProceeding(user: User, formId: number, data: ISIProceeding): Promise<void> {
         const row = await ISIProceedingModel.findOne({
             where: {
                 owner: user.identifier,
@@ -338,10 +349,10 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async deleteISIProceeding(user: User, id: number) {
+    static async deleteISIProceeding(user: User, id: number): Promise<void> {
         const row = await ISIProceedingModel.findOne({
             where: {
                 owner: user.identifier,
@@ -354,11 +365,11 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Articole științifice publicate în extenso în reviste indexate BDI și reviste de specialitate neindexate */
-    static async getScientificArticleBDI(user: User) {
+    static async getScientificArticleBDI(user: User): Promise<any> {
         return (await ScientificArticleBDIModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
@@ -370,10 +381,10 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async updateScientificArticleBDI(user: User, formId: number, data: ScientificArticleBDI) {
+    static async updateScientificArticleBDI(user: User, formId: number, data: ScientificArticleBDI): Promise<void> {
         const row = await ScientificArticleBDIModel.findOne({
             where: {
                 owner: user.identifier,
@@ -386,10 +397,10 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async deleteScientificArticleBDI(user: User, id: number) {
+    static async deleteScientificArticleBDI(user: User, id: number): Promise<void> {
         const row = await ScientificArticleBDIModel.findOne({
             where: {
                 owner: user.identifier,
@@ -402,11 +413,11 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Cărți ştiinţifice sau capitole de cărți publicate în edituri */
-    static async getScientificBook(user: User) {
+    static async getScientificBook(user: User): Promise<any> {
         return (await ScientificBookModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
@@ -418,10 +429,10 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async updateScientificBook(user: User, formId: number, data: ScientificBook) {
+    static async updateScientificBook(user: User, formId: number, data: ScientificBook): Promise<void> {
         const row = await ScientificBookModel.findOne({
             where: {
                 owner: user.identifier,
@@ -434,10 +445,10 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async deleteScientificBook(user: User, id: number) {
+    static async deleteScientificBook(user: User, id: number): Promise<void> {
         const row = await ScientificBookModel.findOne({
             where: {
                 owner: user.identifier,
@@ -450,11 +461,11 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Traduceri */
-    static async getTranslation(user: User) {
+    static async getTranslation(user: User): Promise<any> {
         return (await TranslationModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
@@ -466,10 +477,10 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
-    static async updateTranslation(user: User, formId: number, data: Translation) {
+    static async updateTranslation(user: User, formId: number, data: Translation): Promise<void> {
         const row = await TranslationModel.findOne({
             where: {
                 owner: user.identifier,
@@ -482,7 +493,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deleteTranslation(user: User, id: number) {
@@ -498,7 +509,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Comunicări în manifestări științifice */
@@ -514,7 +525,7 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async updateScientificCommunication(user: User, formId: number, data: ScientificCommunication) {
@@ -530,7 +541,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deleteScientificCommunication(user: User, id: number) {
@@ -546,7 +557,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Brevete */
@@ -562,7 +573,7 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async updatePatent(user: User, formId: number, data: Patent) {
@@ -578,7 +589,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deletePatent(user: User, id: number) {
@@ -594,7 +605,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Contracte de cercetare */
@@ -610,7 +621,7 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async updateResearchContract(user: User, formId: number, data: ResearchContract) {
@@ -626,7 +637,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deleteResearchContract(user: User, id: number) {
@@ -642,7 +653,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Citări */
@@ -658,7 +669,7 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async updateCitation(user: User, formId: number, data: Citation) {
@@ -674,7 +685,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deleteCitation(user: User, id: number) {
@@ -690,7 +701,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Premii si nominalizări */
@@ -706,7 +717,7 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async updateAwardAndNomination(user: User, formId: number, data: AwardAndNomination) {
@@ -722,7 +733,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deleteAwardAndNomination(user: User, id: number) {
@@ -738,7 +749,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Membru în academii */
@@ -754,7 +765,7 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async updateAcademyMember(user: User, formId: number, data: AcademyMember) {
@@ -770,7 +781,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deleteAcademyMember(user: User, id: number) {
@@ -786,7 +797,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Membru în echipa editorială */
@@ -802,7 +813,7 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async updateEditorialMember(user: User, formId: number, data: EditorialMember) {
@@ -818,7 +829,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deleteEditorialMember(user: User, id: number) {
@@ -834,7 +845,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Evenimente organizate */
@@ -850,7 +861,7 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async updateOrganizedEvent(user: User, formId: number, data: OrganizedEvent) {
@@ -866,7 +877,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deleteOrganizedEvent(user: User, id: number) {
@@ -882,7 +893,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Fără activitate științifică */
@@ -898,7 +909,7 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async updateWithoutActivity(user: User, formId: number, data: WithoutActivity) {
@@ -914,7 +925,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deleteWithoutActivity(user: User, id: number) {
@@ -930,7 +941,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /** Activitate didactică */
@@ -946,7 +957,7 @@ export class RestService {
             ...data,
             owner: user.identifier
         });
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async updateDidacticActivity(user: User, formId: number, data: DidacticActivity) {
@@ -962,7 +973,7 @@ export class RestService {
         }
 
         await row.set({...data}).save();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async deleteDidacticActivity(user: User, id: number) {
@@ -978,7 +989,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     /************************************************************************************
@@ -994,7 +1005,7 @@ export class RestService {
         return rows.map(item => item.toJSON());
     }
 
-    static async deleteUser(id: number): Promise<any> {
+    static async deleteUser(id: number): Promise<void> {
         const row = await UserModel.findOne({
             where: {
                 id: id
@@ -1006,7 +1017,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async getBaseInformation() {
@@ -1014,29 +1025,26 @@ export class RestService {
             .map(item => item.toJSON());
     }
 
-    static async importBaseInformation(file: UploadedFile): Promise<any> {
+    static async importBaseInformation(file: UploadedFile): Promise<void> {
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
 
         await BaseInformationModel.destroy({where: {}});
 
-        const sheetRows = XLSX.utils.sheet_to_json(sheet)
-            .map(item => Object.values(item as any));
-
-        const dbRows: BaseInformationModel[] = [];
+        const sheetRows: any = XLSX.utils.sheet_to_json(sheet)
 
         for (const item of sheetRows) {
-            const rowItem = await BaseInformationModel.create({
-                fullName: item[0],
-                identifier: item[1],
-                coordinator: item[2],
-                founding: item[3],
-            });
-            dbRows.push(rowItem);
+            const obj = {
+                fullName: item[XLSXKeys.NAME],
+                identifier: item[XLSXKeys.IDENTIFIER],
+                coordinator: item[XLSXKeys.COORDINATOR],
+                founding: item[XLSXKeys.FUNDING],
+            };
+
+            await BaseInformationModel.create(obj);
         }
 
-        const jsonRows = dbRows.map(item => item.toJSON());
-        return new ResponseData(jsonRows);
+        return;
     }
 
     static async deleteBaseInformation(id: number) {
@@ -1051,7 +1059,7 @@ export class RestService {
         }
 
         await row.destroy();
-        return new ResponseData(ResponseMessage.SUCCESS);
+        return;
     }
 
     static async sendOrganizationEmail(htmlEmail: string, subject: string, from: string, file: UploadedFile): Promise<any> {
@@ -1059,14 +1067,13 @@ export class RestService {
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
 
         const rows: any[] = XLSX.utils.sheet_to_json(sheet);
-        const emailKey = 'Email';
         const emailRowsMap: Map<string, any[]> = new Map();
 
         const headers = Object.keys(rows[0]);
 
         for (let row of rows) {
             const rowMap: Map<string, any> = new Map(Object.entries(row));
-            const email = rowMap.get(emailKey);
+            const email = rowMap.get(XLSXKeys.EMAIL);
 
             const emailRows = emailRowsMap.get(email);
             if (emailRows === undefined) {
@@ -1098,16 +1105,8 @@ export class RestService {
             const dateStr = UtilService.stringDate(new Date());
 
             try {
-                const response = await MailService.sendMail(new MailOptions(
-                    from,
-                    [email],
-                    [],
-                    [],
-                    subject,
-                    htmlEmail,
-                    htmlEmail,
-                    [],
-                    [{content: buffer, filename: `organizare_${dateStr}.xlsx`}]
+                await MailService.sendMail(new MailOptions(from, [email], [], [], subject, htmlEmail,
+                    htmlEmail, [], [{content: buffer, filename: `organizare_${dateStr}.xlsx`}]
 
                 ));
                 emailResults.push({
@@ -1127,7 +1126,7 @@ export class RestService {
         return emailResults;
     }
 
-    static async exportForms() {
+    static async exportForms(): Promise<Buffer> {
         const XLSX = require('XLSX');
 
         let scArticleISI =     (await ScientificArticleISIModel.findAll({order: ['id'],})).map(item => item.toJSON());
@@ -1187,23 +1186,145 @@ export class RestService {
         sheetBook.appendSheets(sheets);
 
         const workBook: WorkBook = sheetBook.getInstance();
-        const buffer = XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'});
-        return new Buffer(buffer);
+        const buffer = new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
+        return buffer;
     }
 
-}
+    static async getProfessors() {
+        return (await ProfessorModel.findAll()).map(item => item.toJSON());
+    }
 
-/** The purpose of this class is to wrap the text messages returned
- * into an object so that all successful requests will return JSON objects. */
-class ResponseData {
-    constructor(public data: any) {}
+    static async refreshProfessors(file: UploadedFile): Promise<void> {
+        const workBook = XLSX.read(file.data);
+        const sheet = workBook.Sheets[workBook.SheetNames[0]];
+
+        await ProfessorModel.destroy({where: {}});
+
+        const rows: any[] = XLSX.utils.sheet_to_json(sheet);
+
+        for (let row of rows) {
+            await ProfessorModel.create({name: row[XLSXKeys.NAME]});
+        }
+
+        return;
+    }
+
+    /* Timetable -> Individual Timetable -> Monthly Hours */
+    static async faz(timetableFile: UploadedFile): Promise<any> {
+        const timetableWorkBook = XLSX.read(timetableFile.data);
+        const timetableSheet = timetableWorkBook.Sheets[timetableWorkBook.SheetNames[0]];
+
+        const timeTablesRows: any[] = XLSX.utils.sheet_to_json(timetableSheet);
+
+        /* This timetable contains a list of rows for evey day of the week  */
+        const parsedTimetable: any = {};
+
+        const professorListMap: any = {};
+
+        let lastDay = '';
+        for (let row of timeTablesRows) {
+            /* This means is a day of the week */
+            if (Object.values(row).length === 1) {
+                lastDay = row[XLSXKeys.FROM];
+                parsedTimetable[lastDay] = [];
+                continue;
+            }
+
+            /* Just in case */
+            if (lastDay === '') {
+                continue;
+            }
+
+            let professorName = row[XLSXKeys.PROFESSOR_NAME];
+
+            if (professorName === undefined || typeof professorName !== "string") {
+                console.log('Something went wrong with row:')
+                console.log(row);
+                throw new ResponseError(ResponseMessage.INVALID_TIMETABLE, StatusCode.BAD_REQUEST);
+            }
+
+            const ratio = 1 / 24;
+            /* Here, 13.30 -> 13.50 */
+            row[XLSXKeys.FROM] = parseFloat((row[XLSXKeys.FROM] / ratio).toFixed(2));
+            row[XLSXKeys.TO] = parseFloat((row[XLSXKeys.TO] / ratio).toFixed(2));
+
+            professorName = professorName.trim();
+            row[XLSXKeys.PROFESSOR_NAME] = professorName;
+
+            parsedTimetable[lastDay].push(row);
+            professorListMap[professorName] = true;
+        }
+
+        /* Just all the professors */
+        const professorList = Object.keys(professorListMap);
+
+        /* Here, every professor will have it's own timetable */
+        const professorsTimetable: any = {};
+        for (let professor of professorList) {
+            professorsTimetable[professor] = {};
+
+            for (let day of Object.entries(parsedTimetable)) {
+                professorsTimetable[professor][day[0]] = (day[1] as any[]).filter(item => item[XLSXKeys.PROFESSOR_NAME] === professor);
+            }
+        }
+
+        /* For every professor the hours will be calculated for the full month */
+        const professorWeek = professorsTimetable['Prof. Dr. Iftene Adrian'];
+
+        const dayMap: any = {
+            0: 'Duminica',
+            1: 'Luni',
+            2: 'Marti',
+            3: 'Miercuri',
+            4: 'Joi',
+            5: 'Vineri',
+            6: 'Sambata',
+        }
+
+        const currentDate = new Date();
+        const monthDays = UtilService.daysInMonth(currentDate); // 1 - First Day
+        const currentMonth = currentDate.getMonth(); // January = 0
+        const currentYear = currentDate.getFullYear();
+
+        /* Loop through each day of the month and see if that professor has something to do */
+        const monthlyHours: any[] = [];
+        for (let i = 1; i <= monthDays; i++) {
+            const day = new Date(currentYear, currentMonth, i).getDay();
+
+            if (day === 0 || day === 6) {
+                continue;
+            }
+
+            const dayStr = dayMap[day];
+            const dayRows: any[] = professorWeek[dayStr];
+            if (dayRows.length !== 0) {
+                let totalDayMinutes = 0;
+
+                for (let item of dayRows) {
+                    const fromTime = item[XLSXKeys.FROM];
+                    const toTime = item[XLSXKeys.TO];
+                    totalDayMinutes += (toTime - fromTime) * 60;
+                }
+
+                monthlyHours.push({day: i, stringDay: dayStr, minutes: totalDayMinutes});
+            }
+        }
+
+        const sheet = XLSX.utils.json_to_sheet(monthlyHours);
+        const workBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workBook, sheet);
+
+        const buffer = new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
+
+        return buffer;
+    }
 }
 
 export enum ResponseMessage {
     SUCCESS = 'Success',
 
     INCOMPLETE_FORM = 'Please complete all the fields',
-    USER_NOT_REGISTERED = 'The user is not registered in out database',
+    USER_NOT_REGISTERED = 'The user is not registered in our database',
     NO_USER_FOUND = 'No user was found with these credentials',
     INVALID_AUTH_KEY = 'The authorization key provided is invalid',
     SOMETHING_WRONG = 'Something went wrong',
@@ -1214,6 +1335,8 @@ export enum ResponseMessage {
     DATA_NOT_FOUND = 'Data not found',
     DATA_TAKEN = 'Some data is already taken',
     ALL_EMAILS_SHOULD_BE_PRESENT = 'All emails should be completed in the column',
+    INVALID_TIMETABLE = 'Invalid timetable',
+    NO_KEY = 'There is no key present',
 }
 
 /** Contains the request responses */

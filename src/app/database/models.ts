@@ -31,6 +31,14 @@ export interface UserKey {
     updatedAt: Date;
 }
 
+export interface Professor {
+    id: number;
+    name: string;
+
+    createdAt: Date;
+    updatedAt: Date;
+}
+
 /************************************************************************************
  *                               Forms
  ***********************************************************************************/

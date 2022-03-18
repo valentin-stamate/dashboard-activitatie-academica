@@ -31,5 +31,7 @@ export enum RestEndpoints {
     BASE_INFORMATION = '/api/base-information',
     ORGANIZATION_EMAIL = '/api/organization-email',
     EXPORT_FORMS = '/api/export-forms',
+    FAZ = '/api/faz',
+    PROFESSORS = '/api/professors',
 
 }

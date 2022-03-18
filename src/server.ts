@@ -48,7 +48,7 @@ app.get(RestEndpoints.CHECK, RestController.check);
 /**  ------------------======================= Visitor Only =======================------------------ */
 app.post(RestEndpoints.SIGNUP, Middleware.visitorMiddleware, RestController.signup);
 app.post(RestEndpoints.LOGIN, Middleware.visitorMiddleware, RestController.login);
-app.post(RestEndpoints.AUTH, Middleware.visitorMiddleware, RestController.authenticate);
+app.get(`${RestEndpoints.AUTH}/:key`, Middleware.visitorMiddleware, RestController.authenticate);
 
 /** ------------------======================= User Only =======================------------------ */
 app.get(RestEndpoints.INFORMATION, Middleware.userMiddleware, RestController.getInformation);
@@ -153,6 +153,12 @@ app.delete(`${RestEndpoints.BASE_INFORMATION}/:id`, Middleware.adminMiddleware, 
 
 app.post(RestEndpoints.ORGANIZATION_EMAIL, Middleware.adminMiddleware, RestController.sendOrganizationEmail);
 app.get(RestEndpoints.EXPORT_FORMS, Middleware.adminMiddleware, RestController.exportForms);
+
+app.post(RestEndpoints.PROFESSORS, Middleware.adminMiddleware, RestController.refreshProfessors);
+app.get(RestEndpoints.PROFESSORS, Middleware.adminMiddleware, RestController.getProfessors);
+
+app.post(RestEndpoints.FAZ, Middleware.adminMiddleware, RestController.faz);
+
 
 /************************************************************************************
  *                               Express Error Handling

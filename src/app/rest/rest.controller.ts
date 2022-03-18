@@ -25,10 +25,15 @@ export class RestController {
     static async check(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
+
+            if (token === undefined) {
+                throw new ResponseError(ResponseMessage.NO_AUTH_TOKEN, StatusCode.BAD_REQUEST);
+            }
+
             const user = JwtService.verifyToken(token) as User;
 
-            const data = await RestService.check(user);
-            res.end(JSON.stringify(data));
+            await RestService.check(user);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -36,8 +41,10 @@ export class RestController {
 
     static async signup(req: Request<any>, res: Response, next: NextFunction) {
         try {
-            const data = await RestService.signup(req.body);
-            res.end(JSON.stringify(data));
+            await RestService.signup(req.body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -45,8 +52,8 @@ export class RestController {
 
     static async login(req: Request<any>, res: Response, next: NextFunction) {
         try {
-            const data = await RestService.login(req.body);
-            res.end(JSON.stringify(data));
+            await RestService.login(req.body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -54,8 +61,15 @@ export class RestController {
 
     static async authenticate(req: Request<any>, res: Response, next: NextFunction) {
         try {
-            const data = await RestService.authenticate(req.body);
-            res.end(JSON.stringify(data));
+            const key = req.params.key;
+
+            if (key === undefined) {
+                throw new ResponseError(ResponseMessage.NO_KEY, StatusCode.BAD_REQUEST);
+            }
+
+            const jwt = await RestService.authenticate(key);
+
+            res.end(jwt);
         } catch (err) {
             next(err);
         }
@@ -107,8 +121,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as ScientificArticleISI;
 
-            const data = await RestService.addScientificArticleISI(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addScientificArticleISI(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -121,8 +137,8 @@ export class RestController {
             const body = req.body as ScientificArticleISI;
             const formId = req.params.id;
 
-            const data = await RestService.updateScientificArticleISI(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateScientificArticleISI(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -134,8 +150,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteScientificArticleISI(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteScientificArticleISI(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -160,8 +176,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as ISIProceeding;
 
-            const data = await RestService.addISIProceeding(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addISIProceeding(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -174,8 +192,8 @@ export class RestController {
             const body = req.body as ISIProceeding;
             const formId = req.params.id;
 
-            const data = await RestService.updateISIProceeding(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateISIProceeding(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -187,8 +205,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteISIProceeding(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteISIProceeding(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -213,8 +231,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as ScientificArticleBDI;
 
-            const data = await RestService.addScientificArticleBDI(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addScientificArticleBDI(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -227,8 +247,8 @@ export class RestController {
             const body = req.body as ScientificArticleBDI;
             const formId = req.params.id;
 
-            const data = await RestService.updateScientificArticleBDI(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateScientificArticleBDI(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -240,8 +260,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteScientificArticleBDI(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteScientificArticleBDI(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -266,8 +286,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as ScientificBook;
 
-            const data = await RestService.addScientificBook(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addScientificBook(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -280,8 +302,8 @@ export class RestController {
             const body = req.body as ScientificBook;
             const formId = req.params.id;
 
-            const data = await RestService.updateScientificBook(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateScientificBook(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -293,8 +315,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteScientificBook(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteScientificBook(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -319,8 +341,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as Translation;
 
-            const data = await RestService.addTranslation(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addTranslation(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -333,8 +357,8 @@ export class RestController {
             const body = req.body as Translation;
             const formId = req.params.id;
 
-            const data = await RestService.updateTranslation(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateTranslation(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -346,8 +370,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteTranslation(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteTranslation(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -372,8 +396,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as ScientificCommunication;
 
-            const data = await RestService.addScientificCommunication(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addScientificCommunication(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -386,8 +412,8 @@ export class RestController {
             const body = req.body as ScientificCommunication;
             const formId = req.params.id;
 
-            const data = await RestService.updateScientificCommunication(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateScientificCommunication(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -399,8 +425,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteScientificCommunication(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteScientificCommunication(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -425,8 +451,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as Patent;
 
-            const data = await RestService.addPatent(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addPatent(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -439,8 +467,8 @@ export class RestController {
             const body = req.body as Patent;
             const formId = req.params.id;
 
-            const data = await RestService.updatePatent(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updatePatent(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -452,8 +480,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deletePatent(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deletePatent(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -478,8 +506,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as ResearchContract;
 
-            const data = await RestService.addResearchContract(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addResearchContract(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -492,8 +522,8 @@ export class RestController {
             const body = req.body as ResearchContract;
             const formId = req.params.id;
 
-            const data = await RestService.updateResearchContract(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateResearchContract(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -505,8 +535,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteResearchContract(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteResearchContract(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -531,8 +561,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as Citation;
 
-            const data = await RestService.addCitation(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addCitation(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -545,8 +577,8 @@ export class RestController {
             const body = req.body as Citation;
             const formId = req.params.id;
 
-            const data = await RestService.updateCitation(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateCitation(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -558,8 +590,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteCitation(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteCitation(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -584,8 +616,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as AwardAndNomination;
 
-            const data = await RestService.addAwardAndNomination(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addAwardAndNomination(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -598,8 +632,8 @@ export class RestController {
             const body = req.body as AwardAndNomination;
             const formId = req.params.id;
 
-            const data = await RestService.updateAwardAndNomination(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateAwardAndNomination(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -611,8 +645,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteAwardAndNomination(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteAwardAndNomination(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -637,8 +671,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as AcademyMember;
 
-            const data = await RestService.addAcademyMember(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addAcademyMember(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -651,8 +687,8 @@ export class RestController {
             const body = req.body as AcademyMember;
             const formId = req.params.id;
 
-            const data = await RestService.updateAcademyMember(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateAcademyMember(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -664,8 +700,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteAcademyMember(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteAcademyMember(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -690,8 +726,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as EditorialMember;
 
-            const data = await RestService.addEditorialMember(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addEditorialMember(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -704,8 +742,8 @@ export class RestController {
             const body = req.body as EditorialMember;
             const formId = req.params.id;
 
-            const data = await RestService.updateEditorialMember(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateEditorialMember(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -717,8 +755,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteEditorialMember(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteEditorialMember(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -743,8 +781,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as OrganizedEvent;
 
-            const data = await RestService.addOrganizedEvent(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addOrganizedEvent(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -757,8 +797,8 @@ export class RestController {
             const body = req.body as OrganizedEvent;
             const formId = req.params.id;
 
-            const data = await RestService.updateOrganizedEvent(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateOrganizedEvent(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -770,8 +810,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteOrganizedEvent(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteOrganizedEvent(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -796,8 +836,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as WithoutActivity;
 
-            const data = await RestService.addWithoutActivity(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addWithoutActivity(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -810,8 +852,8 @@ export class RestController {
             const body = req.body as WithoutActivity;
             const formId = req.params.id;
 
-            const data = await RestService.updateWithoutActivity(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateWithoutActivity(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -823,8 +865,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteWithoutActivity(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteWithoutActivity(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -849,8 +891,10 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const body = req.body as DidacticActivity;
 
-            const data = await RestService.addDidacticActivity(user, body);
-            res.end(JSON.stringify(data));
+            await RestService.addDidacticActivity(user, body);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -863,8 +907,8 @@ export class RestController {
             const body = req.body as DidacticActivity;
             const formId = req.params.id;
 
-            const data = await RestService.updateDidacticActivity(user, formId, body);
-            res.end(JSON.stringify(data));
+            await RestService.updateDidacticActivity(user, formId, body);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -876,8 +920,8 @@ export class RestController {
             const user = JwtService.verifyToken(token) as User;
             const id = req.params.id;
 
-            const data = await RestService.deleteDidacticActivity(user, id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteDidacticActivity(user, id);
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -902,9 +946,9 @@ export class RestController {
     static async deleteUser(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const id = req.params.id;
+            await RestService.deleteUser(id);
 
-            const data = await RestService.deleteUser(id);
-            res.end(JSON.stringify(data));
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -926,11 +970,17 @@ export class RestController {
             return;
         }
 
-        const file = req.files.file as UploadedFile;
-
         try {
-            const data = await RestService.importBaseInformation(file);
-            res.end(JSON.stringify(data));
+            const file = req.files.file as UploadedFile;
+
+            if (file === undefined) {
+                throw new ResponseError(ResponseMessage.INCOMPLETE_FORM);
+            }
+
+            await RestService.importBaseInformation(file);
+
+            res.statusCode = StatusCode.CREATED;
+            res.end();
         } catch (err) {
             next(err);
         }
@@ -940,25 +990,25 @@ export class RestController {
         try {
             const id = req.params.id;
 
-            const data = await RestService.deleteBaseInformation(id);
-            res.end(JSON.stringify(data));
+            await RestService.deleteBaseInformation(id);
+            res.end();
         } catch (err) {
             next(err);
         }
     }
 
     static async sendOrganizationEmail(req: Request<any>, res: Response, next: NextFunction) {
-        if (!req.files) {
+        if (req.files === undefined) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
+        const file = req.files.file as UploadedFile;
         const email = req.body.email;
         const subject = req.body.subject;
         const from = req.body.from;
-        const file = req.files.file as UploadedFile;
 
-        if (email === undefined || subject === undefined || from === undefined) {
+        if (email === undefined || subject === undefined || from === undefined || file === undefined) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -981,6 +1031,47 @@ export class RestController {
             res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
             res.end(fileBuffer);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async getProfessors(req: Request<any>, res: Response, next: NextFunction) {
+        try {
+            const data = await RestService.getProfessors();
+            res.end(JSON.stringify(data));
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async refreshProfessors(req: Request<any>, res: Response, next: NextFunction) {
+        if (req.files === undefined) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        const file = req.files.file as UploadedFile;
+
+        try {
+            const data = await RestService.refreshProfessors(file);
+            res.end(JSON.stringify(data));
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async faz(req: Request<any>, res: Response, next: NextFunction) {
+        if (req.files === undefined) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        const timetableFile = req.files.orar as UploadedFile;
+
+        try {
+            const data = await RestService.faz(timetableFile);
+            res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
         }

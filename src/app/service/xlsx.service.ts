@@ -68,3 +68,14 @@ export class XLSXWorkSheetService {
     }
 
 }
+
+export enum XLSXKeys {
+    NAME = 'Nume',
+    IDENTIFIER = 'Nr. Matricol',
+    COORDINATOR = 'Coordonator',
+    FUNDING = 'Finantare',
+    EMAIL = 'Email',
+    PROFESSOR_NAME = 'Profesor',
+    FROM = 'De la',
+    TO = 'Pana la',
+}

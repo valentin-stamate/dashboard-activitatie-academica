@@ -1,15 +1,4 @@
 import {DataTypes, Model, Sequelize} from '@sequelize/core';
-import {
-    AcademyMember,
-    AwardAndNomination,
-    Citation, DidacticActivity, EditorialMember,
-    ISIProceeding, OrganizedEvent,
-    Patent, ResearchContract,
-    ScientificArticleBDI,
-    ScientificBook,
-    ScientificCommunication,
-    Translation, WithoutActivity
-} from "./models";
 
 require('dotenv').config();
 const env = process.env as any;
@@ -29,6 +18,7 @@ const options = {
 export class BaseInformationModel extends Model {}
 export class UserModel extends Model {}
 export class UserKeyModel extends Model {}
+export class ProfessorModel extends Model {}
 
 export class ScientificArticleISIModel extends Model {}
 export class ISIProceedingModel extends Model {}
@@ -70,6 +60,10 @@ UserKeyModel.init({
     identifier: {type: DataTypes.STRING, unique: true, allowNull: false,},
     key:        {type: DataTypes.STRING, unique: true, allowNull: false,},
 }, {...options, modelName: 'user_key'});
+
+ProfessorModel.init({
+    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+}, {...options, modelName: 'professors'});
 
 /************************************************************************************
  *                                    Forms
