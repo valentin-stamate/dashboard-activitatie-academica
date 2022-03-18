@@ -20,7 +20,6 @@ import {
     Translation,
     TranslationSheet,
     User,
-    UserKey,
     WithoutActivity, WithoutActivitySheet
 } from "../database/models";
 import {
@@ -52,6 +51,8 @@ import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
 import {XLSXKeys, XLSXWorkBookService, XLSXWorkSheetService} from "../service/xlsx.service";
+import JSZip from "jszip";
+import fs from "fs";
 
 /** The layer where the logic holds */
 export class RestService {
@@ -1268,8 +1269,8 @@ export class RestService {
             }
         }
 
-        /* For every professor the hours will be calculated for the full month */
-        const professorWeek = professorsTimetable['Prof. Dr. Iftene Adrian'];
+        /* Prepare the zip instance */
+        const zip = new JSZip();
 
         const dayMap: any = {
             0: 'Duminica',
@@ -1281,42 +1282,62 @@ export class RestService {
             6: 'Sambata',
         }
 
+        /* Get the number of days in the current month, month count, current year
+        * in order to loop through all the month days. */
         const currentDate = new Date();
         const monthDays = UtilService.daysInMonth(currentDate); // 1 - First Day
         const currentMonth = currentDate.getMonth(); // January = 0
         const currentYear = currentDate.getFullYear();
 
-        /* Loop through each day of the month and see if that professor has something to do */
-        const monthlyHours: any[] = [];
-        for (let i = 1; i <= monthDays; i++) {
-            const day = new Date(currentYear, currentMonth, i).getDay();
+        /* For every professor the hours will be calculated for the full month */
+        for (let professor of professorList) {
+            const professorWeek = professorsTimetable[professor];
 
-            if (day === 0 || day === 6) {
-                continue;
-            }
+            /* Loop through each day of the month and see if that professor has something to do */
+            const monthlyHours: any[] = [];
+            for (let i = 1; i <= monthDays; i++) {
+                const day = new Date(currentYear, currentMonth, i).getDay();
 
-            const dayStr = dayMap[day];
-            const dayRows: any[] = professorWeek[dayStr];
-            if (dayRows.length !== 0) {
-                let totalDayMinutes = 0;
-
-                for (let item of dayRows) {
-                    const fromTime = item[XLSXKeys.FROM];
-                    const toTime = item[XLSXKeys.TO];
-                    totalDayMinutes += (toTime - fromTime) * 60;
+                if (day === 0 || day === 6) {
+                    continue;
                 }
 
-                monthlyHours.push({day: i, stringDay: dayStr, minutes: totalDayMinutes});
+                const dayStr = dayMap[day];
+                const dayRows: any[] = professorWeek[dayStr];
+                if (dayRows.length !== 0) {
+                    let totalDayMinutes = 0;
+
+                    for (let item of dayRows) {
+                        const fromTime = item[XLSXKeys.FROM];
+                        const toTime = item[XLSXKeys.TO];
+                        totalDayMinutes += (toTime - fromTime) * 60;
+                    }
+
+                    const hours = totalDayMinutes / 60;
+                    monthlyHours.push({'Data': i, 'Ziua': dayStr, 'Ore': hours});
+                }
             }
+
+            const sheet = XLSX.utils.json_to_sheet(monthlyHours);
+            const workBook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workBook, sheet);
+
+            const excelBuffer = new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
+
+            /* Append the buffer to the zip */
+            zip.file(`${professor}.xlsx`, excelBuffer, {compression: 'DEFLATE'});
         }
 
-        const sheet = XLSX.utils.json_to_sheet(monthlyHours);
-        const workBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workBook, sheet);
+        /* Get the zip buffer in order to send it */
+        const zipBuffer = await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' } );
 
-        const buffer = new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
+        /* Just for testing */
+        const fs = require('fs');
+        fs.writeFile( 'test.zip', zipBuffer, function( err: any ){
+            console.log(err);
+        } );
 
-        return buffer;
+        return zipBuffer;
     }
 }
 

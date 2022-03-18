@@ -1070,8 +1070,14 @@ export class RestController {
         const timetableFile = req.files.orar as UploadedFile;
 
         try {
-            const data = await RestService.faz(timetableFile);
-            res.end(JSON.stringify(data));
+            const fileBuffer = await RestService.faz(timetableFile);
+
+            const fileName = `faz_${UtilService.stringDate(new Date())}.zip`;
+
+            res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+            res.setHeader('Content-type', 'application/octet-stream');
+
+            res.end(fileBuffer);
         } catch (err) {
             next(err);
         }

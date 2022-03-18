@@ -70,6 +70,7 @@ export class XLSXWorkSheetService {
 }
 
 export enum XLSXKeys {
+    DAY = 'Ziua',
     NAME = 'Nume',
     IDENTIFIER = 'Nr. Matricol',
     COORDINATOR = 'Coordonator',
