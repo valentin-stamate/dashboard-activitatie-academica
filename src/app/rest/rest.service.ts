@@ -52,6 +52,7 @@ import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
 import {XLSXKeys, XLSXWorkBookService, XLSXWorkSheetService} from "../service/xlsx.service";
 import JSZip from "jszip";
+import {FAZData, FAZDayActivity, FAZService} from "../service/faz.service";
 
 
 /** The layer where the logic holds */
@@ -1294,7 +1295,7 @@ export class RestService {
             const professorWeek = professorsTimetable[professor];
 
             /* Loop through each day of the month and see if that professor has something to do */
-            const monthlyHours: any[] = [];
+            const monthlyDays: FAZDayActivity[] = [];
             for (let i = 1; i <= monthDays; i++) {
                 const day = new Date(currentYear, currentMonth, i).getDay();
 
@@ -1306,50 +1307,51 @@ export class RestService {
                 const dayRows: any[] = professorWeek[dayStr];
                 if (dayRows.length !== 0) {
                     let totalDayMinutes = 0;
+                    let disciplina = dayRows[0]['Disciplina'];
+                    let intervals = [];
 
                     for (let item of dayRows) {
                         const fromTime = item[XLSXKeys.FROM];
                         const toTime = item[XLSXKeys.TO];
+
+                         intervals.push(`${fromTime}-${toTime}`);
+
                         totalDayMinutes += (toTime - fromTime) * 60;
                     }
 
                     const hours = totalDayMinutes / 60;
-                    monthlyHours.push({'Data': i, 'Ziua': dayStr, 'Ore': hours});
+
+                    const finalRow: FAZDayActivity = {
+                        day: i, interval: intervals.join(', '), discipline: disciplina, year: currentYear,
+                        cad: ' ', sad: ' ', td: ' ', csrd: '', hours: hours, weekDay: dayStr,
+                    };
+
+                    monthlyDays.push(finalRow);
                 }
             }
 
-            const sheet = XLSX.utils.json_to_sheet(monthlyHours);
-            const workBook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workBook, sheet);
+            const nameItems = professor.split(' ');
+            const professorPosition = nameItems.splice(0, 2).join(' ');
+            const professorName = nameItems.join(' ');
 
-            const excelBuffer = new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
+            const fazProfessorData: FAZData = {
+                professorName: professorName,
+                professorPosition: professorPosition,
+                month: currentMonth,
+                year: currentYear,
+                monthlyActivity: monthlyDays,
+            };
+
+            const docxBuffer = FAZService.getDOCXBuffer(fazProfessorData);
 
             /* Append the buffer to the zip */
-            // zip.file(`${professor}.xlsx`, excelBuffer, {compression: 'DEFLATE'});
+            zip.file(`FAZ ${professor}.docx`, docxBuffer, {compression: 'DEFLATE'});
         }
 
-        // /* Get the zip buffer in order to send it */
-        // const zipBuffer = await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' } );
-        //
-        // /* Just for testing */
-        // const fs = require('fs');
-        // fs.writeFile( 'test.zip', zipBuffer, function( err: any ){
-        //     console.log(err);
-        // } );
+        /* Get the zip buffer in order to send it */
+        const zipBuffer = await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' } );
 
-
-
-        // const wordBuffer = await generateDOCX(html);
-        // fs.writeFile('test.docx', wordBuffer, () => {});
-
-
-        // const docxBuffer = await docx.Packer.toBuffer(doc);
-        // const fs = require('fs');
-        // fs.writeFile( 'test.docx', docxBuffer, function( err: any ){
-        //     console.log(err);
-        // } );
-
-        return new Buffer('');
+        return zipBuffer;
     }
 }
 
