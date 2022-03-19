@@ -109,3 +109,5 @@
 * From Fields NodeMailer : https://stackoverflow.com/a/33950100/10805602
 * Month number of days : https://stackoverflow.com/a/1185068/10805602
 * Archive buffers into zip file : https://stackoverflow.com/a/46888173/10805602
+* Html to PDF : https://stackoverflow.com/a/46524273/10805602
+* Html to DOCX : https://www.npmjs.com/package/html-to-docx

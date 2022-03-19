@@ -159,7 +159,8 @@ app.get(RestEndpoints.PROFESSORS, Middleware.adminMiddleware, RestController.get
 
 app.post(RestEndpoints.FAZ, Middleware.adminMiddleware, RestController.faz);
 
-
+/* Test */
+app.post('/test', RestController.test);
 /************************************************************************************
  *                               Express Error Handling
  ***********************************************************************************/

@@ -52,7 +52,7 @@ import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
 import {XLSXKeys, XLSXWorkBookService, XLSXWorkSheetService} from "../service/xlsx.service";
 import JSZip from "jszip";
-import fs from "fs";
+
 
 /** The layer where the logic holds */
 export class RestService {
@@ -1325,19 +1325,31 @@ export class RestService {
             const excelBuffer = new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
 
             /* Append the buffer to the zip */
-            zip.file(`${professor}.xlsx`, excelBuffer, {compression: 'DEFLATE'});
+            // zip.file(`${professor}.xlsx`, excelBuffer, {compression: 'DEFLATE'});
         }
 
-        /* Get the zip buffer in order to send it */
-        const zipBuffer = await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' } );
+        // /* Get the zip buffer in order to send it */
+        // const zipBuffer = await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' } );
+        //
+        // /* Just for testing */
+        // const fs = require('fs');
+        // fs.writeFile( 'test.zip', zipBuffer, function( err: any ){
+        //     console.log(err);
+        // } );
 
-        /* Just for testing */
-        const fs = require('fs');
-        fs.writeFile( 'test.zip', zipBuffer, function( err: any ){
-            console.log(err);
-        } );
 
-        return zipBuffer;
+
+        // const wordBuffer = await generateDOCX(html);
+        // fs.writeFile('test.docx', wordBuffer, () => {});
+
+
+        // const docxBuffer = await docx.Packer.toBuffer(doc);
+        // const fs = require('fs');
+        // fs.writeFile( 'test.docx', docxBuffer, function( err: any ){
+        //     console.log(err);
+        // } );
+
+        return new Buffer('');
     }
 }
 
