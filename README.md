@@ -111,3 +111,6 @@
 * Archive buffers into zip file : https://stackoverflow.com/a/46888173/10805602
 * Html to PDF : https://stackoverflow.com/a/46524273/10805602
 * Html to DOCX : https://www.npmjs.com/package/html-to-docx
+* DOCX library : https://github.com/dolanmiu/docx
+* DOCX documentation : https://docx.js.org/
+* DOCX table demo : https://github.com/dolanmiu/docx/blob/master/demo/32-merge-and-shade-table-cells.ts

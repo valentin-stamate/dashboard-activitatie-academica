@@ -1142,20 +1142,20 @@ export class RestController {
         /* Header */
         const headerLeft = new Paragraph({
             children: [
-                new TextRun({text: 'Universitatea "Alexandru Ioan Cuza" din Iași', font: 'Calibri', break: 1}),
-                new TextRun({text: 'Facultatea de Informatică', font: 'Calibri', break: 1}),
-                new TextRun({text: 'Școala Doctorală', font: 'Calibri', break: 1}),
-                new TextRun({text: `Nume și Prenume: ${professorName}`, font: 'Calibri', break: 1}),
-                new TextRun({text: `Grad didactic: ${position}`, font: 'Calibri', break: 1}),
-                new TextRun({text: `Poziția în statul de funcțiuni: ${anotherPosition}`, font: 'Calibri'}),
+                new TextRun({text: 'Universitatea "Alexandru Ioan Cuza" din Iași', font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: 'Facultatea de Informatică', font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: 'Școala Doctorală', font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: `Nume și Prenume: ${professorName}`, font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: `Grad didactic: ${position}`, font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: `Poziția în statul de funcțiuni: ${anotherPosition}`, font: 'Calibri', size: 21, break: 1}),
             ],
         });
 
         const headerRight = new Paragraph({
             children: [
-                new TextRun({text: 'Se aprobă,', font: 'Calibri', break: 1}),
-                new TextRun({text: 'Director Școala Doctorală,', font: 'Calibri', break: 1}),
-                new TextRun({text: 'Prof. univ. dr. Lenuța Alboaie', font: 'Calibri', break: 1}),
+                new TextRun({text: 'Se aprobă,', font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: 'Director Școala Doctorală,', font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: 'Prof. univ. dr. Lenuța Alboaie', font: 'Calibri', size: 21, break: 1}),
             ],
             alignment: AlignmentType.RIGHT,
         });
@@ -1178,270 +1178,162 @@ export class RestController {
             width: tableFill,
         });
 
+        function customParagraph(text: string, options: any = {}) {
+            return new Paragraph({
+                children: [new TextRun({text: text, font: 'Calibri', ...options})]
+            });
+        }
+
         /* Title */
         const title = new Paragraph({
             children: [
-                new TextRun({text: 'FIȘA DE ACTIVITATE ZILNICĂ', font: 'Calibri', size: 30, bold: true, break: 1}),
-                new TextRun({text: 'Activități normate în statul de funcții', font: 'Calibri', break: 1}),
-                new TextRun({text: `LUNA ${month} ANUL ${year}`, font: 'Calibri', break: 1}),
+                new TextRun({text: 'FIȘA DE ACTIVITATE ZILNICĂ', font: 'Calibri', size: 36, bold: true, break: 1}),
+                new TextRun({text: 'Activități normate în statul de funcții', font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: `Luna ${month} Anul ${year}`, font: 'Calibri', size: 21, break: 1}),
             ],
             alignment: AlignmentType.CENTER
         });
 
-
-        const space = {
-            top: {
-                color: "auto",
-                space: 1,
-                value: "single",
-                size: 6,
-            },
-            bottom: {
-                color: "auto",
-                space: 1,
-                value: "single",
-                size: 6,
-            },
-            left: {
-                color: "auto",
-                space: 1,
-                value: "single",
-                size: 6,
-            },
-            right: {
-                color: "auto",
-                space: 1,
-                value: "single",
-                size: 6,
-            }
-        };
+        const tableMargins = {
+            top: convertInchesToTwip(0.10),
+            bottom: convertInchesToTwip(0.10),
+            right: convertInchesToTwip(0.10),
+            left: convertInchesToTwip(0.10),
+        }
 
         /* Table */
         const fazTable = new Table({
             rows: [
+                /* Header */
                 new TableRow({
                     children: [
                         new TableCell({
-                            children: [new Paragraph({text: 'Ziua'})],
+                            rowSpan: 2,
+                            children: [customParagraph('Ziua')],
                         }),
                         new TableCell({
-                            children: [new Paragraph('Intervalul Orar')],
+                            rowSpan: 2,
+                            children: [customParagraph('Intervalul Orar')],
                         }),
                         new TableCell({
-                            children: [new Paragraph('Disciplina și specializare')],
+                            rowSpan: 2,
+                            children: [customParagraph('Disciplina și specializare')],
                         }),
                         new TableCell({
-                            children: [new Paragraph('Anul')],
+                            rowSpan: 2,
+                            children: [customParagraph('Anul')],
                         }),
                         new TableCell({
-                            children: [new Paragraph('Nivelul de studii și tip de activitate Doctorat\n')],
+                            rowSpan: 1,
+                            columnSpan: 4,
+                            children: [customParagraph('Nivelul de studii și tip de activitate Doctorat')],
                         }),
                         new TableCell({
-                            children: [new Paragraph('Număr de ore fizice efectuate pe săptămână Din fisierul excel verificat cu orarul')],
+                            rowSpan: 2,
+                            children: [customParagraph('Număr de ore fizice efectuate pe săptămână Din fisierul excel verificat cu orarul')],
                         }),
                     ]
                 }),
                 new TableRow({
                     children: [
                         new TableCell({
-                            children: [new Paragraph('Ziua')],
+                            rowSpan: 1,
+                            children: [customParagraph('Curs (CAD')],
                         }),
                         new TableCell({
-                            children: [new Paragraph('Ziua')],
-                            rowSpan: 3,
+                            rowSpan: 1,
+                            children: [customParagraph('Seminar (SAD)')],
+                        }),
+                        new TableCell({
+                            rowSpan: 1,
+                            children: [customParagraph('Îndrumare teza de doctorat (TD)')],
+                        }),
+                        new TableCell({
+                            rowSpan: 1,
+                            children: [customParagraph('Membru comisie îndrumare doctorat (CSRD')],
+                        }),
+                    ]
+                }),
+
+                /* The actual values */
+                new TableRow({
+                    children: [
+                        new TableCell({
+                            children: [customParagraph('12')],
+                        }),
+                        new TableCell({
+                            children: [customParagraph('12-14')],
+                        }),
+                        new TableCell({
+                            children: [customParagraph('Membru comisie îndrumare doctorat')],
+                        }),
+                        new TableCell({
+                            children: [customParagraph('2021')],
+                        }),
+                        new TableCell({
+                            children: [customParagraph('')],
+                        }),
+                        new TableCell({
+                            children: [customParagraph('')],
+                        }),
+                        new TableCell({
+                            children: [customParagraph('')],
+                        }),
+                        new TableCell({
+                            children: [customParagraph('CSRD')],
+                        }),
+                        new TableCell({
+                            children: [customParagraph('1.08')],
+                        }),
+                    ]
+                }),
+
+                /* Result */
+                new TableRow({
+                    children: [
+                        new TableCell({
+                            columnSpan: 4,
+                            children: [customParagraph('Total ore fizice:')]
+                        }),
+                        new TableCell({children: [customParagraph('')]}),
+                        new TableCell({children: [customParagraph('')]}),
+                        new TableCell({children: [customParagraph('')]}),
+                        new TableCell({
+                            children: [customParagraph('4.32 CSRD')]
+                        }),
+                        new TableCell({
+                            children: [customParagraph('4.32')]
                         }),
                     ]
                 }),
             ],
             width: tableFill,
+            margins: tableMargins,
         });
 
+        const fazNote = customParagraph('În semestrul I, anul universitar 2021-2022 datorită virusului COVID-19, activitatea didactică s-a desfășurat în sistem online conform orarului stabilit.');
 
-
-
-
-
-
-        // const title = new Paragraph({
-        //     children: [
-        //         new TextRun
-        //     ]
-        // });
-
-        const table5 = new Table({
-            rows: [
-                new TableRow({
-                    children: [
-                        new TableCell({
-                            children: [new Paragraph("0,0")],
-                        }),
-                        new TableCell({
-                            children: [new Paragraph("0,1")],
-                            rowSpan: 2,
-                        }),
-                        new TableCell({
-                            children: [new Paragraph("0,2")],
-                        }),
-                    ],
-                }),
-                new TableRow({
-                    children: [
-                        new TableCell({
-                            children: [new Paragraph("1,0")],
-                        }),
-                        new TableCell({
-                            children: [new Paragraph("1,2")],
-                            rowSpan: 2,
-                        }),
-                    ],
-                }),
-                new TableRow({
-                    children: [
-                        new TableCell({
-                            children: [new Paragraph("2,0")],
-                        }),
-                        new TableCell({
-                            children: [new Paragraph("2,1")],
-                        }),
-                    ],
-                }),
+        const footer = new Paragraph({
+            children: [
+                new TextRun({text: `Functie ${professorName}`, font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: 'Semnătura', font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: '_______________', font: 'Calibri', size: 21, break: 1}),
             ],
-            width: {
-                size: 100,
-                type: WidthType.PERCENTAGE,
-            },
+            alignment: AlignmentType.END
         });
-
-        const borders = {
-            top: {
-                size: 1,
-                color: "FF0000",
-            },
-            bottom: {
-                size: 1,
-                color: "FF0000",
-            },
-            left: {
-                size: 1,
-                color: "FF0000",
-            },
-            right: {
-                size: 1,
-                color: "FF0000",
-            },
-        };
-
-        const table6 = new Table({
-            rows: [
-                new TableRow({
-                    children: [
-                        new TableCell({
-                            borders,
-                            children: [new Paragraph("0,0")],
-                            rowSpan: 2,
-                        }),
-                        new TableCell({
-                            borders,
-                            children: [new Paragraph("0,1")],
-                        }),
-                    ],
-                }),
-                new TableRow({
-                    children: [
-                        new TableCell({
-                            borders,
-                            children: [new Paragraph("1,1")],
-                            cellSpan: 2,
-                        }),
-                    ],
-                }),
-                new TableRow({
-                    children: [
-                        new TableCell({
-                            borders,
-                            children: [new Paragraph("2,0")],
-                        }),
-                    ],
-                }),
-            ],
-            width: {
-                size: 100,
-                type: WidthType.PERCENTAGE,
-            },
-        });
-        const name = new TextRun({
-            text: "Name:",
-            bold: true,
-            font: "Calibri",
-            allCaps: true,
-        });
-
 
         const doc = new Document({
             sections: [
                 {
                     children: [
-                        new Table({
-                            rows: [
-                                new TableRow({
-                                    children: [
-                                        new TableCell({
-                                            children: [new Paragraph({}), new Paragraph({})],
-                                            verticalAlign: VerticalAlign.CENTER,
-                                        }),
-                                        new TableCell({
-                                            children: [new Paragraph({}), new Paragraph({})],
-                                            verticalAlign: VerticalAlign.CENTER,
-                                        }),
-                                        new TableCell({
-                                            children: [new Paragraph({ text: "bottom to top" }), new Paragraph({})],
-                                            textDirection: TextDirection.BOTTOM_TO_TOP_LEFT_TO_RIGHT,
-                                        }),
-                                        new TableCell({
-                                            children: [new Paragraph({ text: "top to bottom" }), new Paragraph({})],
-                                            textDirection: TextDirection.TOP_TO_BOTTOM_RIGHT_TO_LEFT,
-                                        }),
-                                    ],
-                                }),
-                                new TableRow({
-                                    children: [
-                                        new TableCell({
-                                            children: [
-                                                new Paragraph({
-                                                    text:
-                                                        "Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah",
-                                                    heading: HeadingLevel.HEADING_1,
-                                                }),
-                                            ],
-                                        }),
-                                        new TableCell({
-                                            children: [
-                                                new Paragraph({
-                                                    text: "This text should be in the middle of the cell",
-                                                }),
-                                            ],
-                                            verticalAlign: VerticalAlign.CENTER,
-                                        }),
-                                        new TableCell({
-                                            children: [
-                                                new Paragraph({
-                                                    text: "Text above should be vertical from bottom to top",
-                                                }),
-                                            ],
-                                            verticalAlign: VerticalAlign.CENTER,
-                                        }),
-                                        new TableCell({
-                                            children: [
-                                                new Paragraph({
-                                                    text: "Text above should be vertical from top to bottom",
-                                                }),
-                                            ],
-                                            verticalAlign: VerticalAlign.CENTER,
-                                        }),
-                                    ],
-                                }),
-                            ],
-                        }),
+                        headerTable,
+                        title,
+                        new Paragraph(''),
+                        new Paragraph(''),
+                        fazTable,
+                        fazNote,
+                        new Paragraph(''),
+                        footer,
                     ],
                 },
             ],
