@@ -41,8 +41,8 @@ export class UtilService {
 
     static stringDate(date: Date) {
         const d = date;
-        return `${this.dateNumber(d.getDate())}.${this.dateNumber(d.getMonth() + 1)}.${d.getFullYear()} `
-            + `${this.dateNumber(d.getHours())}:${this.dateNumber(d.getMinutes())}:${this.dateNumber(d.getSeconds())}`;
+        return `${this.dateNumber(d.getDate())}${this.dateNumber(d.getMonth() + 1)}${d.getFullYear()}_`
+            + `${this.dateNumber(d.getHours())}${this.dateNumber(d.getMinutes())}${this.dateNumber(d.getSeconds())}`;
     }
 
     /* 6 -> 06 */
