@@ -209,8 +209,8 @@ export class RestService {
         }
 
         return {
-            information: infoRow.toJSON(),
-            userInformation: userRow.toJSON()
+            userInformation: userRow.toJSON(),
+            baseInformation: infoRow.toJSON(),
         };
     }
 
@@ -1005,11 +1005,13 @@ export class RestService {
     /************************************************************************************
      *                               Admin only
      ***********************************************************************************/
+    /* Get all the users except to the one that is making the request */
     static async allUsers(userExcept: User): Promise<any> {
         const rows = await UserModel.findAll({
             where: {
                 id: {[Op.not]: userExcept.id},
-            }
+            },
+            order: ['id'],
         });
 
         return rows.map(item => item.toJSON());
@@ -1030,12 +1032,17 @@ export class RestService {
         return;
     }
 
-    static async getBaseInformation() {
-        return (await BaseInformationModel.findAll({order: ['id']}))
-            .map(item => item.toJSON());
+    /* Get all base information except to the one that is making the request */
+    static async getBaseInformation(user: User) {
+        return (await BaseInformationModel.findAll({
+            where: {
+                identifier: {[Op.not]: user.identifier},
+            },
+            order: ['id'],
+        })).map(item => item.toJSON());
     }
 
-    static async importBaseInformation(file: UploadedFile): Promise<void> {
+    static async importBaseInformation(file: UploadedFile): Promise<number> {
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
 
@@ -1043,6 +1050,7 @@ export class RestService {
 
         const sheetRows: any = XLSX.utils.sheet_to_json(sheet)
 
+        let rowsCreated = 0;
         for (const item of sheetRows) {
             const obj = {
                 fullName: item[ExcelHeaders.NAME],
@@ -1052,9 +1060,10 @@ export class RestService {
             };
 
             await BaseInformationModel.create(obj);
+            rowsCreated++;
         }
 
-        return;
+        return rowsCreated;
     }
 
     static async deleteBaseInformation(id: number) {

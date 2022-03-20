@@ -31,12 +31,14 @@ export class RestController {
      *                               Visitor user only
      ***********************************************************************************/
     static async check(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const token = req.get('Authorization') as string;
+        const token = req.get('Authorization') as string;
 
-            if (token === undefined) {
-                throw new ResponseError(ResponseMessage.NO_AUTH_TOKEN, StatusCode.BAD_REQUEST);
-            }
+        if (token === undefined) {
+            next(new ResponseError(ResponseMessage.NO_AUTH_TOKEN, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        try {
 
             const user = JwtService.verifyToken(token) as User;
 
@@ -68,13 +70,14 @@ export class RestController {
     }
 
     static async authenticate(req: Request<any>, res: Response, next: NextFunction) {
+        const key = req.params.key;
+
+        if (key === undefined) {
+            next(new ResponseError(ResponseMessage.NO_KEY, StatusCode.BAD_REQUEST));
+            return;
+        }
+
         try {
-            const key = req.params.key;
-
-            if (key === undefined) {
-                throw new ResponseError(ResponseMessage.NO_KEY, StatusCode.BAD_REQUEST);
-            }
-
             const jwt = await RestService.authenticate(key);
 
             res.end(jwt);
@@ -964,7 +967,10 @@ export class RestController {
 
     static async getBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
         try {
-            const data = await RestService.getBaseInformation();
+            const token = req.get('Authorization') as string;
+            const user = JwtService.verifyToken(token) as User;
+
+            const data = await RestService.getBaseInformation(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -978,17 +984,20 @@ export class RestController {
             return;
         }
 
+        const file = req.files.file as UploadedFile;
+
+        if (file === undefined) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM));
+            return;
+        }
+
         try {
-            const file = req.files.file as UploadedFile;
-
-            if (file === undefined) {
-                throw new ResponseError(ResponseMessage.INCOMPLETE_FORM);
-            }
-
-            await RestService.importBaseInformation(file);
+            const rowsCreated = await RestService.importBaseInformation(file);
 
             res.statusCode = StatusCode.CREATED;
-            res.end();
+
+            res.setHeader('Content-Type', 'text/plain');
+            res.end(`${rowsCreated}`);
         } catch (err) {
             next(err);
         }
@@ -1006,7 +1015,7 @@ export class RestController {
     }
 
     static async sendOrganizationEmail(req: Request<any>, res: Response, next: NextFunction) {
-        if (req.files === undefined) {
+        if (!req.files) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -1054,7 +1063,7 @@ export class RestController {
     }
 
     static async refreshProfessors(req: Request<any>, res: Response, next: NextFunction) {
-        if (req.files === undefined) {
+        if (!req.files) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -1070,12 +1079,17 @@ export class RestController {
     }
 
     static async faz(req: Request<any>, res: Response, next: NextFunction) {
-        if (req.files === undefined) {
+        if (!req.files) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
-        const timetableFile = req.files.orar as UploadedFile;
+        const timetableFile = req.files.timetable as UploadedFile;
+
+        if (timetableFile === undefined) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
 
         try {
             const fileBuffer = await RestService.faz(timetableFile);
