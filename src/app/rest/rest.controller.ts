@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {ResponseMessage, RestService, StatusCode} from "./rest.service";
+import {RestService} from "./rest.service";
 import {UploadedFile} from "express-fileupload";
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
@@ -22,7 +22,7 @@ import {
     WithoutActivity
 } from "../database/models";
 import {UtilService} from "../service/util.service";
-import {AlignmentType} from "docx";
+import {ResponseMessage, StatusCode} from "./rest.util";
 
 /** The lowest layer that have access to req & res
  * It uses RestService to handle logic stuff */
@@ -1091,7 +1091,7 @@ export class RestController {
         }
     }
 
-    static async test(req: Request<any>, res: Response, next: NextFunction) {
+    static async test(req: Request<any>, res: Response) {
         res.end("It's just a test dummy")
     }
 }

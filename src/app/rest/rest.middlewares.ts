@@ -1,18 +1,18 @@
 import {NextFunction, Request, Response,} from "express";
-import {ResponseMessage, StatusCode} from "./rest.service";
 import {UserModel} from "../database/sequelize";
 import {JwtService} from "../service/jwt.service";
 import {User} from "../database/models";
+import {ResponseMessage, StatusCode} from "./rest.util";
 
 export class Middleware {
     /** Middleware for unauthorized users. In this case every request can pass. */
-    static async visitorMiddleware (req: Request<any>, res: Response<any>, next: NextFunction) {
+    static async visitorMiddleware (req: Request<any>, res: Response, next: NextFunction) {
         res.setHeader('Content-Type', 'application/json');
         next();
     }
 
     /** Middleware for authorized users. In order for the request to pass the user should exist. */
-    static async userMiddleware (req: Request<any>, res: Response<any>, next: NextFunction) {
+    static async userMiddleware (req: Request<any>, res: Response, next: NextFunction) {
         const token = req.get('Authorization');
 
         if (!token) {
@@ -44,7 +44,7 @@ export class Middleware {
     }
 
     /** Middleware for admin users. */
-    static async adminMiddleware (req: Request<any>, res: Response<any>, next: NextFunction) {
+    static async adminMiddleware (req: Request<any>, res: Response, next: NextFunction) {
         const token = req.get('Authorization');
 
         if (!token) {

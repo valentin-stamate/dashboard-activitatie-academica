@@ -1,26 +1,4 @@
 export class UtilService {
-    static mergeArrays(arr: any[][]) {
-        let list: any = [];
-
-        for (const item of arr) {
-            list = list.concat(item);
-        }
-
-        return list;
-    }
-
-    static mergeProperties(...args: any): any {
-        let merged = {};
-        for (let i in args) {
-            merged = {...merged, ...args[i]};
-        }
-
-        return merged;
-    }
-
-    static sleep(ms: number) {
-        return new Promise(s => setTimeout(s, ms));
-    }
 
     static generateRandomString(length: number = 64) {
         let result = '';
@@ -31,12 +9,6 @@ export class UtilService {
         }
 
         return result;
-    }
-
-    static stringFormat(string: string, args: any[]) {
-        return string.replace(/{([0-9]+)}/g, function (match, index) {
-            return typeof args[index] == 'undefined' ? match : args[index];
-        });
     }
 
     static stringDate(date: Date) {
@@ -52,25 +24,6 @@ export class UtilService {
         }
 
         return '' + number;
-    }
-
-    static fullTrim(str: string) {
-        return str.replace(/\s+/g, ' ').trim();
-    }
-
-    static arrayToString(array: any[], delimiter: string = ',') {
-        let str = '';
-
-        if (array.length === 0) {
-            return str;
-        }
-
-        for (let i = 0; i < array.length - 1; i++) {
-            str += `${array[i]}${delimiter}`;
-        }
-
-        str += `${array[array.length - 1]}`;
-        return str;
     }
 
     static daysInMonth(date: Date) {

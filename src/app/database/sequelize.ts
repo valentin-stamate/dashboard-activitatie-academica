@@ -395,32 +395,32 @@ export async function sequelizeInit() {
 
     await initializeTables();
 
-    const infoA = await BaseInformationModel.create({
+    await BaseInformationModel.create({
         fullName: 'Stamate Valentin',
         identifier: 'valentin',
         founding: 'Bursa',
         coordinator: 'Lenuta Alboaie',
     });
-    const infoB = await BaseInformationModel.create({
+    await BaseInformationModel.create({
         fullName: 'Andrei Amariei',
         identifier: 'andrei',
         founding: 'Taxa',
         coordinator: 'Aries Marin',
     });
 
-    const userA = await UserModel.create({
+    await UserModel.create({
         identifier: 'valentin',
         email: 'stamatevalentin125@gmail.com',
         alternativeEmail: 'valentin.stamate@info.uaic.ro',
         admin: true,
     });
-    const userB = await UserModel.create({
+    await UserModel.create({
         identifier: 'marin',
         email: 'marin@gmail.com',
         alternativeEmail: 'avramescu.marin@info.uaic.ro',
     });
 
-    const scArticleISI = await ScientificArticleISIModel.create({
+    await ScientificArticleISIModel.create({
         observations: 'Ana are mere',
         owner: 'valentin',
     });

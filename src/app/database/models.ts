@@ -1,5 +1,3 @@
-import { Model } from "@sequelize/core/types";
-
 export interface BaseInformation {
     id: number;
     fullName: string;

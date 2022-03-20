@@ -1,14 +1,22 @@
 import {
-    AcademyMember, AcademyMemberSheet,
-    AwardAndNomination, AwardAndNominationSheet,
-    Citation, CitationSheet,
-    DidacticActivity, DidacticActivitySheet,
-    EditorialMember, EditorialMemberSheet,
+    AcademyMember,
+    AcademyMemberSheet,
+    AwardAndNomination,
+    AwardAndNominationSheet,
+    Citation,
+    CitationSheet,
+    DidacticActivity,
+    DidacticActivitySheet,
+    EditorialMember,
+    EditorialMemberSheet,
     ISIProceeding,
     ISIProceedingSheet,
-    OrganizedEvent, OrganizedEventSheet,
-    Patent, PatentSheet,
-    ResearchContract, ResearchContractSheet,
+    OrganizedEvent,
+    OrganizedEventSheet,
+    Patent,
+    PatentSheet,
+    ResearchContract,
+    ResearchContractSheet,
     ScientificArticleBDI,
     ScientificArticleBDISheet,
     ScientificArticleISI,
@@ -20,7 +28,8 @@ import {
     Translation,
     TranslationSheet,
     User,
-    WithoutActivity, WithoutActivitySheet
+    WithoutActivity,
+    WithoutActivitySheet
 } from "../database/models";
 import {
     AcademyMemberModel,
@@ -46,14 +55,14 @@ import {
 import {UploadedFile} from "express-fileupload";
 import XLSX, {WorkBook, WorkSheet} from "xlsx";
 import {UtilService} from "../service/util.service";
-import {EmailDefaults, EmailTemplates, MailOptions, MailService} from "../service/email.service";
+import {EmailDefaults, LoginMessage, MailService} from "../service/email.service";
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
-import {XLSXKeys, XLSXWorkBookService, XLSXWorkSheetService} from "../service/xlsx.service";
+import {ExcelHeaders, XLSXWorkBookService, XLSXWorkSheetService} from "../service/xlsx.service";
 import JSZip from "jszip";
 import {FAZData, FAZDayActivity, FAZService} from "../service/faz.service";
-
+import {ResponseMessage, StatusCode} from "./rest.util";
 
 /** The layer where the logic holds */
 export class RestService {
@@ -144,16 +153,12 @@ export class RestService {
             await (dbKey.set({key: key}).save());
         }
 
-        await MailService.sendMail(new MailOptions(
-            EmailDefaults.FROM,
-            [realUser.email],
-            [],
-            [],
-            '[Login] ' + EmailDefaults.PARTIAL_SUBJECT,
-            '',
-            EmailTemplates.LOGIN,
-            [key],
-            ));
+        await MailService.sendMail({
+            from: EmailDefaults.FROM,
+            to: [realUser.email].join(','),
+            subject: `[Login] ${EmailDefaults.APP_NAME}`,
+            html: LoginMessage.getHtml(key),
+        });
 
         return;
     }
@@ -200,10 +205,13 @@ export class RestService {
         });
 
         if (infoRow === null || userRow === null) {
-            return {};
+            throw new ResponseError(ResponseMessage.SERVER_ERROR, StatusCode.INTERNAL_SERVER_ERROR)
         }
 
-        return {...infoRow.toJSON(), ...userRow.toJSON()};
+        return {
+            information: infoRow.toJSON(),
+            userInformation: userRow.toJSON()
+        };
     }
 
     static async getForms(user: User): Promise<any> {
@@ -275,7 +283,7 @@ export class RestService {
     }
 
     /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
-    static async getScientificArticleISI(user: User) {
+    static async getScientificArticleISI(user: User): Promise<any> {
         return (await ScientificArticleISIModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
@@ -330,7 +338,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addISIProceeding(user: User, data: ISIProceeding) {
+    static async addISIProceeding(user: User, data: ISIProceeding): Promise<any> {
         await ISIProceedingModel.create({
             ...data,
             owner: user.identifier
@@ -378,7 +386,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addScientificArticleBDI(user: User, data: ScientificArticleBDI) {
+    static async addScientificArticleBDI(user: User, data: ScientificArticleBDI): Promise<any> {
         await ScientificArticleBDIModel.create({
             ...data,
             owner: user.identifier
@@ -426,7 +434,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addScientificBook(user: User, data: ScientificBook) {
+    static async addScientificBook(user: User, data: ScientificBook): Promise<any> {
         await ScientificBookModel.create({
             ...data,
             owner: user.identifier
@@ -474,7 +482,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addTranslation(user: User, data: Translation) {
+    static async addTranslation(user: User, data: Translation): Promise<any> {
         await TranslationModel.create({
             ...data,
             owner: user.identifier
@@ -522,7 +530,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addScientificCommunication(user: User, data: ScientificCommunication) {
+    static async addScientificCommunication(user: User, data: ScientificCommunication): Promise<any> {
         await ScientificCommunicationModel.create({
             ...data,
             owner: user.identifier
@@ -570,7 +578,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addPatent(user: User, data: Patent) {
+    static async addPatent(user: User, data: Patent): Promise<any> {
         await PatentModel.create({
             ...data,
             owner: user.identifier
@@ -618,7 +626,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addResearchContract(user: User, data: ResearchContract) {
+    static async addResearchContract(user: User, data: ResearchContract): Promise<any> {
         await ResearchContractModel.create({
             ...data,
             owner: user.identifier
@@ -666,7 +674,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addCitation(user: User, data: Citation) {
+    static async addCitation(user: User, data: Citation): Promise<any> {
         await CitationModel.create({
             ...data,
             owner: user.identifier
@@ -714,7 +722,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addAwardAndNomination(user: User, data: AwardAndNomination) {
+    static async addAwardAndNomination(user: User, data: AwardAndNomination): Promise<any> {
         await AwardAndNominationModel.create({
             ...data,
             owner: user.identifier
@@ -762,7 +770,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addAcademyMember(user: User, data: AcademyMember) {
+    static async addAcademyMember(user: User, data: AcademyMember): Promise<any> {
         await AcademyMemberModel.create({
             ...data,
             owner: user.identifier
@@ -810,7 +818,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addEditorialMember(user: User, data: EditorialMember) {
+    static async addEditorialMember(user: User, data: EditorialMember): Promise<any> {
         await EditorialMemberModel.create({
             ...data,
             owner: user.identifier
@@ -858,7 +866,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addOrganizedEvent(user: User, data: OrganizedEvent) {
+    static async addOrganizedEvent(user: User, data: OrganizedEvent): Promise<any> {
         await OrganizedEventModel.create({
             ...data,
             owner: user.identifier
@@ -906,7 +914,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addWithoutActivity(user: User, data: WithoutActivity) {
+    static async addWithoutActivity(user: User, data: WithoutActivity): Promise<any> {
         await WithoutActivityModel.create({
             ...data,
             owner: user.identifier
@@ -954,7 +962,7 @@ export class RestService {
         })).map(item => item.toJSON());
     }
 
-    static async addDidacticActivity(user: User, data: DidacticActivity) {
+    static async addDidacticActivity(user: User, data: DidacticActivity): Promise<any> {
         await DidacticActivityModel.create({
             ...data,
             owner: user.identifier
@@ -1037,10 +1045,10 @@ export class RestService {
 
         for (const item of sheetRows) {
             const obj = {
-                fullName: item[XLSXKeys.NAME],
-                identifier: item[XLSXKeys.IDENTIFIER],
-                coordinator: item[XLSXKeys.COORDINATOR],
-                founding: item[XLSXKeys.FUNDING],
+                fullName: item[ExcelHeaders.NAME],
+                identifier: item[ExcelHeaders.IDENTIFIER],
+                coordinator: item[ExcelHeaders.COORDINATOR],
+                founding: item[ExcelHeaders.FUNDING],
             };
 
             await BaseInformationModel.create(obj);
@@ -1075,7 +1083,7 @@ export class RestService {
 
         for (let row of rows) {
             const rowMap: Map<string, any> = new Map(Object.entries(row));
-            const email = rowMap.get(XLSXKeys.EMAIL);
+            const email = rowMap.get(ExcelHeaders.EMAIL);
 
             const emailRows = emailRowsMap.get(email);
             if (emailRows === undefined) {
@@ -1102,15 +1110,22 @@ export class RestService {
             const workBook: WorkBook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workBook, sheet);
 
-            const buffer: Buffer = XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'});
-
             const dateStr = UtilService.stringDate(new Date());
+            const excelBuffer: Buffer = XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'});
+            const excelName = `organizare_${dateStr}.xlsx`;
 
             try {
-                await MailService.sendMail(new MailOptions(from, [email], [], [], subject, htmlEmail,
-                    htmlEmail, [], [{content: buffer, filename: `organizare_${dateStr}.xlsx`}]
+                await MailService.sendMail({
+                    from: EmailDefaults.FROM,
+                    subject: `${EmailDefaults.APP_NAME}`,
+                    to: email,
+                    html: htmlEmail,
+                    attachments: [{
+                        content: excelBuffer,
+                        filename: excelName,
+                    }]
+                });
 
-                ));
                 emailResults.push({
                     email: email,
                     send: true,
@@ -1188,8 +1203,8 @@ export class RestService {
         sheetBook.appendSheets(sheets);
 
         const workBook: WorkBook = sheetBook.getInstance();
-        const buffer = new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
-        return buffer;
+        /* Generate Excel Buffer and return */
+        return new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
     }
 
     static async getProfessors() {
@@ -1205,7 +1220,7 @@ export class RestService {
         const rows: any[] = XLSX.utils.sheet_to_json(sheet);
 
         for (let row of rows) {
-            await ProfessorModel.create({name: row[XLSXKeys.NAME]});
+            await ProfessorModel.create({name: row[ExcelHeaders.NAME]});
         }
 
         return;
@@ -1227,7 +1242,7 @@ export class RestService {
         for (let row of timeTablesRows) {
             /* This means is a day of the week */
             if (Object.values(row).length === 1) {
-                lastDay = row[XLSXKeys.FROM];
+                lastDay = row[ExcelHeaders.FROM];
                 parsedTimetable[lastDay] = [];
                 continue;
             }
@@ -1237,7 +1252,7 @@ export class RestService {
                 continue;
             }
 
-            let professorName = row[XLSXKeys.PROFESSOR_NAME];
+            let professorName = row[ExcelHeaders.PROFESSOR_NAME];
 
             if (professorName === undefined || typeof professorName !== "string") {
                 console.log('Something went wrong with row:')
@@ -1247,11 +1262,11 @@ export class RestService {
 
             const ratio = 1 / 24;
             /* Here, 13.30 -> 13.50 */
-            row[XLSXKeys.FROM] = parseFloat((row[XLSXKeys.FROM] / ratio).toFixed(2));
-            row[XLSXKeys.TO] = parseFloat((row[XLSXKeys.TO] / ratio).toFixed(2));
+            row[ExcelHeaders.FROM] = parseFloat((row[ExcelHeaders.FROM] / ratio).toFixed(2));
+            row[ExcelHeaders.TO] = parseFloat((row[ExcelHeaders.TO] / ratio).toFixed(2));
 
             professorName = professorName.trim();
-            row[XLSXKeys.PROFESSOR_NAME] = professorName;
+            row[ExcelHeaders.PROFESSOR_NAME] = professorName;
 
             parsedTimetable[lastDay].push(row);
             professorListMap[professorName] = true;
@@ -1266,7 +1281,7 @@ export class RestService {
             professorsTimetable[professor] = {};
 
             for (let day of Object.entries(parsedTimetable)) {
-                professorsTimetable[professor][day[0]] = (day[1] as any[]).filter(item => item[XLSXKeys.PROFESSOR_NAME] === professor);
+                professorsTimetable[professor][day[0]] = (day[1] as any[]).filter(item => item[ExcelHeaders.PROFESSOR_NAME] === professor);
             }
         }
 
@@ -1311,8 +1326,8 @@ export class RestService {
                     let intervals = [];
 
                     for (let item of dayRows) {
-                        const fromTime = item[XLSXKeys.FROM];
-                        const toTime = item[XLSXKeys.TO];
+                        const fromTime = item[ExcelHeaders.FROM];
+                        const toTime = item[ExcelHeaders.TO];
 
                          intervals.push(`${fromTime}-${toTime}`);
 
@@ -1349,103 +1364,6 @@ export class RestService {
         }
 
         /* Get the zip buffer in order to send it */
-        const zipBuffer = await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' } );
-
-        return zipBuffer;
+        return await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' });
     }
-}
-
-export enum ResponseMessage {
-    SUCCESS = 'Success',
-
-    INCOMPLETE_FORM = 'Please complete all the fields',
-    USER_NOT_REGISTERED = 'The user is not registered in our database',
-    NO_USER_FOUND = 'No user was found with these credentials',
-    INVALID_AUTH_KEY = 'The authorization key provided is invalid',
-    SOMETHING_WRONG = 'Something went wrong',
-    NO_AUTH_TOKEN = 'There is no authentication key available',
-    INVALID_TOKEN = 'Invalid token',
-    USER_NOT_EXISTS = 'Valid token, but user doesn\'t exist',
-    ADMIN_ONLY = 'Unauthorized, admin permission only',
-    DATA_NOT_FOUND = 'Data not found',
-    DATA_TAKEN = 'Some data is already taken',
-    ALL_EMAILS_SHOULD_BE_PRESENT = 'All emails should be completed in the column',
-    INVALID_TIMETABLE = 'Invalid timetable',
-    NO_KEY = 'There is no key present',
-}
-
-/** Contains the request responses */
-export enum StatusCode {
-    /** Informational */
-    CONTINUE = 100,
-    SWITCHING_PROTOCOLS = 101,
-    PROCESSING = 102,
-
-    /** SUCCESS = 2×× */
-    OK = 200,
-    CREATED = 201,
-    ACCEPTED = 202,
-    NON_AUTHORITATIVE_INFORMATION = 203,
-    NO_CONTENT = 204,
-    RESET_CONTENT = 205,
-    PARTIAL_CONTENT = 206,
-    MULTI_STATUS = 207,
-    ALREADY_REPORTED = 208,
-    IM_USED = 226,
-
-    /** REDIRECTION = 3×× */
-    MULTIPLE_CHOICES = 300,
-    MOVED_PERMANENTLY = 301,
-    FOUND = 302,
-    SEE_OTHER = 303,
-    NOT_MODIFIED = 304,
-    USE_PROXY = 305,
-    TEMPORARY_REDIRECT = 307,
-    PERMANENT_REDIRECT = 308,
-
-    /** CLIENT ERROR = 4×× */
-    BAD_REQUEST = 400,
-    UNAUTHORIZED = 401,
-    PAYMENT_REQUIRED = 402,
-    FORBIDDEN = 403,
-    NOT_FOUND = 404,
-    METHOD_NOT_ALLOWED = 405,
-    NOT_ACCEPTABLE = 406,
-    PROXY_AUTHENTICATION_REQUIRED = 407,
-    REQUEST_TIMEOUT = 408,
-    CONFLICT = 409,
-    GONE = 410,
-    LENGTH_REQUIRED = 411,
-    PRECONDITION_FAILED = 412,
-    PAYLOAD_TOO_LARGE = 413,
-    REQUEST_URI_TOO_LONG = 414,
-    UNSUPPORTED_MEDIA_TYPE = 415,
-    REQUESTED_RANGE_NOT_SATISFIABLE = 416,
-    EXPECTATION_FAILED = 417,
-    IM_A_TEAPOT = 418,
-    MISDIRECTED_REQUEST = 421,
-    UNPROCESSABLE_ENTITY = 422,
-    LOCKED = 423,
-    FAILED_DEPENDENCY = 424,
-    UPGRADE_REQUIRED = 426,
-    PRECONDITION_REQUIRED = 428,
-    TOO_MANY_REQUESTS = 429,
-    REQUEST_HEADER_FIELDS_TOO_LARGE = 431,
-    CONNECTION_CLOSED_WITHOUT_RESPONSE = 444,
-    UNAVAILABLE_FOR_LEGAL_REASONS = 451,
-    CLIENT_CLOSED_REQUEST = 499,
-
-    /**  SERVER ERROR = 5×× */
-    INTERNAL_SERVER_ERROR = 500,
-    NOT_IMPLEMENTED = 501,
-    BAD_GATEWAY = 502,
-    SERVICE_UNAVAILABLE = 503,
-    GATEWAY_TIMEOUT = 504,
-    HTTP_VERSION_NOT_SUPPORTED = 505,
-    VARIANT_ALSO_NEGOTIATES = 506,
-    INSUFFICIENT_STORAGE = 507,
-    LOOP_DETECTED = 508,
-    NOT_EXTENDED = 510,
-    NETWORK_AUTHENTICATION_REQUIRED = 511,
-    NETWORK_CONNECT_TIMEOUT_ERROR = 599,
 }

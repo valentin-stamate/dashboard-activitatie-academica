@@ -68,8 +68,7 @@ export class XLSXWorkSheetService {
 
 }
 
-export enum XLSXKeys {
-    DAY = 'Ziua',
+export enum ExcelHeaders {
     NAME = 'Nume',
     IDENTIFIER = 'Nr. Matricol',
     COORDINATOR = 'Coordonator',
