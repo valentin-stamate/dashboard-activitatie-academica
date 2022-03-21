@@ -1053,31 +1053,6 @@ export class RestController {
         }
     }
 
-    static async getProfessors(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const data = await RestService.getProfessors();
-            res.end(JSON.stringify(data));
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async refreshProfessors(req: Request<any>, res: Response, next: NextFunction) {
-        if (!req.files) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const file = req.files.file as UploadedFile;
-
-        try {
-            const data = await RestService.refreshProfessors(file);
-            res.end(JSON.stringify(data));
-        } catch (err) {
-            next(err);
-        }
-    }
-
     static async faz(req: Request<any>, res: Response, next: NextFunction) {
         if (!req.files) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));

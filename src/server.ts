@@ -154,9 +154,6 @@ app.delete(`${RestEndpoints.BASE_INFORMATION}/:id`, Middleware.adminMiddleware, 
 app.post(RestEndpoints.ORGANIZATION_EMAIL, Middleware.adminMiddleware, RestController.sendOrganizationEmail);
 app.get(RestEndpoints.EXPORT_FORMS, Middleware.adminMiddleware, RestController.exportForms);
 
-app.post(RestEndpoints.PROFESSORS, Middleware.adminMiddleware, RestController.refreshProfessors);
-app.get(RestEndpoints.PROFESSORS, Middleware.adminMiddleware, RestController.getProfessors);
-
 app.post(RestEndpoints.FAZ, Middleware.adminMiddleware, RestController.faz);
 
 /* Test */

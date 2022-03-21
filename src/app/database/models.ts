@@ -1,12 +1,12 @@
 export interface BaseInformation {
-    id: number;
+    id?: number;
     fullName: string;
     identifier: string;
-    founding: string;
+    attendanceYear: number;
     coordinator: string;
 
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export interface User {
@@ -29,27 +29,11 @@ export interface UserKey {
     updatedAt: Date;
 }
 
-export interface Professor {
-    id: number;
-    name: string;
-
-    createdAt: Date;
-    updatedAt: Date;
-}
-
 /************************************************************************************
  *                               Forms
  ***********************************************************************************/
 
 /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
-export class ScientificArticleISISheet {
-    static sheetName = 'Articole ştiintifice...ISI...';
-
-    static header = ['Titlul articolului', 'Autori', 'Data publicarii',
-        'Volum', 'ISSUE', 'Nr. pagina de start', 'Nr. pagina de sfarsit', 'Factor de impact',
-        'Clasificare CNATDCU', 'DOI', 'Denumire conferința', 'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface ScientificArticleISI {
     owner: string;
 
@@ -72,14 +56,6 @@ export interface ScientificArticleISI {
 }
 
 /** ISI proceedings */
-export class ISIProceedingSheet {
-    static sheetName = 'ISI proceedings';
-
-    static header = ['Titlul articolului', 'Autori', 'Denumire conferinta',
-        'Tip volum indexat', 'Anul publicarii', 'Tipul lucrarii', 'Tip conferinta', 'Linkul conferintei',
-        'Nr. pagina de start', 'Nr. pagina de sfarsit', 'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface ISIProceeding {
     owner: string;
 
@@ -101,18 +77,6 @@ export interface ISIProceeding {
 }
 
 /** Articole științifice publicate în extenso în reviste indexate BDI și reviste de specialitate neindexate */
-export class ScientificArticleBDISheet {
-    static sheetName = 'Articole științifice...BDI..';
-
-    static header = ['Domenii de ierarhizare', 'Titlul articolului', 'Autori',
-        'Denumire revista indexata BDI', 'Anul publicarii', 'Volum', 'Numar',
-        'Nr. pagina de start', 'Nr. pagina de sfarsit',
-        'Revista internationala', 'Clasificare CNATDCU',
-        'Link articol indexat', 'Baza de date BDI',
-        'Linkul bazei de date BDI',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface ScientificArticleBDI {
     owner: string;
 
@@ -138,15 +102,6 @@ export interface ScientificArticleBDI {
 }
 
 /** Cărți ştiinţifice sau capitole de cărți publicate în edituri */
-export class ScientificBookSheet {
-    static sheetName = 'Cărţi ştiinţifice...';
-
-    static header = ['Domenii de ierarhizare', 'Titlul capitolului', 'Autori',
-        'Titlul cartii', 'Numarul de pagini', 'Anul publicarii', 'Editura',
-        'Tipul publicatiei', 'ISBN',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface ScientificBook {
     owner: string;
 
@@ -167,16 +122,6 @@ export interface ScientificBook {
 }
 
 /** Traduceri */
-export class TranslationSheet {
-    static sheetName = 'Traduceri';
-
-    static header = ['Domenii de ierarhizare', 'Titlul traducerii', 'Autori',
-        'Autorii tradusi', 'Anul publicarii', 'Editura', 'Tara',
-        'Numarul de pagini', 'ISBN',
-        'Tipul traducerii',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface Translation {
     owner: string;
 
@@ -198,14 +143,6 @@ export interface Translation {
 }
 
 /** Comunicări în manifestări științifice */
-export class ScientificCommunicationSheet {
-    static sheetName = 'Comunicări...';
-
-    static header = ['Autori', 'Tipul comunicarii', 'Anul prezentarii',
-        'Denumirea manifestarii stiintifice', 'Tipul manifestarii', 'Link către site-ul manifestării',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface ScientificCommunication {
     owner: string;
 
@@ -223,15 +160,6 @@ export interface ScientificCommunication {
 }
 
 /** Brevete */
-export class PatentSheet {
-    static sheetName = 'Brevete';
-
-    static header = ['Titlul brevetului / CBI', 'Autori',
-        'Anul obținerii brevetului / depunerii CBI', 'Numar brevet', 'Tipul brevetului',
-        'Autoritate eminenta', 'Tara',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface Patent {
     owner: string;
 
@@ -250,14 +178,6 @@ export interface Patent {
 }
 
 /** Contracte de cercetare */
-export class ResearchContractSheet {
-    static sheetName = 'Contracte de cercetare';
-
-    static header = ['Denumire contract de cercetare / proiect', 'Cod proiect', 'Finanțator',
-        'Funcție', 'Perioada de start a proiectului', 'Perioada de sfarsit a proiectului', 'Tipul contractului',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface ResearchContract {
     owner: string;
 
@@ -276,18 +196,6 @@ export interface ResearchContract {
 }
 
 /** Citări */
-export class CitationSheet {
-    static sheetName = 'Citări';
-
-    static header = ['Titlul articolului', 'Autori', 'Titlul publicației unde este citat articolul',
-        'Numele autorilor care citeaza', 'Anul citarii', 'Volum', 'Factor de impact',
-        'Issue', 'Numărul articolului',
-        'Nr. pagina de start', 'Nr. pagina de sfarsit',
-        'Link articol indexat', 'Baza de date BDI',
-        'DOI', 'Clasificare CNATDCU', 'Citari',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface Citation {
     owner: string;
 
@@ -313,14 +221,6 @@ export interface Citation {
 }
 
 /** Premii si nominalizări */
-export class AwardAndNominationSheet {
-    static sheetName = 'Premii si nominalizari';
-
-    static header = ['Anul acordarii premiului', 'Denumirea premiului', 'Tipul premiului',
-        'Organizația care a acordat premiul', 'Tara', 'Acordat pentru activitatea didactică / cercetare',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface AwardAndNomination {
     owner: string;
 
@@ -338,13 +238,6 @@ export interface AwardAndNomination {
 }
 
 /** Membru în academii */
-export class AcademyMemberSheet {
-    static sheetName = 'Membru în academii';
-
-    static header = ['Anul admiterii', 'Denumirea academiei', 'Tip membru',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface AcademyMember {
     owner: string;
 
@@ -359,14 +252,6 @@ export interface AcademyMember {
 }
 
 /** Membru în echipa editorială */
-export class EditorialMemberSheet {
-    static sheetName = 'Membru în echipa editorială';
-
-    static header = ['Denumire comitet', 'Denumire revista / editura', 'Anul intrarii în comitet',
-        'Calitatea', 'Tipul revistei', 'National / International',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface EditorialMember {
     owner: string;
 
@@ -384,15 +269,6 @@ export interface EditorialMember {
 }
 
 /** Evenimente organizate */
-export class OrganizedEventSheet {
-    static sheetName = 'Evenimente organizate';
-
-    static header = ['Denumirea manifestarii', 'Data de inceput', 'Data de sfarsit',
-        'Locul de desfasurare', 'Tipul manifestării', 'Clasificarea manifestării în funcție de participare', 'Link-ul manifestarii',
-        'Persoana de contact',
-        'Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface OrganizedEvent {
     owner: string;
 
@@ -412,12 +288,6 @@ export interface OrganizedEvent {
 }
 
 /** Fără activitate științifică */
-export class WithoutActivitySheet {
-    static sheetName = 'Fără activitate științifică';
-
-    static header = ['Observatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface WithoutActivity {
 
     id: number;
@@ -429,12 +299,6 @@ export interface WithoutActivity {
 }
 
 /** Activitate didactică */
-export class DidacticActivitySheet {
-    static sheetName = 'Activitate didactică';
-
-    static header = ['Denumire disciplina', 'Tipul activitatii', 'Anul sustinerii activitatii', 'Ultima modificare', 'Data crearii', 'Numar Matricol'];
-}
-
 export interface DidacticActivity {
     sheetName: 'Activitate didactică';
 

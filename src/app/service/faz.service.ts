@@ -19,7 +19,7 @@ export interface FAZDayActivity {
     day: number;
     interval: string;
     discipline: string;
-    year: number;
+    year: string;
     cad: string;
     sad: string;
     td: string;

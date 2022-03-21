@@ -23,7 +23,15 @@ export class UtilService {
             return `0${number}`;
         }
 
-        return '' + number;
+        return `${number}`;
+    }
+
+    /* Eg. time = 13.5 aka 13:30 */
+    static excelHourToHourStr(time: number): string {
+        const hours = Math.floor(time);
+        const minutes = (time - hours) * 60;
+
+        return `${hours}:${UtilService.dateNumber(minutes)}`;
     }
 
     static daysInMonth(date: Date) {

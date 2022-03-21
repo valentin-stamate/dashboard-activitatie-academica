@@ -43,8 +43,8 @@ export class DidacticActivityModel extends Model {}
 BaseInformationModel.init( {
     fullName:    {type: DataTypes.STRING, allowNull: false,},
     identifier:  {type: DataTypes.STRING, allowNull: false, unique: true,},
-    founding:    {type: DataTypes.STRING, allowNull: false,},
     coordinator: {type: DataTypes.STRING, allowNull: false,},
+    attendanceYear:    {type: DataTypes.INTEGER, allowNull: false,},
 }, {...options, modelName: 'base_information'});
 
 UserModel.init({
@@ -60,10 +60,6 @@ UserKeyModel.init({
     identifier: {type: DataTypes.STRING, unique: true, allowNull: false,},
     key:        {type: DataTypes.STRING, unique: true, allowNull: false,},
 }, {...options, modelName: 'user_key'});
-
-ProfessorModel.init({
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
-}, {...options, modelName: 'professors'});
 
 /************************************************************************************
  *                                    Forms
@@ -396,16 +392,17 @@ export async function sequelizeInit() {
     await initializeTables();
 
     await BaseInformationModel.create({
-        fullName: 'Stamate Valentin',
-        identifier: 'valentin',
-        founding: 'Bursa',
-        coordinator: 'Lenuta Alboaie',
+        fullName: 'Marin Aioanei',
+        identifier: 'marin',
+        coordinator: 'Buraga Cosmin',
+        attendanceYear: 2021,
     });
     await BaseInformationModel.create({
         fullName: 'Andrei Amariei',
         identifier: 'andrei',
         founding: 'Taxa',
         coordinator: 'Aries Marin',
+        attendanceYear: 2021,
     });
 
     await UserModel.create({

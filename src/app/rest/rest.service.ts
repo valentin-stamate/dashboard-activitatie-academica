@@ -1,35 +1,21 @@
 import {
     AcademyMember,
-    AcademyMemberSheet,
     AwardAndNomination,
-    AwardAndNominationSheet,
+    BaseInformation,
     Citation,
-    CitationSheet,
     DidacticActivity,
-    DidacticActivitySheet,
     EditorialMember,
-    EditorialMemberSheet,
     ISIProceeding,
-    ISIProceedingSheet,
     OrganizedEvent,
-    OrganizedEventSheet,
     Patent,
-    PatentSheet,
     ResearchContract,
-    ResearchContractSheet,
     ScientificArticleBDI,
-    ScientificArticleBDISheet,
     ScientificArticleISI,
-    ScientificArticleISISheet,
     ScientificBook,
-    ScientificBookSheet,
     ScientificCommunication,
-    ScientificCommunicationSheet,
     Translation,
-    TranslationSheet,
     User,
-    WithoutActivity,
-    WithoutActivitySheet
+    WithoutActivity
 } from "../database/models";
 import {
     AcademyMemberModel,
@@ -41,7 +27,6 @@ import {
     ISIProceedingModel,
     OrganizedEventModel,
     PatentModel,
-    ProfessorModel,
     ResearchContractModel,
     ScientificArticleBDIModel,
     ScientificArticleISIModel,
@@ -59,10 +44,11 @@ import {EmailDefaults, LoginMessage, MailService} from "../service/email.service
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
-import {ExcelHeaders, XLSXWorkBookService, XLSXWorkSheetService} from "../service/xlsx.service";
+import {BaseInformationHeaders, OrganizationHeaders, TimetableHeaders,} from "../service/xlsx.service";
 import JSZip from "jszip";
 import {FAZData, FAZDayActivity, FAZService} from "../service/faz.service";
 import {ResponseMessage, StatusCode} from "./rest.util";
+import {FormsService} from "../service/forms.service";
 
 /** The layer where the logic holds */
 export class RestService {
@@ -1052,14 +1038,14 @@ export class RestService {
 
         let rowsCreated = 0;
         for (const item of sheetRows) {
-            const obj = {
-                fullName: item[ExcelHeaders.NAME],
-                identifier: item[ExcelHeaders.IDENTIFIER],
-                coordinator: item[ExcelHeaders.COORDINATOR],
-                founding: item[ExcelHeaders.FUNDING],
+            const obj: BaseInformation = {
+                identifier: item[BaseInformationHeaders.IDENTIFIER],
+                fullName: item[BaseInformationHeaders.NAME],
+                coordinator: item[BaseInformationHeaders.COORDINATOR],
+                attendanceYear: item[BaseInformationHeaders.ATTENDANCE_YEAR],
             };
 
-            await BaseInformationModel.create(obj);
+            await BaseInformationModel.create(obj as any);
             rowsCreated++;
         }
 
@@ -1092,7 +1078,7 @@ export class RestService {
 
         for (let row of rows) {
             const rowMap: Map<string, any> = new Map(Object.entries(row));
-            const email = rowMap.get(ExcelHeaders.EMAIL);
+            const email = rowMap.get(OrganizationHeaders.EMAIL);
 
             const emailRows = emailRowsMap.get(email);
             if (emailRows === undefined) {
@@ -1171,68 +1157,41 @@ export class RestService {
         let withoutActivity =  (await WithoutActivityModel.findAll({order: ['id'],})).map(item => item.toJSON());
         let didacticActivity = (await DidacticActivityModel.findAll({order: ['id'],})).map(item => item.toJSON());
 
-        scArticleISI = scArticleISI.map(item => {delete item.id; return item});
-        isiProceedings = isiProceedings.map(item => {delete item.id; return item});
-        scArticleBDI = scArticleBDI.map(item => {delete item.id; return item});
-        scBook = scBook.map(item => {delete item.id; return item});
-        translation = translation.map(item => {delete item.id; return item});
-        scCommunication = scCommunication.map(item => {delete item.id; return item});
-        patent = patent.map(item => {delete item.id; return item});
-        researchContract = researchContract.map(item => {delete item.id; return item});
-        citation = citation.map(item => {delete item.id; return item});
-        awardsNomination = awardsNomination.map(item => {delete item.id; return item});
-        academyMember = academyMember.map(item => {delete item.id; return item});
-        editorialMember = editorialMember.map(item => {delete item.id; return item});
-        organizedEvent = organizedEvent.map(item => {delete item.id; return item});
-        withoutActivity = withoutActivity.map(item => {delete item.id; return item});
-        didacticActivity = didacticActivity.map(item => {delete item.id; return item});
+        const scISISheet = FormsService.getScientificArticleISISheet(scArticleISI);
+        const isiProceedingsSheet = FormsService.getISIProceedingsSheet(isiProceedings);
+        const scArticleBDISheet = FormsService.getScientificArticleBDISheet(scArticleBDI);
+        const scBookSheet = FormsService.getScientificBookSheet(scBook);
+        const translationSheet = FormsService.getTranslationSheet(translation);
+        const scCommunicationSheet = FormsService.getScientificCommunicationSheet(scCommunication);
+        const patentSheet = FormsService.getPatentSheet(patent);
+        const researchContractSheet = FormsService.getResearchContractSheet(researchContract);
+        const citationSheet = FormsService.getCitationSheet(citation);
+        const awardsNominationSheet = FormsService.getAwardAndNominationSheet(awardsNomination);
+        const academyMemberSheet = FormsService.getAcademyMemberSheet(academyMember);
+        const editorialMemberSheet = FormsService.getEditorialMemberSheet(editorialMember);
+        const organizedEventSheet = FormsService.getOrganizedEventSheet(organizedEvent);
+        const withoutActivitySheet = FormsService.getWithoutActivitySheet(withoutActivity);
+        const didacticActivitySheet = FormsService.getDidacticActivitySheet(didacticActivity);
 
-        const scISISheet = new XLSXWorkSheetService(ScientificArticleISISheet.header, ScientificArticleISISheet.sheetName, scArticleISI);
-        const isiProceedingsSheet = new XLSXWorkSheetService(ISIProceedingSheet.header, ISIProceedingSheet.sheetName, isiProceedings);
-        const scArticleBDISheet = new XLSXWorkSheetService(ScientificArticleBDISheet.header, ScientificArticleBDISheet.sheetName, scArticleBDI);
-        const scBookSheet = new XLSXWorkSheetService(ScientificBookSheet.header, ScientificBookSheet.sheetName, scBook);
-        const translationSheet = new XLSXWorkSheetService(TranslationSheet.header, TranslationSheet.sheetName, translation);
-        const scCommunicationSheet = new XLSXWorkSheetService(ScientificCommunicationSheet.header, ScientificCommunicationSheet.sheetName, scCommunication);
-        const patentSheet = new XLSXWorkSheetService(PatentSheet.header, PatentSheet.sheetName, patent);
-        const researchContractSheet = new XLSXWorkSheetService(ResearchContractSheet.header, ResearchContractSheet.sheetName, researchContract);
-        const citationSheet = new XLSXWorkSheetService(CitationSheet.header, CitationSheet.sheetName, citation);
-        const awardsNominationSheet = new XLSXWorkSheetService(AwardAndNominationSheet.header, AwardAndNominationSheet.sheetName, awardsNomination);
-        const academyMemberSheet = new XLSXWorkSheetService(AcademyMemberSheet.header, AcademyMemberSheet.sheetName, academyMember);
-        const editorialMemberSheet = new XLSXWorkSheetService(EditorialMemberSheet.header, EditorialMemberSheet.sheetName, editorialMember);
-        const organizedEventSheet = new XLSXWorkSheetService(OrganizedEventSheet.header, OrganizedEventSheet.sheetName, organizedEvent);
-        const withoutActivitySheet = new XLSXWorkSheetService(WithoutActivitySheet.header, WithoutActivitySheet.sheetName, withoutActivity);
-        const didacticActivitySheet = new XLSXWorkSheetService(DidacticActivitySheet.header, DidacticActivitySheet.sheetName, didacticActivity);
+        const workBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workBook, scISISheet, 'Articole ştiintifice...ISI...');
+        XLSX.utils.book_append_sheet(workBook, isiProceedingsSheet, 'ISI proceedings');
+        XLSX.utils.book_append_sheet(workBook, scArticleBDISheet, 'Articole științifice...BDI..');
+        XLSX.utils.book_append_sheet(workBook, scBookSheet, 'Cărţi ştiinţifice...');
+        XLSX.utils.book_append_sheet(workBook, translationSheet, 'Traduceri');
+        XLSX.utils.book_append_sheet(workBook, scCommunicationSheet, 'Comunicări...');
+        XLSX.utils.book_append_sheet(workBook, patentSheet, 'Brevete');
+        XLSX.utils.book_append_sheet(workBook, researchContractSheet, 'Contracte de cercetare');
+        XLSX.utils.book_append_sheet(workBook, citationSheet, 'Citări');
+        XLSX.utils.book_append_sheet(workBook, awardsNominationSheet, 'Premii si nominalizari');
+        XLSX.utils.book_append_sheet(workBook, academyMemberSheet, 'Membru în academii');
+        XLSX.utils.book_append_sheet(workBook, editorialMemberSheet, 'Membru în echipa editorială');
+        XLSX.utils.book_append_sheet(workBook, organizedEventSheet, 'Evenimente organizate');
+        XLSX.utils.book_append_sheet(workBook, withoutActivitySheet, 'Fără activitate științifică');
+        XLSX.utils.book_append_sheet(workBook, didacticActivitySheet, 'Activitate didactică');
 
-        const sheets: XLSXWorkSheetService[] = [
-            scISISheet, isiProceedingsSheet, scArticleBDISheet, scBookSheet, translationSheet, scCommunicationSheet, patentSheet, researchContractSheet,
-            citationSheet, awardsNominationSheet, academyMemberSheet, editorialMemberSheet, organizedEventSheet, withoutActivitySheet, didacticActivitySheet
-        ];
-
-        const sheetBook = new XLSXWorkBookService();
-        sheetBook.appendSheets(sheets);
-
-        const workBook: WorkBook = sheetBook.getInstance();
         /* Generate Excel Buffer and return */
         return new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
-    }
-
-    static async getProfessors() {
-        return (await ProfessorModel.findAll()).map(item => item.toJSON());
-    }
-
-    static async refreshProfessors(file: UploadedFile): Promise<void> {
-        const workBook = XLSX.read(file.data);
-        const sheet = workBook.Sheets[workBook.SheetNames[0]];
-
-        await ProfessorModel.destroy({where: {}});
-
-        const rows: any[] = XLSX.utils.sheet_to_json(sheet);
-
-        for (let row of rows) {
-            await ProfessorModel.create({name: row[ExcelHeaders.NAME]});
-        }
-
-        return;
     }
 
     /* Timetable -> Individual Timetable -> Monthly Hours */
@@ -1251,7 +1210,7 @@ export class RestService {
         for (let row of timeTablesRows) {
             /* This means is a day of the week */
             if (Object.values(row).length === 1) {
-                lastDay = row[ExcelHeaders.FROM];
+                lastDay = row[TimetableHeaders.FROM];
                 parsedTimetable[lastDay] = [];
                 continue;
             }
@@ -1261,7 +1220,7 @@ export class RestService {
                 continue;
             }
 
-            let professorName = row[ExcelHeaders.PROFESSOR_NAME];
+            let professorName = row[TimetableHeaders.PROFESSOR_NAME];
 
             if (professorName === undefined || typeof professorName !== "string") {
                 console.log('Something went wrong with row:')
@@ -1271,11 +1230,11 @@ export class RestService {
 
             const ratio = 1 / 24;
             /* Here, 13.30 -> 13.50 */
-            row[ExcelHeaders.FROM] = parseFloat((row[ExcelHeaders.FROM] / ratio).toFixed(2));
-            row[ExcelHeaders.TO] = parseFloat((row[ExcelHeaders.TO] / ratio).toFixed(2));
+            row[TimetableHeaders.FROM] = parseFloat((row[TimetableHeaders.FROM] / ratio).toFixed(2));
+            row[TimetableHeaders.TO] = parseFloat((row[TimetableHeaders.TO] / ratio).toFixed(2));
 
             professorName = professorName.trim();
-            row[ExcelHeaders.PROFESSOR_NAME] = professorName;
+            row[TimetableHeaders.PROFESSOR_NAME] = professorName;
 
             parsedTimetable[lastDay].push(row);
             professorListMap[professorName] = true;
@@ -1290,7 +1249,7 @@ export class RestService {
             professorsTimetable[professor] = {};
 
             for (let day of Object.entries(parsedTimetable)) {
-                professorsTimetable[professor][day[0]] = (day[1] as any[]).filter(item => item[ExcelHeaders.PROFESSOR_NAME] === professor);
+                professorsTimetable[professor][day[0]] = (day[1] as any[]).filter(item => item[TimetableHeaders.PROFESSOR_NAME] === professor);
             }
         }
 
@@ -1331,23 +1290,25 @@ export class RestService {
                 const dayRows: any[] = professorWeek[dayStr];
                 if (dayRows.length !== 0) {
                     let totalDayMinutes = 0;
-                    let disciplina = dayRows[0]['Disciplina'];
                     let intervals = [];
 
                     for (let item of dayRows) {
-                        const fromTime = item[ExcelHeaders.FROM];
-                        const toTime = item[ExcelHeaders.TO];
+                        const rawFromTime = item[TimetableHeaders.FROM]; // eg. 13.5 aka 13:30
+                        const rawToTime = item[TimetableHeaders.TO]; // ex. 14.25 aka 14:15
+
+                        const fromTime = UtilService.excelHourToHourStr(rawFromTime);
+                        const toTime = UtilService.excelHourToHourStr(rawToTime);
 
                          intervals.push(`${fromTime}-${toTime}`);
 
-                        totalDayMinutes += (toTime - fromTime) * 60;
+                        totalDayMinutes += (rawToTime - rawFromTime) * 60;
                     }
 
-                    const hours = totalDayMinutes / 60;
+                    const hours: number = totalDayMinutes / 60;
 
                     const finalRow: FAZDayActivity = {
-                        day: i, interval: intervals.join(', '), discipline: disciplina, year: currentYear,
-                        cad: ' ', sad: ' ', td: ' ', csrd: '', hours: hours, weekDay: dayStr,
+                        day: i, interval: intervals.join(', '), discipline: '', year: 'I',
+                        cad: '', sad: ' ', td: ' ', csrd: '', hours: hours, weekDay: dayStr,
                     };
 
                     monthlyDays.push(finalRow);
