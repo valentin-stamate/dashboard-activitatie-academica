@@ -14,6 +14,7 @@ export enum ResponseMessage {
     INVALID_TIMETABLE = 'Invalid timetable',
     NO_KEY = 'There is no key present',
     SERVER_ERROR = 'Internal server error, or logic error',
+    FORM_FIELD_ERROR = 'The form should not contain empty fields',
 }
 
 /** Contains the request responses */

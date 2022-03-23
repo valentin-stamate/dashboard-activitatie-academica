@@ -190,13 +190,20 @@ export class RestService {
             }
         });
 
-        if (infoRow === null || userRow === null) {
-            throw new ResponseError(ResponseMessage.SERVER_ERROR, StatusCode.INTERNAL_SERVER_ERROR)
+        if (userRow === null) {
+            throw new ResponseError(ResponseMessage.NO_USER_FOUND);
+        }
+
+        let infoData = {};
+        const userData = userRow.toJSON();
+
+        if (infoRow !== null) {
+            infoData = infoRow.toJSON();
         }
 
         return {
-            userInformation: userRow.toJSON(),
-            baseInformation: infoRow.toJSON(),
+            userInformation: userData,
+            baseInformation: infoData,
         };
     }
 
@@ -277,6 +284,10 @@ export class RestService {
     }
 
     static async addScientificArticleISI(user: User, data: ScientificArticleISI): Promise<void> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await ScientificArticleISIModel.create({
             ...data,
             owner: user.identifier
@@ -285,6 +296,10 @@ export class RestService {
     }
 
     static async updateScientificArticleISI(user: User, formId: number, data: ScientificArticleISI): Promise<void> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await ScientificArticleISIModel.findOne({
             where: {
                 owner: user.identifier,
@@ -325,6 +340,10 @@ export class RestService {
     }
 
     static async addISIProceeding(user: User, data: ISIProceeding): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await ISIProceedingModel.create({
             ...data,
             owner: user.identifier
@@ -333,6 +352,10 @@ export class RestService {
     }
 
     static async updateISIProceeding(user: User, formId: number, data: ISIProceeding): Promise<void> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await ISIProceedingModel.findOne({
             where: {
                 owner: user.identifier,
@@ -373,6 +396,10 @@ export class RestService {
     }
 
     static async addScientificArticleBDI(user: User, data: ScientificArticleBDI): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await ScientificArticleBDIModel.create({
             ...data,
             owner: user.identifier
@@ -381,6 +408,10 @@ export class RestService {
     }
 
     static async updateScientificArticleBDI(user: User, formId: number, data: ScientificArticleBDI): Promise<void> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await ScientificArticleBDIModel.findOne({
             where: {
                 owner: user.identifier,
@@ -421,6 +452,10 @@ export class RestService {
     }
 
     static async addScientificBook(user: User, data: ScientificBook): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await ScientificBookModel.create({
             ...data,
             owner: user.identifier
@@ -429,6 +464,10 @@ export class RestService {
     }
 
     static async updateScientificBook(user: User, formId: number, data: ScientificBook): Promise<void> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await ScientificBookModel.findOne({
             where: {
                 owner: user.identifier,
@@ -469,6 +508,10 @@ export class RestService {
     }
 
     static async addTranslation(user: User, data: Translation): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await TranslationModel.create({
             ...data,
             owner: user.identifier
@@ -477,6 +520,10 @@ export class RestService {
     }
 
     static async updateTranslation(user: User, formId: number, data: Translation): Promise<void> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await TranslationModel.findOne({
             where: {
                 owner: user.identifier,
@@ -517,6 +564,10 @@ export class RestService {
     }
 
     static async addScientificCommunication(user: User, data: ScientificCommunication): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await ScientificCommunicationModel.create({
             ...data,
             owner: user.identifier
@@ -525,6 +576,10 @@ export class RestService {
     }
 
     static async updateScientificCommunication(user: User, formId: number, data: ScientificCommunication) {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await ScientificCommunicationModel.findOne({
             where: {
                 owner: user.identifier,
@@ -565,6 +620,10 @@ export class RestService {
     }
 
     static async addPatent(user: User, data: Patent): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await PatentModel.create({
             ...data,
             owner: user.identifier
@@ -573,6 +632,10 @@ export class RestService {
     }
 
     static async updatePatent(user: User, formId: number, data: Patent) {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await PatentModel.findOne({
             where: {
                 owner: user.identifier,
@@ -613,6 +676,10 @@ export class RestService {
     }
 
     static async addResearchContract(user: User, data: ResearchContract): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await ResearchContractModel.create({
             ...data,
             owner: user.identifier
@@ -621,6 +688,10 @@ export class RestService {
     }
 
     static async updateResearchContract(user: User, formId: number, data: ResearchContract) {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await ResearchContractModel.findOne({
             where: {
                 owner: user.identifier,
@@ -661,6 +732,10 @@ export class RestService {
     }
 
     static async addCitation(user: User, data: Citation): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await CitationModel.create({
             ...data,
             owner: user.identifier
@@ -669,6 +744,10 @@ export class RestService {
     }
 
     static async updateCitation(user: User, formId: number, data: Citation) {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await CitationModel.findOne({
             where: {
                 owner: user.identifier,
@@ -709,6 +788,10 @@ export class RestService {
     }
 
     static async addAwardAndNomination(user: User, data: AwardAndNomination): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await AwardAndNominationModel.create({
             ...data,
             owner: user.identifier
@@ -717,6 +800,10 @@ export class RestService {
     }
 
     static async updateAwardAndNomination(user: User, formId: number, data: AwardAndNomination) {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await AwardAndNominationModel.findOne({
             where: {
                 owner: user.identifier,
@@ -757,6 +844,10 @@ export class RestService {
     }
 
     static async addAcademyMember(user: User, data: AcademyMember): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await AcademyMemberModel.create({
             ...data,
             owner: user.identifier
@@ -765,6 +856,10 @@ export class RestService {
     }
 
     static async updateAcademyMember(user: User, formId: number, data: AcademyMember) {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await AcademyMemberModel.findOne({
             where: {
                 owner: user.identifier,
@@ -805,6 +900,10 @@ export class RestService {
     }
 
     static async addEditorialMember(user: User, data: EditorialMember): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await EditorialMemberModel.create({
             ...data,
             owner: user.identifier
@@ -813,6 +912,10 @@ export class RestService {
     }
 
     static async updateEditorialMember(user: User, formId: number, data: EditorialMember) {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await EditorialMemberModel.findOne({
             where: {
                 owner: user.identifier,
@@ -853,6 +956,10 @@ export class RestService {
     }
 
     static async addOrganizedEvent(user: User, data: OrganizedEvent): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await OrganizedEventModel.create({
             ...data,
             owner: user.identifier
@@ -861,6 +968,10 @@ export class RestService {
     }
 
     static async updateOrganizedEvent(user: User, formId: number, data: OrganizedEvent) {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await OrganizedEventModel.findOne({
             where: {
                 owner: user.identifier,
@@ -901,6 +1012,10 @@ export class RestService {
     }
 
     static async addWithoutActivity(user: User, data: WithoutActivity): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await WithoutActivityModel.create({
             ...data,
             owner: user.identifier
@@ -909,6 +1024,10 @@ export class RestService {
     }
 
     static async updateWithoutActivity(user: User, formId: number, data: WithoutActivity) {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         const row = await WithoutActivityModel.findOne({
             where: {
                 owner: user.identifier,
@@ -949,6 +1068,10 @@ export class RestService {
     }
 
     static async addDidacticActivity(user: User, data: DidacticActivity): Promise<any> {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+
         await DidacticActivityModel.create({
             ...data,
             owner: user.identifier
@@ -957,6 +1080,10 @@ export class RestService {
     }
 
     static async updateDidacticActivity(user: User, formId: number, data: DidacticActivity) {
+        if (!UtilService.checkFormFields(data)) {
+            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
+        }
+        
         const row = await DidacticActivityModel.findOne({
             where: {
                 owner: user.identifier,

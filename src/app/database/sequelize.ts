@@ -18,7 +18,6 @@ const options = {
 export class BaseInformationModel extends Model {}
 export class UserModel extends Model {}
 export class UserKeyModel extends Model {}
-export class ProfessorModel extends Model {}
 
 export class ScientificArticleISIModel extends Model {}
 export class ISIProceedingModel extends Model {}
@@ -420,5 +419,6 @@ export async function sequelizeInit() {
     await ScientificArticleISIModel.create({
         observations: 'Ana are mere',
         owner: 'valentin',
+        publicationDate: new Date(),
     });
 }
