@@ -116,3 +116,4 @@
 * DOCX table demo : https://github.com/dolanmiu/docx/blob/master/demo/32-merge-and-shade-table-cells.ts
 * Javascript join array : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join
 * Javascript splice array : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
+* MongoDB Tutorial : https://youtu.be/pWbMrx5rVBE

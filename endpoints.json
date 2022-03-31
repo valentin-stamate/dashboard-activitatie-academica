@@ -1,0 +1,2626 @@
+{
+	"info": {
+		"_postman_id": "69b3c12a-b969-42ff-a033-bd984ea3c0cb",
+		"name": "Thesis Rest API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Visitor",
+			"item": [
+				{
+					"name": "Signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identifier\": \"andredfgi\",\r\n    \"email\": \"andrei.mercedes@gmail.com\",\r\n    \"alternativeEmail\": \"andrei.mercedes@info.uaic.ro\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/signup",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"identifier\": \"valentin\",\r\n    \"email\": \"stamatevalentin125@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/oUPJu03eC2Xxh8E0",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"oUPJu03eC2Xxh8E0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/check",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"check"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Scientific Article ISI",
+					"item": [
+						{
+							"name": "Scientific Article ISI",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/sc-article-isi",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"sc-article-isi"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Article ISI",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"articleTitle\": \"Article title\",\r\n    \"authors\": \"Author A, Author B\",\r\n    \"publicationDate\": \"2022-03-06T17:39:09.340Z\",\r\n    \"volume\": \"The lord of the rings\",\r\n    \"issue\": \"No issue\",\r\n    \"startingPage\": 3,\r\n    \"endingPage\": 5,\r\n    \"impactFactor\": \"Impact\",\r\n    \"cnatdcuClassification\": \"Class\",\r\n    \"doi\": \"Trei\",\r\n    \"conferenceName\": \"Conference\",\r\n    \"observations\": \"Meh\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/sc-article-isi",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"sc-article-isi"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Article ISI",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"articleTitle\": \"Article title\",\r\n    \"authors\": \"Author A, Author B\",\r\n    \"publicationDate\": \"2022-03-06T17:39:09.340Z\",\r\n    \"volume\": \"The lord of the rings\",\r\n    \"issue\": \"No issue\",\r\n    \"startingPage\": 3,\r\n    \"endingPage\": 5,\r\n    \"impactFactor\": \"Impact\",\r\n    \"cnatdcuClassification\": \"Class\",\r\n    \"doi\": \"Cinci\",\r\n    \"conferenceName\": \"Conference\",\r\n    \"observations\": \"Meh\",\r\n    \"createdAt\": \"2020-03-06T17:39:09.340Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/sc-article-isi/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"sc-article-isi",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Article ISI",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-article-isi/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-article-isi",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ISI Proceedings",
+					"item": [
+						{
+							"name": "ISI Proceedings",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/isi-proceedings",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"isi-proceedings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ISI Proceedings",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"articleTitle\": \"Article title\",\r\n    \"authors\": \"Author A, Author B\",\r\n    \"conferenceName\": \"2022-03-06T17:39:09.340Z\",\r\n    \"indexedVolumeType\": \"The lord of the rings\",\r\n    \"publicationYear\": 2022,\r\n    \"articleType\": \"Article title\",\r\n    \"conferenceType\": \"Conference Type\",\r\n    \"conferenceLink\": \"Impact\",\r\n    \"startingPage\": 2,\r\n    \"endingPage\": 4,\r\n    \"observations\": \"Meh\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/isi-proceedings",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"isi-proceedings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ISI Proceedings",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"articleTitle\": \"Article title\",\r\n    \"authors\": \"Author A, Author B\",\r\n    \"conferenceName\": \"2022-03-06T17:39:09.340Z\",\r\n    \"indexedVolumeType\": \"The lord of the rings\",\r\n    \"publicationYear\": 2022,\r\n    \"articleType\": \"Article title\",\r\n    \"conferenceType\": \"Conference Type\",\r\n    \"conferenceLink\": \"Impact\",\r\n    \"startingPage\": 2,\r\n    \"endingPage\": 4,\r\n    \"observations\": \"Meh\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/isi-proceedings/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"isi-proceedings",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ISI Proceedings",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/isi-proceedings/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"isi-proceedings",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Scientific Article BDI",
+					"item": [
+						{
+							"name": "Scientific Article BDI",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-article-bdi",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-article-bdi"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Article BDI",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"hierarchyDomains\": \"Article title\",\r\n    \"articleTitle\": \"Author A, Author B\",\r\n    \"authors\": \"2022-03-06T17:39:09.340Z\",\r\n    \"bdiIndexedMagazine\": \"The lord of the rings\",\r\n    \"publicationYear\": 2022,\r\n    \"volume\": \"Volume\",\r\n    \"number\": 5,\r\n    \"startingPage\": 3,\r\n    \"endingPage\": 5,\r\n    \"internationalMagazine\": \"Trei\",\r\n    \"cnatdcuClassification\": \"Conference\",\r\n    \"indexedArticleLink\": \"Meh\",\r\n    \"bdiDatabase\": \"Meh\",\r\n    \"bdiDatabaseLink\": \"Meh\",\r\n    \"observations\": \"Meh\" \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-article-bdi",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-article-bdi"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Article BDI",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"hierarchyDomains\": \"Article title\",\r\n    \"articleTitle\": \"Author A, Author B\",\r\n    \"authors\": \"2022-03-06T17:39:09.340Z\",\r\n    \"bdiIndexedMagazine\": \"The lord of the rings\",\r\n    \"publicationYear\": 2022,\r\n    \"volume\": \"Volume\",\r\n    \"number\": 5,\r\n    \"startingPage\": 3,\r\n    \"endingPage\": 5,\r\n    \"internationalMagazine\": \"Trei\",\r\n    \"cnatdcuClassification\": \"Conference\",\r\n    \"indexedArticleLink\": \"Meh\",\r\n    \"bdiDatabase\": \"Meh\",\r\n    \"bdiDatabaseLink\": \"Meh\",\r\n    \"observations\": \"Meh\" \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-article-bdi/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-article-bdi",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Article BDI",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-article-bdi/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-article-bdi",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Scientific Book",
+					"item": [
+						{
+							"name": "Scientific Book",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-book",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-book"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Book",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"hierarchyDomains\": \"Article title\",\r\n    \"chapterTitle\": \"Author A, Author B\",\r\n    \"authors\": \"2022-03-06T17:39:09.340Z\",\r\n    \"bookTitle\": \"The lord of the rings\",\r\n    \"pageNumber\": \"No issue\",\r\n    \"publicationYear\": 3,\r\n    \"publishingHouse\": \"Publishing House\",\r\n    \"impactFactor\": \"Impact\",\r\n    \"publicationType\": \"Class\",\r\n    \"isbn\": \"\",\r\n    \"observations\": \"Meh\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-book",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-book"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Book",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"hierarchyDomains\": \"Article title\",\r\n    \"chapterTitle\": \"Author A, Author B\",\r\n    \"authors\": \"2022-03-06T17:39:09.340Z\",\r\n    \"bookTitle\": \"The lord of the rings\",\r\n    \"pageNumber\": \"No issue\",\r\n    \"publicationYear\": 3,\r\n    \"publishingHouse\": \"Publishing House\",\r\n    \"impactFactor\": \"Impact\",\r\n    \"publicationType\": \"Class\",\r\n    \"isbn\": \"\",\r\n    \"observations\": \"Meh\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-book/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-book",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Book",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-book/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-book",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Translation",
+					"item": [
+						{
+							"name": "Translation",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/translation",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"translation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Translation",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"hierarchyDomains\": \"value\",\r\n    \"translationTitle\": \"value\",\r\n    \"authors\": \"value\",\r\n    \"translatedAuthors\": \"value\",\r\n    \"publicationYear\": 2021,\r\n    \"publishingHouse\": \"value\",\r\n    \"country\": \"value\",\r\n    \"pageNumber\": 2,\r\n    \"isbn\": \"value\",\r\n    \"translationType\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/translation",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"translation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Translation",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"hierarchyDomains\": \"value\",\r\n    \"translationTitle\": \"value\",\r\n    \"authors\": \"value\",\r\n    \"translatedAuthors\": \"value\",\r\n    \"publicationYear\": 2021,\r\n    \"publishingHouse\": \"value\",\r\n    \"country\": \"value\",\r\n    \"pageNumber\": 2,\r\n    \"isbn\": \"value\",\r\n    \"translationType\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/translation/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"translation",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Translation",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/translation/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"translation",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Scientific Communication",
+					"item": [
+						{
+							"name": "Scientific Communication",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-communication",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-communication"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Communication",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"authors\": \"value\",\r\n    \"communicationType\": \"value\",\r\n    \"presentationYear\": 2021,\r\n    \"scientificManifestationName\": \"value\",\r\n    \"manifestationType\": \"value\",\r\n    \"scientificManifestationLink\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-communication",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-communication"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Communication",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"authors\": \"value\",\r\n    \"communicationType\": \"value\",\r\n    \"presentationYear\": 2021,\r\n    \"scientificManifestationName\": \"value\",\r\n    \"manifestationType\": \"value\",\r\n    \"scientificManifestationLink\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-communication/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-communication",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Scientific Communication",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/sc-communication/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"sc-communication",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Patent",
+					"item": [
+						{
+							"name": "Patent",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/patent",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"patent"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Patent",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"patentTitleOrCBI\": \"dvalue\",\r\n    \"authors\": \"value\",\r\n    \"yearOfObtainingPatent\": 2021,\r\n    \"patentNumber\": 3,\r\n    \"patentType\": \"value\",\r\n    \"authority\": \"value\",\r\n    \"country\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/patent",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"patent"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Patent",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"patentTitleOrCBI\": \"dvalue\",\r\n    \"authors\": \"value\",\r\n    \"yearOfObtainingPatent\": 2021,\r\n    \"patentNumber\": 3,\r\n    \"patentType\": \"value\",\r\n    \"authority\": \"value\",\r\n    \"country\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/patent/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"patent",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Patent",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/patent/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"patent",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Research Contract",
+					"item": [
+						{
+							"name": "Research Contract",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/research-contract",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"research-contract"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Research Contract",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"researchContractNameOrProject\": \"dvalue\",\r\n    \"projectCode\": \"value\",\r\n    \"financier\": \"value\",\r\n    \"function\": \"value\",\r\n    \"startProjectPeriod\": \"Tue Feb 15 2022\",\r\n    \"endProjectPeriod\": \"Tue Feb 15 2022\",\r\n    \"contractType\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/research-contract",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"research-contract"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Research Contract",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"researchContractNameOrProject\": \"dvalue\",\r\n    \"projectCode\": \"value\",\r\n    \"financier\": \"value\",\r\n    \"function\": \"value\",\r\n    \"startProjectPeriod\": \"Tue Feb 15 2022\",\r\n    \"endProjectPeriod\": \"Tue Feb 15 2022\",\r\n    \"contractType\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/research-contract/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"research-contract",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Research Contract",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/research-contract/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"research-contract",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Citation",
+					"item": [
+						{
+							"name": "Citation",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BaseUrl}}/api/citation",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"citation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Citation",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"articleTitle\": \"dvalue\",\r\n    \"authors\": \"value\",\r\n    \"publicationTitleWhereReferenced\": \"value\",\r\n    \"authorsNamesThatReference\": \"value\",\r\n    \"citationYear\": 2021,\r\n    \"volume\": \"value\",\r\n    \"impactFactor\": \"value\",\r\n    \"issue\": \"value\",\r\n    \"articleNumber\": 7,\r\n    \"startingPage\": 4,\r\n    \"endingPage\": 6,\r\n    \"doi\": \"value\",\r\n    \"cnatdcuClassification\": \"value\",\r\n    \"citations\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/citation",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"citation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Citation",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"articleTitle\": \"dvalue\",\r\n    \"authors\": \"value\",\r\n    \"publicationTitleWhereReferenced\": \"value\",\r\n    \"authorsNamesThatReference\": \"value\",\r\n    \"citationYear\": 2021,\r\n    \"volume\": \"value\",\r\n    \"impactFactor\": \"value\",\r\n    \"issue\": \"value\",\r\n    \"articleNumber\": 7,\r\n    \"startingPage\": 4,\r\n    \"endingPage\": 6,\r\n    \"doi\": \"value\",\r\n    \"cnatdcuClassification\": \"value\",\r\n    \"citations\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/citation/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"citation",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Citation",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/citation/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"citation",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Awards And Nominations",
+					"item": [
+						{
+							"name": "Awards And Nominations",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/award-nomination",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"award-nomination"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Awards And Nominations",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"yearOfAward\": 2021,\r\n    \"awardName\": \"value\",\r\n    \"awardType\": \"value\",\r\n    \"organizationThatGiveTheAward\": \"value\",\r\n    \"country\": \"value\",\r\n    \"awardedFor\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/award-nomination",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"award-nomination"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Awards And Nominations",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"yearOfAward\": 2021,\r\n    \"awardName\": \"value\",\r\n    \"awardType\": \"value\",\r\n    \"organizationThatGiveTheAward\": \"value\",\r\n    \"country\": \"value\",\r\n    \"awardedFor\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/award-nomination/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"award-nomination",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Awards And Nominations",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/award-nomination/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"award-nomination",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Academy Member",
+					"item": [
+						{
+							"name": "Academy Member",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/academy-member",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"academy-member"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Academy Member",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"admissionYear\": 2021,\r\n    \"academyName\": \"value\",\r\n    \"memberType\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/academy-member",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"academy-member"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Academy Member",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"admissionYear\": 2021,\r\n    \"academyName\": \"value\",\r\n    \"memberType\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/academy-member/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"academy-member",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Academy Member",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/academy-member/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"academy-member",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Editorial Member",
+					"item": [
+						{
+							"name": "Editorial Member",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/editorial-member",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"editorial-member"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Editorial Member",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"committeeName\": \"value\",\r\n    \"magazineName\": \"value\",\r\n    \"yearOfCommitteeAttendance\": 2021,\r\n    \"quality\": \"value\",\r\n    \"magazineType\": \"value\",\r\n    \"nationalOrInternational\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/editorial-member",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"editorial-member"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Editorial Member",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"committeeName\": \"value\",\r\n    \"magazineName\": \"value\",\r\n    \"yearOfCommitteeAttendance\": 2021,\r\n    \"quality\": \"value\",\r\n    \"magazineType\": \"value\",\r\n    \"nationalOrInternational\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/editorial-member/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"editorial-member",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Editorial Member",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/editorial-member/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"editorial-member",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Organized Event",
+					"item": [
+						{
+							"name": "Organized Event",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/organized-event",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"organized-event"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Organized Event",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"manifestationName\": \"value\",\r\n    \"startDate\": \"Tue Feb 15 2022\",\r\n    \"endDate\": \"Tue Feb 15 2022\",\r\n    \"manifestationPlace\": \"value\",\r\n    \"manifestationType\": \"value\",\r\n    \"manifestationClassification\": \"value\",\r\n    \"manifestationLink\": \"value\",\r\n    \"contactPerson\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/organized-event",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"organized-event"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Organized Event",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"manifestationName\": \"value\",\r\n    \"startDate\": \"Tue Feb 15 2022\",\r\n    \"endDate\": \"Tue Feb 15 2022\",\r\n    \"manifestationPlace\": \"value\",\r\n    \"manifestationType\": \"value\",\r\n    \"manifestationClassification\": \"value\",\r\n    \"manifestationLink\": \"value\",\r\n    \"contactPerson\": \"value\",\r\n    \"observations\": \"value\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/organized-event/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"organized-event",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Organized Event",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/organized-event/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"organized-event",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Without Activity",
+					"item": [
+						{
+							"name": "Without Activity",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/without-activity",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"without-activity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Without Activity",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"observations\": \"Meh\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/without-activity",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"without-activity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Without Activity",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"observations\": \"Meh\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/without-activity/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"without-activity",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Without Activity",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/without-activity/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"without-activity",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Didactic Activity",
+					"item": [
+						{
+							"name": "Didactic Activity",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/didactic-activity",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"didactic-activity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Didactic Activity",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"className\": \"value\",\r\n    \"activityType\": \"value\",\r\n    \"yearOfAttendingActivity\": 2021\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/didactic-activity",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"didactic-activity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Didactic Activity",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"className\": \"value\",\r\n    \"activityType\": \"value\",\r\n    \"yearOfAttendingActivity\": 2021\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/didactic-activity/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"didactic-activity",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Didactic Activity",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{Authorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/api/didactic-activity/1",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"api",
+										"didactic-activity",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Information",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/information",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"information"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Forms",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{token}}/api/forms",
+							"host": [
+								"{{token}}"
+							],
+							"path": [
+								"api",
+								"forms"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/user/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Base Information",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{host}}/api/base-information",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"base-information"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Base Information",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Valentin/Desktop/base_information.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/base-information",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"base-information"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Base Information",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{host}}/api/base-information/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"base-information",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Organization Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Valentin/Desktop/organization_test.xlsx"
+								},
+								{
+									"key": "email",
+									"value": "Ana are mere",
+									"type": "text"
+								},
+								{
+									"key": "subject",
+									"value": "Test",
+									"type": "text"
+								},
+								{
+									"key": "from",
+									"value": "Cineva",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/organization-email",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"organization-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export Forms",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/export-forms",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"export-forms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FAZ",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "timetable",
+									"type": "file",
+									"src": "/C:/Users/Valentin/Desktop/orar_scoala_doctorala.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/faz",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"faz"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
