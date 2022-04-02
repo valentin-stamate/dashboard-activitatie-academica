@@ -1322,7 +1322,9 @@ export class RestService {
     }
 
     /* Timetable -> Individual Timetable -> Monthly Hours */
-    static async faz(timetableFile: UploadedFile): Promise<any> {
+    static async faz(timetableFile: UploadedFile, ignoreStart: number, ignoreEnd: number): Promise<any> {
+        /* ignoreStart and ignoreEnd are by default -1 if the user doesn't specify a date */
+
         const timetableWorkBook = XLSX.read(timetableFile.data);
         const timetableSheet = timetableWorkBook.Sheets[timetableWorkBook.SheetNames[0]];
 
@@ -1350,7 +1352,7 @@ export class RestService {
             let professorName = row[TimetableHeaders.PROFESSOR_NAME];
 
             if (professorName === undefined || typeof professorName !== "string") {
-                console.log('Something went wrong with row:')
+                console.log('Something went wrong with the row:')
                 console.log(row);
                 throw new ResponseError(ResponseMessage.INVALID_TIMETABLE, StatusCode.BAD_REQUEST);
             }
@@ -1375,6 +1377,7 @@ export class RestService {
         for (let professor of professorList) {
             professorsTimetable[professor] = {};
 
+            /* The day is the form [day, rows[]] */
             for (let day of Object.entries(parsedTimetable)) {
                 professorsTimetable[professor][day[0]] = (day[1] as any[]).filter(item => item[TimetableHeaders.PROFESSOR_NAME] === professor);
             }
@@ -1400,6 +1403,18 @@ export class RestService {
         const currentMonth = currentDate.getMonth(); // January = 0
         const currentYear = currentDate.getFullYear();
 
+        const activityTypes: string[] = [
+            'Membru comisie de îndrumare CSRD',
+            'Îndrumare teză de doctorat TD',
+            'Tehnici fundamentale din domeniul temei de cercetare CAD',
+            'Tehnici fundamentale din domeniul temei de cercetare SAD',
+            'Metode și metodologii în cercetarea în lnformatica CAD',
+            'Metode și metodologii în cercetarea în lnformatica SAD',
+            'Tehnici specifice avansate din domeniul temei de cercetare CAD',
+            'Tehnici specifice avansate din domeniul temei de cercetare SAD',
+            'Etică și lntegritate Academică CAD',
+        ];
+
         /* For every professor the hours will be calculated for the full month */
         for (let professor of professorList) {
             const professorWeek = professorsTimetable[professor];
@@ -1407,6 +1422,10 @@ export class RestService {
             /* Loop through each day of the month and see if that professor has something to do */
             const monthlyDays: FAZDayActivity[] = [];
             for (let i = 1; i <= monthDays; i++) {
+                if (ignoreStart <= i && i <= ignoreEnd) {
+                    continue;
+                }
+
                 const day = new Date(currentYear, currentMonth, i).getDay();
 
                 if (day === 0 || day === 6) {
@@ -1416,29 +1435,68 @@ export class RestService {
                 const dayStr = dayMap[day];
                 const dayRows: any[] = professorWeek[dayStr];
                 if (dayRows.length !== 0) {
-                    let totalDayMinutes = 0;
-                    let intervals = [];
+                    /* First activity type day summary */
+
+                    /* Create a map for every activity type in order to separate them */
+                    const activityMap: any = {};
+                    for (let activity of activityTypes) {
+                        activityMap[activity] = {hours: 0, intervals: [], activity: '', activityShort: ''};
+                    }
 
                     for (let item of dayRows) {
+                        const activity = item[TimetableHeaders.ACTIVITY_TYPE];
+                        const activityShort = item[TimetableHeaders.ACTIVITY_SHORTCUT];
+
+                        const activityFull = `${activity} ${activityShort}`;
+                        if (activityMap[activityFull] === undefined) {
+                            console.log(`Unrecognized activity type: "${activityFull}". Skipped.`);
+                            continue;
+                        }
+
                         const rawFromTime = item[TimetableHeaders.FROM]; // eg. 13.5 aka 13:30
                         const rawToTime = item[TimetableHeaders.TO]; // ex. 14.25 aka 14:15
 
                         const fromTime = UtilService.excelHourToHourStr(rawFromTime);
                         const toTime = UtilService.excelHourToHourStr(rawToTime);
 
-                         intervals.push(`${fromTime}-${toTime}`);
+                        activityMap[activityFull].intervals.push(`${fromTime}-${toTime}`);
 
-                        totalDayMinutes += (rawToTime - rawFromTime) * 60;
+                        const rowFAZHours = item[TimetableHeaders.FAZ_HOURS];
+
+                        if (typeof rowFAZHours === 'number') {
+                            activityMap[activityFull].hours += rowFAZHours;
+                        }
+
+                        activityMap[activityFull].activity = activity;
+                        activityMap[activityFull].activityShort = activityShort;
                     }
 
-                    const hours: number = totalDayMinutes / 60;
+                    /* Look through all the different activity types day summary and push it to the monthly days list */
+                    for (let activityFull of activityTypes) {
+                        let hours = activityMap[activityFull].hours;
+                        let intervals = activityMap[activityFull].intervals;
+                        let activity = activityMap[activityFull].activity;
+                        let activityShort = activityMap[activityFull].activityShort;
 
-                    const finalRow: FAZDayActivity = {
-                        day: i, interval: intervals.join(', '), discipline: '', year: 'I',
-                        cad: '', sad: ' ', td: ' ', csrd: '', hours: hours, weekDay: dayStr,
-                    };
+                        if (hours === 0) {
+                            continue;
+                        }
 
-                    monthlyDays.push(finalRow);
+                        hours = parseFloat(hours.toFixed(2));
+
+                        let cad = activityShort === 'CAD' ? 'CAD' : '';
+                        let sad = activityShort === 'SAD' ? 'SAD' : '';
+                        let td = activityShort === 'TD' ? 'TD' : '';
+                        let csrd = activityShort === 'CSRD' ? 'CSRD' : '';
+
+                        const fazRow: FAZDayActivity = {
+                            day: i, interval: intervals.join(', '), discipline: activity, year: 'I',
+                            cad: cad, sad: sad, td: td, csrd: csrd, hours: hours, weekDay: dayStr,
+                        };
+
+                        monthlyDays.push(fazRow);
+                    }
+
                 }
             }
 

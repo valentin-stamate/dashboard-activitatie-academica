@@ -1,4 +1,5 @@
 import {AlignmentType, BorderStyle, convertInchesToTwip, Packer, Paragraph, Table, TableCell, TableRow, TextRun, WidthType, Document} from "docx";
+import {TimetableHeaders} from "./xlsx.service";
 
 const monthMap = [
   'Ianuarie',
@@ -72,10 +73,10 @@ export class FAZService {
         };
 
         const tableMargins = {
-            top: convertInchesToTwip(0.10),
-            bottom: convertInchesToTwip(0.10),
-            right: convertInchesToTwip(0.10),
-            left: convertInchesToTwip(0.10),
+            top: convertInchesToTwip(0.05),
+            bottom: convertInchesToTwip(0.05),
+            right: convertInchesToTwip(0.05),
+            left: convertInchesToTwip(0.05),
         }
 
         const tableFill = {
@@ -135,10 +136,35 @@ export class FAZService {
         const fazRows = FAZService.generateDOCXRows(data.monthlyActivity);
 
         /* Calculate the total hours in a month */
-        let totalHours = 0;
+        let totalCADHours = 0;
+        let totalSADHours = 0;
+        let totalTDHours = 0;
+        let totalCSRDHours = 0;
+
         for (let row of data.monthlyActivity) {
-            totalHours += row.hours;
+            if (row.cad !== '') {
+                totalCADHours += row.hours;
+            }
+
+            if (row.sad !== '') {
+                totalSADHours += row.hours;
+            }
+
+            if (row.td !== '') {
+                totalTDHours += row.hours;
+            }
+
+            if (row.csrd !== '') {
+                totalCSRDHours += row.hours;
+            }
         }
+
+        totalCADHours = parseFloat(totalCADHours.toFixed(2));
+        totalSADHours = parseFloat(totalSADHours.toFixed(2));
+        totalTDHours = parseFloat(totalTDHours.toFixed(2));
+        totalCSRDHours = parseFloat(totalCSRDHours.toFixed(2));
+
+        const totalHours = totalCADHours + totalSADHours + totalTDHours + totalCSRDHours;
 
         /* Table */
         const fazTable = new Table({
@@ -149,27 +175,33 @@ export class FAZService {
                         new TableCell({
                             rowSpan: 2,
                             children: [FAZService.customParagraph('Ziua')],
+                            width: {size: 5, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
                             children: [FAZService.customParagraph('Intervalul Orar')],
+                            width: {size: 15, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
                             children: [FAZService.customParagraph('Disciplina și specializare')],
+                            width: {size: 25, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
                             children: [FAZService.customParagraph('Anul')],
+                            width: {size: 5, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 1,
                             columnSpan: 4,
                             children: [FAZService.customParagraph('Nivelul de studii și tip de activitate Doctorat')],
+                            width: {size: 40, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Număr de ore fizice efectuate pe săptămână Din fisierul excel verificat cu orarul')],
+                            children: [FAZService.customParagraph('Număr de ore fizice efectuate pe săptămână')],
+                            width: {size: 10, type: WidthType.PERCENTAGE},
                         }),
                     ]
                 }),
@@ -204,15 +236,11 @@ export class FAZService {
                             columnSpan: 4,
                             children: [FAZService.customParagraph('Total ore fizice:')]
                         }),
-                        new TableCell({children: [FAZService.customParagraph('')]}),
-                        new TableCell({children: [FAZService.customParagraph('')]}),
-                        new TableCell({children: [FAZService.customParagraph('')]}),
-                        new TableCell({
-                            children: [FAZService.customParagraph(`${totalHours} CSRD`)]
-                        }),
-                        new TableCell({
-                            children: [FAZService.customParagraph(`${totalHours}`)]
-                        }),
+                        new TableCell({children: [FAZService.customParagraph(`${totalCADHours} CAD`)]}),
+                        new TableCell({children: [FAZService.customParagraph(`${totalSADHours} SAD`)]}),
+                        new TableCell({children: [FAZService.customParagraph(`${totalTDHours} TD`)]}),
+                        new TableCell({children: [FAZService.customParagraph(`${totalCSRDHours} CSRD`)]}),
+                        new TableCell({children: [FAZService.customParagraph(`${totalHours} TOTAL`)]}),
                     ]
                 }),
             ],

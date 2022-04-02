@@ -13,7 +13,9 @@ export enum TimetableHeaders {
     FROM = 'De la',
     TO = 'Până la',
     ACTIVITY_NAME = 'Disciplina',
-    ACTIVITY_TYPE = 'Tip',
+    ACTIVITY_TYPE = 'Activitate',
+    ACTIVITY_SHORTCUT = 'Prescurtare activitate',
     PROFESSOR_NAME = 'Profesor',
+    FAZ_HOURS = 'ore pe saptamana FAZ',
     CLASS_LOCATION = 'Sala',
 }

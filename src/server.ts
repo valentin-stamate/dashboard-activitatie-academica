@@ -16,7 +16,7 @@ require('dotenv').config();
 const app: Express = express();
 
 /** Initialize Database */
-sequelizeInit();
+sequelizeInit().then(r => {});
 
 /************************************************************************************
  *                              Basic Express Middlewares

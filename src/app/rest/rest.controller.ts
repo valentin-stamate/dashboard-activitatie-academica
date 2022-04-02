@@ -1054,7 +1054,9 @@ export class RestController {
     }
 
     static async faz(req: Request<any>, res: Response, next: NextFunction) {
-        if (!req.files) {
+        const body = req.body;
+
+        if (!req.files || body.ignoreStart === undefined || body.ignoreEnd === undefined) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -1067,7 +1069,7 @@ export class RestController {
         }
 
         try {
-            const fileBuffer = await RestService.faz(timetableFile);
+            const fileBuffer = await RestService.faz(timetableFile, body.ignoreStart, body.ignoreEnd);
 
             const fileName = `faz_${UtilService.stringDate(new Date())}.zip`;
 
