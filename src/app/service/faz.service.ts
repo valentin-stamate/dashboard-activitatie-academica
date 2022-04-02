@@ -174,33 +174,33 @@ export class FAZService {
                     children: [
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Ziua')],
+                            children: [FAZService.customParagraph('Ziua', {size: 16})],
                             width: {size: 5, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Intervalul Orar')],
+                            children: [FAZService.customParagraph('Intervalul Orar', {size: 16})],
                             width: {size: 15, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Disciplina și specializare')],
+                            children: [FAZService.customParagraph('Disciplina și specializare', {size: 16})],
                             width: {size: 25, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Anul')],
+                            children: [FAZService.customParagraph('Anul', {size: 16})],
                             width: {size: 5, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 1,
                             columnSpan: 4,
-                            children: [FAZService.customParagraph('Nivelul de studii și tip de activitate Doctorat')],
+                            children: [FAZService.customParagraph('Nivelul de studii și tip de activitate Doctorat', {size: 16})],
                             width: {size: 40, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Număr de ore fizice efectuate pe săptămână')],
+                            children: [FAZService.customParagraph('Număr de ore fizice efectuate pe săptămână', {size: 16})],
                             width: {size: 10, type: WidthType.PERCENTAGE},
                         }),
                     ]
@@ -209,19 +209,19 @@ export class FAZService {
                     children: [
                         new TableCell({
                             rowSpan: 1,
-                            children: [FAZService.customParagraph('Curs (CAD)')],
+                            children: [FAZService.customParagraph('Curs (CAD)', {size: 16})],
                         }),
                         new TableCell({
                             rowSpan: 1,
-                            children: [FAZService.customParagraph('Seminar (SAD)')],
+                            children: [FAZService.customParagraph('Seminar (SAD)', {size: 16})],
                         }),
                         new TableCell({
                             rowSpan: 1,
-                            children: [FAZService.customParagraph('Îndrumare teza de doctorat (TD)')],
+                            children: [FAZService.customParagraph('Îndrumare teza de doctorat (TD)', {size: 16})],
                         }),
                         new TableCell({
                             rowSpan: 1,
-                            children: [FAZService.customParagraph('Membru comisie îndrumare doctorat (CSRD)')],
+                            children: [FAZService.customParagraph('Membru comisie îndrumare doctorat (CSRD)', {size: 16})],
                         }),
                     ]
                 }),
@@ -234,13 +234,13 @@ export class FAZService {
                     children: [
                         new TableCell({
                             columnSpan: 4,
-                            children: [FAZService.customParagraph('Total ore fizice:')]
+                            children: [FAZService.customParagraph('Total ore fizice:', {size: 16})]
                         }),
-                        new TableCell({children: [FAZService.customParagraph(`${totalCADHours} CAD`)]}),
-                        new TableCell({children: [FAZService.customParagraph(`${totalSADHours} SAD`)]}),
-                        new TableCell({children: [FAZService.customParagraph(`${totalTDHours} TD`)]}),
-                        new TableCell({children: [FAZService.customParagraph(`${totalCSRDHours} CSRD`)]}),
-                        new TableCell({children: [FAZService.customParagraph(`${totalHours} TOTAL`)]}),
+                        new TableCell({children: [FAZService.customParagraph(`${totalCADHours} CAD`, {size: 16})]}),
+                        new TableCell({children: [FAZService.customParagraph(`${totalSADHours} SAD`, {size: 16})]}),
+                        new TableCell({children: [FAZService.customParagraph(`${totalTDHours} TD`, {size: 16})]}),
+                        new TableCell({children: [FAZService.customParagraph(`${totalCSRDHours} CSRD`, {size: 16})]}),
+                        new TableCell({children: [FAZService.customParagraph(`${totalHours} TOTAL`, {size: 16})]}),
                     ]
                 }),
             ],
@@ -286,31 +286,31 @@ export class FAZService {
             tableRows.push(new TableRow({
                 children: [
                     new TableCell({
-                        children: [FAZService.customParagraph(`${row.day}`)],
+                        children: [FAZService.customParagraph(`${row.day}`, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.interval)],
+                        children: [FAZService.customParagraph(row.interval, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.discipline)],
+                        children: [FAZService.customParagraph(row.discipline, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(`${row.year}`)],
+                        children: [FAZService.customParagraph(`${row.year}`, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.cad)],
+                        children: [FAZService.customParagraph(row.cad, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.sad)],
+                        children: [FAZService.customParagraph(row.sad, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.td)],
+                        children: [FAZService.customParagraph(row.td, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.csrd)],
+                        children: [FAZService.customParagraph(row.csrd, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(`${row.hours}`)],
+                        children: [FAZService.customParagraph(`${row.hours}`, {size: 16})],
                     }),
                 ]
             }));
