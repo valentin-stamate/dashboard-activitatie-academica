@@ -151,7 +151,7 @@ app.get(RestEndpoints.BASE_INFORMATION, Middleware.adminMiddleware, RestControll
 app.post(RestEndpoints.BASE_INFORMATION, Middleware.adminMiddleware, RestController.importBaseInformation);
 app.delete(`${RestEndpoints.BASE_INFORMATION}/:id`, Middleware.adminMiddleware, RestController.deleteBaseInformation);
 
-app.post(RestEndpoints.ORGANIZATION_EMAIL, Middleware.adminMiddleware, RestController.sendOrganizationEmail);
+app.post(RestEndpoints.TIMETABLE_EMAIL, Middleware.adminMiddleware, RestController.sendTimetableEmail);
 app.get(RestEndpoints.EXPORT_FORMS, Middleware.adminMiddleware, RestController.exportForms);
 
 app.post(RestEndpoints.FAZ, Middleware.adminMiddleware, RestController.faz);

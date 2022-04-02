@@ -1014,16 +1014,23 @@ export class RestController {
         }
     }
 
-    static async sendOrganizationEmail(req: Request<any>, res: Response, next: NextFunction) {
+    static async sendTimetableEmail(req: Request<any>, res: Response, next: NextFunction) {
         if (!req.files) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
         const file = req.files.file as UploadedFile;
-        const email = req.body.email;
+        const email = req.body.emailTemplate;
         const subject = req.body.subject;
         const from = req.body.from;
+        const recipientExcept = req.body.exceptRecipient;
+
+        let recipientExceptList: string[] = [];
+        if (recipientExcept !== undefined) {
+            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
+            recipientExceptList = parsedRecipientExcept.split(',');
+        }
 
         if (email === undefined || subject === undefined || from === undefined || file === undefined) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
@@ -1031,7 +1038,7 @@ export class RestController {
         }
 
         try {
-            const data = await RestService.sendOrganizationEmail(email, subject, from, file);
+            const data = await RestService.sendTimetableEmail(email, subject, from, file, recipientExceptList);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);

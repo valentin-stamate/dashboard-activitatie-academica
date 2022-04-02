@@ -38,13 +38,13 @@ import {
     WithoutActivityModel
 } from "../database/sequelize";
 import {UploadedFile} from "express-fileupload";
-import XLSX, {WorkBook, WorkSheet} from "xlsx";
+import XLSX from "xlsx";
 import {UtilService} from "../service/util.service";
 import {EmailDefaults, LoginMessage, MailService} from "../service/email.service";
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
-import {BaseInformationHeaders, OrganizationHeaders, TimetableHeaders,} from "../service/xlsx.service";
+import {BaseInformationHeaders, SemesterTimetableHeaders, TimetableHeaders,} from "../service/xlsx.service";
 import JSZip from "jszip";
 import {FAZData, FAZDayActivity, FAZService} from "../service/faz.service";
 import {ResponseMessage, StatusCode} from "./rest.util";
@@ -1194,20 +1194,18 @@ export class RestService {
         return;
     }
 
-    static async sendOrganizationEmail(htmlEmail: string, subject: string, from: string, file: UploadedFile): Promise<any> {
+    static async sendTimetableEmail(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[]): Promise<any> {
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
 
         const rows: any[] = XLSX.utils.sheet_to_json(sheet);
-        const emailRowsMap: Map<string, any[]> = new Map();
-
-        const headers = Object.keys(rows[0]);
+        const emailRowsMap = new Map<string, any[]>();
 
         for (let row of rows) {
-            const rowMap: Map<string, any> = new Map(Object.entries(row));
-            const email = rowMap.get(OrganizationHeaders.EMAIL);
+            const email = row[SemesterTimetableHeaders.EMAIL];
 
             const emailRows = emailRowsMap.get(email);
+
             if (emailRows === undefined) {
                 emailRowsMap.set(email, [row]);
                 continue;
@@ -1218,48 +1216,37 @@ export class RestService {
 
         const emailResults: {email: string, send: boolean}[] = [];
 
-        for (const [email, rows] of emailRowsMap.entries()) {
-            if (email === undefined) {
-                throw new ResponseError(ResponseMessage.ALL_EMAILS_SHOULD_BE_PRESENT, StatusCode.NOT_FOUND);
+        for (let [email, rows] of emailRowsMap.entries()) {
+            if (recipientExceptList.some(item => item === email)) {
+                continue;
             }
 
-            const sheet: WorkSheet = XLSX.utils.aoa_to_sheet([
-                headers
-            ]);
+            let emailActivityContent = '';
+            for (let row of rows) {
+                const activity = row[SemesterTimetableHeaders.ACTIVITY];
+                const weekHours = row[SemesterTimetableHeaders.WEEK_HOURS];
 
-            XLSX.utils.sheet_add_aoa(sheet, rows.map(item => Object.values(item)), {origin: -1});
+                emailActivityContent += `${activity} ${weekHours} ore/saptamana <br>`;
+            }
 
-            const workBook: WorkBook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workBook, sheet);
+            const emailContent = emailTemplate.replace(new RegExp(/{{activity}}/g), emailActivityContent);
 
-            const dateStr = UtilService.stringDate(new Date());
-            const excelBuffer: Buffer = XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'});
-            const excelName = `organizare_${dateStr}.xlsx`;
+            /* Sending the email */
 
             try {
                 await MailService.sendMail({
-                    from: EmailDefaults.FROM,
-                    subject: `${EmailDefaults.APP_NAME}`,
+                    from: from,
+                    subject: subject,
                     to: email,
-                    html: htmlEmail,
-                    attachments: [{
-                        content: excelBuffer,
-                        filename: excelName,
-                    }]
+                    html: emailContent,
                 });
 
-                emailResults.push({
-                    email: email,
-                    send: true,
-                });
-            } catch (e) {
-                console.log(`Mail Error: ${email}`);
-                console.log(e);
-                emailResults.push({
-                    email: email,
-                    send: false,
-                });
+                emailResults.push({email: email, send: true});
+            } catch (err) {
+                console.log(err);
+                emailResults.push({email: email, send: false});
             }
+
         }
 
         return emailResults;

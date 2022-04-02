@@ -1,7 +1,3 @@
-export enum OrganizationHeaders {
-    EMAIL = 'Email',
-}
-
 export enum BaseInformationHeaders {
     IDENTIFIER = 'Matricol',
     NAME = 'Nume și prenume',
@@ -18,4 +14,12 @@ export enum TimetableHeaders {
     PROFESSOR_NAME = 'Profesor',
     FAZ_HOURS = 'ore pe saptamana FAZ',
     CLASS_LOCATION = 'Sala',
+}
+
+export enum SemesterTimetableHeaders {
+    NAME = 'Nume si prenume',
+    ACTIVITY = 'Activitate',
+    NUMBER_OF_STUDENTS = 'Studenti doctoranzi',
+    WEEK_HOURS = 'Ore în orar / saptamana',
+    EMAIL = 'Email',
 }

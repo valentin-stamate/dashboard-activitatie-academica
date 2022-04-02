@@ -29,7 +29,7 @@ export enum RestEndpoints {
     /** Admin */
     USER = '/api/user',
     BASE_INFORMATION = '/api/base-information',
-    ORGANIZATION_EMAIL = '/api/organization-email',
+    TIMETABLE_EMAIL = '/api/timetable-email',
     EXPORT_FORMS = '/api/export-forms',
     FAZ = '/api/faz',
     PROFESSORS = '/api/professors',

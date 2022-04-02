@@ -2470,7 +2470,7 @@
 					"response": []
 				},
 				{
-					"name": "Organization Email",
+					"name": "Timetable Email",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2486,33 +2486,38 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/Valentin/Desktop/organization_test.xlsx"
-								},
-								{
-									"key": "email",
-									"value": "Ana are mere",
-									"type": "text"
+									"src": "/C:/Users/Valentin/Desktop/ore_semestru.xlsx"
 								},
 								{
 									"key": "subject",
-									"value": "Test",
+									"value": "Școala Doctorală de Informatica - orar semestrul 2, an univ. 2021-2022",
 									"type": "text"
 								},
 								{
 									"key": "from",
-									"value": "Cineva",
+									"value": "Secretariat FII Adriana Bejinariu <stamatevalentin125@gmail.com>",
+									"type": "text"
+								},
+								{
+									"key": "emailTemplate",
+									"value": "Bună ziua,<br>\n<br>\nPentru activitățile din cadrul Școlii Doctorale de Informatică este nevoie să alocați la\norar intervale pentru următoarele ore în semestrul 2 al anului. univ. 2021-2022:<br>\n<br>\n{{activity}}\n<br>\nPersoană de contact orar semestrul 2. Conf.univ.dr. Arusoaie Andrei arusoaie.andrei@info.uaic.ro, andrei.arusoaie@gmail.com<br>\nVa mulțumesc anticipat",
+									"type": "text"
+								},
+								{
+									"key": "exceptRecipient",
+									"value": "alex@gmail.com",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{host}}/api/organization-email",
+							"raw": "{{host}}/api/timetable-email",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"organization-email"
+								"timetable-email"
 							]
 						}
 					},
@@ -2572,6 +2577,16 @@
 									"key": "timetable",
 									"type": "file",
 									"src": "/C:/Users/Valentin/Desktop/orar_scoala_doctorala.xlsx"
+								},
+								{
+									"key": "ignoreStart",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "ignoreEnd",
+									"value": "20",
+									"type": "text"
 								}
 							]
 						},

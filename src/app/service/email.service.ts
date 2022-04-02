@@ -34,6 +34,6 @@ export abstract class LoginMessage {
 }
 
 export enum EmailDefaults {
-    FROM = 'adriana.bejinariu@info.uaic.ro',
+    FROM = 'Scoala Doctorala FII <adriana.bejinariu@info.uaic.ro>',
     APP_NAME = 'Școala Doctorală de Informatică',
 }
