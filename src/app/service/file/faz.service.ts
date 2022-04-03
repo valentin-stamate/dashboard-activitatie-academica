@@ -1,5 +1,5 @@
-import {AlignmentType, BorderStyle, convertInchesToTwip, Packer, Paragraph, Table, TableCell, TableRow, TextRun, WidthType, Document} from "docx";
-import {TimetableHeaders} from "./xlsx.service";
+import {AlignmentType, Packer, Paragraph, Table, TableCell, TableRow, TextRun, WidthType, Document} from "docx";
+import {DocxUtils} from "./docx.utils";
 
 const monthMap = [
   'Ianuarie',
@@ -41,53 +41,11 @@ export interface FAZData {
 
 export class FAZService {
     static async getDOCXBuffer(data: FAZData): Promise<Buffer> {
-        const borderSize = 1;
-        const borderColor = 'ff0000';
-
-        /* Some configuration */
-        const borderNone = {
-            top: {
-                style: BorderStyle.NONE,
-                size: borderSize,
-                color: borderColor,
-                space: 10,
-            },
-            bottom: {
-                style: BorderStyle.NONE,
-                size: borderSize,
-                color: borderColor,
-                space: 10,
-            },
-            left: {
-                style: BorderStyle.NONE,
-                size: borderSize,
-                color: borderColor,
-                space: 10,
-            },
-            right: {
-                style: BorderStyle.NONE,
-                size: borderSize,
-                color: borderColor,
-                space: 10,
-            },
-        };
-
-        const tableMargins = {
-            top: convertInchesToTwip(0.05),
-            bottom: convertInchesToTwip(0.05),
-            right: convertInchesToTwip(0.05),
-            left: convertInchesToTwip(0.05),
-        }
-
-        const tableFill = {
-            size: 100,
-            type: WidthType.PERCENTAGE,
-        };
 
         /* Header */
         const headerLeft = new Paragraph({
             children: [
-                new TextRun({text: 'Universitatea "Alexandru Ioan Cuza" din Iași', font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: 'Universitatea "Alexandru Ioan Cuza" din Iași', font: 'Calibri', size: 21}),
                 new TextRun({text: 'Facultatea de Informatică', font: 'Calibri', size: 21, break: 1}),
                 new TextRun({text: 'Școala Doctorală', font: 'Calibri', size: 21, break: 1}),
                 new TextRun({text: `Nume și Prenume: ${data.professorName}`, font: 'Calibri', size: 21, break: 1}),
@@ -98,7 +56,7 @@ export class FAZService {
 
         const headerRight = new Paragraph({
             children: [
-                new TextRun({text: 'Se aprobă,', font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: 'Se aprobă,', font: 'Calibri', size: 21}),
                 new TextRun({text: 'Director Școala Doctorală,', font: 'Calibri', size: 21, break: 1}),
                 new TextRun({text: 'Prof. univ. dr. Lenuța Alboaie', font: 'Calibri', size: 21, break: 1}),
             ],
@@ -111,16 +69,16 @@ export class FAZService {
                     children: [
                         new TableCell({
                             children: [headerLeft],
-                            borders: borderNone,
+                            borders: DocxUtils.borderNone,
                         }),
                         new TableCell({
                             children: [headerRight],
-                            borders: borderNone,
+                            borders: DocxUtils.borderNone,
                         })
                     ]
                 }),
             ],
-            width: tableFill,
+            width: DocxUtils.tableFill,
         });
 
         /* Title */
@@ -174,33 +132,33 @@ export class FAZService {
                     children: [
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Ziua', {size: 16})],
+                            children: [DocxUtils.customParagraph('Ziua', {size: 16})],
                             width: {size: 5, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Intervalul Orar', {size: 16})],
+                            children: [DocxUtils.customParagraph('Intervalul Orar', {size: 16})],
                             width: {size: 15, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Disciplina și specializare', {size: 16})],
+                            children: [DocxUtils.customParagraph('Disciplina și specializare', {size: 16})],
                             width: {size: 25, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Anul', {size: 16})],
+                            children: [DocxUtils.customParagraph('Anul', {size: 16})],
                             width: {size: 5, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 1,
                             columnSpan: 4,
-                            children: [FAZService.customParagraph('Nivelul de studii și tip de activitate Doctorat', {size: 16})],
+                            children: [DocxUtils.customParagraph('Nivelul de studii și tip de activitate Doctorat', {size: 16})],
                             width: {size: 40, type: WidthType.PERCENTAGE},
                         }),
                         new TableCell({
                             rowSpan: 2,
-                            children: [FAZService.customParagraph('Număr de ore fizice efectuate pe săptămână', {size: 16})],
+                            children: [DocxUtils.customParagraph('Număr de ore fizice efectuate pe săptămână', {size: 16})],
                             width: {size: 10, type: WidthType.PERCENTAGE},
                         }),
                     ]
@@ -209,19 +167,19 @@ export class FAZService {
                     children: [
                         new TableCell({
                             rowSpan: 1,
-                            children: [FAZService.customParagraph('Curs (CAD)', {size: 16})],
+                            children: [DocxUtils.customParagraph('Curs (CAD)', {size: 16})],
                         }),
                         new TableCell({
                             rowSpan: 1,
-                            children: [FAZService.customParagraph('Seminar (SAD)', {size: 16})],
+                            children: [DocxUtils.customParagraph('Seminar (SAD)', {size: 16})],
                         }),
                         new TableCell({
                             rowSpan: 1,
-                            children: [FAZService.customParagraph('Îndrumare teza de doctorat (TD)', {size: 16})],
+                            children: [DocxUtils.customParagraph('Îndrumare teza de doctorat (TD)', {size: 16})],
                         }),
                         new TableCell({
                             rowSpan: 1,
-                            children: [FAZService.customParagraph('Membru comisie îndrumare doctorat (CSRD)', {size: 16})],
+                            children: [DocxUtils.customParagraph('Membru comisie îndrumare doctorat (CSRD)', {size: 16})],
                         }),
                     ]
                 }),
@@ -234,21 +192,21 @@ export class FAZService {
                     children: [
                         new TableCell({
                             columnSpan: 4,
-                            children: [FAZService.customParagraph('Total ore fizice:', {size: 16})]
+                            children: [DocxUtils.customParagraph('Total ore fizice:', {size: 16})]
                         }),
-                        new TableCell({children: [FAZService.customParagraph(`${totalCADHours} CAD`, {size: 16})]}),
-                        new TableCell({children: [FAZService.customParagraph(`${totalSADHours} SAD`, {size: 16})]}),
-                        new TableCell({children: [FAZService.customParagraph(`${totalTDHours} TD`, {size: 16})]}),
-                        new TableCell({children: [FAZService.customParagraph(`${totalCSRDHours} CSRD`, {size: 16})]}),
-                        new TableCell({children: [FAZService.customParagraph(`${totalHours} TOTAL`, {size: 16})]}),
+                        new TableCell({children: [DocxUtils.customParagraph(`${totalCADHours} CAD`, {size: 16})]}),
+                        new TableCell({children: [DocxUtils.customParagraph(`${totalSADHours} SAD`, {size: 16})]}),
+                        new TableCell({children: [DocxUtils.customParagraph(`${totalTDHours} TD`, {size: 16})]}),
+                        new TableCell({children: [DocxUtils.customParagraph(`${totalCSRDHours} CSRD`, {size: 16})]}),
+                        new TableCell({children: [DocxUtils.customParagraph(`${totalHours} TOTAL`, {size: 16})]}),
                     ]
                 }),
             ],
-            width: tableFill,
-            margins: tableMargins,
+            width: DocxUtils.tableFill,
+            margins: DocxUtils.tableMargins,
         });
 
-        const fazNote = FAZService.customParagraph('În semestrul I, anul universitar 2021-2022 datorită virusului COVID-19, activitatea didactică s-a desfășurat în sistem online conform orarului stabilit.');
+        const fazNote = DocxUtils.customParagraph('În semestrul I, anul universitar 2021-2022 datorită virusului COVID-19, activitatea didactică s-a desfășurat în sistem online conform orarului stabilit.');
 
         const footer = new Paragraph({
             children: [
@@ -286,31 +244,31 @@ export class FAZService {
             tableRows.push(new TableRow({
                 children: [
                     new TableCell({
-                        children: [FAZService.customParagraph(`${row.day}`, {size: 16})],
+                        children: [DocxUtils.customParagraph(`${row.day}`, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.interval, {size: 16})],
+                        children: [DocxUtils.customParagraph(row.interval, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.discipline, {size: 16})],
+                        children: [DocxUtils.customParagraph(row.discipline, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(`${row.year}`, {size: 16})],
+                        children: [DocxUtils.customParagraph(`${row.year}`, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.cad, {size: 16})],
+                        children: [DocxUtils.customParagraph(row.cad, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.sad, {size: 16})],
+                        children: [DocxUtils.customParagraph(row.sad, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.td, {size: 16})],
+                        children: [DocxUtils.customParagraph(row.td, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(row.csrd, {size: 16})],
+                        children: [DocxUtils.customParagraph(row.csrd, {size: 16})],
                     }),
                     new TableCell({
-                        children: [FAZService.customParagraph(`${row.hours}`, {size: 16})],
+                        children: [DocxUtils.customParagraph(`${row.hours}`, {size: 16})],
                     }),
                 ]
             }));
@@ -319,10 +277,4 @@ export class FAZService {
         return tableRows;
     }
 
-    /* Helper function */
-    private static customParagraph(text: string, options: any = {}) {
-        return new Paragraph({
-            children: [new TextRun({text: text, font: 'Calibri', ...options})]
-        });
-    }
 }

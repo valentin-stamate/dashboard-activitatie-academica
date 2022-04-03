@@ -155,6 +155,7 @@ app.post(RestEndpoints.TIMETABLE_EMAIL, Middleware.adminMiddleware, RestControll
 app.get(RestEndpoints.EXPORT_FORMS, Middleware.adminMiddleware, RestController.exportForms);
 
 app.post(RestEndpoints.FAZ, Middleware.adminMiddleware, RestController.faz);
+app.post(RestEndpoints.VERBAL_PROCESS, Middleware.adminMiddleware, RestController.sendVerbalProcess);
 
 /* Test */
 app.post('/test', RestController.test);

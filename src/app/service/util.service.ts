@@ -17,6 +17,12 @@ export class UtilService {
             + `${this.dateNumber(d.getHours())}${this.dateNumber(d.getMinutes())}${this.dateNumber(d.getSeconds())}`;
     }
 
+    /* 20.02.2022 */
+    static simpleStringDate(date: Date) {
+        const d = date;
+        return `${this.dateNumber(d.getDate())}.${this.dateNumber(d.getMonth() + 1)}.${d.getFullYear()}`;
+    }
+
     /* 6 -> 06 */
     static dateNumber(number: number):string {
         if (number < 10) {

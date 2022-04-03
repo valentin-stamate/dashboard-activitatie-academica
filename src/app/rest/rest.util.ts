@@ -17,6 +17,12 @@ export enum ResponseMessage {
     FORM_FIELD_ERROR = 'The form should not contain empty fields',
 }
 
+export enum ContentType {
+    ZIP = 'application/zip',
+    DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+}
+
 /** Contains the request responses */
 export enum StatusCode {
     /** Informational */

@@ -44,11 +44,12 @@ import {EmailDefaults, LoginMessage, MailService} from "../service/email.service
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
-import {BaseInformationHeaders, SemesterTimetableHeaders, TimetableHeaders,} from "../service/xlsx.service";
+import {BaseInformationHeaders, SemesterTimetableHeaders, TimetableHeaders,} from "../service/file/xlsx.service";
 import JSZip from "jszip";
-import {FAZData, FAZDayActivity, FAZService} from "../service/faz.service";
+import {FAZData, FAZDayActivity, FAZService} from "../service/file/faz.service";
 import {ResponseMessage, StatusCode} from "./rest.util";
 import {FormsService} from "../service/forms.service";
+import {VerbalProcessData, VerbalProcessService, VerbalProcessTableRow} from "../service/file/verbal.process.service";
 
 /** The layer where the logic holds */
 export class RestService {
@@ -1507,5 +1508,23 @@ export class RestService {
 
         /* Get the zip buffer in order to send it */
         return await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' });
+    }
+
+    static async sendVerbalProcess(): Promise<Buffer> {
+        const dummy: VerbalProcessData = {
+            name: 'dasdas',
+            function: 'Conf. Drt.',
+            presentationDate: new Date(),
+            attendanceYear: 2020,
+            reportTheme: 'Curcubee',
+            rows: [
+                {number: 1, coordinatorName: 'Cineva', commission: 'Commission',},
+                {number: 2, coordinatorName: 'Altcineva', commission: 'Commission',},
+                {number: 3, coordinatorName: 'Bassd', commission: 'Commission',},
+                {number: 4, coordinatorName: 'Hjsad', commission: 'Commission',},
+            ],
+        }
+
+        return await VerbalProcessService.getVerbalProcessDOCXBuffer(dummy);
     }
 }

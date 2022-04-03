@@ -22,7 +22,7 @@ import {
     WithoutActivity
 } from "../database/models";
 import {UtilService} from "../service/util.service";
-import {ResponseMessage, StatusCode} from "./rest.util";
+import {ContentType, ResponseMessage, StatusCode} from "./rest.util";
 
 /** The lowest layer that have access to req & res
  * It uses RestService to handle logic stuff */
@@ -1052,7 +1052,7 @@ export class RestController {
             const fileName = `data_${UtilService.stringDate(new Date())}.xlsx`;
 
             res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-            res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-type', ContentType.XLSX);
 
             res.end(fileBuffer);
         } catch (err) {
@@ -1077,12 +1077,26 @@ export class RestController {
 
         try {
             const fileBuffer = await RestService.faz(timetableFile, body.ignoreStart, body.ignoreEnd);
-
             const fileName = `faz_${UtilService.stringDate(new Date())}.zip`;
 
             res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-            res.setHeader('Content-type', 'application/octet-stream');
+            res.setHeader('Content-type', ContentType.ZIP);
+            res.end(fileBuffer);
+        } catch (err) {
+            next(err);
+        }
+    }
 
+    static async sendVerbalProcess(req: Request<any>, res: Response, next: NextFunction) {
+        const body = req.body;
+        // const file = req.files.file;
+
+        try {
+            const fileBuffer = await RestService.sendVerbalProcess();
+            const fileName = `proces_verbal_asdasdsad.docx`;
+
+            res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+            res.setHeader('Content-type', ContentType.DOCX);
             res.end(fileBuffer);
         } catch (err) {
             next(err);

@@ -32,6 +32,6 @@ export enum RestEndpoints {
     TIMETABLE_EMAIL = '/api/timetable-email',
     EXPORT_FORMS = '/api/export-forms',
     FAZ = '/api/faz',
-    PROFESSORS = '/api/professors',
+    VERBAL_PROCESS = '/api/verbal-process',
 
 }
