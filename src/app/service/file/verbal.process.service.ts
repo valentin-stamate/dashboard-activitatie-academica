@@ -4,7 +4,8 @@ import {UtilService} from "../util.service";
 
 export interface VerbalProcessData {
     name: string;
-    function: string;
+    coordinatorName: string;
+    coordinatorFunction: string;
     presentationDate: Date;
     attendanceYear: number;
     reportTheme: string;
@@ -40,7 +41,7 @@ export class VerbalProcessService {
         /* Title */
         const title = new Paragraph({
             children: [
-                new TextRun({text: 'PROCES-VERBAL', font: 'Calibri', size: 28, bold: true, break: 3}),
+                new TextRun({text: 'PROCES-VERBAL', font: 'Calibri', size: 28, bold: true, break: 2}),
                 new TextRun({text: '', font: 'Calibri', size: 24, bold: true, break: 1}),
                 new TextRun({text: `Din data de ${presentationDate}`, font: 'Calibri', size: 24, break: 1}),
                 new TextRun({text: `Privind raportul ştiinţific de doctorat susţinut de`, font: 'Calibri', size: 24, break: 1}),
@@ -106,13 +107,10 @@ export class VerbalProcessService {
                         '....................................................................................................................................................' +
                         '....................................................................................................................................................' +
                         '....................................................................................................................................................' +
-                        '....................................................................................................................................................' +
-                        '....................................................................................................................................................' +
-                        '....................................................................................................................................................' +
                         '', font: 'Calibri', size: 24}),
 
                 new TextRun({text: `Conducător ştiinţific:`, font: 'Calibri', size: 24, break: 2}),
-                new TextRun({text: `${data.function} ${data.name}`, font: 'Calibri', size: 24, break: 1}),
+                new TextRun({text: `${data.coordinatorFunction} ${data.coordinatorName}`, font: 'Calibri', size: 24, break: 1}),
             ],
         });
 

@@ -1089,10 +1089,21 @@ export class RestController {
 
     static async sendVerbalProcess(req: Request<any>, res: Response, next: NextFunction) {
         const body = req.body;
-        // const file = req.files.file;
+        const files = req.files;
+
+        if (files === undefined) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        if (files.file === undefined) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
 
         try {
-            const fileBuffer = await RestService.sendVerbalProcess();
+            const file = files.file as UploadedFile;
+            const fileBuffer = await RestService.sendVerbalProcess(file);
             const fileName = `proces_verbal_asdasdsad.docx`;
 
             res.setHeader('Content-disposition', 'attachment; filename=' + fileName);

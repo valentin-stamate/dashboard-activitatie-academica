@@ -44,7 +44,12 @@ import {EmailDefaults, LoginMessage, MailService} from "../service/email.service
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
-import {BaseInformationHeaders, SemesterTimetableHeaders, TimetableHeaders,} from "../service/file/xlsx.service";
+import {
+    BaseInformationHeaders,
+    ReportsAnnouncementHeaders,
+    SemesterTimetableHeaders,
+    TimetableHeaders,
+} from "../service/file/xlsx.service";
 import JSZip from "jszip";
 import {FAZData, FAZDayActivity, FAZService} from "../service/file/faz.service";
 import {ResponseMessage, StatusCode} from "./rest.util";
@@ -1488,13 +1493,11 @@ export class RestService {
                 }
             }
 
-            const nameItems = professor.split(' ');
-            const professorPosition = nameItems.splice(0, 2).join(' ');
-            const professorName = nameItems.join(' ');
+            const nameItems = UtilService.splitSplitProfessorName(professor);
 
             const fazProfessorData: FAZData = {
-                professorName: professorName,
-                professorPosition: professorPosition,
+                professorName: nameItems[1],
+                professorPosition: nameItems[2],
                 month: currentMonth,
                 year: currentYear,
                 monthlyActivity: monthlyDays,
@@ -1510,21 +1513,43 @@ export class RestService {
         return await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' });
     }
 
-    static async sendVerbalProcess(): Promise<Buffer> {
-        const dummy: VerbalProcessData = {
-            name: 'dasdas',
-            function: 'Conf. Drt.',
-            presentationDate: new Date(),
-            attendanceYear: 2020,
-            reportTheme: 'Curcubee',
-            rows: [
-                {number: 1, coordinatorName: 'Cineva', commission: 'Commission',},
-                {number: 2, coordinatorName: 'Altcineva', commission: 'Commission',},
-                {number: 3, coordinatorName: 'Bassd', commission: 'Commission',},
-                {number: 4, coordinatorName: 'Hjsad', commission: 'Commission',},
-            ],
+    static async sendVerbalProcess(file: UploadedFile): Promise<Buffer> {
+        const workBook = XLSX.read(file.data);
+        const sheet = workBook.Sheets[workBook.SheetNames[0]];
+        const jsonSheet = XLSX.utils.sheet_to_json(sheet, {raw: false}) as any[];
+
+        for (let i = 0; i < jsonSheet.length; i += 3) {
+            const firstRow = jsonSheet[i];
+            const secondRow = jsonSheet[i + 1];
+            const thirdRow = jsonSheet[i + 2];
+
+            const coordinationFuncName = UtilService.splitSplitProfessorName(firstRow[ReportsAnnouncementHeaders.COORDINATOR])
+            const attendanceDate = new Date(firstRow[ReportsAnnouncementHeaders.ATTENDANCE_DATE]);
+
+            console.log(firstRow[ReportsAnnouncementHeaders.ATTENDANCE_DATE]);
+            console.log(firstRow);
+
+            console.log(attendanceDate);
+
+            const data: VerbalProcessData = {
+                name: firstRow[ReportsAnnouncementHeaders.STUDENT_NAME],
+                coordinatorName: coordinationFuncName[1],
+                coordinatorFunction: coordinationFuncName[0],
+                presentationDate: attendanceDate,
+                attendanceYear: attendanceDate.getFullYear(),
+                reportTheme: thirdRow[ReportsAnnouncementHeaders.R3],
+                rows: [
+                    {number: 1, coordinatorName: coordinationFuncName.join(' '), commission: 'Conducător ştiinţific'},
+                    {number: 2, coordinatorName: firstRow[ReportsAnnouncementHeaders.COMMISSION], commission: 'Membru'},
+                    {number: 3, coordinatorName: secondRow[ReportsAnnouncementHeaders.COMMISSION], commission: 'Membru'},
+                    {number: 4, coordinatorName: thirdRow[ReportsAnnouncementHeaders.COMMISSION], commission: 'Membru'},
+                ],
+            }
+
+            return await VerbalProcessService.getVerbalProcessDOCXBuffer(data);
         }
 
-        return await VerbalProcessService.getVerbalProcessDOCXBuffer(dummy);
+        // await VerbalProcessService.getVerbalProcessDOCXBuffer(dummy);
+        return new Buffer('');
     }
 }

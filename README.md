@@ -118,3 +118,4 @@
 * Javascript splice array : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice
 * MongoDB Tutorial : https://youtu.be/pWbMrx5rVBE
 * Cell width DOCX : https://stackoverflow.com/a/60743717/10805602
+* SheeJs Date : https://stackoverflow.com/a/53163756/10805602

@@ -32,6 +32,15 @@ export class UtilService {
         return `${number}`;
     }
 
+    /* Eg. Conf. Prog Lorem Ipsum -> [Conf. Prof, Lorem Ipsum] */
+    static splitSplitProfessorName(fullProfessorName: string) {
+        const nameItems = fullProfessorName.split(' ');
+        const professorPosition = nameItems.splice(0, 2).join(' ');
+        const professorName = nameItems.join(' ');
+
+        return [professorPosition, professorName];
+    }
+
     /* Eg. time = 13.5 aka 13:30 */
     static excelHourToHourStr(time: number): string {
         const hours = Math.floor(time);
