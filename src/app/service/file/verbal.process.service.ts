@@ -8,7 +8,7 @@ export interface VerbalProcessData {
     coordinatorFunction: string;
     presentationDate: Date;
     attendanceYear: number;
-    reportTheme: string;
+    thesisTitle: string;
     rows: VerbalProcessTableRow[];
 }
 
@@ -55,7 +55,7 @@ export class VerbalProcessService {
         const details = new Paragraph({
             children: [
                 new TextRun({text: `Înmatriculat la doctorat în anul ${data.attendanceYear}, în domeniul INFORMATICĂ`, font: 'Calibri', size: 24, break: 2}),
-                new TextRun({text: `Tema raportului ştiinţific susţinut "${data.reportTheme}"`, font: 'Calibri', size: 24, break: 1}),
+                new TextRun({text: `Tema raportului ştiinţific susţinut "${data.thesisTitle}"`, font: 'Calibri', size: 24, break: 1}),
             ],
             alignment: AlignmentType.START,
         });

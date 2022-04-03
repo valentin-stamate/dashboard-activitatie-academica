@@ -1524,20 +1524,39 @@ export class RestService {
             const thirdRow = jsonSheet[i + 2];
 
             const coordinationFuncName = UtilService.splitSplitProfessorName(firstRow[ReportsAnnouncementHeaders.COORDINATOR])
-            const attendanceDate = new Date(firstRow[ReportsAnnouncementHeaders.ATTENDANCE_DATE]);
+            const year = new Date(firstRow[ReportsAnnouncementHeaders.ATTENDANCE_DATE]).getFullYear();
 
-            console.log(firstRow[ReportsAnnouncementHeaders.ATTENDANCE_DATE]);
-            console.log(firstRow);
+            const r1Data = [new Date(secondRow[ReportsAnnouncementHeaders.R1]), thirdRow[ReportsAnnouncementHeaders.R1]];
+            const r2Data = [new Date(secondRow[ReportsAnnouncementHeaders.R2]), thirdRow[ReportsAnnouncementHeaders.R2]];
+            const r3Data = [new Date(secondRow[ReportsAnnouncementHeaders.R3]), thirdRow[ReportsAnnouncementHeaders.R3]];
 
-            console.log(attendanceDate);
+            let lastData = undefined;
+
+            /* Getting the latest date from 'Data Prez.' */
+            if (!isNaN(r1Data[0])) {
+                lastData = r1Data;
+            }
+
+            if (!isNaN(r2Data[0])) {
+                lastData = r1Data;
+            }
+
+            if (!isNaN(r3Data[0])) {
+                lastData = r1Data;
+            }
+
+            /* Don't make the Verbal Process for those who have no date into the 'Data Prez.' */
+            if (lastData === undefined) {
+                continue;
+            }
 
             const data: VerbalProcessData = {
                 name: firstRow[ReportsAnnouncementHeaders.STUDENT_NAME],
                 coordinatorName: coordinationFuncName[1],
                 coordinatorFunction: coordinationFuncName[0],
-                presentationDate: attendanceDate,
-                attendanceYear: attendanceDate.getFullYear(),
-                reportTheme: thirdRow[ReportsAnnouncementHeaders.R3],
+                presentationDate: lastData[0],
+                attendanceYear: year,
+                thesisTitle: lastData[1],
                 rows: [
                     {number: 1, coordinatorName: coordinationFuncName.join(' '), commission: 'Conducător ştiinţific'},
                     {number: 2, coordinatorName: firstRow[ReportsAnnouncementHeaders.COMMISSION], commission: 'Membru'},
