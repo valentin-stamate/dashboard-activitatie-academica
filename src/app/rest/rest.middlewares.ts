@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response,} from "express";
 import {UserModel} from "../database/sequelize";
 import {JwtService} from "../service/jwt.service";
-import {User} from "../database/models";
+import {User} from "../database/db.models";
 import {ResponseMessage, StatusCode} from "./rest.util";
 
 export class Middleware {

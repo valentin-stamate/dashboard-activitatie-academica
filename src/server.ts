@@ -156,9 +156,9 @@ app.get(RestEndpoints.EXPORT_FORMS, Middleware.adminMiddleware, RestController.e
 
 app.post(RestEndpoints.FAZ, Middleware.adminMiddleware, RestController.faz);
 app.post(RestEndpoints.VERBAL_PROCESS, Middleware.adminMiddleware, RestController.sendVerbalProcess);
+app.post(RestEndpoints.THESIS_NOTIFICATION, Middleware.adminMiddleware, RestController.sendThesisEmailNotification);
 
-/* Test */
-app.post('/test', RestController.test);
+
 /************************************************************************************
  *                               Express Error Handling
  ***********************************************************************************/

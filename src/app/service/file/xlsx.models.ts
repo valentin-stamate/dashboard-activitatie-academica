@@ -1,12 +1,14 @@
 /* */
 export interface VerbalProcessData {
     name: string;
+    email: string;
     coordinatorName: string;
     coordinatorFunction: string;
+    coordinatorEmail: string;
     presentationDate: Date;
     attendanceYear: number;
-    thesisTitle: string;
-    rows: VerbalProcessTableRow[];
+    reportTitle: string;
+    coordinators: VerbalProcessTableRow[];
 }
 
 export interface VerbalProcessTableRow {

@@ -15,7 +15,7 @@ import {
     Translation,
     User,
     WithoutActivity
-} from "../database/models";
+} from "../database/db.models";
 import {
     AcademyMemberModel,
     AwardAndNominationModel,
@@ -48,6 +48,7 @@ import JSZip from "jszip";
 import {ResponseMessage, StatusCode} from "./rest.util";
 import {FormsService} from "../service/forms.service";
 import {DocxService} from "../service/file/docx.service";
+import {EmailResult} from "../service/models";
 
 /** The layer where the logic holds */
 export class RestService {
@@ -1184,7 +1185,7 @@ export class RestService {
     static async sendSemesterActivityEmail(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[]): Promise<any> {
         const semesterActivityDataList = XLSXService.parseSemesterActivityTimetable(file);
 
-        const emailResults: {email: string, send: boolean}[] = [];
+        const emailResults: EmailResult[] = [];
         for (let data of semesterActivityDataList) {
             if (recipientExceptList.some(item => item === data.emailTo)) {
                 continue;
@@ -1207,10 +1208,10 @@ export class RestService {
                     html: emailContent,
                 });
 
-                emailResults.push({email: data.emailTo, send: true});
+                emailResults.push({email: data.emailTo, success: true});
             } catch (err) {
                 console.log(err);
-                emailResults.push({email: data.emailTo, send: false});
+                emailResults.push({email: data.emailTo, success: false});
             }
 
         }
@@ -1300,4 +1301,52 @@ export class RestService {
 
         return new Buffer('');
     }
+
+    static async sendThesisEmailNotification(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[]) {
+        const verbalProcessDataList = XLSXService.parseReportAnnouncement(file);
+
+        const emailResults: EmailResult[] = [];
+
+        for (const data of verbalProcessDataList) {
+            if (recipientExceptList.some(item => item === data.email)) {
+                continue;
+            }
+
+            let commission = '';
+            commission += `${data.coordinators[1].coordinatorName}<br>`;
+            commission += `${data.coordinators[2].coordinatorName}<br>`;
+            commission += `${data.coordinators[3].coordinatorName}<br>`;
+
+            let emailContent = emailTemplate;
+            emailContent = emailContent.replace(new RegExp(/{{date}}/g), UtilService.simpleStringDate(data.presentationDate));
+            emailContent = emailContent.replace(new RegExp(/{{reportTitle}}/g), data.reportTitle);
+            emailContent = emailContent.replace(new RegExp(/{{coordinator}}/g), data.coordinators[0].coordinatorName);
+            emailContent = emailContent.replace(new RegExp(/{{commission}}/g), commission);
+
+            try {
+                await MailService.sendMail({
+                    subject: subject,
+                    from: from,
+                    to: data.email,
+                    cc: [data.coordinatorEmail],
+                    html: emailContent,
+                });
+
+                emailResults.push({
+                    email: data.email,
+                    success: true,
+                });
+            } catch (err) {
+                console.log(err);
+
+                emailResults.push({
+                   email: data.email,
+                   success: false,
+                });
+            }
+        }
+
+        return emailResults;
+    }
+
 }

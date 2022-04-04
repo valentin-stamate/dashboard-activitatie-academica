@@ -290,12 +290,12 @@ export class DocxService {
         const details = new Paragraph({
             children: [
                 new TextRun({text: `Înmatriculat la doctorat în anul ${data.attendanceYear}, în domeniul INFORMATICĂ`, font: 'Calibri', size: 24, break: 2}),
-                new TextRun({text: `Tema raportului ştiinţific susţinut "${data.thesisTitle}"`, font: 'Calibri', size: 24, break: 1}),
+                new TextRun({text: `Tema raportului ştiinţific susţinut "${data.reportTitle}"`, font: 'Calibri', size: 24, break: 1}),
             ],
             alignment: AlignmentType.START,
         });
 
-        const tableRows = DocxService.getVerbalProcessTableRows(data.rows);
+        const tableRows = DocxService.getVerbalProcessTableRows(data.coordinators);
 
         const table = new Table({
             rows: [

@@ -3,7 +3,7 @@ import XLSX from "xlsx";
 import {ResponseError} from "../../rest/rest.middlewares";
 import {ResponseMessage, StatusCode} from "../../rest/rest.util";
 import {UtilService} from "../util.service";
-import {BaseInformation} from "../../database/models";
+import {BaseInformation} from "../../database/db.models";
 import {
     FAZData,
     FAZDayActivity,
@@ -264,12 +264,14 @@ export class XLSXService {
 
             const data: VerbalProcessData = {
                 name: firstRow[ReportsAnnouncementHeaders.STUDENT_NAME],
+                email: firstRow[ReportsAnnouncementHeaders.EMAIL],
                 coordinatorName: coordinationFuncName[1],
                 coordinatorFunction: coordinationFuncName[0],
+                coordinatorEmail: firstRow[ReportsAnnouncementHeaders.COORDINATOR_EMAIL],
                 presentationDate: lastData[0],
                 attendanceYear: year,
-                thesisTitle: lastData[1],
-                rows: [
+                reportTitle: lastData[1],
+                coordinators: [
                     {number: 1, coordinatorName: coordinationFuncName.join(' '), commission: 'Conducător ştiinţific'},
                     {number: 2, coordinatorName: firstRow[ReportsAnnouncementHeaders.COMMISSION], commission: 'Membru'},
                     {number: 3, coordinatorName: secondRow[ReportsAnnouncementHeaders.COMMISSION], commission: 'Membru'},
