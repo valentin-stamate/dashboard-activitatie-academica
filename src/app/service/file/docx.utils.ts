@@ -47,7 +47,7 @@ export class DocxUtils {
     /* Helper function */
     public static customParagraph(text: string, options: any = {}) {
         return new Paragraph({
-            children: [new TextRun({text: text, font: 'Calibri', ...options})]
+            children: [new TextRun({text: text, ...options})]
         });
     }
 

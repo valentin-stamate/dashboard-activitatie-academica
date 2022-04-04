@@ -1302,8 +1302,6 @@ export class RestService {
 
             const emailContent = 'Holla';
 
-            console.log(data);
-
             try {
                 await MailService.sendMail({
                     from: from,
