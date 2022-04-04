@@ -27,7 +27,7 @@ export enum SemesterTimetableHeaders {
 export enum ReportsAnnouncementHeaders {
     NUMBER = '"Nr. crt"',
     COORDINATOR = 'Conducator de doctorat',
-    COORDINATOR_EMAIL = 'Adresa de email',
+    COORDINATOR_EMAIL = 'Adresa de email coordonator',
     COMMISSION = 'Comisie de indrumare',
     STUDENT_NAME = 'Doctorand',
     EMAIL = 'Adresa de email',

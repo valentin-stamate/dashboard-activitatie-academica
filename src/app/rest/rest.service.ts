@@ -1290,16 +1290,46 @@ export class RestService {
         return await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' });
     }
 
-    static async sendVerbalProcess(file: UploadedFile): Promise<Buffer> {
+    static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[]): Promise<EmailResult[]> {
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file);
+
+        const emailResults: EmailResult[] = [];
+
+        const filename = `process_verbal_${UtilService.stringDate(new Date())}.docx`;
 
         for (let data of verbalProcessDataList) {
             const buffer = await DocxService.getVerbalProcessDOCXBuffer(data);
 
-            return buffer;
+            const emailContent = 'Holla';
+
+            console.log(data);
+
+            try {
+                await MailService.sendMail({
+                    from: from,
+                    subject: subject,
+                    to: data.email,
+                    html: emailContent,
+                    attachments: [{
+                        content: buffer,
+                        filename: filename,
+                    }],
+                });
+
+                emailResults.push({
+                   email: data.email,
+                   success: true,
+                });
+            } catch (err) {
+                console.log(err);
+                emailResults.push({
+                    email: data.email,
+                    success: true,
+                });
+            }
         }
 
-        return new Buffer('');
+        return emailResults;
     }
 
     static async sendThesisEmailNotification(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[]) {

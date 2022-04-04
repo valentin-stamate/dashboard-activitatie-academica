@@ -1015,16 +1015,24 @@ export class RestController {
     }
 
     static async sendSemesterActivityEmail(req: Request<any>, res: Response, next: NextFunction) {
-        if (!req.files) {
+        const body = req.body;
+        const files = req.files;
+
+        if (!files) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
-        const file = req.files.file as UploadedFile;
-        const email = req.body.emailTemplate;
-        const subject = req.body.subject;
-        const from = req.body.from;
-        const recipientExcept = req.body.exceptRecipient;
+        if (!files.file) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        const file = files.file as UploadedFile;
+        const email = body.emailTemplate;
+        const subject = body.subject;
+        const from = body.from;
+        const recipientExcept = body.exceptRecipient;
 
         let recipientExceptList: string[] = [];
         if (recipientExcept !== undefined) {
@@ -1062,13 +1070,14 @@ export class RestController {
 
     static async faz(req: Request<any>, res: Response, next: NextFunction) {
         const body = req.body;
+        const files = req.files;
 
-        if (!req.files || body.ignoreStart === undefined || body.ignoreEnd === undefined) {
+        if (!files || body.ignoreStart === undefined || body.ignoreEnd === undefined) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
-        const timetableFile = req.files.timetable as UploadedFile;
+        const timetableFile = files.timetable as UploadedFile;
 
         if (timetableFile === undefined) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
@@ -1101,30 +1110,52 @@ export class RestController {
             return;
         }
 
+        const file = files.file as UploadedFile;
+        const email = body.emailTemplate;
+        const subject = body.subject;
+        const from = body.from;
+        const recipientExcept = body.exceptRecipient;
+
+        let recipientExceptList: string[] = [];
+        if (recipientExcept !== undefined) {
+            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
+            recipientExceptList = parsedRecipientExcept.split(',');
+        }
+
+        if (email === undefined || subject === undefined || from === undefined || file === undefined) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
         try {
             const file = files.file as UploadedFile;
-            const fileBuffer = await RestService.sendVerbalProcess(file);
-            const fileName = `proces_verbal_asdasdsad.docx`;
+            const emailResults = await RestService.sendVerbalProcess(email, subject, from, file, recipientExceptList);
 
-            res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-            res.setHeader('Content-type', ContentType.DOCX);
-            res.end(fileBuffer);
+            res.end(JSON.stringify(emailResults));
         } catch (err) {
             next(err);
         }
     }
 
     static async sendThesisEmailNotification(req: Request<any>, res: Response, next: NextFunction) {
-        if (!req.files) {
+        const body = req.body;
+        const files = req.files;
+
+        if (!files) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
-        const file = req.files.file as UploadedFile;
-        const email = req.body.emailTemplate;
-        const subject = req.body.subject;
-        const from = req.body.from;
-        const recipientExcept = req.body.exceptRecipient;
+        if (files.file === undefined) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        const file = files.file as UploadedFile;
+        const email = body.emailTemplate;
+        const subject = body.subject;
+        const from = body.from;
+        const recipientExcept = body.exceptRecipient;
 
         let recipientExceptList: string[] = [];
         if (recipientExcept !== undefined) {
