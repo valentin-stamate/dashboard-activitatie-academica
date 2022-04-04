@@ -1014,7 +1014,7 @@ export class RestController {
         }
     }
 
-    static async sendTimetableEmail(req: Request<any>, res: Response, next: NextFunction) {
+    static async sendSemesterActivityEmail(req: Request<any>, res: Response, next: NextFunction) {
         if (!req.files) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
@@ -1038,7 +1038,7 @@ export class RestController {
         }
 
         try {
-            const data = await RestService.sendTimetableEmail(email, subject, from, file, recipientExceptList);
+            const data = await RestService.sendSemesterActivityEmail(email, subject, from, file, recipientExceptList);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);

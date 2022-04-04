@@ -1,46 +1,27 @@
-import {AlignmentType, Packer, Paragraph, Table, TableCell, TableRow, TextRun, WidthType, Document} from "docx";
+import {FAZData, FAZDayActivity, VerbalProcessData, VerbalProcessTableRow} from "./xlsx.models";
+import {AlignmentType, Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun, WidthType} from "docx";
 import {DocxUtils} from "./docx.utils";
+import {UtilService} from "../util.service";
 
 const monthMap = [
-  'Ianuarie',
-  'Februarie',
-  'Martie',
-  'Aprilie',
-  'Mai',
-  'Iunie',
-  'Iulie',
-  'August',
-  'Septembrie',
-  'Octombrie',
-  'Noiembrie',
-  'Decembrie',
+    'Ianuarie',
+    'Februarie',
+    'Martie',
+    'Aprilie',
+    'Mai',
+    'Iunie',
+    'Iulie',
+    'August',
+    'Septembrie',
+    'Octombrie',
+    'Noiembrie',
+    'Decembrie',
 ];
 
-export interface FAZDayActivity {
-    day: number;
-    interval: string;
-    discipline: string;
-    year: string;
-    cad: string;
-    sad: string;
-    td: string;
-    csrd: string;
-    hours: number;
+export class DocxService {
 
-    /* Suplimentar */
-    weekDay: string;
-}
-
-export interface FAZData {
-    professorName: string;
-    professorPosition: string;
-    month: number;
-    year: number;
-    monthlyActivity: FAZDayActivity[];
-}
-
-export class FAZService {
-    static async getDOCXBuffer(data: FAZData): Promise<Buffer> {
+    /* Faz */
+    static async getFazDOCXBuffer(data: FAZData): Promise<Buffer> {
 
         /* Header */
         const headerLeft = new Paragraph({
@@ -49,8 +30,8 @@ export class FAZService {
                 new TextRun({text: 'Facultatea de Informatică', font: 'Calibri', size: 21, break: 1}),
                 new TextRun({text: 'Școala Doctorală', font: 'Calibri', size: 21, break: 1}),
                 new TextRun({text: `Nume și Prenume: ${data.professorName}`, font: 'Calibri', size: 21, break: 1}),
-                new TextRun({text: `Grad didactic: ${data.professorPosition}`, font: 'Calibri', size: 21, break: 1}),
-                new TextRun({text: `Poziția în statul de funcțiuni: ${data.professorPosition}`, font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: `Grad didactic: ${data.professorFunction}`, font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: `Poziția în statul de funcțiuni: ${data.professorFunction}`, font: 'Calibri', size: 21, break: 1}),
             ],
         });
 
@@ -91,7 +72,7 @@ export class FAZService {
             alignment: AlignmentType.CENTER
         });
 
-        const fazRows = FAZService.generateDOCXRows(data.monthlyActivity);
+        const fazRows = DocxService.generateFazDOCXTableRows(data.monthlyActivity);
 
         /* Calculate the total hours in a month */
         let totalCADHours = 0;
@@ -210,7 +191,7 @@ export class FAZService {
 
         const footer = new Paragraph({
             children: [
-                new TextRun({text: `${data.professorPosition} ${data.professorName}`, font: 'Calibri', size: 21, break: 1}),
+                new TextRun({text: `${data.professorFunction} ${data.professorName}`, font: 'Calibri', size: 21, break: 1}),
                 new TextRun({text: 'Semnătura', font: 'Calibri', size: 21, break: 1}),
                 new TextRun({text: '_______________', font: 'Calibri', size: 21, break: 1}),
             ],
@@ -236,8 +217,8 @@ export class FAZService {
 
         return await Packer.toBuffer(doc);
     }
-    
-    private static generateDOCXRows(rows: FAZDayActivity[]): TableRow[] {
+
+    private static generateFazDOCXTableRows(rows: FAZDayActivity[]): TableRow[] {
         const tableRows: TableRow[] = [];
 
         for (let row of rows) {
@@ -271,6 +252,144 @@ export class FAZService {
                         children: [DocxUtils.customParagraph(`${row.hours}`, {size: 16})],
                     }),
                 ]
+            }));
+        }
+
+        return tableRows;
+    }
+
+    /* Verbal Process */
+    static async getVerbalProcessDOCXBuffer(data: VerbalProcessData): Promise<Buffer> {
+        /* Header */
+        const header = new Paragraph({
+            children: [
+                new TextRun({text: 'UNIVERSITATEA "ALEXANDRU IOAN CUZA" DIN IAŞI', font: 'Calibri', size: 24}),
+                new TextRun({text: '                                                           ', font: 'Calibri', size: 24}),
+                new TextRun({text: 'Anexa 6', font: 'Calibri', size: 24, color: '#305598'}),
+                new TextRun({text: 'Facultatea de Informatică', font: 'Calibri', size: 24, break: 1}),
+                new TextRun({text: 'Şcoala Doctorală de Informatică', font: 'Calibri', size: 24, break: 1}),
+            ],
+        });
+
+        const presentationDate = UtilService.simpleStringDate(data.presentationDate);
+
+        /* Title */
+        const title = new Paragraph({
+            children: [
+                new TextRun({text: 'PROCES-VERBAL', font: 'Calibri', size: 28, bold: true, break: 2}),
+                new TextRun({text: '', font: 'Calibri', size: 24, bold: true, break: 1}),
+                new TextRun({text: `Din data de ${presentationDate}`, font: 'Calibri', size: 24, break: 1}),
+                new TextRun({text: `Privind raportul ştiinţific de doctorat susţinut de`, font: 'Calibri', size: 24, break: 1}),
+                new TextRun({text: `Domnul/Doamna`, font: 'Calibri', size: 24, break: 1}),
+                new TextRun({text: `${data.name}`, font: 'Calibri', size: 24, break: 1}),
+                new TextRun({text: `(Numele şi prenumele doctorandului)`, font: 'Calibri', size: 20, break: 1}),
+            ],
+            alignment: AlignmentType.CENTER
+        });
+
+        const details = new Paragraph({
+            children: [
+                new TextRun({text: `Înmatriculat la doctorat în anul ${data.attendanceYear}, în domeniul INFORMATICĂ`, font: 'Calibri', size: 24, break: 2}),
+                new TextRun({text: `Tema raportului ştiinţific susţinut "${data.thesisTitle}"`, font: 'Calibri', size: 24, break: 1}),
+            ],
+            alignment: AlignmentType.START,
+        });
+
+        const tableRows = DocxService.getVerbalProcessTableRows(data.rows);
+
+        const table = new Table({
+            rows: [
+                /* Header */
+                new TableRow({
+                    children: [
+                        new TableCell({
+                            children: [DocxUtils.customParagraph('Nr. Crt', {size: 24})],
+                            width: {size: 4, type: WidthType.PERCENTAGE},
+                        }),
+                        new TableCell({
+                            children: [DocxUtils.customParagraph('Comisia de îndrumare', {size: 24})],
+                            width: {size: 24, type: WidthType.PERCENTAGE},
+                        }),
+                        new TableCell({
+                            children: [DocxUtils.customParagraph('Numele şi prenumele', {size: 24})],
+                            width: {size: 24, type: WidthType.PERCENTAGE},
+                        }),
+                        new TableCell({
+                            children: [DocxUtils.customParagraph('Calificativul', {size: 24})],
+                            width: {size: 24, type: WidthType.PERCENTAGE},
+                        }),
+                        new TableCell({
+                            children: [DocxUtils.customParagraph('Semnătura', {size: 24})],
+                            width: {size: 24, type: WidthType.PERCENTAGE},
+                        }),
+                    ]
+                }),
+
+                ...tableRows,
+            ],
+            width: DocxUtils.tableFill,
+            margins: DocxUtils.tableMargins,
+        });
+
+        const footer = new Paragraph({
+            children: [
+                new TextRun({text: 'În urma prezentării raportului ştiinţific doctorandul a obţinut calificativul final .......................', font: 'Calibri', size: 24, break: 1}),
+                new TextRun({text: 'Observaţii şi recomandări:', font: 'Calibri', size: 24, break: 2}),
+                new TextRun({text: '...............................................................................................................................' +
+                        '....................................................................................................................................................' +
+                        '....................................................................................................................................................' +
+                        '....................................................................................................................................................' +
+                        '....................................................................................................................................................' +
+                        '....................................................................................................................................................' +
+                        '....................................................................................................................................................' +
+                        '', font: 'Calibri', size: 24}),
+
+                new TextRun({text: `Conducător ştiinţific:`, font: 'Calibri', size: 24, break: 2}),
+                new TextRun({text: `${data.coordinatorFunction} ${data.coordinatorName}`, font: 'Calibri', size: 24, break: 1}),
+            ],
+        });
+
+        /* Creating the document */
+        const doc = new Document({
+            sections: [
+                {
+                    children: [
+                        header,
+                        title,
+                        details,
+                        DocxUtils.customParagraph('', {size: 24, break: 2}),
+                        table,
+                        footer,
+                    ]
+                }
+            ]
+        });
+
+        return await Packer.toBuffer(doc);
+    }
+
+    private static getVerbalProcessTableRows(rows: VerbalProcessTableRow[]): TableRow[] {
+        const tableRows: TableRow[] = [];
+
+        for (let row of rows) {
+            tableRows.push(new TableRow({
+                children: [
+                    new TableCell({
+                        children: [DocxUtils.customParagraph(`${row.number}`, {size: 24})]
+                    }),
+                    new TableCell({
+                        children: [DocxUtils.customParagraph(`${row.commission}`, {size: 24})]
+                    }),
+                    new TableCell({
+                        children: [DocxUtils.customParagraph(`${row.coordinatorName}`, {size: 24})]
+                    }),
+                    new TableCell({
+                        children: [DocxUtils.customParagraph(``, {size: 24})]
+                    }),
+                    new TableCell({
+                        children: [DocxUtils.customParagraph(``, {size: 24})]
+                    }),
+                ],
             }));
         }
 

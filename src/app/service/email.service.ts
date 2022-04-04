@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import Mail from "nodemailer/lib/mailer";
+
 require('dotenv').config();
 
 const env =  process.env as any;
