@@ -21,7 +21,7 @@ const monthMap = [
 export class DocxService {
 
     /* Faz */
-    static async getFazDOCXBuffer(data: FAZData): Promise<Buffer> {
+    static async getFazDOCXBuffer(data: FAZData, afterTableNote: string): Promise<Buffer> {
         const font = 'Calibri';
         
         /* Header */
@@ -176,10 +176,10 @@ export class DocxService {
                             columnSpan: 4,
                             children: [DocxUtils.customParagraph('Total ore fizice:', {size: 16, font: font})]
                         }),
-                        new TableCell({children: [DocxUtils.customParagraph(`${totalCADHours} CAD`, {size: 16, font: font})]}),
-                        new TableCell({children: [DocxUtils.customParagraph(`${totalSADHours} SAD`, {size: 16, font: font})]}),
-                        new TableCell({children: [DocxUtils.customParagraph(`${totalTDHours} TD`, {size: 16, font: font})]}),
-                        new TableCell({children: [DocxUtils.customParagraph(`${totalCSRDHours} CSRD`, {size: 16, font: font})]}),
+                        new TableCell({children: [DocxUtils.customParagraph(totalCADHours !== 0 ? `${totalCADHours} CAD` : '', {size: 16, font: font})]}),
+                        new TableCell({children: [DocxUtils.customParagraph(totalSADHours !== 0 ?`${totalSADHours} SAD` : '', {size: 16, font: font})]}),
+                        new TableCell({children: [DocxUtils.customParagraph(totalTDHours !== 0 ? `${totalTDHours} TD` : '', {size: 16, font: font})]}),
+                        new TableCell({children: [DocxUtils.customParagraph(totalCSRDHours !== 0 ? `${totalCSRDHours} CSRD` : '', {size: 16, font: font})]}),
                         new TableCell({children: [DocxUtils.customParagraph(`${totalHours} TOTAL`, {size: 16, font: font})]}),
                     ]
                 }),
@@ -188,8 +188,7 @@ export class DocxService {
             margins: DocxUtils.tableMargins,
         });
 
-        const fazNote = DocxUtils.customParagraph('În semestrul I, anul universitar 2021-2022 datorită virusului COVID-19, activitatea didactică s-a desfășurat în sistem online conform orarului stabilit.',
-            {size: 21, font: font});
+        const fazNote = DocxUtils.customParagraph(`${afterTableNote}`, {size: 21, font: font});
 
         const footer = new Paragraph({
             children: [
@@ -283,7 +282,7 @@ export class DocxService {
         const title = new Paragraph({
             children: [
                 new TextRun({text: 'PROCES-VERBAL', font: font, size: 28, bold: true, break: 2}),
-                new TextRun({text: '', font: font, size: 24, bold: true, break: 1}),
+                new TextRun({text: '', font: font, size: 24, bold: true, break: 2}),
                 new TextRun({text: `Din data de ${presentationDate}`, font: font, size: 24, break: 1}),
                 new TextRun({text: `Privind raportul ştiinţific de doctorat susţinut de`, font: font, size: 24, break: 1}),
                 new TextRun({text: `Domnul/Doamna`, font: font, size: 24, break: 1}),
@@ -296,7 +295,7 @@ export class DocxService {
         const details = new Paragraph({
             children: [
                 new TextRun({text: `Înmatriculat la doctorat în anul ${data.attendanceYear}, în domeniul INFORMATICĂ`, font: font, size: 24, break: 2}),
-                new TextRun({text: `Tema raportului ştiinţific susţinut "${data.reportTitle}"`, font: font, size: 24, break: 1}),
+                new TextRun({text: `Tema raportului ştiinţific susţinut "${data.reportTitle}"`, font: font, size: 24, break: 2}),
             ],
             alignment: AlignmentType.START,
         });

@@ -8,6 +8,7 @@ export interface VerbalProcessData {
     presentationDate: Date;
     attendanceYear: number;
     reportTitle: string;
+    source: string;
     coordinators: VerbalProcessTableRow[];
 }
 

@@ -37,7 +37,6 @@ import {
     WithoutActivityModel
 } from "../database/sequelize";
 import {UploadedFile} from "express-fileupload";
-
 import {UtilService} from "../service/util.service";
 import {EmailDefaults, LoginMessage, MailService} from "../service/email.service";
 import {ResponseError} from "./rest.middlewares";
@@ -1275,13 +1274,13 @@ export class RestService {
         return new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
     }
 
-    static async faz(timetableFile: UploadedFile, ignoreStart: number, ignoreEnd: number): Promise<any> {
+    static async faz(timetableFile: UploadedFile, afterTableNote: string, ignoreStart: number, ignoreEnd: number): Promise<any> {
         const fazProfessorDataList = XLSXService.parseFAZ(timetableFile, ignoreStart, ignoreEnd);
 
         const zip = new JSZip();
 
         for (let data of fazProfessorDataList) {
-            const docxBuffer = DocxService.getFazDOCXBuffer(data);
+            const docxBuffer = DocxService.getFazDOCXBuffer(data, afterTableNote);
 
             /* Append the buffer to the zip */
             zip.file(`FAZ ${data.professorFunction} ${data.professorName}.docx`, docxBuffer, {compression: 'DEFLATE'});
@@ -1295,10 +1294,10 @@ export class RestService {
 
         const emailResults: EmailResult[] = [];
 
-        const filename = `process_verbal_${UtilService.stringDate(new Date())}.docx`;
 
         for (let data of verbalProcessDataList) {
             const buffer = await DocxService.getVerbalProcessDOCXBuffer(data);
+            const filename = `Proces_verbal_${data.name} ${data.source}.docx`;
 
             const emailContent = 'Holla';
 
@@ -1306,7 +1305,7 @@ export class RestService {
                 await MailService.sendMail({
                     from: from,
                     subject: subject,
-                    to: data.email,
+                    to: 'stamatevalentin125@gmail.com',
                     html: emailContent,
                     attachments: [{
                         content: buffer,

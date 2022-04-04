@@ -210,7 +210,7 @@ export class XLSXService {
 
             const fazProfessorData: FAZData = {
                 professorName: nameItems[1],
-                professorFunction: nameItems[2],
+                professorFunction: nameItems[0],
                 month: currentMonth,
                 year: currentYear,
                 monthlyActivity: monthlyDays,
@@ -243,22 +243,26 @@ export class XLSXService {
             const r3Data = [new Date(secondRow[ReportsAnnouncementHeaders.R3]), thirdRow[ReportsAnnouncementHeaders.R3]];
 
             let lastData = undefined;
+            let source = undefined;
 
             /* Getting the latest date from 'Data Prez.' */
             if (!isNaN(r1Data[0])) {
                 lastData = r1Data;
+                source = ReportsAnnouncementHeaders.R1;
             }
 
             if (!isNaN(r2Data[0])) {
                 lastData = r1Data;
+                source = ReportsAnnouncementHeaders.R2;
             }
 
             if (!isNaN(r3Data[0])) {
                 lastData = r1Data;
+                source = ReportsAnnouncementHeaders.R3;
             }
 
             /* Don't make the Verbal Process for those who have no date into the 'Data Prez.' */
-            if (lastData === undefined) {
+            if (lastData === undefined || source === undefined) {
                 continue;
             }
 
@@ -271,6 +275,7 @@ export class XLSXService {
                 presentationDate: lastData[0],
                 attendanceYear: year,
                 reportTitle: lastData[1],
+                source: source,
                 coordinators: [
                     {number: 1, coordinatorName: coordinationFuncName.join(' '), commission: 'Conducător ştiinţific'},
                     {number: 2, coordinatorName: firstRow[ReportsAnnouncementHeaders.COMMISSION], commission: 'Membru'},
