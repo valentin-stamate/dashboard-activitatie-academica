@@ -1100,7 +1100,7 @@ export class RestController {
         const body = req.body;
         const files = req.files;
 
-        if (files === undefined) {
+        if (!files) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }

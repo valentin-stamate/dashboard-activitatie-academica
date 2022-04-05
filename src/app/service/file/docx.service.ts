@@ -1,5 +1,16 @@
 import {FAZData, FAZDayActivity, VerbalProcessData, VerbalProcessTableRow} from "./xlsx.models";
-import {AlignmentType, Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun, WidthType} from "docx";
+import {
+    AlignmentType,
+    Document,
+    Packer,
+    Paragraph,
+    Table,
+    TableCell,
+    TableRow,
+    TextRun,
+    VerticalAlign,
+    WidthType
+} from "docx";
 import {DocxUtils} from "./docx.utils";
 import {UtilService} from "../util.service";
 
@@ -269,8 +280,8 @@ export class DocxService {
         const header = new Paragraph({
             children: [
                 new TextRun({text: 'UNIVERSITATEA "ALEXANDRU IOAN CUZA" DIN IAŞI', font: font, size: 24}),
-                new TextRun({text: '                                    ', font: font, size: 24}),
-                new TextRun({text: 'Anexa 6', font: font, size: 24, color: '#305598'}),
+                new TextRun({text: '                                   ', font: font, size: 24}),
+                new TextRun({text: 'Anexa 6', font: font, size: 24, color: '#305598', bold: true}),
                 new TextRun({text: 'Facultatea de Informatică', font: font, size: 24, break: 1}),
                 new TextRun({text: 'Şcoala Doctorală de Informatică', font: font, size: 24, break: 1}),
             ],
@@ -282,20 +293,24 @@ export class DocxService {
         const title = new Paragraph({
             children: [
                 new TextRun({text: 'PROCES-VERBAL', font: font, size: 28, bold: true, break: 2}),
-                new TextRun({text: '', font: font, size: 24, bold: true, break: 2}),
-                new TextRun({text: `Din data de ${presentationDate}`, font: font, size: 24, break: 1}),
+                new TextRun({text: `Din data de ${presentationDate}`, font: font, size: 24, break: 2}),
                 new TextRun({text: `Privind raportul ştiinţific de doctorat susţinut de`, font: font, size: 24, break: 1}),
                 new TextRun({text: `Domnul/Doamna`, font: font, size: 24, break: 1}),
-                new TextRun({text: `${data.name}`, font: font, size: 24, break: 1}),
+                new TextRun({text: `${data.name}`, font: font, size: 24, break: 2}),
                 new TextRun({text: `(Numele şi prenumele doctorandului)`, font: font, size: 20, break: 1}),
             ],
-            alignment: AlignmentType.CENTER
+            alignment: AlignmentType.CENTER,
+            spacing: {
+                line: 300
+            }
         });
 
         const details = new Paragraph({
             children: [
                 new TextRun({text: `Înmatriculat la doctorat în anul ${data.attendanceYear}, în domeniul INFORMATICĂ`, font: font, size: 24, break: 2}),
-                new TextRun({text: `Tema raportului ştiinţific susţinut "${data.reportTitle}"`, font: font, size: 24, break: 2}),
+                new TextRun({text: `Tema raportului ştiinţific susţinut `, font: font, size: 24, break: 2}),
+                new TextRun({text: `"${data.reportTitle}"`, font: font, size: 24, italics: true}),
+                new TextRun({text: ` `, font: font, size: 24, break: 1}),
             ],
             alignment: AlignmentType.START,
         });
@@ -308,24 +323,44 @@ export class DocxService {
                 new TableRow({
                     children: [
                         new TableCell({
-                            children: [DocxUtils.customParagraph('Nr. Crt', {size: 24, font: font})],
+                            children: [new Paragraph({
+                                children: [new TextRun({text: `Nr. Crt`, size: 24, font: font, bold: true}),],
+                                alignment: AlignmentType.CENTER
+                            })],
                             width: {size: 4, type: WidthType.PERCENTAGE},
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
                         new TableCell({
-                            children: [DocxUtils.customParagraph('Comisia de îndrumare', {size: 24, font: font})],
+                            children: [new Paragraph({
+                                children: [new TextRun({text: `Comisia de îndrumare`, size: 24, font: font, bold: true}),],
+                                alignment: AlignmentType.CENTER
+                            })],
                             width: {size: 24, type: WidthType.PERCENTAGE},
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
                         new TableCell({
-                            children: [DocxUtils.customParagraph('Numele şi prenumele', {size: 24, font: font})],
+                            children: [new Paragraph({
+                                children: [new TextRun({text: `Numele şi prenumele`, size: 24, font: font, bold: true}),],
+                                alignment: AlignmentType.CENTER
+                            })],
                             width: {size: 24, type: WidthType.PERCENTAGE},
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
                         new TableCell({
-                            children: [DocxUtils.customParagraph('Calificativul', {size: 24, font: font})],
+                            children: [new Paragraph({
+                                children: [new TextRun({text: `Calificativul`, size: 24, font: font, bold: true}),],
+                                alignment: AlignmentType.CENTER
+                            })],
                             width: {size: 24, type: WidthType.PERCENTAGE},
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
                         new TableCell({
-                            children: [DocxUtils.customParagraph('Semnătura', {size: 24, font: font})],
+                            children: [new Paragraph({
+                                children: [new TextRun({text: `Semnătura`, size: 24, font: font, bold: true}),],
+                                alignment: AlignmentType.CENTER
+                            })],
                             width: {size: 24, type: WidthType.PERCENTAGE},
+                            verticalAlign: VerticalAlign.CENTER,
                         }),
                     ]
                 }),
@@ -348,7 +383,6 @@ export class DocxService {
                         '......................................................................................................................................................' +
                         '......................................................................................................................................................' +
                         '......................................................................................................................................................' +
-                        '......................................................................................................................................................' +
                         '', font: font, size: 24}),
 
                 new TextRun({text: `Conducător ştiinţific:`, font: font, size: 24, break: 2}),
@@ -364,7 +398,6 @@ export class DocxService {
                         header,
                         title,
                         details,
-                        DocxUtils.customParagraph('', {size: 24, break: 2, font: font}),
                         table,
                         footer,
                     ]
@@ -384,7 +417,11 @@ export class DocxService {
             tableRows.push(new TableRow({
                 children: [
                     new TableCell({
-                        children: [DocxUtils.customParagraph(`${row.number}`, {size: 24, font: font})]
+                        children: [new Paragraph({
+                            children: [new TextRun({text: `${row.number}`, size: 24, font: font}),],
+                            alignment: AlignmentType.CENTER
+                        })],
+                        verticalAlign: VerticalAlign.CENTER,
                     }),
                     new TableCell({
                         children: [DocxUtils.customParagraph(`${row.commission}`, {size: 24, font: font})]
