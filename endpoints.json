@@ -2470,7 +2470,7 @@
 					"response": []
 				},
 				{
-					"name": "Timetable Email",
+					"name": "Semester Activity",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2486,7 +2486,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/Valentin/Desktop/ore_semestru.xlsx"
+									"src": "/C:/Users/Valentin/Desktop/activitate_ore_semestru.xlsx"
 								},
 								{
 									"key": "subject",
@@ -2511,13 +2511,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{host}}/api/timetable-email",
+							"raw": "{{host}}/api/semester-activity",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"timetable-email"
+								"semester-activity"
 							]
 						}
 					},
@@ -2587,6 +2587,11 @@
 									"key": "ignoreEnd",
 									"value": "20",
 									"type": "text"
+								},
+								{
+									"key": "afterTableNote",
+									"value": "În semestrul I, anul universitar 2021-2022 datorită virusului COVID-19, activitatea didactică s-a desfășurat în sistem online   conform orarului stabilit.",
+									"type": "text"
 								}
 							]
 						},
@@ -2598,6 +2603,114 @@
 							"path": [
 								"api",
 								"faz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verbal Process",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Valentin/Desktop/anuntare_rapoarte_drd.xlsx"
+								},
+								{
+									"key": "subject",
+									"value": "Școala Doctorală de Informatica - Proces Verbal",
+									"type": "text"
+								},
+								{
+									"key": "from",
+									"value": "Secretariat FII Adriana Bejinariu <stamatevalentin125@gmail.com>",
+									"type": "text"
+								},
+								{
+									"key": "emailTemplate",
+									"value": "Buna ziua,<br>\nÎn această lună aveți programat raportul cu titlul  \"{{reportTitle}}\", în data de {{date}}. Vă invităm să vă consultați cu coordonatorul științific în termen util.<br>\n<br>\nCererea de susținere sau amanare a referatului va fi depusă la Secretariat cu o lună înainte de data programată a susținerii referatului. (Formularele sunt disponibile pe site-ul Scolii Doctorale, https://www.info.uaic.ro/regulamente-formulare-scoala-doctorala/  Sectiunea Formulare)<br>\n<br>\nProcedura operaţională privind evaluarea online a rapoartelor din programul de cercetare ştiinţifică a doctoranzilor este disponibilă aici  https://www.info.uaic.ro/wp-content/uploads/2021/02/procedura_evaluare_online_rapoarte_cercetare_doctoranzi_aprobata_senat-SD-FII.pdf<br>   \n<br> \nConducător ştiinţific: {{coordinator}}<br>\nMembri comisiei de îndrumare sunt :<br>\n{{commission}}\n<br>\nO zi buna,<br>\n",
+									"type": "text"
+								},
+								{
+									"key": "exceptRecipient",
+									"value": "alex@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/verbal-process",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"verbal-process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Thesis Notification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Valentin/Desktop/anuntare_rapoarte_drd.xlsx"
+								},
+								{
+									"key": "subject",
+									"value": "Școala Doctorală de Informatica - Informare Susținere Referat",
+									"type": "text"
+								},
+								{
+									"key": "from",
+									"value": "Secretariat FII Adriana Bejinariu <stamatevalentin125@gmail.com>",
+									"type": "text"
+								},
+								{
+									"key": "emailTemplate",
+									"value": "Buna ziua,<br>\nÎn această lună aveți programat raportul cu titlul  \"{{reportTitle}}\", în data de {{date}}. Vă invităm să vă consultați cu coordonatorul științific în termen util.<br>\n<br>\nCererea de susținere sau amanare a referatului va fi depusă la Secretariat cu o lună înainte de data programată a susținerii referatului. (Formularele sunt disponibile pe site-ul Scolii Doctorale, https://www.info.uaic.ro/regulamente-formulare-scoala-doctorala/  Sectiunea Formulare)<br>\n<br>\nProcedura operaţională privind evaluarea online a rapoartelor din programul de cercetare ştiinţifică a doctoranzilor este disponibilă aici  https://www.info.uaic.ro/wp-content/uploads/2021/02/procedura_evaluare_online_rapoarte_cercetare_doctoranzi_aprobata_senat-SD-FII.pdf<br>   \n<br> \nConducător ştiinţific: {{coordinator}}<br>\nMembri comisiei de îndrumare sunt :<br>\n{{commission}}\n<br>\nO zi buna,<br>\n",
+									"type": "text"
+								},
+								{
+									"key": "exceptRecipient",
+									"value": "alex@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/thesis-notification",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"thesis-notification"
 							]
 						}
 					},
