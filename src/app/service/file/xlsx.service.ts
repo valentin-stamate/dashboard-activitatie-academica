@@ -160,65 +160,6 @@ export class XLSXService {
                     monthlyDays.push(fazRow);
                 }
 
-                // if (dayRows.length !== 0) {
-                //     /* First activity type day summary */
-                //
-                //     for (let activity of activityTypes) {
-                //         activityMap[activity] = {hours: 0, intervals: [], activity: '', activityShort: ''};
-                //     }
-                //
-                //     for (let item of dayRows) {
-                //         const activity = item[TimetableHeaders.ACTIVITY_TYPE];
-                //         const activityShort = item[TimetableHeaders.ACTIVITY_SHORTCUT];
-                //
-                //         const activityFull = `${activity} ${activityShort}`;
-                //         if (activityMap[activityFull] === undefined) {
-                //             console.log(`Unrecognized activity type: "${activityFull}". Skipped.`);
-                //             continue;
-                //         }
-                //
-                //         const fromTime = item[TimetableHeaders.FROM]; // eg. 13.5 aka 13:30
-                //         const toTime = item[TimetableHeaders.TO]; // ex. 14.25 aka 14:15
-                //
-                //         activityMap[activityFull].intervals.push(`${fromTime}-${toTime}`);
-                //
-                //         const rowFAZHours = item[TimetableHeaders.FAZ_HOURS];
-                //
-                //         if (typeof rowFAZHours === 'number') {
-                //             activityMap[activityFull].hours += rowFAZHours;
-                //         }
-                //
-                //         activityMap[activityFull].activity = activity;
-                //         activityMap[activityFull].activityShort = activityShort;
-                //     }
-                //
-                //     /* Look through all the different activity types day summary and push it to the monthly days list */
-                //     for (let activityFull of activityTypes) {
-                //         let hours = activityMap[activityFull].hours;
-                //         let intervals = activityMap[activityFull].intervals;
-                //         let activity = activityMap[activityFull].activity;
-                //         let activityShort = activityMap[activityFull].activityShort;
-                //
-                //         if (hours === 0) {
-                //             continue;
-                //         }
-                //
-                //         hours = parseFloat(hours.toFixed(2));
-                //
-                //         let cad = activityShort === 'CAD' ? 'CAD' : '';
-                //         let sad = activityShort === 'SAD' ? 'SAD' : '';
-                //         let td = activityShort === 'TD' ? 'TD' : '';
-                //         let csrd = activityShort === 'CSRD' ? 'CSRD' : '';
-                //
-                //         const fazRow: FAZDayActivity = {
-                //             day: i, interval: intervals.join(', '), discipline: activity, year: 'I',
-                //             cad: cad, sad: sad, td: td, csrd: csrd, hours: hours, weekDay: dayStr,
-                //         };
-                //
-                //         monthlyDays.push(fazRow);
-                //     }
-                //
-                // }
             }
 
             const nameItems = UtilService.splitSplitProfessorName(professor);
