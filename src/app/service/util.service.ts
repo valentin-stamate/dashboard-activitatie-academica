@@ -41,14 +41,6 @@ export class UtilService {
         return [professorPosition, professorName];
     }
 
-    /* Eg. time = 13.5 aka 13:30 */
-    static excelHourToHourStr(time: number): string {
-        const hours = Math.floor(time);
-        const minutes = (time - hours) * 60;
-
-        return `${hours}:${UtilService.dateNumber(minutes)}`;
-    }
-
     static daysInMonth(date: Date) {
         return new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
     }

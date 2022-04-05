@@ -37,7 +37,7 @@ export class XLSXService {
         const timetableWorkBook = XLSX.read(timetableFile.data);
         const timetableSheet = timetableWorkBook.Sheets[timetableWorkBook.SheetNames[0]];
 
-        const timeTablesRows: any[] = XLSX.utils.sheet_to_json(timetableSheet);
+        const timeTablesRows: any[] = XLSX.utils.sheet_to_json(timetableSheet, {raw: false});
 
         /* This timetable contains a list of rows for evey day of the week  */
         const parsedTimetable: any = {};
@@ -65,11 +65,6 @@ export class XLSXService {
                 console.log(row);
                 throw new ResponseError(ResponseMessage.INVALID_TIMETABLE, StatusCode.BAD_REQUEST);
             }
-
-            const ratio = 1 / 24;
-            /* Here, 13.30 -> 13.50 */
-            row[TimetableHeaders.FROM] = parseFloat((row[TimetableHeaders.FROM] / ratio).toFixed(2));
-            row[TimetableHeaders.TO] = parseFloat((row[TimetableHeaders.TO] / ratio).toFixed(2));
 
             professorName = professorName.trim();
             row[TimetableHeaders.PROFESSOR_NAME] = professorName;
@@ -140,70 +135,90 @@ export class XLSXService {
 
                 const dayStr = dayMap[day];
                 const dayRows: any[] = professorWeek[dayStr];
-                if (dayRows.length !== 0) {
-                    /* First activity type day summary */
 
-                    /* Create a map for every activity type in order to separate them */
-                    const activityMap: any = {};
-                    for (let activity of activityTypes) {
-                        activityMap[activity] = {hours: 0, intervals: [], activity: '', activityShort: ''};
+                for (let dayActivity of dayRows) {
+                    const from = dayActivity[TimetableHeaders.FROM];
+                    const to = dayActivity[TimetableHeaders.TO];
+                    const discipline = dayActivity[TimetableHeaders.ACTIVITY_TYPE];
+                    const activityShort = dayActivity[TimetableHeaders.ACTIVITY_SHORTCUT];
+                    let fazHours: number = parseFloat(dayActivity[TimetableHeaders.FAZ_HOURS]);
+
+                    if (isNaN(fazHours)) {
+                        fazHours = 0;
                     }
 
-                    for (let item of dayRows) {
-                        const activity = item[TimetableHeaders.ACTIVITY_TYPE];
-                        const activityShort = item[TimetableHeaders.ACTIVITY_SHORTCUT];
+                    let cad = activityShort === 'CAD' ? 'CAD' : '';
+                    let sad = activityShort === 'SAD' ? 'SAD' : '';
+                    let td = activityShort === 'TD' ? 'TD' : '';
+                    let csrd = activityShort === 'CSRD' ? 'CSRD' : '';
 
-                        const activityFull = `${activity} ${activityShort}`;
-                        if (activityMap[activityFull] === undefined) {
-                            console.log(`Unrecognized activity type: "${activityFull}". Skipped.`);
-                            continue;
-                        }
+                    const fazRow: FAZDayActivity = {
+                        day: i, interval: `${from} - ${to}`, discipline: discipline, year: 'I',
+                        cad: cad, sad: sad, td: td, csrd: csrd, hours: fazHours, weekDay: dayStr,
+                    };
 
-                        const rawFromTime = item[TimetableHeaders.FROM]; // eg. 13.5 aka 13:30
-                        const rawToTime = item[TimetableHeaders.TO]; // ex. 14.25 aka 14:15
-
-                        const fromTime = UtilService.excelHourToHourStr(rawFromTime);
-                        const toTime = UtilService.excelHourToHourStr(rawToTime);
-
-                        activityMap[activityFull].intervals.push(`${fromTime}-${toTime}`);
-
-                        const rowFAZHours = item[TimetableHeaders.FAZ_HOURS];
-
-                        if (typeof rowFAZHours === 'number') {
-                            activityMap[activityFull].hours += rowFAZHours;
-                        }
-
-                        activityMap[activityFull].activity = activity;
-                        activityMap[activityFull].activityShort = activityShort;
-                    }
-
-                    /* Look through all the different activity types day summary and push it to the monthly days list */
-                    for (let activityFull of activityTypes) {
-                        let hours = activityMap[activityFull].hours;
-                        let intervals = activityMap[activityFull].intervals;
-                        let activity = activityMap[activityFull].activity;
-                        let activityShort = activityMap[activityFull].activityShort;
-
-                        if (hours === 0) {
-                            continue;
-                        }
-
-                        hours = parseFloat(hours.toFixed(2));
-
-                        let cad = activityShort === 'CAD' ? 'CAD' : '';
-                        let sad = activityShort === 'SAD' ? 'SAD' : '';
-                        let td = activityShort === 'TD' ? 'TD' : '';
-                        let csrd = activityShort === 'CSRD' ? 'CSRD' : '';
-
-                        const fazRow: FAZDayActivity = {
-                            day: i, interval: intervals.join(', '), discipline: activity, year: 'I',
-                            cad: cad, sad: sad, td: td, csrd: csrd, hours: hours, weekDay: dayStr,
-                        };
-
-                        monthlyDays.push(fazRow);
-                    }
-
+                    monthlyDays.push(fazRow);
                 }
+
+                // if (dayRows.length !== 0) {
+                //     /* First activity type day summary */
+                //
+                //     for (let activity of activityTypes) {
+                //         activityMap[activity] = {hours: 0, intervals: [], activity: '', activityShort: ''};
+                //     }
+                //
+                //     for (let item of dayRows) {
+                //         const activity = item[TimetableHeaders.ACTIVITY_TYPE];
+                //         const activityShort = item[TimetableHeaders.ACTIVITY_SHORTCUT];
+                //
+                //         const activityFull = `${activity} ${activityShort}`;
+                //         if (activityMap[activityFull] === undefined) {
+                //             console.log(`Unrecognized activity type: "${activityFull}". Skipped.`);
+                //             continue;
+                //         }
+                //
+                //         const fromTime = item[TimetableHeaders.FROM]; // eg. 13.5 aka 13:30
+                //         const toTime = item[TimetableHeaders.TO]; // ex. 14.25 aka 14:15
+                //
+                //         activityMap[activityFull].intervals.push(`${fromTime}-${toTime}`);
+                //
+                //         const rowFAZHours = item[TimetableHeaders.FAZ_HOURS];
+                //
+                //         if (typeof rowFAZHours === 'number') {
+                //             activityMap[activityFull].hours += rowFAZHours;
+                //         }
+                //
+                //         activityMap[activityFull].activity = activity;
+                //         activityMap[activityFull].activityShort = activityShort;
+                //     }
+                //
+                //     /* Look through all the different activity types day summary and push it to the monthly days list */
+                //     for (let activityFull of activityTypes) {
+                //         let hours = activityMap[activityFull].hours;
+                //         let intervals = activityMap[activityFull].intervals;
+                //         let activity = activityMap[activityFull].activity;
+                //         let activityShort = activityMap[activityFull].activityShort;
+                //
+                //         if (hours === 0) {
+                //             continue;
+                //         }
+                //
+                //         hours = parseFloat(hours.toFixed(2));
+                //
+                //         let cad = activityShort === 'CAD' ? 'CAD' : '';
+                //         let sad = activityShort === 'SAD' ? 'SAD' : '';
+                //         let td = activityShort === 'TD' ? 'TD' : '';
+                //         let csrd = activityShort === 'CSRD' ? 'CSRD' : '';
+                //
+                //         const fazRow: FAZDayActivity = {
+                //             day: i, interval: intervals.join(', '), discipline: activity, year: 'I',
+                //             cad: cad, sad: sad, td: td, csrd: csrd, hours: hours, weekDay: dayStr,
+                //         };
+                //
+                //         monthlyDays.push(fazRow);
+                //     }
+                //
+                // }
             }
 
             const nameItems = UtilService.splitSplitProfessorName(professor);
