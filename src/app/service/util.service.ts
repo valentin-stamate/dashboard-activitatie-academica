@@ -35,7 +35,7 @@ export class UtilService {
     /* Eg. Conf. Prog Lorem Ipsum -> [Conf. Prof, Lorem Ipsum] */
     static splitSplitProfessorName(fullProfessorName: string) {
         const nameItems = fullProfessorName.split(' ');
-        const professorPosition = nameItems.splice(0, 2).join(' ');
+        const professorPosition = nameItems.splice(0, 1).join(' ');
         const professorName = nameItems.join(' ');
 
         return [professorPosition, professorName];
