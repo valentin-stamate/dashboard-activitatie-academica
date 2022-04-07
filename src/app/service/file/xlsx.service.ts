@@ -223,15 +223,15 @@ export class XLSXService {
             }
 
             const data: VerbalProcessData = {
-                name: firstRow[ReportsAnnouncementHeaders.STUDENT_NAME],
-                email: firstRow[ReportsAnnouncementHeaders.EMAIL],
+                studentName: firstRow[ReportsAnnouncementHeaders.STUDENT_NAME],
+                studentEmail: firstRow[ReportsAnnouncementHeaders.EMAIL],
                 coordinatorName: coordinationFuncName[1],
                 coordinatorFunction: coordinationFuncName[0],
                 coordinatorEmail: firstRow[ReportsAnnouncementHeaders.COORDINATOR_EMAIL],
                 presentationDate: lastData[0],
                 attendanceYear: year,
                 reportTitle: lastData[1],
-                source: source,
+                report: source,
                 coordinators: [
                     {number: 1, coordinatorName: coordinationFuncName.join(' '), commission: 'Conducător ştiinţific'},
                     {number: 2, coordinatorName: firstRow[ReportsAnnouncementHeaders.COMMISSION], commission: 'Membru'},

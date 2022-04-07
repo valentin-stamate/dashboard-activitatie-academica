@@ -1293,21 +1293,24 @@ export class RestService {
 
         const emailResults: EmailResult[] = [];
 
-
         for (let data of verbalProcessDataList) {
-            if (recipientExceptList.some(item => item === data.email)) {
+            if (recipientExceptList.some(item => item === data.studentEmail)) {
                 continue;
             }
 
             const buffer = await DocxService.getVerbalProcessDOCXBuffer(data);
-            const filename = `Proces_verbal_${data.name} ${data.source}.docx`;
+            const filename = `Proces_verbal_${data.studentName} ${data.report}.docx`;
+
+            let emailContent = emailTemplate;
+            emailContent = emailContent.replace(new RegExp(/{{report}}/g), data.report[1]);
+            emailContent = emailContent.replace(new RegExp(/{{studentName}}/g), data.studentName);
 
             try {
                 await MailService.sendMail({
                     from: from,
-                    subject: subject,
-                    to: data.email,
-                    html: emailTemplate,
+                    subject: `${subject} nr. ${data.report[1]} - drd. ${data.studentName}`,
+                    to: data.studentEmail,
+                    html: emailContent,
                     attachments: [{
                         content: buffer,
                         filename: filename,
@@ -1315,13 +1318,13 @@ export class RestService {
                 });
 
                 emailResults.push({
-                   email: data.email,
+                   email: data.studentEmail,
                    success: true,
                 });
             } catch (err) {
                 console.log(err);
                 emailResults.push({
-                    email: data.email,
+                    email: data.studentEmail,
                     success: true,
                 });
             }
@@ -1336,14 +1339,14 @@ export class RestService {
         const emailResults: EmailResult[] = [];
 
         for (const data of verbalProcessDataList) {
-            if (recipientExceptList.some(item => item === data.email)) {
+            if (recipientExceptList.some(item => item === data.studentEmail)) {
                 continue;
             }
 
             let commission = '';
             commission += `${data.coordinators[1].coordinatorName}<br>`;
             commission += `${data.coordinators[2].coordinatorName}<br>`;
-            commission += `${data.coordinators[3].coordinatorName}<br>`;
+            commission += `${data.coordinators[3].coordinatorName}`;
 
             let emailContent = emailTemplate;
             emailContent = emailContent.replace(new RegExp(/{{date}}/g), UtilService.simpleStringDate(data.presentationDate));
@@ -1353,22 +1356,22 @@ export class RestService {
 
             try {
                 await MailService.sendMail({
-                    subject: `${subject} ${data.source[1]}`,
+                    subject: `${subject} ${data.report[1]}`,
                     from: from,
-                    to: data.email,
+                    to: data.studentEmail,
                     cc: [data.coordinatorEmail],
                     html: emailContent,
                 });
 
                 emailResults.push({
-                    email: data.email,
+                    email: data.studentEmail,
                     success: true,
                 });
             } catch (err) {
                 console.log(err);
 
                 emailResults.push({
-                   email: data.email,
+                   email: data.studentEmail,
                    success: false,
                 });
             }

@@ -296,7 +296,7 @@ export class DocxService {
                 new TextRun({text: `Din data de ${presentationDate}`, font: font, size: 24, break: 2}),
                 new TextRun({text: `Privind raportul ştiinţific de doctorat susţinut de`, font: font, size: 24, break: 1}),
                 new TextRun({text: `Domnul/Doamna`, font: font, size: 24, break: 1}),
-                new TextRun({text: `${data.name}`, font: font, size: 24, break: 2}),
+                new TextRun({text: `${data.studentName}`, font: font, size: 24, break: 2}),
                 new TextRun({text: `(Numele şi prenumele doctorandului)`, font: font, size: 20, break: 1}),
             ],
             alignment: AlignmentType.CENTER,
