@@ -152,11 +152,10 @@ app.post(RestEndpoints.BASE_INFORMATION, Middleware.adminMiddleware, RestControl
 app.delete(`${RestEndpoints.BASE_INFORMATION}/:id`, Middleware.adminMiddleware, RestController.deleteBaseInformation);
 
 app.post(RestEndpoints.SEMESTER_ACTIVITY_EMAIL, Middleware.adminMiddleware, RestController.sendSemesterActivityEmail);
-app.get(RestEndpoints.EXPORT_FORMS, Middleware.adminMiddleware, RestController.exportForms);
-
 app.post(RestEndpoints.FAZ, Middleware.adminMiddleware, RestController.faz);
 app.post(RestEndpoints.VERBAL_PROCESS, Middleware.adminMiddleware, RestController.sendVerbalProcess);
 app.post(RestEndpoints.THESIS_NOTIFICATION, Middleware.adminMiddleware, RestController.sendThesisEmailNotification);
+app.get(RestEndpoints.EXPORT_FORMS, Middleware.adminMiddleware, RestController.exportForms);
 
 
 /************************************************************************************

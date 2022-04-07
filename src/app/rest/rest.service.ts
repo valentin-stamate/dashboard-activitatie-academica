@@ -1190,10 +1190,9 @@ export class RestService {
                 continue;
             }
 
-            let emailActivityContent = '';
-            for (let row of data.professorActivity) {
-                emailActivityContent += `${row.activity} ${row.weekHours} ore/saptamana <br>`;
-            }
+            let emailActivityContent: string = data.professorActivity
+                .map(item => `${item.activity} ${item.weekHours} ore/săptămână`)
+                .join(`<br>`);
 
             const emailContent = emailTemplate.replace(new RegExp(/{{activity}}/g), emailActivityContent);
 
@@ -1296,17 +1295,19 @@ export class RestService {
 
 
         for (let data of verbalProcessDataList) {
+            if (recipientExceptList.some(item => item === data.email)) {
+                continue;
+            }
+
             const buffer = await DocxService.getVerbalProcessDOCXBuffer(data);
             const filename = `Proces_verbal_${data.name} ${data.source}.docx`;
-
-            const emailContent = 'Holla';
 
             try {
                 await MailService.sendMail({
                     from: from,
                     subject: subject,
-                    to: 'stamatevalentin125@gmail.com',
-                    html: emailContent,
+                    to: data.email,
+                    html: emailTemplate,
                     attachments: [{
                         content: buffer,
                         filename: filename,
@@ -1352,7 +1353,7 @@ export class RestService {
 
             try {
                 await MailService.sendMail({
-                    subject: subject,
+                    subject: `${subject} ${data.source[1]}`,
                     from: from,
                     to: data.email,
                     cc: [data.coordinatorEmail],
