@@ -14,13 +14,24 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"identifier\": \"andredfgi\",\r\n    \"email\": \"andrei.mercedes@gmail.com\",\r\n    \"alternativeEmail\": \"andrei.mercedes@info.uaic.ro\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "identifier",
+									"value": "valentin",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "stamatevalentin125@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "alternativeEmail",
+									"value": "valentin.stamate@info.uaic.ro",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{host}}/api/signup",
@@ -36,58 +47,99 @@
 					"response": []
 				},
 				{
-					"name": "Login",
+					"name": "Student Login",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"identifier\": \"valentin\",\r\n    \"email\": \"stamatevalentin125@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "identifier",
+									"value": "valentin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "{{host}}/api/login",
+							"raw": "{{host}}/api/login-student",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"login"
+								"login-student"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Authenticate",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Coordinator Login",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "identifier",
+									"value": "valentin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "{{host}}/api/auth/oUPJu03eC2Xxh8E0",
+							"raw": "{{host}}/api/login-student",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"auth",
-								"oUPJu03eC2Xxh8E0"
+								"login-student"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "valentin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/login-admin",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"login-admin"
 							]
 						}
 					},
@@ -249,9 +301,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-article-isi/1",
+									"raw": "{{host}}/api/sc-article-isi/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -291,9 +343,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/isi-proceedings",
+									"raw": "{{host}}/api/isi-proceedings",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -324,9 +376,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/isi-proceedings",
+									"raw": "{{host}}/api/isi-proceedings",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -357,9 +409,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/isi-proceedings/1",
+									"raw": "{{host}}/api/isi-proceedings/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -391,9 +443,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/isi-proceedings/1",
+									"raw": "{{host}}/api/isi-proceedings/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -433,9 +485,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-article-bdi",
+									"raw": "{{host}}/api/sc-article-bdi",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -466,9 +518,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-article-bdi",
+									"raw": "{{host}}/api/sc-article-bdi",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -499,9 +551,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-article-bdi/1",
+									"raw": "{{host}}/api/sc-article-bdi/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -533,9 +585,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-article-bdi/1",
+									"raw": "{{host}}/api/sc-article-bdi/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -575,9 +627,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-book",
+									"raw": "{{host}}/api/sc-book",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -608,9 +660,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-book",
+									"raw": "{{host}}/api/sc-book",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -641,9 +693,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-book/1",
+									"raw": "{{host}}/api/sc-book/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -675,9 +727,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-book/1",
+									"raw": "{{host}}/api/sc-book/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -717,9 +769,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/translation",
+									"raw": "{{host}}/api/translation",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -750,9 +802,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/translation",
+									"raw": "{{host}}/api/translation",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -783,9 +835,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/translation/1",
+									"raw": "{{host}}/api/translation/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -817,9 +869,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/translation/1",
+									"raw": "{{host}}/api/translation/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -859,9 +911,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-communication",
+									"raw": "{{host}}/api/sc-communication",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -892,9 +944,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-communication",
+									"raw": "{{host}}/api/sc-communication",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -925,9 +977,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-communication/1",
+									"raw": "{{host}}/api/sc-communication/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -959,9 +1011,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/sc-communication/1",
+									"raw": "{{host}}/api/sc-communication/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1001,9 +1053,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/patent",
+									"raw": "{{host}}/api/patent",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1034,9 +1086,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/patent",
+									"raw": "{{host}}/api/patent",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1067,9 +1119,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/patent/1",
+									"raw": "{{host}}/api/patent/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1101,9 +1153,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/patent/1",
+									"raw": "{{host}}/api/patent/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1143,9 +1195,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/research-contract",
+									"raw": "{{host}}/api/research-contract",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1176,9 +1228,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/research-contract",
+									"raw": "{{host}}/api/research-contract",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1209,9 +1261,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/research-contract/1",
+									"raw": "{{host}}/api/research-contract/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1243,9 +1295,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/research-contract/1",
+									"raw": "{{host}}/api/research-contract/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1273,9 +1325,9 @@
 									}
 								],
 								"url": {
-									"raw": "{{BaseUrl}}/api/citation",
+									"raw": "{{host}}/api/citation",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1306,9 +1358,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/citation",
+									"raw": "{{host}}/api/citation",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1339,9 +1391,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/citation/1",
+									"raw": "{{host}}/api/citation/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1373,9 +1425,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/citation/1",
+									"raw": "{{host}}/api/citation/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1415,9 +1467,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/award-nomination",
+									"raw": "{{host}}/api/award-nomination",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1448,9 +1500,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/award-nomination",
+									"raw": "{{host}}/api/award-nomination",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1481,9 +1533,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/award-nomination/1",
+									"raw": "{{host}}/api/award-nomination/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1515,9 +1567,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/award-nomination/1",
+									"raw": "{{host}}/api/award-nomination/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1557,9 +1609,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/academy-member",
+									"raw": "{{host}}/api/academy-member",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1590,9 +1642,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/academy-member",
+									"raw": "{{host}}/api/academy-member",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1623,9 +1675,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/academy-member/1",
+									"raw": "{{host}}/api/academy-member/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1657,9 +1709,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/academy-member/1",
+									"raw": "{{host}}/api/academy-member/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1699,9 +1751,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/editorial-member",
+									"raw": "{{host}}/api/editorial-member",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1732,9 +1784,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/editorial-member",
+									"raw": "{{host}}/api/editorial-member",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1765,9 +1817,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/editorial-member/1",
+									"raw": "{{host}}/api/editorial-member/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1799,9 +1851,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/editorial-member/1",
+									"raw": "{{host}}/api/editorial-member/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1841,9 +1893,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/organized-event",
+									"raw": "{{host}}/api/organized-event",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1874,9 +1926,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/organized-event",
+									"raw": "{{host}}/api/organized-event",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1907,9 +1959,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/organized-event/1",
+									"raw": "{{host}}/api/organized-event/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1941,9 +1993,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/organized-event/1",
+									"raw": "{{host}}/api/organized-event/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -1983,9 +2035,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/without-activity",
+									"raw": "{{host}}/api/without-activity",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -2016,9 +2068,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/without-activity",
+									"raw": "{{host}}/api/without-activity",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -2049,9 +2101,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/without-activity/1",
+									"raw": "{{host}}/api/without-activity/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -2083,9 +2135,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/without-activity/1",
+									"raw": "{{host}}/api/without-activity/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -2125,9 +2177,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/didactic-activity",
+									"raw": "{{host}}/api/didactic-activity",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -2158,9 +2210,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/didactic-activity",
+									"raw": "{{host}}/api/didactic-activity",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -2191,9 +2243,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/didactic-activity/1",
+									"raw": "{{host}}/api/didactic-activity/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -2225,9 +2277,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/api/didactic-activity/1",
+									"raw": "{{host}}/api/didactic-activity/1",
 									"host": [
-										"{{BaseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"api",
@@ -2288,13 +2340,51 @@
 							}
 						},
 						"url": {
-							"raw": "{{token}}/api/forms",
+							"raw": "{{host}}/api/forms",
 							"host": [
-								"{{token}}"
+								"{{host}}"
 							],
 							"path": [
 								"api",
 								"forms"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Coordinator",
+			"item": [
+				{
+					"name": "Login Coordinator",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "{{coordinatorEmail}}",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "{{coordinatorCode}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/login-coordinator",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"login-coordinator"
 							]
 						}
 					},
@@ -2715,6 +2805,77 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Import Coordinators",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Valentin/Desktop/Date_conectare_coordonatori.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/import-coordinators",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"import-coordinators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Coordinators",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Valentin/Desktop/Date_conectare_coordonatori.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/coordinators",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"coordinators"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
@@ -2744,6 +2905,18 @@
 			"key": "host",
 			"value": "",
 			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string",
+			"disabled": true
 		},
 		{
 			"key": "token",

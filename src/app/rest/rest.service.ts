@@ -1,5 +1,5 @@
 import {
-    AcademyMember,
+    AcademyMember, Admin,
     AllowedStudent,
     AwardAndNomination,
     Citation,
@@ -59,27 +59,48 @@ export class RestService {
     /************************************************************************************
      *                               Visitor only
      ***********************************************************************************/
-    static async check(user: any): Promise<void> {
+    /** Checks the user and returns the type of it:
+     * 1 for Student
+     * 2 for Coordinator
+     * 3 for Admin */
+    static async check(user: any): Promise<number> {
+        console.log(user);
+
         let studentRow = await StudentModel.findOne({
             where: {
                 id: user.id,
+                fullName: user.fullName || 'none',
+                identifier: user.identifier || 'none',
+                email: user.email || 'none',
             }});
 
         let coordinatorRow = await CoordinatorModel.findOne({
             where: {
                 id: user.id,
+                name: user.name || 'none',
+                function: user.function || 'none',
+                email: user.email || 'none',
             }});
 
         let adminRow = await AdminModel.findOne({
             where: {
                 id: user.id,
+                username: user.username || 'none',
             }});
 
-        if (!studentRow || !coordinatorRow || !adminRow) {
+        if (!studentRow && !coordinatorRow && !adminRow) {
             throw new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.NOT_FOUND);
         }
 
-        return;
+        if (studentRow) {
+            return 1;
+        }
+
+        if (coordinatorRow) {
+            return 2;
+        }
+
+        return 3;
     }
 
     static async signupStudent(identifier: string, email: string, alternativeEmail: string): Promise<void> {
@@ -171,9 +192,9 @@ export class RestService {
             throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
         }
 
-        const user = row.toJSON() as Student;
+        const user = row.toJSON() as Coordinator;
 
-        return JwtService.generateAccessTokenForStudent(user);
+        return JwtService.generateAccessTokenForCoordinator(user);
     }
 
     static async loginAdmin(identifier: string, rawPassword: string): Promise<string> {
@@ -190,41 +211,29 @@ export class RestService {
             throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
         }
 
-        const user = row.toJSON() as Student;
+        const user = row.toJSON() as Admin;
 
-        return JwtService.generateAccessTokenForStudent(user);
+        return JwtService.generateAccessTokenForAdmin(user);
     }
 
     /************************************************************************************
      *                               User only
      ***********************************************************************************/
-    static async getInformation(user: Student): Promise<any> {
-        const infoRow = await AllowedStudentsModel.findOne({
-            where: {
-                identifier: user.identifier
-            }
-        });
-        const userRow = await StudentModel.findOne({
+    static async getInformation(user: Student): Promise<Student> {
+        const row = await StudentModel.findOne({
             where: {
                 id: user.id
             }
         });
 
-        if (userRow === null) {
+        if (row === null) {
             throw new ResponseError(ResponseMessage.NO_USER_FOUND);
         }
 
-        let infoData = {};
-        const userData = userRow.toJSON();
+        const student = row.toJSON();
+        delete student.password;
 
-        if (infoRow !== null) {
-            infoData = infoRow.toJSON();
-        }
-
-        return {
-            userInformation: userData,
-            baseInformation: infoData,
-        };
+        return student;
     }
 
     static async getForms(user: Student): Promise<any> {

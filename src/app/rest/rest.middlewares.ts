@@ -11,8 +11,8 @@ export class Middleware {
         next();
     }
 
-    /** Middleware for authorized users. In order for the request to pass the user should exist. */
-    static async userMiddleware (req: Request<any>, res: Response, next: NextFunction) {
+    /** Middleware for authorized students. In order for the request to pass the user should exist. */
+    static async studentMiddleware (req: Request<any>, res: Response, next: NextFunction) {
         const token = req.get('Authorization');
 
         if (!token) {
@@ -29,8 +29,41 @@ export class Middleware {
 
         const row = await StudentModel.findOne({where: {
                 id: user.id,
-                identifier: user.identifier,
-                email: user.email,
+                fullName: user.fullName || 'none',
+                identifier: user.identifier || 'none',
+                email: user.email || 'none',
+            }});
+
+        if (row === null) {
+            next(new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.IM_A_TEAPOT));
+            return;
+        }
+
+        res.setHeader('Content-Type', ContentType.JSON);
+        next();
+    }
+
+    /** Middleware for coordinators users. */
+    static async coordinatorMiddleware (req: Request<any>, res: Response, next: NextFunction) {
+        const token = req.get('Authorization');
+
+        if (!token) {
+            next(new ResponseError(ResponseMessage.NO_AUTH_TOKEN, StatusCode.UNAUTHORIZED));
+            return;
+        }
+
+        const user = JwtService.verifyToken(token) as Coordinator;
+
+        if (user === null) {
+            next(new ResponseError(ResponseMessage.INVALID_TOKEN, StatusCode.IM_A_TEAPOT));
+            return;
+        }
+
+        const row = await CoordinatorModel.findOne({where: {
+                id: user.id,
+                name: user.name || 'none',
+                function: user.function || 'none',
+                email: user.email || 'none',
             }});
 
         if (row === null) {
@@ -60,7 +93,7 @@ export class Middleware {
 
         const row = await StudentModel.findOne({where: {
                 id: user.id,
-                username: user.username,
+                username: user.username || 'none',
             }});
 
         if (row === null) {
@@ -70,38 +103,6 @@ export class Middleware {
 
         if (!row.toJSON().admin) {
             next(new ResponseError(ResponseMessage.ADMIN_ONLY, StatusCode.IM_A_TEAPOT));
-            return;
-        }
-
-        res.setHeader('Content-Type', ContentType.JSON);
-        next();
-    }
-
-    /** Middleware for coordinators users. */
-    static async coordinatorMiddleware (req: Request<any>, res: Response, next: NextFunction) {
-        const token = req.get('Authorization');
-
-        if (!token) {
-            next(new ResponseError(ResponseMessage.NO_AUTH_TOKEN, StatusCode.UNAUTHORIZED));
-            return;
-        }
-
-        const user = JwtService.verifyToken(token) as Coordinator;
-
-        if (user === null) {
-            next(new ResponseError(ResponseMessage.INVALID_TOKEN, StatusCode.IM_A_TEAPOT));
-            return;
-        }
-
-        const row = await CoordinatorModel.findOne({where: {
-                id: user.id,
-                name: user.name,
-                function: user.function,
-                email: user.email,
-            }});
-
-        if (row === null) {
-            next(new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.IM_A_TEAPOT));
             return;
         }
 
