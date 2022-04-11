@@ -3,9 +3,11 @@ export enum RestEndpoints {
     CHECK = '/api/check',
 
     /** Visitor */
-    SIGNUP = '/api/signup',
-    LOGIN = '/api/login',
-    AUTH = '/api/auth',
+    SIGNUP_STUDENT = '/api/signup-student',
+
+    LOGIN_STUDENT = '/api/login-student',
+    LOGIN_ADMIN = '/api/login-admin',
+    LOGIN_COORDINATOR = '/api/login-coordinator',
 
     /** User */
     FORMS = `/api/forms`,
@@ -38,7 +40,6 @@ export enum RestEndpoints {
     COORDINATORS = '/api/coordinators',
 
     /* Coordinator */
-    LOGIN_COORDINATOR = '/api/login-coordinator',
     COORDINATOR_STUDENTS = '/api/coordinator/students',
 
 }

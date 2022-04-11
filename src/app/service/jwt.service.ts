@@ -1,17 +1,17 @@
 import jwt from 'jsonwebtoken';
-import {Coordinator, User} from "../database/db.models";
+import {Admin, Coordinator, Student} from "../database/db.models";
 
 require('dotenv').config();
 const env = process.env as any;
 
 export class JwtService {
 
-    static generateAccessToken(user: User) {
+    static generateAccessTokenForStudent(user: Student) {
         return jwt.sign({
                 id: user.id,
+                fullName: user.fullName,
                 identifier: user.identifier,
                 email: user.email,
-                admin: user.admin,
             },
             env.TOKEN_SECRET);
     }
@@ -22,6 +22,13 @@ export class JwtService {
             name: coordinator.name,
             function: coordinator.function,
             email: coordinator.email,
+        }, env.TOKEN_SECRET);
+    }
+
+    static generateAccessTokenForAdmin(coordinator: Admin) {
+        return jwt.sign({
+            id: coordinator.id,
+            username: coordinator.username,
         }, env.TOKEN_SECRET);
     }
 

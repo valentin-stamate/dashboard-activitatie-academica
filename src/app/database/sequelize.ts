@@ -15,10 +15,11 @@ const options = {
     underscored: true,
 };
 
-export class BaseInformationModel extends Model {}
-export class UserModel extends Model {}
-export class UserKeyModel extends Model {}
+export class AllowedStudentsModel extends Model {}
+export class StudentModel extends Model {}
 export class CoordinatorModel extends Model {}
+export class AdminModel extends Model {}
+export class UserKeyModel extends Model {}
 
 export class ScientificArticleISIModel extends Model {}
 export class ISIProceedingModel extends Model {}
@@ -40,28 +41,37 @@ export class DidacticActivityModel extends Model {}
  *                               Table Initialization
  ***********************************************************************************/
 
-BaseInformationModel.init( {
+AllowedStudentsModel.init( {
     fullName:    {type: DataTypes.STRING, allowNull: false,},
     identifier:  {type: DataTypes.STRING, allowNull: false, unique: true,},
     coordinator: {type: DataTypes.STRING, allowNull: false,},
     attendanceYear:    {type: DataTypes.INTEGER, allowNull: false,},
-}, {...options, modelName: 'base_information'});
+}, {...options, modelName: 'allowed_students'});
 
-UserModel.init({
-        identifier:       {type: DataTypes.STRING, unique: true, allowNull: false,},
-        email:            {type: DataTypes.STRING, unique: true, allowNull: false,},
-        alternativeEmail: {type: DataTypes.STRING, unique: true, allowNull: false,},
-        admin:            {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false,},
+StudentModel.init({
+        identifier:          {type: DataTypes.STRING, unique: true, allowNull: false,},
+        password:            {type: DataTypes.STRING, unique: false, allowNull: false,},
+        fullName:            {type: DataTypes.STRING, unique: false, allowNull: false,},
+        email:               {type: DataTypes.STRING, unique: true, allowNull: false,},
+        alternativeEmail:    {type: DataTypes.STRING, unique: true, allowNull: false,},
+        attendanceYear:      {type: DataTypes.INTEGER, unique: false, allowNull: false,},
+        coordinatorName:     {type: DataTypes.STRING, unique: false, allowNull: false,},
+        coordinatorFunction: {type: DataTypes.STRING, unique: false, allowNull: false,},
     },
-    {...options, tableName: 'users',}
+    {...options, tableName: 'students',}
 );
 
 CoordinatorModel.init({
     name:     {type: DataTypes.STRING, unique: true, allowNull: false,},
     function: {type: DataTypes.STRING, unique: false, allowNull: false,},
     email:    {type: DataTypes.STRING, unique: true, allowNull: false,},
-    code:     {type: DataTypes.STRING, unique: true, allowNull: false,},
+    password: {type: DataTypes.STRING, unique: false, allowNull: false,},
 }, {...options, tableName: 'coordinators'});
+
+AdminModel.init({
+    username: {type: DataTypes.STRING, unique: true, allowNull: false,},
+    password: {type: DataTypes.STRING, unique: false, allowNull: false,},
+}, {...options, tableName: 'admins'});
 
 UserKeyModel.init({
     identifier: {type: DataTypes.STRING, unique: true, allowNull: false,},
@@ -89,7 +99,7 @@ ScientificArticleISIModel.init({
     },
     {...options, tableName: 'sc_article_isi',}
 );
-UserModel.hasMany(ScientificArticleISIModel, {
+StudentModel.hasMany(ScientificArticleISIModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -112,7 +122,7 @@ ISIProceedingModel.init({
     },
     {...options, tableName: 'isi_proceeding',}
 );
-UserModel.hasMany(ISIProceedingModel, {
+StudentModel.hasMany(ISIProceedingModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -139,7 +149,7 @@ ScientificArticleBDIModel.init({
     },
     {...options, tableName: 'sc_article_bdi',}
 );
-UserModel.hasMany(ScientificArticleBDIModel, {
+StudentModel.hasMany(ScientificArticleBDIModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -161,7 +171,7 @@ ScientificBookModel.init({
     },
     {...options, tableName: 'sc_book',}
 );
-UserModel.hasMany(ScientificBookModel, {
+StudentModel.hasMany(ScientificBookModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -184,7 +194,7 @@ TranslationModel.init({
     },
     {...options, tableName: 'translations',}
 );
-UserModel.hasMany(TranslationModel, {
+StudentModel.hasMany(TranslationModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -203,7 +213,7 @@ ScientificCommunicationModel.init({
     },
     {...options, tableName: 'sc_communications',}
 );
-UserModel.hasMany(ScientificCommunicationModel, {
+StudentModel.hasMany(ScientificCommunicationModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -223,7 +233,7 @@ PatentModel.init({
     },
     {...options, tableName: 'patents',}
 );
-UserModel.hasMany(PatentModel, {
+StudentModel.hasMany(PatentModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -243,7 +253,7 @@ ResearchContractModel.init({
     },
     {...options, tableName: 'research_contract',}
 );
-UserModel.hasMany(ResearchContractModel, {
+StudentModel.hasMany(ResearchContractModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -270,7 +280,7 @@ CitationModel.init({
     },
     {...options, tableName: 'citation',}
 );
-UserModel.hasMany(CitationModel, {
+StudentModel.hasMany(CitationModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -289,7 +299,7 @@ AwardAndNominationModel.init({
     },
     {...options, tableName: 'awards_nominations',}
 );
-UserModel.hasMany(AwardAndNominationModel, {
+StudentModel.hasMany(AwardAndNominationModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -305,7 +315,7 @@ AcademyMemberModel.init({
     },
     {...options, tableName: 'academy_member',}
 );
-UserModel.hasMany(AcademyMemberModel, {
+StudentModel.hasMany(AcademyMemberModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -324,7 +334,7 @@ EditorialMemberModel.init({
     },
     {...options, tableName: 'editorial_member',}
 );
-UserModel.hasMany(EditorialMemberModel, {
+StudentModel.hasMany(EditorialMemberModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -345,7 +355,7 @@ OrganizedEventModel.init({
     },
     {...options, tableName: 'oraganized_events',}
 );
-UserModel.hasMany(OrganizedEventModel, {
+StudentModel.hasMany(OrganizedEventModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -358,7 +368,7 @@ WithoutActivityModel.init({
     },
     {...options, tableName: 'without_activity',}
 );
-UserModel.hasMany(WithoutActivityModel, {
+StudentModel.hasMany(WithoutActivityModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -373,7 +383,7 @@ DidacticActivityModel.init({
     },
     {...options, tableName: 'didactic_activity',}
 );
-UserModel.hasMany(DidacticActivityModel, {
+StudentModel.hasMany(DidacticActivityModel, {
     sourceKey: 'identifier',
     foreignKey: {name: 'owner', allowNull: false,},
     onDelete: 'CASCADE',
@@ -398,13 +408,13 @@ export async function sequelizeInit() {
 
     await initializeTables();
 
-    await BaseInformationModel.create({
-        fullName: 'Marin Aioanei',
-        identifier: 'marin',
-        coordinator: 'Buraga Cosmin',
-        attendanceYear: 2021,
+    await AllowedStudentsModel.create({
+        fullName: 'Stamate Valentin',
+        identifier: 'valentin',
+        coordinator: 'Prof.univ.dr. Lenuța Alboaie',
+        attendanceYear: 2022,
     });
-    await BaseInformationModel.create({
+    await AllowedStudentsModel.create({
         fullName: 'Andrei Amariei',
         identifier: 'andrei',
         founding: 'Taxa',
@@ -412,21 +422,9 @@ export async function sequelizeInit() {
         attendanceYear: 2021,
     });
 
-    await UserModel.create({
-        identifier: 'valentin',
-        email: 'stamatevalentin125@gmail.com',
-        alternativeEmail: 'valentin.stamate@info.uaic.ro',
-        admin: true,
-    });
-    await UserModel.create({
-        identifier: 'marin',
-        email: 'marin@gmail.com',
-        alternativeEmail: 'avramescu.marin@info.uaic.ro',
+    await AdminModel.create({
+        username: 'valentin',
+        password: 'f1fb829f43600004028ec33213913163bba13327a43430a06acbe866bf747cb5',
     });
 
-    await ScientificArticleISIModel.create({
-        observations: 'Ana are mere',
-        owner: 'valentin',
-        publicationDate: new Date(),
-    });
 }

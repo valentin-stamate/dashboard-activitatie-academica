@@ -1,7 +1,9 @@
 import {
     AcademyMember,
+    AllowedStudent,
     AwardAndNomination,
-    Citation, Coordinator,
+    Citation,
+    Coordinator,
     DidacticActivity,
     EditorialMember,
     ISIProceeding,
@@ -12,15 +14,17 @@ import {
     ScientificArticleISI,
     ScientificBook,
     ScientificCommunication,
+    Student,
     Translation,
-    User,
     WithoutActivity
 } from "../database/db.models";
 import {
     AcademyMemberModel,
+    AdminModel,
+    AllowedStudentsModel,
     AwardAndNominationModel,
-    BaseInformationModel,
-    CitationModel, CoordinatorModel,
+    CitationModel,
+    CoordinatorModel,
     DidacticActivityModel,
     EditorialMemberModel,
     ISIProceedingModel,
@@ -31,14 +35,13 @@ import {
     ScientificArticleISIModel,
     ScientificBookModel,
     ScientificCommunicationModel,
+    StudentModel,
     TranslationModel,
-    UserKeyModel,
-    UserModel,
     WithoutActivityModel
 } from "../database/sequelize";
 import {UploadedFile} from "express-fileupload";
 import {UtilService} from "../service/util.service";
-import {EmailDefaults, LoginMessage, MailService} from "../service/email.service";
+import {EmailDefaults, MailService} from "../service/email.service";
 import {ResponseError} from "./rest.middlewares";
 import {JwtService} from "../service/jwt.service";
 import {Op} from "@sequelize/core";
@@ -48,52 +51,53 @@ import {ResponseMessage, StatusCode} from "./rest.util";
 import {FormsService} from "../service/forms.service";
 import {DocxService} from "../service/file/docx.service";
 import {EmailResult} from "../service/models";
+import {CryptoUtil} from "../service/crypto.util";
+import sha256 from 'crypto-js/sha256';
 
 /** The layer where the logic holds */
 export class RestService {
     /************************************************************************************
      *                               Visitor only
      ***********************************************************************************/
-    static async check(user: User): Promise<void> {
-        const row = await UserModel.findOne({
+    static async check(user: any): Promise<void> {
+        let studentRow = await StudentModel.findOne({
             where: {
                 id: user.id,
-                identifier: user.identifier,
-                email: user.email,
-                admin: user.admin,
             }});
 
-        if (row === null) {
+        let coordinatorRow = await CoordinatorModel.findOne({
+            where: {
+                id: user.id,
+            }});
+
+        let adminRow = await AdminModel.findOne({
+            where: {
+                id: user.id,
+            }});
+
+        if (!studentRow || !coordinatorRow || !adminRow) {
             throw new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.NOT_FOUND);
         }
 
         return;
     }
 
-    static async signup(user: User): Promise<void> {
-        if (!user.identifier || !user.email || !user.alternativeEmail) {
-            throw new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST);
-        }
-
-        const options = {
+    static async signupStudent(identifier: string, email: string, alternativeEmail: string): Promise<void> {
+        const existingUser = await StudentModel.findOne({
             where: {
                 [Op.or]: [
-                    {identifier: user.identifier},
-                    {email: user.email},
-                    {alternativeEmail: user.alternativeEmail},
+                    {identifier: identifier},
                 ]
             }
-        };
-
-        const existingUser = await UserModel.findOne(options);
+        });
 
         if (existingUser !== null) {
             throw new ResponseError(ResponseMessage.DATA_TAKEN, StatusCode.BAD_REQUEST);
         }
 
-        const row = await BaseInformationModel.findOne({
+        const row = await AllowedStudentsModel.findOne({
             where: {
-                identifier: user.identifier
+                identifier: identifier
             }
         });
 
@@ -101,89 +105,106 @@ export class RestService {
             throw new ResponseError(ResponseMessage.USER_NOT_REGISTERED, StatusCode.NOT_ACCEPTABLE);
         }
 
-        user = {...user, admin: false};
-        await UserModel.build({...user}).save();
+        const studentPreInformation = row.toJSON() as AllowedStudent;
 
+        const coordinatorFullName = UtilService.splitSplitProfessorName(studentPreInformation.coordinator);
+
+        const generatedPassword = 'admin';
+        const password = CryptoUtil.scufflePassword(generatedPassword);
+
+        const student: Student = {
+            identifier: identifier,
+            password: sha256(password).toString(),
+            fullName: studentPreInformation.fullName,
+            email: email,
+            alternativeEmail: alternativeEmail,
+            attendanceYear: studentPreInformation.attendanceYear,
+            coordinatorName: coordinatorFullName[1],
+            coordinatorFunction: coordinatorFullName[0],
+        }
+
+        try {
+            await MailService.sendMail({
+                from: EmailDefaults.FROM,
+                to: email,
+                html: generatedPassword,
+            });
+        } catch (err) {
+            console.log(err);
+            throw new ResponseError(ResponseMessage.MAIL_ERROR, StatusCode.BAD_REQUEST);
+        }
+
+        await StudentModel.create(student as any);
         return;
     }
 
-    static async login(user: User): Promise<void> {
-        if (!user.identifier || !user.email) {
-            throw new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST);
-        }
+    static async loginStudent(identifier: string, rawPassword: string): Promise<string> {
+        const password = CryptoUtil.scufflePassword(rawPassword);
 
-        const row = await UserModel.findOne({
+        const row = await StudentModel.findOne({
             where: {
-                identifier: user.identifier,
-                email: user.email
+                identifier: identifier,
+                password: sha256(password).toString(),
             }
         });
 
         if (row === null) {
-            throw new ResponseError(ResponseMessage.NO_USER_FOUND, StatusCode.NOT_FOUND);
+            throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
         }
 
-        const realUser = row.toJSON() as User;
-        const key = UtilService.generateRandomString(16);
+        const user = row.toJSON() as Student;
 
-        let dbKey = await UserKeyModel.findOne({
-            where: {
-                identifier: realUser.identifier
-            }
-        });
-
-        if (dbKey === null) {
-            await UserKeyModel.create({identifier: realUser.identifier, key: key});
-        } else {
-            await (dbKey.set({key: key}).save());
-        }
-
-        await MailService.sendMail({
-            from: EmailDefaults.FROM,
-            to: [realUser.email].join(','),
-            subject: `[Login] ${EmailDefaults.APP_NAME}`,
-            html: LoginMessage.getHtml(key),
-        });
-
-        return;
+        return JwtService.generateAccessTokenForStudent(user);
     }
 
-    static async authenticate(key: string): Promise<string> {
-        const row = await UserKeyModel.findOne({
+    static async loginCoordinator(email: string, code: string): Promise<string> {
+        const password = CryptoUtil.scufflePassword(code);
+
+        const row = await StudentModel.findOne({
             where: {
-                key: key
+                email: email,
+                password: sha256(password).toString(),
             }
         });
 
         if (row === null) {
-            throw new ResponseError(ResponseMessage.INVALID_AUTH_KEY, StatusCode.NOT_FOUND);
+            throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
         }
 
-        const user = await UserModel.findOne({
+        const user = row.toJSON() as Student;
+
+        return JwtService.generateAccessTokenForStudent(user);
+    }
+
+    static async loginAdmin(identifier: string, rawPassword: string): Promise<string> {
+        const password = CryptoUtil.scufflePassword(rawPassword);
+
+        const row = await AdminModel.findOne({
             where: {
-                identifier: row.toJSON().identifier
+                username: identifier,
+                password: sha256(password).toString(),
             }
         });
 
-        if (user === null) {
-            throw new ResponseError(ResponseMessage.SOMETHING_WRONG, StatusCode.EXPECTATION_FAILED);
+        if (row === null) {
+            throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
         }
 
-        await row.destroy();
+        const user = row.toJSON() as Student;
 
-        return JwtService.generateAccessToken(user.toJSON() as User);
+        return JwtService.generateAccessTokenForStudent(user);
     }
 
     /************************************************************************************
      *                               User only
      ***********************************************************************************/
-    static async getInformation(user: User): Promise<any> {
-        const infoRow = await BaseInformationModel.findOne({
+    static async getInformation(user: Student): Promise<any> {
+        const infoRow = await AllowedStudentsModel.findOne({
             where: {
                 identifier: user.identifier
             }
         });
-        const userRow = await UserModel.findOne({
+        const userRow = await StudentModel.findOne({
             where: {
                 id: user.id
             }
@@ -206,7 +227,7 @@ export class RestService {
         };
     }
 
-    static async getForms(user: User): Promise<any> {
+    static async getForms(user: Student): Promise<any> {
         const scArticleISI = (await ScientificArticleISIModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
@@ -275,14 +296,14 @@ export class RestService {
     }
 
     /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
-    static async getScientificArticleISI(user: User): Promise<any> {
+    static async getScientificArticleISI(user: Student): Promise<any> {
         return (await ScientificArticleISIModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addScientificArticleISI(user: User, data: ScientificArticleISI): Promise<void> {
+    static async addScientificArticleISI(user: Student, data: ScientificArticleISI): Promise<void> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -294,7 +315,7 @@ export class RestService {
         return;
     }
 
-    static async updateScientificArticleISI(user: User, formId: number, data: ScientificArticleISI): Promise<void> {
+    static async updateScientificArticleISI(user: Student, formId: number, data: ScientificArticleISI): Promise<void> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -314,7 +335,7 @@ export class RestService {
         return;
     }
 
-    static async deleteScientificArticleISI(user: User, id: number): Promise<void> {
+    static async deleteScientificArticleISI(user: Student, id: number): Promise<void> {
         const row = await ScientificArticleISIModel.findOne({
             where: {
                 owner: user.identifier,
@@ -331,14 +352,14 @@ export class RestService {
     }
 
     /** ISI proceedings */
-    static async getISIProceeding(user: User): Promise<any> {
+    static async getISIProceeding(user: Student): Promise<any> {
         return (await ISIProceedingModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addISIProceeding(user: User, data: ISIProceeding): Promise<any> {
+    static async addISIProceeding(user: Student, data: ISIProceeding): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -350,7 +371,7 @@ export class RestService {
         return;
     }
 
-    static async updateISIProceeding(user: User, formId: number, data: ISIProceeding): Promise<void> {
+    static async updateISIProceeding(user: Student, formId: number, data: ISIProceeding): Promise<void> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -370,7 +391,7 @@ export class RestService {
         return;
     }
 
-    static async deleteISIProceeding(user: User, id: number): Promise<void> {
+    static async deleteISIProceeding(user: Student, id: number): Promise<void> {
         const row = await ISIProceedingModel.findOne({
             where: {
                 owner: user.identifier,
@@ -387,14 +408,14 @@ export class RestService {
     }
 
     /** Articole științifice publicate în extenso în reviste indexate BDI și reviste de specialitate neindexate */
-    static async getScientificArticleBDI(user: User): Promise<any> {
+    static async getScientificArticleBDI(user: Student): Promise<any> {
         return (await ScientificArticleBDIModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addScientificArticleBDI(user: User, data: ScientificArticleBDI): Promise<any> {
+    static async addScientificArticleBDI(user: Student, data: ScientificArticleBDI): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -406,7 +427,7 @@ export class RestService {
         return;
     }
 
-    static async updateScientificArticleBDI(user: User, formId: number, data: ScientificArticleBDI): Promise<void> {
+    static async updateScientificArticleBDI(user: Student, formId: number, data: ScientificArticleBDI): Promise<void> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -426,7 +447,7 @@ export class RestService {
         return;
     }
 
-    static async deleteScientificArticleBDI(user: User, id: number): Promise<void> {
+    static async deleteScientificArticleBDI(user: Student, id: number): Promise<void> {
         const row = await ScientificArticleBDIModel.findOne({
             where: {
                 owner: user.identifier,
@@ -443,14 +464,14 @@ export class RestService {
     }
 
     /** Cărți ştiinţifice sau capitole de cărți publicate în edituri */
-    static async getScientificBook(user: User): Promise<any> {
+    static async getScientificBook(user: Student): Promise<any> {
         return (await ScientificBookModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addScientificBook(user: User, data: ScientificBook): Promise<any> {
+    static async addScientificBook(user: Student, data: ScientificBook): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -462,7 +483,7 @@ export class RestService {
         return;
     }
 
-    static async updateScientificBook(user: User, formId: number, data: ScientificBook): Promise<void> {
+    static async updateScientificBook(user: Student, formId: number, data: ScientificBook): Promise<void> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -482,7 +503,7 @@ export class RestService {
         return;
     }
 
-    static async deleteScientificBook(user: User, id: number): Promise<void> {
+    static async deleteScientificBook(user: Student, id: number): Promise<void> {
         const row = await ScientificBookModel.findOne({
             where: {
                 owner: user.identifier,
@@ -499,14 +520,14 @@ export class RestService {
     }
 
     /** Traduceri */
-    static async getTranslation(user: User): Promise<any> {
+    static async getTranslation(user: Student): Promise<any> {
         return (await TranslationModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addTranslation(user: User, data: Translation): Promise<any> {
+    static async addTranslation(user: Student, data: Translation): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -518,7 +539,7 @@ export class RestService {
         return;
     }
 
-    static async updateTranslation(user: User, formId: number, data: Translation): Promise<void> {
+    static async updateTranslation(user: Student, formId: number, data: Translation): Promise<void> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -538,7 +559,7 @@ export class RestService {
         return;
     }
 
-    static async deleteTranslation(user: User, id: number) {
+    static async deleteTranslation(user: Student, id: number) {
         const row = await TranslationModel.findOne({
             where: {
                 owner: user.identifier,
@@ -555,14 +576,14 @@ export class RestService {
     }
 
     /** Comunicări în manifestări științifice */
-    static async getScientificCommunication(user: User) {
+    static async getScientificCommunication(user: Student) {
         return (await ScientificCommunicationModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addScientificCommunication(user: User, data: ScientificCommunication): Promise<any> {
+    static async addScientificCommunication(user: Student, data: ScientificCommunication): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -574,7 +595,7 @@ export class RestService {
         return;
     }
 
-    static async updateScientificCommunication(user: User, formId: number, data: ScientificCommunication) {
+    static async updateScientificCommunication(user: Student, formId: number, data: ScientificCommunication) {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -594,7 +615,7 @@ export class RestService {
         return;
     }
 
-    static async deleteScientificCommunication(user: User, id: number) {
+    static async deleteScientificCommunication(user: Student, id: number) {
         const row = await ScientificCommunicationModel.findOne({
             where: {
                 owner: user.identifier,
@@ -611,14 +632,14 @@ export class RestService {
     }
 
     /** Brevete */
-    static async getPatent(user: User) {
+    static async getPatent(user: Student) {
         return (await PatentModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addPatent(user: User, data: Patent): Promise<any> {
+    static async addPatent(user: Student, data: Patent): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -630,7 +651,7 @@ export class RestService {
         return;
     }
 
-    static async updatePatent(user: User, formId: number, data: Patent) {
+    static async updatePatent(user: Student, formId: number, data: Patent) {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -650,7 +671,7 @@ export class RestService {
         return;
     }
 
-    static async deletePatent(user: User, id: number) {
+    static async deletePatent(user: Student, id: number) {
         const row = await PatentModel.findOne({
             where: {
                 owner: user.identifier,
@@ -667,14 +688,14 @@ export class RestService {
     }
 
     /** Contracte de cercetare */
-    static async getResearchContract(user: User) {
+    static async getResearchContract(user: Student) {
         return (await ResearchContractModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addResearchContract(user: User, data: ResearchContract): Promise<any> {
+    static async addResearchContract(user: Student, data: ResearchContract): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -686,7 +707,7 @@ export class RestService {
         return;
     }
 
-    static async updateResearchContract(user: User, formId: number, data: ResearchContract) {
+    static async updateResearchContract(user: Student, formId: number, data: ResearchContract) {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -706,7 +727,7 @@ export class RestService {
         return;
     }
 
-    static async deleteResearchContract(user: User, id: number) {
+    static async deleteResearchContract(user: Student, id: number) {
         const row = await ResearchContractModel.findOne({
             where: {
                 owner: user.identifier,
@@ -723,14 +744,14 @@ export class RestService {
     }
 
     /** Citări */
-    static async getCitation(user: User) {
+    static async getCitation(user: Student) {
         return (await CitationModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addCitation(user: User, data: Citation): Promise<any> {
+    static async addCitation(user: Student, data: Citation): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -742,7 +763,7 @@ export class RestService {
         return;
     }
 
-    static async updateCitation(user: User, formId: number, data: Citation) {
+    static async updateCitation(user: Student, formId: number, data: Citation) {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -762,7 +783,7 @@ export class RestService {
         return;
     }
 
-    static async deleteCitation(user: User, id: number) {
+    static async deleteCitation(user: Student, id: number) {
         const row = await CitationModel.findOne({
             where: {
                 owner: user.identifier,
@@ -779,14 +800,14 @@ export class RestService {
     }
 
     /** Premii si nominalizări */
-    static async getAwardAndNomination(user: User) {
+    static async getAwardAndNomination(user: Student) {
         return (await AwardAndNominationModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addAwardAndNomination(user: User, data: AwardAndNomination): Promise<any> {
+    static async addAwardAndNomination(user: Student, data: AwardAndNomination): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -798,7 +819,7 @@ export class RestService {
         return;
     }
 
-    static async updateAwardAndNomination(user: User, formId: number, data: AwardAndNomination) {
+    static async updateAwardAndNomination(user: Student, formId: number, data: AwardAndNomination) {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -818,7 +839,7 @@ export class RestService {
         return;
     }
 
-    static async deleteAwardAndNomination(user: User, id: number) {
+    static async deleteAwardAndNomination(user: Student, id: number) {
         const row = await AwardAndNominationModel.findOne({
             where: {
                 owner: user.identifier,
@@ -835,14 +856,14 @@ export class RestService {
     }
 
     /** Membru în academii */
-    static async getAcademyMember(user: User) {
+    static async getAcademyMember(user: Student) {
         return (await AcademyMemberModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addAcademyMember(user: User, data: AcademyMember): Promise<any> {
+    static async addAcademyMember(user: Student, data: AcademyMember): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -854,7 +875,7 @@ export class RestService {
         return;
     }
 
-    static async updateAcademyMember(user: User, formId: number, data: AcademyMember) {
+    static async updateAcademyMember(user: Student, formId: number, data: AcademyMember) {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -874,7 +895,7 @@ export class RestService {
         return;
     }
 
-    static async deleteAcademyMember(user: User, id: number) {
+    static async deleteAcademyMember(user: Student, id: number) {
         const row = await AcademyMemberModel.findOne({
             where: {
                 owner: user.identifier,
@@ -891,14 +912,14 @@ export class RestService {
     }
 
     /** Membru în echipa editorială */
-    static async getEditorialMember(user: User) {
+    static async getEditorialMember(user: Student) {
         return (await EditorialMemberModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addEditorialMember(user: User, data: EditorialMember): Promise<any> {
+    static async addEditorialMember(user: Student, data: EditorialMember): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -910,7 +931,7 @@ export class RestService {
         return;
     }
 
-    static async updateEditorialMember(user: User, formId: number, data: EditorialMember) {
+    static async updateEditorialMember(user: Student, formId: number, data: EditorialMember) {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -930,7 +951,7 @@ export class RestService {
         return;
     }
 
-    static async deleteEditorialMember(user: User, id: number) {
+    static async deleteEditorialMember(user: Student, id: number) {
         const row = await EditorialMemberModel.findOne({
             where: {
                 owner: user.identifier,
@@ -947,14 +968,14 @@ export class RestService {
     }
 
     /** Evenimente organizate */
-    static async getOrganizedEvent(user: User) {
+    static async getOrganizedEvent(user: Student) {
         return (await OrganizedEventModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addOrganizedEvent(user: User, data: OrganizedEvent): Promise<any> {
+    static async addOrganizedEvent(user: Student, data: OrganizedEvent): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -966,7 +987,7 @@ export class RestService {
         return;
     }
 
-    static async updateOrganizedEvent(user: User, formId: number, data: OrganizedEvent) {
+    static async updateOrganizedEvent(user: Student, formId: number, data: OrganizedEvent) {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -986,7 +1007,7 @@ export class RestService {
         return;
     }
 
-    static async deleteOrganizedEvent(user: User, id: number) {
+    static async deleteOrganizedEvent(user: Student, id: number) {
         const row = await OrganizedEventModel.findOne({
             where: {
                 owner: user.identifier,
@@ -1003,14 +1024,14 @@ export class RestService {
     }
 
     /** Fără activitate științifică */
-    static async getWithoutActivity(user: User) {
+    static async getWithoutActivity(user: Student) {
         return (await WithoutActivityModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addWithoutActivity(user: User, data: WithoutActivity): Promise<any> {
+    static async addWithoutActivity(user: Student, data: WithoutActivity): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -1022,7 +1043,7 @@ export class RestService {
         return;
     }
 
-    static async updateWithoutActivity(user: User, formId: number, data: WithoutActivity) {
+    static async updateWithoutActivity(user: Student, formId: number, data: WithoutActivity) {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -1042,7 +1063,7 @@ export class RestService {
         return;
     }
 
-    static async deleteWithoutActivity(user: User, id: number) {
+    static async deleteWithoutActivity(user: Student, id: number) {
         const row = await WithoutActivityModel.findOne({
             where: {
                 owner: user.identifier,
@@ -1059,14 +1080,14 @@ export class RestService {
     }
 
     /** Activitate didactică */
-    static async getDidacticActivity(user: User) {
+    static async getDidacticActivity(user: Student) {
         return (await DidacticActivityModel.findAll({
             where: {owner: user.identifier},
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async addDidacticActivity(user: User, data: DidacticActivity): Promise<any> {
+    static async addDidacticActivity(user: Student, data: DidacticActivity): Promise<any> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -1078,7 +1099,7 @@ export class RestService {
         return;
     }
 
-    static async updateDidacticActivity(user: User, formId: number, data: DidacticActivity) {
+    static async updateDidacticActivity(user: Student, formId: number, data: DidacticActivity) {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
@@ -1098,7 +1119,7 @@ export class RestService {
         return;
     }
 
-    static async deleteDidacticActivity(user: User, id: number) {
+    static async deleteDidacticActivity(user: Student, id: number) {
         const row = await DidacticActivityModel.findOne({
             where: {
                 owner: user.identifier,
@@ -1118,8 +1139,8 @@ export class RestService {
      *                               Admin only
      ***********************************************************************************/
     /* Get all the users except to the one that is making the request */
-    static async allUsers(userExcept: User): Promise<any> {
-        const rows = await UserModel.findAll({
+    static async allUsers(userExcept: Student): Promise<any> {
+        const rows = await StudentModel.findAll({
             where: {
                 id: {[Op.not]: userExcept.id},
             },
@@ -1130,7 +1151,7 @@ export class RestService {
     }
 
     static async deleteUser(id: number): Promise<void> {
-        const row = await UserModel.findOne({
+        const row = await StudentModel.findOne({
             where: {
                 id: id
             }
@@ -1145,8 +1166,8 @@ export class RestService {
     }
 
     /* Get all base information except to the one that is making the request */
-    static async getBaseInformation(user: User) {
-        return (await BaseInformationModel.findAll({
+    static async getBaseInformation(user: Student) {
+        return (await AllowedStudentsModel.findAll({
             where: {
                 identifier: {[Op.not]: user.identifier},
             },
@@ -1159,7 +1180,7 @@ export class RestService {
 
         let rowsCreated = 0;
         for (let data of baseInformationList) {
-            await BaseInformationModel.create(data as any);
+            await AllowedStudentsModel.create(data as any);
             rowsCreated++;
         }
 
@@ -1167,7 +1188,7 @@ export class RestService {
     }
 
     static async deleteBaseInformation(id: number) {
-        const row = await BaseInformationModel.findOne({
+        const row = await AllowedStudentsModel.findOne({
             where: {
                 id: id,
             }
@@ -1387,6 +1408,7 @@ export class RestService {
 
         let rowsCreated = 0;
         for (let item of coordinators) {
+            item.password = sha256(CryptoUtil.scufflePassword(item.password)).toString();
             await CoordinatorModel.create(item as any);
             rowsCreated++;
         }
@@ -1398,23 +1420,7 @@ export class RestService {
         return (await CoordinatorModel.findAll({where: {}})).map(item => item.toJSON() as Coordinator);
     }
 
-    static async loginCoordinator(email: string, code: string): Promise<string> {
-
-        const row = await CoordinatorModel.findOne({
-            where: {
-                email: email,
-                code: code,
-            }
-        });
-
-        if (!row) {
-            throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
-        }
-
-        return JwtService.generateAccessTokenForCoordinator(row.toJSON() as Coordinator);
-    }
-
-    static async getCoordinatorStudents(coordinator: Coordinator): Promise<User[]> {
+    static async getCoordinatorStudents(coordinator: Coordinator): Promise<Student[]> {
         // const rows = (await UserModel.findAll({where: {}}));
 
         return [];

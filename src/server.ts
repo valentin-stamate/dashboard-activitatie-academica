@@ -46,9 +46,11 @@ app.use(fileUpload());
 app.get(RestEndpoints.CHECK, RestController.check);
 
 /**  ------------------======================= Visitor Only =======================------------------ */
-app.post(RestEndpoints.SIGNUP, Middleware.visitorMiddleware, RestController.signup);
-app.post(RestEndpoints.LOGIN, Middleware.visitorMiddleware, RestController.login);
-app.get(`${RestEndpoints.AUTH}/:key`, Middleware.visitorMiddleware, RestController.authenticate);
+app.post(RestEndpoints.SIGNUP_STUDENT, Middleware.visitorMiddleware, RestController.signupStudent);
+
+app.post(RestEndpoints.LOGIN_STUDENT, Middleware.visitorMiddleware, RestController.loginStudent);
+app.post(RestEndpoints.LOGIN_COORDINATOR, Middleware.visitorMiddleware, RestController.loginCoordinator);
+app.post(RestEndpoints.LOGIN_ADMIN, Middleware.visitorMiddleware, RestController.loginAdmin);
 
 /** ------------------======================= User Only =======================------------------ */
 app.get(RestEndpoints.INFORMATION, Middleware.userMiddleware, RestController.getInformation);

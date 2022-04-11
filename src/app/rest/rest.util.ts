@@ -16,6 +16,7 @@ export enum ResponseMessage {
     SERVER_ERROR = 'Internal server error, or logic error',
     FORM_FIELD_ERROR = 'The form should not contain empty fields',
     INVALID_CREDENTIALS = 'Invalid credentials',
+    MAIL_ERROR = 'Mail error',
 }
 
 export enum ContentType {

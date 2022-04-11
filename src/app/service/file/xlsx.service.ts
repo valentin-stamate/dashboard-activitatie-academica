@@ -3,7 +3,7 @@ import XLSX from "xlsx";
 import {ResponseError} from "../../rest/rest.middlewares";
 import {ResponseMessage, StatusCode} from "../../rest/rest.util";
 import {UtilService} from "../util.service";
-import {BaseInformation, Coordinator} from "../../database/db.models";
+import {AllowedStudent, Coordinator} from "../../database/db.models";
 import {
     FAZData,
     FAZDayActivity,
@@ -248,8 +248,8 @@ export class XLSXService {
     }
 
     /** In acest fisier sunt studentii care pot avea cont in aplicatie */
-    static parseExistingStudents(file: UploadedFile): BaseInformation[] {
-        const baseInformationList: BaseInformation[] = [];
+    static parseExistingStudents(file: UploadedFile): AllowedStudent[] {
+        const baseInformationList: AllowedStudent[] = [];
 
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
@@ -257,7 +257,7 @@ export class XLSXService {
         const sheetRows: any = XLSX.utils.sheet_to_json(sheet)
 
         for (const item of sheetRows) {
-            const data: BaseInformation = {
+            const data: AllowedStudent = {
                 identifier: item[BaseInformationHeaders.IDENTIFIER],
                 fullName: item[BaseInformationHeaders.NAME],
                 coordinator: item[BaseInformationHeaders.COORDINATOR],
@@ -334,7 +334,7 @@ export class XLSXService {
                 name: fullName[1],
                 function: fullName[0],
                 email: row[CoordinatorsHeaders.EMAIL],
-                code: '' + row[CoordinatorsHeaders.CODE],
+                password: '' + row[CoordinatorsHeaders.CODE],
             });
         }
 

@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response,} from "express";
-import {CoordinatorModel, UserModel} from "../database/sequelize";
+import {CoordinatorModel, StudentModel} from "../database/sequelize";
 import {JwtService} from "../service/jwt.service";
-import {Coordinator, User} from "../database/db.models";
+import {Admin, Coordinator, Student} from "../database/db.models";
 import {ContentType, ResponseMessage, StatusCode} from "./rest.util";
 
 export class Middleware {
@@ -20,18 +20,17 @@ export class Middleware {
             return;
         }
 
-        const user = JwtService.verifyToken(token) as User;
+        const user = JwtService.verifyToken(token) as Student;
 
         if (user === null) {
             next(new ResponseError(ResponseMessage.INVALID_TOKEN, StatusCode.IM_A_TEAPOT));
             return;
         }
 
-        const row = await UserModel.findOne({where: {
+        const row = await StudentModel.findOne({where: {
                 id: user.id,
                 identifier: user.identifier,
                 email: user.email,
-                admin: user.admin,
             }});
 
         if (row === null) {
@@ -52,18 +51,16 @@ export class Middleware {
             return;
         }
 
-        const user = JwtService.verifyToken(token) as User;
+        const user = JwtService.verifyToken(token) as Admin;
 
         if (user === null) {
             next(new ResponseError(ResponseMessage.INVALID_TOKEN, StatusCode.IM_A_TEAPOT));
             return;
         }
 
-        const row = await UserModel.findOne({where: {
+        const row = await StudentModel.findOne({where: {
                 id: user.id,
-                identifier: user.identifier,
-                email: user.email,
-                admin: user.admin,
+                username: user.username,
             }});
 
         if (row === null) {

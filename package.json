@@ -30,11 +30,13 @@
   },
   "dependencies": {
     "@sequelize/core": "^7.0.0-alpha.10",
+    "@types/crypto-js": "^4.1.1",
     "@types/html-pdf": "^3.0.0",
     "@types/jsonwebtoken": "^8.5.6",
     "@types/nodemailer": "^6.4.4",
     "axios": "^0.26.0",
     "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
     "docx": "^7.3.0",
     "dotenv": "^16.0.0",
     "env-cmd": "^10.1.0",

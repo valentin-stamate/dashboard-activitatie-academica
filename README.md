@@ -120,3 +120,4 @@
 * Cell width DOCX : https://stackoverflow.com/a/60743717/10805602
 * SheeJs Date : https://stackoverflow.com/a/53163756/10805602
 * Docx to Pdf : https://stackoverflow.com/a/65549867/10805602
+* https://www.npmjs.com/package/crypto-js

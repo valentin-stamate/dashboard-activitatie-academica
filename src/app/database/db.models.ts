@@ -1,5 +1,6 @@
-export interface BaseInformation {
+export interface AllowedStudent {
     id?: number;
+
     fullName: string;
     identifier: string;
     attendanceYear: number;
@@ -9,30 +10,47 @@ export interface BaseInformation {
     updatedAt?: Date;
 }
 
-export interface User {
-    id: number;
+export interface Student {
+    id?: number;
+
     identifier: string;
+    password: string;
+    fullName: string;
     email: string;
     alternativeEmail: string;
-    admin: boolean;
-
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export interface Coordinator {
-    id?: number
-    name: string;
-    function: string;
-    email: string;
-    code: string;
+    attendanceYear: number;
+    coordinatorName: string;
+    coordinatorFunction: string;
 
     createdAt?: Date;
     updatedAt?: Date;
 }
 
+export interface Coordinator {
+    id?: number;
+
+    name: string;
+    function: string;
+    email: string;
+    password: string;
+
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+export interface Admin {
+    id: number;
+
+    username: string;
+    password: string;
+
+    createdAt: Date;
+    updatedAt: Date;
+}
+
 export interface UserKey {
     id: number;
+
     identifier: string;
     key: string;
 

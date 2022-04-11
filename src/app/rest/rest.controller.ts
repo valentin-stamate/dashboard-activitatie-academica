@@ -18,7 +18,7 @@ import {
     ScientificBook,
     ScientificCommunication,
     Translation,
-    User,
+    Student,
     WithoutActivity
 } from "../database/db.models";
 import {UtilService} from "../service/util.service";
@@ -39,8 +39,7 @@ export class RestController {
         }
 
         try {
-
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as any;
 
             await RestService.check(user);
             res.end();
@@ -49,9 +48,20 @@ export class RestController {
         }
     }
 
-    static async signup(req: Request<any>, res: Response, next: NextFunction) {
+    static async signupStudent(req: Request<any>, res: Response, next: NextFunction) {
+        const body = req.body;
+
+        const identifier = body.identifier;
+        const email = body.email;
+        const alternativeEmail = body.alternativeEmail;
+
+        if (!identifier || !email || !alternativeEmail) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
         try {
-            await RestService.signup(req.body);
+            await RestService.signupStudent(identifier, email, alternativeEmail);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -60,27 +70,61 @@ export class RestController {
         }
     }
 
-    static async login(req: Request<any>, res: Response, next: NextFunction) {
+    static async loginStudent(req: Request<any>, res: Response, next: NextFunction) {
+        const body = req.body;
+
+        const identifier = body.identifier;
+        const password = body.password;
+
+        if (!identifier || !password) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+        }
+
         try {
-            await RestService.login(req.body);
-            res.end();
+            const token = await RestService.loginStudent(identifier, password);
+
+            res.contentType(ContentType.TEXT);
+            res.end(token);
         } catch (err) {
             next(err);
         }
     }
 
-    static async authenticate(req: Request<any>, res: Response, next: NextFunction) {
-        const key = req.params.key;
+    static async loginCoordinator(req: Request<any>, res: Response, next: NextFunction) {
+        const body = req.body;
 
-        if (key === undefined) {
-            next(new ResponseError(ResponseMessage.NO_KEY, StatusCode.BAD_REQUEST));
-            return;
+        const email = body.email;
+        const password = body.password;
+
+        if (!email || !password) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
         }
 
         try {
-            const jwt = await RestService.authenticate(key);
+            const token = await RestService.loginCoordinator(email, password);
 
-            res.end(jwt);
+            res.contentType(ContentType.TEXT);
+            res.end(token);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async loginAdmin(req: Request<any>, res: Response, next: NextFunction) {
+        const body = req.body;
+
+        const username = body.username;
+        const password = body.password;
+
+        if (!username || !password) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+        }
+
+        try {
+            const token = await RestService.loginAdmin(username, password);
+
+            res.contentType(ContentType.TEXT);
+            res.end(token);
         } catch (err) {
             next(err);
         }
@@ -92,7 +136,7 @@ export class RestController {
     static async getInformation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getInformation(user);
             res.end(JSON.stringify(data));
@@ -104,7 +148,7 @@ export class RestController {
     static async getForms(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getForms(user);
             res.end(JSON.stringify(data));
@@ -117,7 +161,7 @@ export class RestController {
     static async getScientificArticleISI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getScientificArticleISI(user);
             res.end(JSON.stringify(data));
@@ -129,7 +173,7 @@ export class RestController {
     static async addScientificArticleISI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificArticleISI;
 
             await RestService.addScientificArticleISI(user, body);
@@ -144,7 +188,7 @@ export class RestController {
     static async updateScientificArticleISI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificArticleISI;
             const formId = req.params.id;
 
@@ -158,7 +202,7 @@ export class RestController {
     static async deleteScientificArticleISI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteScientificArticleISI(user, id);
@@ -172,7 +216,7 @@ export class RestController {
     static async getISIProceeding(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getISIProceeding(user);
             res.end(JSON.stringify(data));
@@ -184,7 +228,7 @@ export class RestController {
     static async addISIProceeding(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ISIProceeding;
 
             await RestService.addISIProceeding(user, body);
@@ -199,7 +243,7 @@ export class RestController {
     static async updateISIProceeding(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ISIProceeding;
             const formId = req.params.id;
 
@@ -213,7 +257,7 @@ export class RestController {
     static async deleteISIProceeding(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteISIProceeding(user, id);
@@ -227,7 +271,7 @@ export class RestController {
     static async getScientificArticleBDI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getScientificArticleBDI(user);
             res.end(JSON.stringify(data));
@@ -239,7 +283,7 @@ export class RestController {
     static async addScientificArticleBDI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificArticleBDI;
 
             await RestService.addScientificArticleBDI(user, body);
@@ -254,7 +298,7 @@ export class RestController {
     static async updateScientificArticleBDI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificArticleBDI;
             const formId = req.params.id;
 
@@ -268,7 +312,7 @@ export class RestController {
     static async deleteScientificArticleBDI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteScientificArticleBDI(user, id);
@@ -282,7 +326,7 @@ export class RestController {
     static async getScientificBook(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getScientificBook(user);
             res.end(JSON.stringify(data));
@@ -294,7 +338,7 @@ export class RestController {
     static async addScientificBook(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificBook;
 
             await RestService.addScientificBook(user, body);
@@ -309,7 +353,7 @@ export class RestController {
     static async updateScientificBook(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificBook;
             const formId = req.params.id;
 
@@ -323,7 +367,7 @@ export class RestController {
     static async deleteScientificBook(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteScientificBook(user, id);
@@ -337,7 +381,7 @@ export class RestController {
     static async getTranslation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getTranslation(user);
             res.end(JSON.stringify(data));
@@ -349,7 +393,7 @@ export class RestController {
     static async addTranslation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Translation;
 
             await RestService.addTranslation(user, body);
@@ -364,7 +408,7 @@ export class RestController {
     static async updateTranslation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Translation;
             const formId = req.params.id;
 
@@ -378,7 +422,7 @@ export class RestController {
     static async deleteTranslation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteTranslation(user, id);
@@ -392,7 +436,7 @@ export class RestController {
     static async getScientificCommunication(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getScientificCommunication(user);
             res.end(JSON.stringify(data));
@@ -404,7 +448,7 @@ export class RestController {
     static async addScientificCommunication(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificCommunication;
 
             await RestService.addScientificCommunication(user, body);
@@ -419,7 +463,7 @@ export class RestController {
     static async updateScientificCommunication(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificCommunication;
             const formId = req.params.id;
 
@@ -433,7 +477,7 @@ export class RestController {
     static async deleteScientificCommunication(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteScientificCommunication(user, id);
@@ -447,7 +491,7 @@ export class RestController {
     static async getPatent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getPatent(user);
             res.end(JSON.stringify(data));
@@ -459,7 +503,7 @@ export class RestController {
     static async addPatent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Patent;
 
             await RestService.addPatent(user, body);
@@ -474,7 +518,7 @@ export class RestController {
     static async updatePatent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Patent;
             const formId = req.params.id;
 
@@ -488,7 +532,7 @@ export class RestController {
     static async deletePatent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deletePatent(user, id);
@@ -502,7 +546,7 @@ export class RestController {
     static async getResearchContract(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getResearchContract(user);
             res.end(JSON.stringify(data));
@@ -514,7 +558,7 @@ export class RestController {
     static async addResearchContract(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ResearchContract;
 
             await RestService.addResearchContract(user, body);
@@ -529,7 +573,7 @@ export class RestController {
     static async updateResearchContract(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ResearchContract;
             const formId = req.params.id;
 
@@ -543,7 +587,7 @@ export class RestController {
     static async deleteResearchContract(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteResearchContract(user, id);
@@ -557,7 +601,7 @@ export class RestController {
     static async getCitation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getCitation(user);
             res.end(JSON.stringify(data));
@@ -569,7 +613,7 @@ export class RestController {
     static async addCitation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Citation;
 
             await RestService.addCitation(user, body);
@@ -584,7 +628,7 @@ export class RestController {
     static async updateCitation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Citation;
             const formId = req.params.id;
 
@@ -598,7 +642,7 @@ export class RestController {
     static async deleteCitation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteCitation(user, id);
@@ -612,7 +656,7 @@ export class RestController {
     static async getAwardAndNomination(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getAwardAndNomination(user);
             res.end(JSON.stringify(data));
@@ -624,7 +668,7 @@ export class RestController {
     static async addAwardAndNomination(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as AwardAndNomination;
 
             await RestService.addAwardAndNomination(user, body);
@@ -639,7 +683,7 @@ export class RestController {
     static async updateAwardAndNomination(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as AwardAndNomination;
             const formId = req.params.id;
 
@@ -653,7 +697,7 @@ export class RestController {
     static async deleteAwardAndNomination(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteAwardAndNomination(user, id);
@@ -667,7 +711,7 @@ export class RestController {
     static async getAcademyMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getAcademyMember(user);
             res.end(JSON.stringify(data));
@@ -679,7 +723,7 @@ export class RestController {
     static async addAcademyMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as AcademyMember;
 
             await RestService.addAcademyMember(user, body);
@@ -694,7 +738,7 @@ export class RestController {
     static async updateAcademyMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as AcademyMember;
             const formId = req.params.id;
 
@@ -708,7 +752,7 @@ export class RestController {
     static async deleteAcademyMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteAcademyMember(user, id);
@@ -722,7 +766,7 @@ export class RestController {
     static async getEditorialMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getEditorialMember(user);
             res.end(JSON.stringify(data));
@@ -734,7 +778,7 @@ export class RestController {
     static async addEditorialMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as EditorialMember;
 
             await RestService.addEditorialMember(user, body);
@@ -749,7 +793,7 @@ export class RestController {
     static async updateEditorialMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as EditorialMember;
             const formId = req.params.id;
 
@@ -763,7 +807,7 @@ export class RestController {
     static async deleteEditorialMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteEditorialMember(user, id);
@@ -777,7 +821,7 @@ export class RestController {
     static async getOrganizedEvent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getOrganizedEvent(user);
             res.end(JSON.stringify(data));
@@ -789,7 +833,7 @@ export class RestController {
     static async addOrganizedEvent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as OrganizedEvent;
 
             await RestService.addOrganizedEvent(user, body);
@@ -804,7 +848,7 @@ export class RestController {
     static async updateOrganizedEvent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as OrganizedEvent;
             const formId = req.params.id;
 
@@ -818,7 +862,7 @@ export class RestController {
     static async deleteOrganizedEvent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteOrganizedEvent(user, id);
@@ -832,7 +876,7 @@ export class RestController {
     static async getWithoutActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getWithoutActivity(user);
             res.end(JSON.stringify(data));
@@ -844,7 +888,7 @@ export class RestController {
     static async addWithoutActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as WithoutActivity;
 
             await RestService.addWithoutActivity(user, body);
@@ -859,7 +903,7 @@ export class RestController {
     static async updateWithoutActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as WithoutActivity;
             const formId = req.params.id;
 
@@ -873,7 +917,7 @@ export class RestController {
     static async deleteWithoutActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteWithoutActivity(user, id);
@@ -887,7 +931,7 @@ export class RestController {
     static async getDidacticActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getDidacticActivity(user);
             res.end(JSON.stringify(data));
@@ -899,7 +943,7 @@ export class RestController {
     static async addDidacticActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as DidacticActivity;
 
             await RestService.addDidacticActivity(user, body);
@@ -914,7 +958,7 @@ export class RestController {
     static async updateDidacticActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const body = req.body as DidacticActivity;
             const formId = req.params.id;
 
@@ -928,7 +972,7 @@ export class RestController {
     static async deleteDidacticActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
             await RestService.deleteDidacticActivity(user, id);
@@ -945,7 +989,7 @@ export class RestController {
     static async allUsers(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.allUsers(user);
             res.end(JSON.stringify(data));
@@ -968,7 +1012,7 @@ export class RestController {
     static async getBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as User;
+            const user = JwtService.verifyToken(token) as Student;
 
             const data = await RestService.getBaseInformation(user);
             res.end(JSON.stringify(data));
@@ -1206,29 +1250,6 @@ export class RestController {
         try {
             const rows = await RestService.getCoordinators();
             res.end(JSON.stringify(rows));
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async loginCoordinator(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-
-        const email = body.email;
-        const code = body.code;
-
-        console.log(body);
-
-        if (!email || !code) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        try {
-            const token = await RestService.loginCoordinator(email, code);
-
-            res.setHeader('Content-Type', ContentType.TEXT);
-            res.end(`${token}`);
         } catch (err) {
             next(err);
         }
