@@ -156,6 +156,12 @@ app.post(RestEndpoints.FAZ, Middleware.adminMiddleware, RestController.faz);
 app.post(RestEndpoints.VERBAL_PROCESS, Middleware.adminMiddleware, RestController.sendVerbalProcess);
 app.post(RestEndpoints.THESIS_NOTIFICATION, Middleware.adminMiddleware, RestController.sendThesisEmailNotification);
 app.get(RestEndpoints.EXPORT_FORMS, Middleware.adminMiddleware, RestController.exportForms);
+app.post(RestEndpoints.IMPORT_COORDINATORS, Middleware.adminMiddleware, RestController.importCoordinators);
+app.get(RestEndpoints.COORDINATORS, Middleware.adminMiddleware, RestController.getCoordinators);
+
+/** ------------------======================= Coordinator only =======================------------------ */
+app.post(RestEndpoints.LOGIN_COORDINATOR, Middleware.visitorMiddleware, RestController.loginCoordinator);
+app.get(RestEndpoints.COORDINATOR_STUDENTS, Middleware.coordinatorMiddleware, RestController.getCoordinatorStudents);
 
 
 /************************************************************************************

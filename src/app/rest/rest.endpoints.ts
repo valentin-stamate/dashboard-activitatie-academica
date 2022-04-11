@@ -34,5 +34,11 @@ export enum RestEndpoints {
     FAZ = '/api/faz',
     VERBAL_PROCESS = '/api/verbal-process',
     THESIS_NOTIFICATION = '/api/thesis-notification',
+    IMPORT_COORDINATORS = '/api/import-coordinators',
+    COORDINATORS = '/api/coordinators',
+
+    /* Coordinator */
+    LOGIN_COORDINATOR = '/api/login-coordinator',
+    COORDINATOR_STUDENTS = '/api/coordinator/students',
 
 }

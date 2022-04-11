@@ -20,6 +20,17 @@ export interface User {
     updatedAt: Date;
 }
 
+export interface Coordinator {
+    id?: number
+    name: string;
+    function: string;
+    email: string;
+    code: string;
+
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
 export interface UserKey {
     id: number;
     identifier: string;

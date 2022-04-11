@@ -1,7 +1,7 @@
 import {
     AcademyMember,
     AwardAndNomination,
-    Citation,
+    Citation, Coordinator,
     DidacticActivity,
     EditorialMember,
     ISIProceeding,
@@ -20,7 +20,7 @@ import {
     AcademyMemberModel,
     AwardAndNominationModel,
     BaseInformationModel,
-    CitationModel,
+    CitationModel, CoordinatorModel,
     DidacticActivityModel,
     EditorialMemberModel,
     ISIProceedingModel,
@@ -1378,6 +1378,46 @@ export class RestService {
         }
 
         return emailResults;
+    }
+
+    static async importCoordinators(file: UploadedFile): Promise<number> {
+        const coordinators = XLSXService.parseCoordinatorsExcel(file);
+
+        await CoordinatorModel.destroy({where: {}});
+
+        let rowsCreated = 0;
+        for (let item of coordinators) {
+            await CoordinatorModel.create(item as any);
+            rowsCreated++;
+        }
+
+        return rowsCreated;
+    }
+
+    static async getCoordinators(): Promise<Coordinator[]> {
+        return (await CoordinatorModel.findAll({where: {}})).map(item => item.toJSON() as Coordinator);
+    }
+
+    static async loginCoordinator(email: string, code: string): Promise<string> {
+
+        const row = await CoordinatorModel.findOne({
+            where: {
+                email: email,
+                code: code,
+            }
+        });
+
+        if (!row) {
+            throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
+        }
+
+        return JwtService.generateAccessTokenForCoordinator(row.toJSON() as Coordinator);
+    }
+
+    static async getCoordinatorStudents(coordinator: Coordinator): Promise<User[]> {
+        // const rows = (await UserModel.findAll({where: {}}));
+
+        return [];
     }
 
 }

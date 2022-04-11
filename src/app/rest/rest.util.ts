@@ -15,9 +15,12 @@ export enum ResponseMessage {
     NO_KEY = 'There is no key present',
     SERVER_ERROR = 'Internal server error, or logic error',
     FORM_FIELD_ERROR = 'The form should not contain empty fields',
+    INVALID_CREDENTIALS = 'Invalid credentials',
 }
 
 export enum ContentType {
+    TEXT = 'text/plain',
+    JSON = 'application/json',
     ZIP = 'application/zip',
     DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

@@ -18,6 +18,7 @@ const options = {
 export class BaseInformationModel extends Model {}
 export class UserModel extends Model {}
 export class UserKeyModel extends Model {}
+export class CoordinatorModel extends Model {}
 
 export class ScientificArticleISIModel extends Model {}
 export class ISIProceedingModel extends Model {}
@@ -54,6 +55,13 @@ UserModel.init({
     },
     {...options, tableName: 'users',}
 );
+
+CoordinatorModel.init({
+    name:     {type: DataTypes.STRING, unique: true, allowNull: false,},
+    function: {type: DataTypes.STRING, unique: false, allowNull: false,},
+    email:    {type: DataTypes.STRING, unique: true, allowNull: false,},
+    code:     {type: DataTypes.STRING, unique: true, allowNull: false,},
+}, {...options, tableName: 'coordinators'});
 
 UserKeyModel.init({
     identifier: {type: DataTypes.STRING, unique: true, allowNull: false,},

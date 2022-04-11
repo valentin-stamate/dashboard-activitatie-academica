@@ -3,7 +3,7 @@ import XLSX from "xlsx";
 import {ResponseError} from "../../rest/rest.middlewares";
 import {ResponseMessage, StatusCode} from "../../rest/rest.util";
 import {UtilService} from "../util.service";
-import {BaseInformation} from "../../database/db.models";
+import {BaseInformation, Coordinator} from "../../database/db.models";
 import {
     FAZData,
     FAZDayActivity,
@@ -12,11 +12,12 @@ import {
     VerbalProcessData
 } from "./xlsx.models";
 import {
-    BaseInformationHeaders,
+    BaseInformationHeaders, CoordinatorsHeaders,
     ReportsAnnouncementHeaders,
     SemesterTimetableHeaders,
     TimetableHeaders
 } from "./xlsx.utils";
+import {CoordinatorModel} from "../../database/sequelize";
 
 /* The comments here will be explained in romaninan because este mai usor sa explic ce se intampla, si fara diacritice */
 export class XLSXService {
@@ -314,6 +315,30 @@ export class XLSXService {
         }
 
         return semesterTimetableList;
+    }
+
+    /** Se parseaza excelul cu coordonatori */
+    static parseCoordinatorsExcel(file: UploadedFile): Coordinator[] {
+        const list: Coordinator[] = [];
+
+        const workBook = XLSX.read(file.data);
+        const sheet = workBook.Sheets[workBook.SheetNames[0]];
+
+        const rows: any[] = XLSX.utils.sheet_to_json(sheet);
+
+        for (let row of rows) {
+            /* Name and the function */
+            const fullName = UtilService.splitSplitProfessorName(row[CoordinatorsHeaders.NAME_FUNCTION]);
+
+            list.push({
+                name: fullName[1],
+                function: fullName[0],
+                email: row[CoordinatorsHeaders.EMAIL],
+                code: '' + row[CoordinatorsHeaders.CODE],
+            });
+        }
+
+        return list;
     }
 
 }

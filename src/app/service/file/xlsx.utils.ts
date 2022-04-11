@@ -24,6 +24,12 @@ export enum SemesterTimetableHeaders {
     EMAIL = 'Email',
 }
 
+export enum CoordinatorsHeaders {
+    CODE = 'Marca',
+    NAME_FUNCTION = 'Nume prenume conducator de doctorat',
+    EMAIL = 'Email',
+}
+
 export enum ReportsAnnouncementHeaders {
     NUMBER = '"Nr. crt"',
     COORDINATOR = 'Conducator de doctorat',

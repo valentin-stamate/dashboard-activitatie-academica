@@ -6,7 +6,7 @@ import {JwtService} from "../service/jwt.service";
 import {
     AcademyMember,
     AwardAndNomination,
-    Citation,
+    Citation, Coordinator,
     DidacticActivity,
     EditorialMember,
     ISIProceeding,
@@ -996,7 +996,7 @@ export class RestController {
 
             res.statusCode = StatusCode.CREATED;
 
-            res.setHeader('Content-Type', 'text/plain');
+            res.setHeader('Content-Type', ContentType.TEXT);
             res.end(`${rowsCreated}`);
         } catch (err) {
             next(err);
@@ -1171,6 +1171,77 @@ export class RestController {
         try {
             const data = await RestService.sendThesisEmailNotification(email, subject, from, file, recipientExceptList);
             res.end(JSON.stringify(data));
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async importCoordinators(req: Request<any>, res: Response, next: NextFunction) {
+        const files = req.files;
+
+        if (!files) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        if (files.file === undefined) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        const file = files.file as UploadedFile;
+
+        try {
+            const rowsCreated = await RestService.importCoordinators(file);
+
+            res.setHeader('Content-Type', ContentType.TEXT);
+            res.statusCode = StatusCode.CREATED;
+            res.end(`${rowsCreated}`);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async getCoordinators(req: Request<any>, res: Response, next: NextFunction) {
+        try {
+            const rows = await RestService.getCoordinators();
+            res.end(JSON.stringify(rows));
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async loginCoordinator(req: Request<any>, res: Response, next: NextFunction) {
+        const body = req.body;
+
+        const email = body.email;
+        const code = body.code;
+
+        console.log(body);
+
+        if (!email || !code) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        try {
+            const token = await RestService.loginCoordinator(email, code);
+
+            res.setHeader('Content-Type', ContentType.TEXT);
+            res.end(`${token}`);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async getCoordinatorStudents(req: Request<any>, res: Response, next: NextFunction) {
+        const token = req.get('Authorization') as string;
+
+        try {
+            const coordinator = JwtService.verifyToken(token) as Coordinator;
+
+            const students = await RestService.getCoordinatorStudents(coordinator);
+            res.end(JSON.stringify(students));
         } catch (err) {
             next(err);
         }
