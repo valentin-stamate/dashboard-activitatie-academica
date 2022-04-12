@@ -1430,9 +1430,13 @@ export class RestService {
     }
 
     static async getCoordinatorStudents(coordinator: Coordinator): Promise<Student[]> {
-        // const rows = (await UserModel.findAll({where: {}}));
-
-        return [];
+        return (await StudentModel.findAll({
+            where: {
+                coordinatorName: coordinator.name,
+            }}))
+            .map(item => {
+                return {...item.toJSON(), password: ''} as Student
+            });
     }
 
 }

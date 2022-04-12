@@ -56,4 +56,8 @@ export class UtilService {
         return true;
     }
 
+    static async sleep(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
 }
