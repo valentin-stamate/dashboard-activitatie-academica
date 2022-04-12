@@ -1,4 +1,6 @@
 import {DataTypes, Model, Sequelize} from '@sequelize/core';
+import {CryptoUtil} from "../service/crypto.util";
+import sha256 from "crypto-js/sha256";
 
 require('dotenv').config();
 const env = process.env as any;
@@ -413,6 +415,17 @@ export async function sequelizeInit(force: boolean) {
     if (!force) {
         return;
     }
+
+    await StudentModel.create({
+        identifier: 'valentin.stamate',
+        password: sha256(CryptoUtil.scufflePassword('admin')).toString(),
+        fullName: 'Stamate Valentin',
+        email: 'stamatevalentin125@gmail.com',
+        alternativeEmail: 'valentin.stamate@info.uaic.ro',
+        attendanceYear: 2019,
+        coordinatorName: 'Lenuța Alboaie',
+        coordinatorFunction: 'Prof.dr.',
+    });
 
     await AllowedStudentsModel.create({
         fullName: 'Stamate Valentin',

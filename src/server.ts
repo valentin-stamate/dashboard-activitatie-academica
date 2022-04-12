@@ -164,7 +164,6 @@ app.post(RestEndpoints.IMPORT_COORDINATORS, Middleware.adminMiddleware, RestCont
 app.get(RestEndpoints.COORDINATORS, Middleware.adminMiddleware, RestController.getCoordinators);
 
 /** ------------------======================= Coordinator only =======================------------------ */
-app.post(RestEndpoints.LOGIN_COORDINATOR, Middleware.visitorMiddleware, RestController.loginCoordinator);
 app.get(RestEndpoints.COORDINATOR_STUDENTS, Middleware.coordinatorMiddleware, RestController.getCoordinatorStudents);
 
 

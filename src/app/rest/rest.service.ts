@@ -179,12 +179,12 @@ export class RestService {
     }
 
     static async loginCoordinator(email: string, code: string): Promise<string> {
-        const password = CryptoUtil.scufflePassword(code);
+        const hashedPassword = sha256(CryptoUtil.scufflePassword(code)).toString();
 
-        const row = await StudentModel.findOne({
+        const row = await CoordinatorModel.findOne({
             where: {
                 email: email,
-                password: sha256(password).toString(),
+                password: hashedPassword,
             }
         });
 
@@ -1430,12 +1430,15 @@ export class RestService {
     }
 
     static async getCoordinatorStudents(coordinator: Coordinator): Promise<Student[]> {
+
         return (await StudentModel.findAll({
             where: {
                 coordinatorName: coordinator.name,
             }}))
             .map(item => {
-                return {...item.toJSON(), password: ''} as Student
+                const studentJSON = item.toJSON();
+                delete studentJSON.password;
+                return studentJSON as Student
             });
     }
 
