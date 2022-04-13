@@ -40,11 +40,9 @@ export class RestController {
 
         try {
             const user = JwtService.verifyToken(token) as any;
+            await RestService.check(user);
 
-            const userType = await RestService.check(user);
-
-            res.contentType(ContentType.TEXT);
-            res.end(`${userType}`);
+            res.end();
         } catch (err) {
             next(err);
         }

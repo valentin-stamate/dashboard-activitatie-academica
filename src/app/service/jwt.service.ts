@@ -4,6 +4,11 @@ import {Admin, Coordinator, Student} from "../database/db.models";
 require('dotenv').config();
 const env = process.env as any;
 
+/** Creates the jwt for user
+ * User types are:
+ * 1 for Student
+ * 2 for Coordinator
+ * 3 for Admin */
 export class JwtService {
 
     static generateAccessTokenForStudent(user: Student) {
@@ -12,6 +17,7 @@ export class JwtService {
                 fullName: user.fullName,
                 identifier: user.identifier,
                 email: user.email,
+                userType: 1,
             },
             env.TOKEN_SECRET);
     }
@@ -22,6 +28,7 @@ export class JwtService {
             name: coordinator.name,
             function: coordinator.function,
             email: coordinator.email,
+            userType: 2,
         }, env.TOKEN_SECRET);
     }
 
@@ -29,6 +36,7 @@ export class JwtService {
         return jwt.sign({
             id: coordinator.id,
             username: coordinator.username,
+            userType: 3,
         }, env.TOKEN_SECRET);
     }
 

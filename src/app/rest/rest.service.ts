@@ -59,10 +59,6 @@ export class RestService {
     /************************************************************************************
      *                               Visitor only
      ***********************************************************************************/
-    /** Checks the user and returns the type of it:
-     * 1 for Student
-     * 2 for Coordinator
-     * 3 for Admin */
     static async check(user: any): Promise<number> {
         console.log(user);
 

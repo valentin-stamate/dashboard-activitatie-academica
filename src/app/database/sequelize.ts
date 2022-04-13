@@ -1,6 +1,7 @@
 import {DataTypes, Model, Sequelize} from '@sequelize/core';
 import {CryptoUtil} from "../service/crypto.util";
 import sha256 from "crypto-js/sha256";
+import {UtilService} from "../service/util.service";
 
 require('dotenv').config();
 const env = process.env as any;
@@ -21,7 +22,6 @@ export class AllowedStudentsModel extends Model {}
 export class StudentModel extends Model {}
 export class CoordinatorModel extends Model {}
 export class AdminModel extends Model {}
-export class UserKeyModel extends Model {}
 
 export class ScientificArticleISIModel extends Model {}
 export class ISIProceedingModel extends Model {}
@@ -76,10 +76,10 @@ async function initializeTables(force: boolean) {
         password: {type: DataTypes.STRING, unique: false, allowNull: false,},
     }, {...options, tableName: 'admins'});
 
-    UserKeyModel.init({
-        identifier: {type: DataTypes.STRING, unique: true, allowNull: false,},
-        key:        {type: DataTypes.STRING, unique: true, allowNull: false,},
-    }, {...options, modelName: 'user_key'});
+    // UserKeyModel.init({
+    //     identifier: {type: DataTypes.STRING, unique: true, allowNull: false,},
+    //     key:        {type: DataTypes.STRING, unique: true, allowNull: false,},
+    // }, {...options, modelName: 'user_key'});
 
     await sequelize.sync({force: force});
 
@@ -408,6 +408,7 @@ export async function sequelizeInit(force: boolean) {
         console.log('Connection has been established successfully.');
     } catch (error) {
         console.error('Unable to connect to the database:', error);
+        return;
     }
 
     await initializeTables(force);
@@ -415,17 +416,6 @@ export async function sequelizeInit(force: boolean) {
     if (!force) {
         return;
     }
-
-    await StudentModel.create({
-        identifier: 'valentin.stamate',
-        password: sha256(CryptoUtil.scufflePassword('admin')).toString(),
-        fullName: 'Stamate Valentin',
-        email: 'stamatevalentin125@gmail.com',
-        alternativeEmail: 'valentin.stamate@info.uaic.ro',
-        attendanceYear: 2019,
-        coordinatorName: 'Lenuța Alboaie',
-        coordinatorFunction: 'Prof.dr.',
-    });
 
     await AllowedStudentsModel.create({
         fullName: 'Stamate Valentin',
@@ -444,7 +434,25 @@ export async function sequelizeInit(force: boolean) {
 
     await AdminModel.create({
         username: 'valentin',
-        password: 'f1fb829f43600004028ec33213913163bba13327a43430a06acbe866bf747cb5',
+        password: sha256(CryptoUtil.scufflePassword('admin')).toString(),
+    });
+
+    await StudentModel.create({
+        identifier: 'andrei',
+        password: sha256(CryptoUtil.scufflePassword('admin')).toString(),
+        fullName: 'Andrei Aioanei',
+        email: 'stamatevalentin125@gmail.com',
+        alternativeEmail: 'valentin.stamate@info.uaic.ro',
+        attendanceYear: 2019,
+        coordinatorName: 'Buraza Ion',
+        coordinatorFunction: 'Prof.univ.dr',
+    });
+
+    await CoordinatorModel.create({
+        name: 'Buraza Ion',
+        function: 'Prof.univ.dr',
+        email: 'stamatevalentin125@gmail.com',
+        password: sha256(CryptoUtil.scufflePassword('admin')).toString(),
     });
 
 }
