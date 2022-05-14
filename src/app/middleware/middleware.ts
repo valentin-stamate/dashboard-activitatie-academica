@@ -1,8 +1,8 @@
 import {NextFunction, Request, Response,} from "express";
 import {AdminModel, CoordinatorModel, StudentModel} from "../database/sequelize";
-import {JwtService} from "../service/jwt.service";
-import {Admin, Coordinator, Student} from "../database/db.models";
-import {ContentType, ResponseMessage, StatusCode} from "./rest.util";
+import {JwtService} from "../services/jwt.service";
+import {Admin, Coordinator, Student} from "../database/models";
+import {ContentType, ResponseMessage, StatusCode} from "../services/rest.util";
 
 export class Middleware {
     /** Middleware for unauthorized users. In this case every request can pass. */
@@ -119,7 +119,7 @@ export class Middleware {
         }
     }
 
-    /** The middleware that handles all the exceptions thrown by the app */
+    /** The endpoints that handles all the exceptions thrown by the app */
     static errorHandler(err: ResponseError, req: Request<any>, res: Response, next: NextFunction) {
         let statusError = 500;
 

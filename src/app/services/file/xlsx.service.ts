@@ -1,9 +1,9 @@
 import {UploadedFile} from "express-fileupload";
 import XLSX from "xlsx";
-import {ResponseError} from "../../rest/rest.middlewares";
-import {ResponseMessage, StatusCode} from "../../rest/rest.util";
+import {ResponseError} from "../../middleware/middleware";
+import {ResponseMessage, StatusCode} from "../rest.util";
 import {UtilService} from "../util.service";
-import {AllowedStudent, Coordinator} from "../../database/db.models";
+import {AllowedStudent, Coordinator} from "../../database/models";
 import {
     FAZData,
     FAZDayActivity,

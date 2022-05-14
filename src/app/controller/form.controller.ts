@@ -1,169 +1,27 @@
 import {NextFunction, Request, Response} from "express";
-import {RestService} from "./rest.service";
-import {UploadedFile} from "express-fileupload";
-import {ResponseError} from "./rest.middlewares";
-import {JwtService} from "../service/jwt.service";
+import {JwtService} from "../services/jwt.service";
 import {
     AcademyMember,
     AwardAndNomination,
-    Citation, Coordinator,
-    DidacticActivity,
-    EditorialMember,
-    ISIProceeding,
-    OrganizedEvent,
-    Patent,
-    ResearchContract,
+    Citation, DidacticActivity, EditorialMember,
+    ISIProceeding, OrganizedEvent, Patent, ResearchContract,
     ScientificArticleBDI,
     ScientificArticleISI,
-    ScientificBook,
-    ScientificCommunication,
-    Translation,
-    Student,
-    WithoutActivity
-} from "../database/db.models";
-import {UtilService} from "../service/util.service";
-import {ContentType, ResponseMessage, StatusCode} from "./rest.util";
+    ScientificBook, ScientificCommunication,
+    Student, Translation, WithoutActivity
+} from "../database/models";
+import {StatusCode} from "../services/rest.util";
+import {FormService} from "../service/form.service";
 
-/** The lowest layer that have access to req & res
- * It uses RestService to handle logic stuff */
-export class RestController {
-    /************************************************************************************
-     *                               Visitor user only
-     ***********************************************************************************/
-    static async check(req: Request<any>, res: Response, next: NextFunction) {
-        const token = req.get('Authorization') as string;
-
-        if (token === undefined) {
-            next(new ResponseError(ResponseMessage.NO_AUTH_TOKEN, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        try {
-            const user = JwtService.verifyToken(token) as any;
-            await RestService.check(user);
-
-            res.end();
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async signupStudent(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-
-        const identifier = body.identifier;
-        const email = body.email;
-        const alternativeEmail = body.alternativeEmail;
-
-        if (!identifier || !email || !alternativeEmail) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        try {
-            await RestService.signupStudent(identifier, email, alternativeEmail);
-
-            res.statusCode = StatusCode.CREATED;
-            res.end();
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async loginStudent(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-
-        const identifier = body.identifier;
-        const password = body.password;
-
-        if (!identifier || !password) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-        }
-
-        try {
-            const token = await RestService.loginStudent(identifier, password);
-
-            res.contentType(ContentType.TEXT);
-            res.end(token);
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async loginCoordinator(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-
-        const email = body.email;
-        const password = body.password;
-
-        if (!email || !password) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-        }
-
-        try {
-            const token = await RestService.loginCoordinator(email, password);
-
-            res.contentType(ContentType.TEXT);
-            res.end(token);
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async loginAdmin(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-
-        const username = body.username;
-        const password = body.password;
-
-        if (!username || !password) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-        }
-
-        try {
-            const token = await RestService.loginAdmin(username, password);
-
-            res.contentType(ContentType.TEXT);
-            res.end(token);
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    /************************************************************************************
-     *                               User only
-     ***********************************************************************************/
-    static async getInformation(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-
-            const data = await RestService.getInformation(user);
-            res.end(JSON.stringify(data));
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async getForms(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-
-            const data = await RestService.getForms(user);
-            res.end(JSON.stringify(data));
-        } catch (err) {
-            next(err);
-        }
-    }
-
+export class FormController {
+    
     /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
     static async getScientificArticleISI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getScientificArticleISI(user);
+            const data = await FormService.getScientificArticleISI(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -176,7 +34,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificArticleISI;
 
-            await RestService.addScientificArticleISI(user, body);
+            await FormService.addScientificArticleISI(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -192,7 +50,7 @@ export class RestController {
             const body = req.body as ScientificArticleISI;
             const formId = req.params.id;
 
-            await RestService.updateScientificArticleISI(user, formId, body);
+            await FormService.updateScientificArticleISI(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -205,7 +63,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteScientificArticleISI(user, id);
+            await FormService.deleteScientificArticleISI(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -218,7 +76,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getISIProceeding(user);
+            const data = await FormService.getISIProceeding(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -231,7 +89,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ISIProceeding;
 
-            await RestService.addISIProceeding(user, body);
+            await FormService.addISIProceeding(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -247,7 +105,7 @@ export class RestController {
             const body = req.body as ISIProceeding;
             const formId = req.params.id;
 
-            await RestService.updateISIProceeding(user, formId, body);
+            await FormService.updateISIProceeding(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -260,7 +118,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteISIProceeding(user, id);
+            await FormService.deleteISIProceeding(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -273,7 +131,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getScientificArticleBDI(user);
+            const data = await FormService.getScientificArticleBDI(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -286,7 +144,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificArticleBDI;
 
-            await RestService.addScientificArticleBDI(user, body);
+            await FormService.addScientificArticleBDI(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -302,7 +160,7 @@ export class RestController {
             const body = req.body as ScientificArticleBDI;
             const formId = req.params.id;
 
-            await RestService.updateScientificArticleBDI(user, formId, body);
+            await FormService.updateScientificArticleBDI(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -315,7 +173,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteScientificArticleBDI(user, id);
+            await FormService.deleteScientificArticleBDI(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -328,7 +186,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getScientificBook(user);
+            const data = await FormService.getScientificBook(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -341,7 +199,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificBook;
 
-            await RestService.addScientificBook(user, body);
+            await FormService.addScientificBook(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -357,7 +215,7 @@ export class RestController {
             const body = req.body as ScientificBook;
             const formId = req.params.id;
 
-            await RestService.updateScientificBook(user, formId, body);
+            await FormService.updateScientificBook(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -370,7 +228,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteScientificBook(user, id);
+            await FormService.deleteScientificBook(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -383,7 +241,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getTranslation(user);
+            const data = await FormService.getTranslation(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -396,7 +254,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Translation;
 
-            await RestService.addTranslation(user, body);
+            await FormService.addTranslation(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -412,7 +270,7 @@ export class RestController {
             const body = req.body as Translation;
             const formId = req.params.id;
 
-            await RestService.updateTranslation(user, formId, body);
+            await FormService.updateTranslation(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -425,7 +283,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteTranslation(user, id);
+            await FormService.deleteTranslation(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -438,7 +296,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getScientificCommunication(user);
+            const data = await FormService.getScientificCommunication(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -451,7 +309,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificCommunication;
 
-            await RestService.addScientificCommunication(user, body);
+            await FormService.addScientificCommunication(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -467,7 +325,7 @@ export class RestController {
             const body = req.body as ScientificCommunication;
             const formId = req.params.id;
 
-            await RestService.updateScientificCommunication(user, formId, body);
+            await FormService.updateScientificCommunication(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -480,7 +338,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteScientificCommunication(user, id);
+            await FormService.deleteScientificCommunication(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -493,7 +351,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getPatent(user);
+            const data = await FormService.getPatent(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -506,7 +364,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Patent;
 
-            await RestService.addPatent(user, body);
+            await FormService.addPatent(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -522,7 +380,7 @@ export class RestController {
             const body = req.body as Patent;
             const formId = req.params.id;
 
-            await RestService.updatePatent(user, formId, body);
+            await FormService.updatePatent(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -535,7 +393,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deletePatent(user, id);
+            await FormService.deletePatent(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -548,7 +406,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getResearchContract(user);
+            const data = await FormService.getResearchContract(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -561,7 +419,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ResearchContract;
 
-            await RestService.addResearchContract(user, body);
+            await FormService.addResearchContract(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -577,7 +435,7 @@ export class RestController {
             const body = req.body as ResearchContract;
             const formId = req.params.id;
 
-            await RestService.updateResearchContract(user, formId, body);
+            await FormService.updateResearchContract(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -590,7 +448,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteResearchContract(user, id);
+            await FormService.deleteResearchContract(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -603,7 +461,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getCitation(user);
+            const data = await FormService.getCitation(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -616,7 +474,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Citation;
 
-            await RestService.addCitation(user, body);
+            await FormService.addCitation(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -632,7 +490,7 @@ export class RestController {
             const body = req.body as Citation;
             const formId = req.params.id;
 
-            await RestService.updateCitation(user, formId, body);
+            await FormService.updateCitation(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -645,7 +503,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteCitation(user, id);
+            await FormService.deleteCitation(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -658,7 +516,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getAwardAndNomination(user);
+            const data = await FormService.getAwardAndNomination(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -671,7 +529,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as AwardAndNomination;
 
-            await RestService.addAwardAndNomination(user, body);
+            await FormService.addAwardAndNomination(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -687,7 +545,7 @@ export class RestController {
             const body = req.body as AwardAndNomination;
             const formId = req.params.id;
 
-            await RestService.updateAwardAndNomination(user, formId, body);
+            await FormService.updateAwardAndNomination(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -700,7 +558,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteAwardAndNomination(user, id);
+            await FormService.deleteAwardAndNomination(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -713,7 +571,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getAcademyMember(user);
+            const data = await FormService.getAcademyMember(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -726,7 +584,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as AcademyMember;
 
-            await RestService.addAcademyMember(user, body);
+            await FormService.addAcademyMember(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -742,7 +600,7 @@ export class RestController {
             const body = req.body as AcademyMember;
             const formId = req.params.id;
 
-            await RestService.updateAcademyMember(user, formId, body);
+            await FormService.updateAcademyMember(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -755,7 +613,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteAcademyMember(user, id);
+            await FormService.deleteAcademyMember(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -768,7 +626,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getEditorialMember(user);
+            const data = await FormService.getEditorialMember(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -781,7 +639,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as EditorialMember;
 
-            await RestService.addEditorialMember(user, body);
+            await FormService.addEditorialMember(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -797,7 +655,7 @@ export class RestController {
             const body = req.body as EditorialMember;
             const formId = req.params.id;
 
-            await RestService.updateEditorialMember(user, formId, body);
+            await FormService.updateEditorialMember(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -810,7 +668,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteEditorialMember(user, id);
+            await FormService.deleteEditorialMember(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -823,7 +681,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getOrganizedEvent(user);
+            const data = await FormService.getOrganizedEvent(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -836,7 +694,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as OrganizedEvent;
 
-            await RestService.addOrganizedEvent(user, body);
+            await FormService.addOrganizedEvent(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -852,7 +710,7 @@ export class RestController {
             const body = req.body as OrganizedEvent;
             const formId = req.params.id;
 
-            await RestService.updateOrganizedEvent(user, formId, body);
+            await FormService.updateOrganizedEvent(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -865,7 +723,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteOrganizedEvent(user, id);
+            await FormService.deleteOrganizedEvent(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -878,7 +736,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getWithoutActivity(user);
+            const data = await FormService.getWithoutActivity(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -891,7 +749,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as WithoutActivity;
 
-            await RestService.addWithoutActivity(user, body);
+            await FormService.addWithoutActivity(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -907,7 +765,7 @@ export class RestController {
             const body = req.body as WithoutActivity;
             const formId = req.params.id;
 
-            await RestService.updateWithoutActivity(user, formId, body);
+            await FormService.updateWithoutActivity(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -920,7 +778,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteWithoutActivity(user, id);
+            await FormService.deleteWithoutActivity(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -933,7 +791,7 @@ export class RestController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await RestService.getDidacticActivity(user);
+            const data = await FormService.getDidacticActivity(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -946,7 +804,7 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as DidacticActivity;
 
-            await RestService.addDidacticActivity(user, body);
+            await FormService.addDidacticActivity(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -962,7 +820,7 @@ export class RestController {
             const body = req.body as DidacticActivity;
             const formId = req.params.id;
 
-            await RestService.updateDidacticActivity(user, formId, body);
+            await FormService.updateDidacticActivity(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -975,297 +833,11 @@ export class RestController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await RestService.deleteDidacticActivity(user, id);
+            await FormService.deleteDidacticActivity(user, id);
             res.end();
         } catch (err) {
             next(err);
         }
     }
-
-
-    /************************************************************************************
-     *                               Admin only
-     ***********************************************************************************/
-    static async allUsers(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-
-            const data = await RestService.allUsers(user);
-            res.end(JSON.stringify(data));
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async deleteUser(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const id = req.params.id;
-            await RestService.deleteUser(id);
-
-            res.end();
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async getBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-
-            const data = await RestService.getBaseInformation(user);
-            res.end(JSON.stringify(data));
-        } catch (err) {
-            next(err);
-        }
-
-    }
-
-    static async importBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
-        if (!req.files) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const file = req.files.file as UploadedFile;
-
-        if (file === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM));
-            return;
-        }
-
-        try {
-            const rowsCreated = await RestService.importBaseInformation(file);
-
-            res.statusCode = StatusCode.CREATED;
-
-            res.setHeader('Content-Type', ContentType.TEXT);
-            res.end(`${rowsCreated}`);
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async deleteBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const id = req.params.id;
-
-            await RestService.deleteBaseInformation(id);
-            res.end();
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async sendSemesterActivityEmail(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-        const files = req.files;
-
-        if (!files) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        if (!files.file) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const file = files.file as UploadedFile;
-        const email = body.emailTemplate;
-        const subject = body.subject;
-        const from = body.from;
-        const recipientExcept = body.exceptRecipient;
-
-        let recipientExceptList: string[] = [];
-        if (recipientExcept !== undefined) {
-            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
-            recipientExceptList = parsedRecipientExcept.split(',');
-        }
-
-        if (email === undefined || subject === undefined || from === undefined || file === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        try {
-            const data = await RestService.sendSemesterActivityEmail(email, subject, from, file, recipientExceptList);
-            res.end(JSON.stringify(data));
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async exportForms(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const fileBuffer: Buffer = await RestService.exportForms();
-
-            const fileName = `data_${UtilService.stringDate(new Date())}.xlsx`;
-
-            res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-            res.setHeader('Content-type', ContentType.XLSX);
-
-            res.end(fileBuffer);
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async faz(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-        const files = req.files;
-
-        if (!files || body.ignoreStart === undefined || body.ignoreEnd === undefined || body.afterTableNote === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const timetableFile = files.timetable as UploadedFile;
-
-        if (timetableFile === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        try {
-            const fileBuffer = await RestService.faz(timetableFile, body.afterTableNote, body.ignoreStart, body.ignoreEnd);
-            const fileName = `faz_${UtilService.stringDate(new Date())}.zip`;
-
-            res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-            res.setHeader('Content-type', ContentType.ZIP);
-            res.end(fileBuffer);
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async sendVerbalProcess(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-        const files = req.files;
-
-        if (!files) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        if (files.file === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const file = files.file as UploadedFile;
-        const email = body.emailTemplate;
-        const subject = body.subject;
-        const from = body.from;
-        const recipientExcept = body.exceptRecipient;
-
-        let recipientExceptList: string[] = [];
-        if (recipientExcept !== undefined) {
-            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
-            recipientExceptList = parsedRecipientExcept.split(',');
-        }
-
-        if (email === undefined || subject === undefined || from === undefined || file === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        try {
-            const file = files.file as UploadedFile;
-            const emailResults = await RestService.sendVerbalProcess(email, subject, from, file, recipientExceptList);
-
-            res.end(JSON.stringify(emailResults));
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async sendThesisEmailNotification(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-        const files = req.files;
-
-        if (!files) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        if (files.file === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const file = files.file as UploadedFile;
-        const email = body.emailTemplate;
-        const subject = body.subject;
-        const from = body.from;
-        const recipientExcept = body.exceptRecipient;
-
-        let recipientExceptList: string[] = [];
-        if (recipientExcept !== undefined) {
-            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
-            recipientExceptList = parsedRecipientExcept.split(',');
-        }
-
-        if (email === undefined || subject === undefined || from === undefined || file === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        try {
-            const data = await RestService.sendThesisEmailNotification(email, subject, from, file, recipientExceptList);
-            res.end(JSON.stringify(data));
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async importCoordinators(req: Request<any>, res: Response, next: NextFunction) {
-        const files = req.files;
-
-        if (!files) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        if (files.file === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const file = files.file as UploadedFile;
-
-        try {
-            const rowsCreated = await RestService.importCoordinators(file);
-
-            res.setHeader('Content-Type', ContentType.TEXT);
-            res.statusCode = StatusCode.CREATED;
-            res.end(`${rowsCreated}`);
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async getCoordinators(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const rows = await RestService.getCoordinators();
-            res.end(JSON.stringify(rows));
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async getCoordinatorStudents(req: Request<any>, res: Response, next: NextFunction) {
-        const token = req.get('Authorization') as string;
-
-        try {
-            const coordinator = JwtService.verifyToken(token) as Coordinator;
-
-            const students = await RestService.getCoordinatorStudents(coordinator);
-            res.end(JSON.stringify(students));
-        } catch (err) {
-            next(err);
-        }
-    }
-
+    
 }

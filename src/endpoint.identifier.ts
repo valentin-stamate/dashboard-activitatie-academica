@@ -1,4 +1,4 @@
-export enum RestEndpoints {
+export enum EndpointIdentifier {
     /** Check */
     CHECK = '/api/check',
 

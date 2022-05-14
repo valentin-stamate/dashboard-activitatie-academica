@@ -1,3 +1,8 @@
+export interface EmailResult {
+    email: string;
+    success: boolean;
+}
+
 export interface AllowedStudent {
     id?: number;
 

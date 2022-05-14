@@ -1,7 +1,7 @@
 import {DataTypes, Model, Sequelize} from '@sequelize/core';
-import {CryptoUtil} from "../service/crypto.util";
+import {CryptoUtil} from "../services/crypto.util";
 import sha256 from "crypto-js/sha256";
-import {UtilService} from "../service/util.service";
+import {UtilService} from "../services/util.service";
 
 require('dotenv').config();
 const env = process.env as any;

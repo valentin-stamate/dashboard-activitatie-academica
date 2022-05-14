@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import {Admin, Coordinator, Student} from "../database/db.models";
+import {Admin, Coordinator, Student} from "../database/models";
 
 require('dotenv').config();
 const env = process.env as any;
