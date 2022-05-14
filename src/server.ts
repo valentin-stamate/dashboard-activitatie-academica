@@ -19,7 +19,7 @@ require('dotenv').config();
 const app: Express = express();
 
 /** Initialize Database */
-sequelizeInit(false)
+sequelizeInit(true)
     .then(r => {})
     .catch(err => console.log(err));
 

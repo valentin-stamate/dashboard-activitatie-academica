@@ -1,7 +1,6 @@
 import {DataTypes, Model, Sequelize} from '@sequelize/core';
 import {CryptoUtil} from "../services/crypto.util";
 import sha256 from "crypto-js/sha256";
-import {UtilService} from "../services/util.service";
 
 require('dotenv').config();
 const env = process.env as any;
@@ -38,11 +37,16 @@ export class EditorialMemberModel extends Model {}
 export class OrganizedEventModel extends Model {}
 export class WithoutActivityModel extends Model {}
 export class DidacticActivityModel extends Model {}
+export class AuthorizationKeyModel extends Model {}
 
 async function initializeTables(force: boolean) {
     /************************************************************************************
      *                               Table Initialization
      ***********************************************************************************/
+
+    AuthorizationKeyModel.init({
+        key: {type: DataTypes.STRING, allowNull: false,},
+    }, {...options, modelName: 'authorization_keys'});
 
     AllowedStudentsModel.init( {
         fullName:    {type: DataTypes.STRING, allowNull: false,},
@@ -53,7 +57,6 @@ async function initializeTables(force: boolean) {
 
     StudentModel.init({
             identifier:          {type: DataTypes.STRING, unique: true, allowNull: false,},
-            password:            {type: DataTypes.STRING, unique: false, allowNull: false,},
             fullName:            {type: DataTypes.STRING, unique: false, allowNull: false,},
             email:               {type: DataTypes.STRING, unique: true, allowNull: false,},
             alternativeEmail:    {type: DataTypes.STRING, unique: true, allowNull: false,},
@@ -73,13 +76,8 @@ async function initializeTables(force: boolean) {
 
     AdminModel.init({
         username: {type: DataTypes.STRING, unique: true, allowNull: false,},
-        password: {type: DataTypes.STRING, unique: false, allowNull: false,},
+        email:    {type: DataTypes.STRING, unique: true, allowNull: false,},
     }, {...options, tableName: 'admins'});
-
-    // UserKeyModel.init({
-    //     identifier: {type: DataTypes.STRING, unique: true, allowNull: false,},
-    //     key:        {type: DataTypes.STRING, unique: true, allowNull: false,},
-    // }, {...options, modelName: 'user_key'});
 
     await sequelize.sync({force: force});
 
@@ -403,6 +401,8 @@ async function initializeTables(force: boolean) {
  *                                 Init Function
  ***********************************************************************************/
 export async function sequelizeInit(force: boolean) {
+    console.log(`Sequelize init: force ${force}`);
+
     try {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
@@ -434,13 +434,12 @@ export async function sequelizeInit(force: boolean) {
 
     await AdminModel.create({
         username: 'valentin',
-        password: sha256(CryptoUtil.scufflePassword('admin')).toString(),
+        email: 'stamatevalentin125@gmail.com',
     });
 
     await StudentModel.create({
-        identifier: 'andrei',
-        password: sha256(CryptoUtil.scufflePassword('admin')).toString(),
-        fullName: 'Andrei Aioanei',
+        identifier: 'valentin',
+        fullName: 'Valentin Aioanei',
         email: 'stamatevalentin125@gmail.com',
         alternativeEmail: 'valentin.stamate@info.uaic.ro',
         attendanceYear: 2019,

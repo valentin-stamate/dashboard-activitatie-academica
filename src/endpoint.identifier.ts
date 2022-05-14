@@ -6,7 +6,9 @@ export enum EndpointIdentifier {
     SIGNUP_STUDENT = '/api/signup-student',
 
     LOGIN_STUDENT = '/api/login-student',
+    LOGIN_STUDENT_CODE = '/api/login-student-code',
     LOGIN_ADMIN = '/api/login-admin',
+    LOGIN_ADMIN_CODE = '/api/login-admin-code',
     LOGIN_COORDINATOR = '/api/login-coordinator',
 
     /** User */

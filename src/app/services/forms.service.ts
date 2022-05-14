@@ -14,7 +14,7 @@ import {
     ScientificCommunication,
     Translation,
     WithoutActivity
-} from "../database/models";
+} from "../database/form.models";
 import XLSX, {WorkSheet} from "xlsx";
 
 /* The final form method :D */

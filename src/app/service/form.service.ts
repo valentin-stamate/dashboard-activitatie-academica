@@ -1,3 +1,4 @@
+import {Student} from "../database/models";
 import {
     AcademyMember,
     AwardAndNomination,
@@ -6,9 +7,8 @@ import {
     ScientificArticleBDI,
     ScientificArticleISI,
     ScientificBook, ScientificCommunication,
-    Student,
     Translation, WithoutActivity
-} from "../database/models";
+} from "../database/form.models";
 import {
     AcademyMemberModel,
     AwardAndNominationModel,

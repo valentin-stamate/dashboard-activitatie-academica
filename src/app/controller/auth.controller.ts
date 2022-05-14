@@ -52,14 +52,35 @@ export class AuthController {
         const body = req.body;
 
         const identifier = body.identifier;
-        const password = body.password;
+        const email = body.email;
 
-        if (!identifier || !password) {
+        if (!identifier || !email) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
         }
 
         try {
-            const token = await AuthService.loginStudent(identifier, password);
+            await AuthService.loginStudent(identifier, email);
+
+            res.contentType(ContentType.TEXT);
+            res.end();
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async loginStudentWithCode(req: Request<any>, res: Response, next: NextFunction) {
+        const body = req.body;
+
+        const identifier = body.identifier;
+        const email = body.email;
+        const code = body.code;
+
+        if (!identifier || !email || !code) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+        }
+
+        try {
+            const token = await AuthService.loginStudentWithCode(identifier, email, code);
 
             res.contentType(ContentType.TEXT);
             res.end(token);
@@ -92,14 +113,35 @@ export class AuthController {
         const body = req.body;
 
         const username = body.username;
-        const password = body.password;
+        const email = body.email;
 
-        if (!username || !password) {
+        if (!username || !email) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
         }
 
         try {
-            const token = await AuthService.loginAdmin(username, password);
+            await AuthService.loginAdmin(username, email);
+
+            res.contentType(ContentType.TEXT);
+            res.end();
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async loginAdminWithCode(req: Request<any>, res: Response, next: NextFunction) {
+        const body = req.body;
+
+        const username = body.username;
+        const email = body.email;
+        const code = body.code;
+
+        if (!username || !email || !code) {
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+        }
+
+        try {
+            const token = await AuthService.loginAdminWithCode(username, email, code);
 
             res.contentType(ContentType.TEXT);
             res.end(token);

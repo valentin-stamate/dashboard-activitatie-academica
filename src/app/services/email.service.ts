@@ -28,9 +28,21 @@ export class MailService {
 
 }
 
-export abstract class LoginMessage {
-    static getHtml(key: string) {
-        return `Hello! In order to log in paste this code into the app <b>${key}</b> .`;
+export class LoginMessage {
+    static getHtml(code: string) {
+        return `Hello! In order to log in paste this code into the app <b>${code}</b> .`;
+    }
+}
+
+export class SignupMessage {
+    static getHtml(firstname: string) {
+        return `Hello: ${firstname}! Welcome!`;
+    }
+}
+
+export class AdminLoginMessage {
+    static getHtml(code: string) {
+        return `Hello! In order to log in paste this code into the app <b>${code}</b> .`;
     }
 }
 

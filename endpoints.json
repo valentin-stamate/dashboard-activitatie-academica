@@ -60,8 +60,8 @@
 									"type": "text"
 								},
 								{
-									"key": "password",
-									"value": "admin",
+									"key": "email",
+									"value": "stamatevalentin125@gmail.com",
 									"type": "text"
 								}
 							]
@@ -80,7 +80,7 @@
 					"response": []
 				},
 				{
-					"name": "Coordinator Login",
+					"name": "Student Login With Code",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -93,20 +93,58 @@
 									"type": "text"
 								},
 								{
-									"key": "password",
-									"value": "admin",
+									"key": "email",
+									"value": "stamatevalentin125@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "obj95CaKLw80ENKv",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{host}}/api/login-student",
+							"raw": "{{host}}/api/login-student-code",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"login-student"
+								"login-student-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Coordinator Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "{{coordinatorEmail}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{coordinatorPassword}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/login-coordinator",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"login-coordinator"
 							]
 						}
 					},
@@ -126,8 +164,8 @@
 									"type": "text"
 								},
 								{
-									"key": "password",
-									"value": "admin",
+									"key": "email",
+									"value": "stamatevalentin125@gmail.com",
 									"type": "text"
 								}
 							]
@@ -146,13 +184,51 @@
 					"response": []
 				},
 				{
+					"name": "Admin Login With Code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "valentin",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "stamatevalentin125@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "yvDnpRFhr8FtX46y",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/login-admin-code",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"login-admin-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Check",
 					"request": {
 						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{student_token}}",
 								"type": "text"
 							}
 						],
@@ -187,7 +263,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{token}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -220,7 +296,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{token}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -253,7 +329,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{token}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -287,7 +363,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -329,7 +405,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -362,7 +438,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -395,7 +471,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -429,7 +505,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -471,7 +547,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -504,7 +580,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -537,7 +613,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -571,7 +647,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -613,7 +689,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -646,7 +722,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -679,7 +755,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -713,7 +789,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -755,7 +831,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -788,7 +864,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -821,7 +897,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -855,7 +931,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -897,7 +973,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -930,7 +1006,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -963,7 +1039,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -997,7 +1073,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1039,7 +1115,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1072,7 +1148,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1105,7 +1181,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1139,7 +1215,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1181,7 +1257,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1214,7 +1290,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1247,7 +1323,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1281,7 +1357,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1320,7 +1396,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1344,7 +1420,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1377,7 +1453,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1411,7 +1487,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1453,7 +1529,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1486,7 +1562,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1519,7 +1595,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1553,7 +1629,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1595,7 +1671,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1628,7 +1704,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1661,7 +1737,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1695,7 +1771,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1737,7 +1813,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1770,7 +1846,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1803,7 +1879,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1837,7 +1913,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1879,7 +1955,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1912,7 +1988,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1945,7 +2021,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -1979,7 +2055,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -2021,7 +2097,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -2054,7 +2130,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -2087,7 +2163,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -2121,7 +2197,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -2163,7 +2239,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -2196,7 +2272,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -2229,7 +2305,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -2263,7 +2339,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "{{Authorization}}",
+										"value": "{{student_token}}",
 										"type": "text"
 									}
 								],
@@ -2299,7 +2375,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{student_token}}",
 								"type": "text"
 							}
 						],
@@ -2326,7 +2402,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{student_token}}",
 								"type": "text"
 							}
 						],
@@ -2358,33 +2434,25 @@
 			"name": "Coordinator",
 			"item": [
 				{
-					"name": "Login Coordinator",
+					"name": "Coordinator Students",
 					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "email",
-									"value": "{{coordinatorEmail}}",
-									"type": "text"
-								},
-								{
-									"key": "code",
-									"value": "{{coordinatorCode}}",
-									"type": "text"
-								}
-							]
-						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{coordinator_token}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{host}}/api/login-coordinator",
+							"raw": "{{host}}/api/coordinator/students",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"login-coordinator"
+								"coordinator",
+								"students"
 							]
 						}
 					},
@@ -2405,7 +2473,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2438,7 +2506,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2475,7 +2543,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2503,7 +2571,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2537,7 +2605,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2569,7 +2637,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2602,7 +2670,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2656,7 +2724,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2710,7 +2778,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2764,7 +2832,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2813,7 +2881,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2850,7 +2918,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{token}}",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -2907,19 +2975,27 @@
 			"type": "string"
 		},
 		{
-			"key": "token",
+			"key": "student_token",
 			"value": "",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
-			"key": "token",
+			"key": "coordinator_token",
 			"value": "",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
-			"key": "token",
+			"key": "admin_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "coordinatorEmail",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "coordinatorPassword",
 			"value": "",
 			"type": "string"
 		}

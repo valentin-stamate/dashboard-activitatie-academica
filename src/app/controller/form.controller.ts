@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {JwtService} from "../services/jwt.service";
+import {Student} from "../database/models";
 import {
     AcademyMember,
     AwardAndNomination,
@@ -8,8 +9,8 @@ import {
     ScientificArticleBDI,
     ScientificArticleISI,
     ScientificBook, ScientificCommunication,
-    Student, Translation, WithoutActivity
-} from "../database/models";
+    Translation, WithoutActivity
+} from "../database/form.models";
 import {StatusCode} from "../services/rest.util";
 import {FormService} from "../service/form.service";
 

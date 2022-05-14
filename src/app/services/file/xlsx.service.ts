@@ -17,7 +17,6 @@ import {
     SemesterTimetableHeaders,
     TimetableHeaders
 } from "./xlsx.utils";
-import {CoordinatorModel} from "../../database/sequelize";
 
 /* The comments here will be explained in romaninan because este mai usor sa explic ce se intampla, si fara diacritice */
 export class XLSXService {
