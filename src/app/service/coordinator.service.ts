@@ -1,5 +1,8 @@
 import {Coordinator, Student} from "../database/models";
 import {StudentModel} from "../database/sequelize";
+import {ResponseMessage, StatusCode} from "../services/rest.util";
+import {ResponseError} from "../middleware/middleware";
+import {UserService} from "./user.service";
 
 export class CoordinatorService {
 
@@ -11,9 +14,23 @@ export class CoordinatorService {
             }}))
             .map(item => {
                 const studentJSON = item.toJSON();
-                delete studentJSON.password;
                 return studentJSON as Student
             });
+    }
+
+    static async getCoordinatorStudentForms(coordinator: Coordinator, studentIdentifier: string): Promise<any[]> {
+        const existingStudent = await StudentModel.findOne({
+            where: {
+                identifier: studentIdentifier,
+                coordinatorName: coordinator.name,
+            }
+        });
+
+        if (!existingStudent) {
+            throw new ResponseError(ResponseMessage.NO_USER_FOUND, StatusCode.NOT_FOUND);
+        }
+
+        return await UserService.getForms(existingStudent.toJSON() as Student);
     }
 
 }

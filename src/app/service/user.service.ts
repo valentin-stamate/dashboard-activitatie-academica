@@ -92,7 +92,7 @@ export class UserService {
             order: ['id'],
         })).map(item => item.toJSON());
         return {
-            scArticleISI,isiProceedings, scArticleBDI, scBook, translation, scCommunication,
+            scArticleISI, isiProceedings, scArticleBDI, scBook, translation, scCommunication,
             patent, researchContract, citation, awardsNomination, academyMember, editorialMember,
             organizedEvent, withoutActivity, didacticActivity,
         };

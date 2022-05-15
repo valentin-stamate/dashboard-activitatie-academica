@@ -43,5 +43,6 @@ export enum EndpointIdentifier {
 
     /* Coordinator */
     COORDINATOR_STUDENTS = '/api/coordinator/students',
+    COORDINATOR_STUDENT_FORMS = '/api/coordinator/student-forms',
 
 }
