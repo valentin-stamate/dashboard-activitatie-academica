@@ -1,3 +1,35 @@
+/** -----------============== Coordinator ==============----------- */
+/** Activitatea științifică a conducatorului de doctorat */
+export interface CoordinatorScientificActivity {
+    id: number;
+    ownerId: number;
+
+    fullName: string;
+    publicationNumberWebOfScience: string;
+    committees: string;
+    conferences: string;
+    reportYear: number;
+
+    updatedAt: Date;
+    createdAt: Date;
+}
+
+/** Activitatea referențială a conducătorului de doctorat/abilitat de la IOSU-UAIC */
+export interface CoordinatorReferentialActivity {
+    id: number;
+    ownerId: number;
+
+    fullName: string;
+    thesisDomain: string;
+    thesisReference: string;
+    IOSUD: string;
+
+    updatedAt: Date;
+    createdAt: Date;
+}
+
+
+/** -----------============== Student ==============----------- */
 /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
 export interface ScientificArticleISI {
     owner: string;

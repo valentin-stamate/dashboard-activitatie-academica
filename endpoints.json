@@ -126,13 +126,13 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "name",
-									"value": "{{coordinatorEmail}}",
+									"key": "email",
+									"value": "stamatevalentin125@gmail.com",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "{{coordinatorPassword}}",
+									"value": "admin",
 									"type": "text"
 								}
 							]
@@ -2434,6 +2434,319 @@
 			"name": "Coordinator",
 			"item": [
 				{
+					"name": "Coordinator Scientific Activity",
+					"item": [
+						{
+							"name": "Coordinator Scientific Activity",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/coordinator/scientific-activity",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"scientific-activity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Coordinator Scientific Activity",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "Demo name",
+											"type": "text"
+										},
+										{
+											"key": "publicationNumberWebOfScience",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "committees",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "conferences",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "reportYear",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/coordinator/scientific-activity",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"scientific-activity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Coordinator Scientific Activity",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "publicationNumberWebOfScience",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "committees",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "conferences",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "reportYear",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/coordinator/scientific-activity",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"scientific-activity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Coordinator Scientific Activity",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/coordinator/scientific-activity",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"scientific-activity"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Coordinator Referential Activity",
+					"item": [
+						{
+							"name": "Coordinator Referential Activity",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/coordinator/scientific-activity",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"scientific-activity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Coordinator Referential Activity",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "thesisDomain",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "thesisReference",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "IOSUD",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/coordinator/scientific-activity",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"scientific-activity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Coordinator Referential Activity",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/coordinator/scientific-activity?fullName&thesisDomain&thesisReference&IOSUD",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"scientific-activity"
+									],
+									"query": [
+										{
+											"key": "fullName",
+											"value": null
+										},
+										{
+											"key": "thesisDomain",
+											"value": null
+										},
+										{
+											"key": "thesisReference",
+											"value": null
+										},
+										{
+											"key": "IOSUD",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Coordinator Referential Activity",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/coordinator/scientific-activity",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"scientific-activity"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Coordinator Students",
 					"request": {
 						"method": "GET",
@@ -2453,6 +2766,32 @@
 								"api",
 								"coordinator",
 								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Coordinator Student Forms",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{coordinator_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/coordinator/student-forms/valentin",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"coordinator",
+								"student-forms",
+								"valentin"
 							]
 						}
 					},
@@ -2986,16 +3325,6 @@
 		},
 		{
 			"key": "admin_token",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "coordinatorEmail",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "coordinatorPassword",
 			"value": "",
 			"type": "string"
 		}

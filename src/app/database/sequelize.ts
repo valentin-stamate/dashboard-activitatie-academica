@@ -1,6 +1,7 @@
 import {DataTypes, Model, Sequelize} from '@sequelize/core';
 import {CryptoUtil} from "../services/crypto.util";
 import sha256 from "crypto-js/sha256";
+import {CoordinatorScientificActivity} from "./form.models";
 
 require('dotenv').config();
 const env = process.env as any;
@@ -38,6 +39,9 @@ export class OrganizedEventModel extends Model {}
 export class WithoutActivityModel extends Model {}
 export class DidacticActivityModel extends Model {}
 export class AuthorizationKeyModel extends Model {}
+
+export class CoordinatorScientificActivityModel extends Model {}
+export class CoordinatorReferentialActivityModel extends Model {}
 
 async function initializeTables(force: boolean) {
     /************************************************************************************
@@ -85,6 +89,35 @@ async function initializeTables(force: boolean) {
      *                                    Forms
      ***********************************************************************************/
 
+    /** -----------============== Coordinator ==============----------- */
+    CoordinatorScientificActivityModel.init({
+        fullName: {type: DataTypes.STRING,},
+        publicationNumberWebOfScience: {type: DataTypes.STRING,},
+        committees: {type: DataTypes.STRING,},
+        conferences: {type: DataTypes.STRING,},
+        reportYear: {type: DataTypes.INTEGER,},
+    }, {...options});
+    CoordinatorModel.hasMany(CoordinatorScientificActivityModel, {
+        sourceKey: 'id',
+        foreignKey: {name: 'ownerId', allowNull: false,},
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    });
+
+    CoordinatorReferentialActivityModel.init({
+        fullName: {type: DataTypes.STRING,},
+        thesisDomain: {type: DataTypes.STRING,},
+        thesisReference: {type: DataTypes.STRING,},
+        IOSUD: {type: DataTypes.STRING,},
+    }, {...options});
+    CoordinatorModel.hasMany(CoordinatorReferentialActivityModel, {
+        sourceKey: 'id',
+        foreignKey: {name: 'ownerId', allowNull: false,},
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    });
+
+    /** -----------============== Student ==============----------- */
     /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
     ScientificArticleISIModel.init({
             articleTitle: {type: DataTypes.STRING,},
