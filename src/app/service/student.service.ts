@@ -11,7 +11,7 @@ import {
 import {ResponseError} from "../middleware/middleware";
 import {ResponseMessage} from "../services/rest.util";
 
-export class UserService {
+export class StudentService {
 
     static async getInformation(user: Student): Promise<Student> {
         const row = await StudentModel.findOne({

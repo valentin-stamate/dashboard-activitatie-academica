@@ -1,16 +1,16 @@
 import {NextFunction, Request, Response} from "express";
 import {JwtService} from "../services/jwt.service";
 import {Student} from "../database/models";
-import {UserService} from "../service/user.service";
+import {StudentService} from "../service/student.service";
 
-export class UserController {
+export class StudentController {
 
     static async getInformation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await UserService.getInformation(user);
+            const data = await StudentService.getInformation(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -22,7 +22,7 @@ export class UserController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await UserService.getForms(user);
+            const data = await StudentService.getForms(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);

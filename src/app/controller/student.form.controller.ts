@@ -12,9 +12,9 @@ import {
     Translation, WithoutActivity
 } from "../database/form.models";
 import {StatusCode} from "../services/rest.util";
-import {FormService} from "../service/form.service";
+import {StudentFormService} from "../service/student.form.service";
 
-export class FormController {
+export class StudentFormController {
     
     /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
     static async getScientificArticleISI(req: Request<any>, res: Response, next: NextFunction) {
@@ -22,7 +22,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getScientificArticleISI(user);
+            const data = await StudentFormService.getScientificArticleISI(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -35,7 +35,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificArticleISI;
 
-            await FormService.addScientificArticleISI(user, body);
+            await StudentFormService.addScientificArticleISI(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -51,7 +51,7 @@ export class FormController {
             const body = req.body as ScientificArticleISI;
             const formId = req.params.id;
 
-            await FormService.updateScientificArticleISI(user, formId, body);
+            await StudentFormService.updateScientificArticleISI(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -64,7 +64,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteScientificArticleISI(user, id);
+            await StudentFormService.deleteScientificArticleISI(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -77,7 +77,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getISIProceeding(user);
+            const data = await StudentFormService.getISIProceeding(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -90,7 +90,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ISIProceeding;
 
-            await FormService.addISIProceeding(user, body);
+            await StudentFormService.addISIProceeding(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -106,7 +106,7 @@ export class FormController {
             const body = req.body as ISIProceeding;
             const formId = req.params.id;
 
-            await FormService.updateISIProceeding(user, formId, body);
+            await StudentFormService.updateISIProceeding(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -119,7 +119,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteISIProceeding(user, id);
+            await StudentFormService.deleteISIProceeding(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -132,7 +132,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getScientificArticleBDI(user);
+            const data = await StudentFormService.getScientificArticleBDI(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -145,7 +145,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificArticleBDI;
 
-            await FormService.addScientificArticleBDI(user, body);
+            await StudentFormService.addScientificArticleBDI(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -161,7 +161,7 @@ export class FormController {
             const body = req.body as ScientificArticleBDI;
             const formId = req.params.id;
 
-            await FormService.updateScientificArticleBDI(user, formId, body);
+            await StudentFormService.updateScientificArticleBDI(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -174,7 +174,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteScientificArticleBDI(user, id);
+            await StudentFormService.deleteScientificArticleBDI(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -187,7 +187,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getScientificBook(user);
+            const data = await StudentFormService.getScientificBook(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -200,7 +200,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificBook;
 
-            await FormService.addScientificBook(user, body);
+            await StudentFormService.addScientificBook(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -216,7 +216,7 @@ export class FormController {
             const body = req.body as ScientificBook;
             const formId = req.params.id;
 
-            await FormService.updateScientificBook(user, formId, body);
+            await StudentFormService.updateScientificBook(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -229,7 +229,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteScientificBook(user, id);
+            await StudentFormService.deleteScientificBook(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -242,7 +242,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getTranslation(user);
+            const data = await StudentFormService.getTranslation(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -255,7 +255,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Translation;
 
-            await FormService.addTranslation(user, body);
+            await StudentFormService.addTranslation(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -271,7 +271,7 @@ export class FormController {
             const body = req.body as Translation;
             const formId = req.params.id;
 
-            await FormService.updateTranslation(user, formId, body);
+            await StudentFormService.updateTranslation(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -284,7 +284,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteTranslation(user, id);
+            await StudentFormService.deleteTranslation(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -297,7 +297,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getScientificCommunication(user);
+            const data = await StudentFormService.getScientificCommunication(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -310,7 +310,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ScientificCommunication;
 
-            await FormService.addScientificCommunication(user, body);
+            await StudentFormService.addScientificCommunication(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -326,7 +326,7 @@ export class FormController {
             const body = req.body as ScientificCommunication;
             const formId = req.params.id;
 
-            await FormService.updateScientificCommunication(user, formId, body);
+            await StudentFormService.updateScientificCommunication(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -339,7 +339,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteScientificCommunication(user, id);
+            await StudentFormService.deleteScientificCommunication(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -352,7 +352,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getPatent(user);
+            const data = await StudentFormService.getPatent(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -365,7 +365,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Patent;
 
-            await FormService.addPatent(user, body);
+            await StudentFormService.addPatent(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -381,7 +381,7 @@ export class FormController {
             const body = req.body as Patent;
             const formId = req.params.id;
 
-            await FormService.updatePatent(user, formId, body);
+            await StudentFormService.updatePatent(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -394,7 +394,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deletePatent(user, id);
+            await StudentFormService.deletePatent(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -407,7 +407,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getResearchContract(user);
+            const data = await StudentFormService.getResearchContract(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -420,7 +420,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as ResearchContract;
 
-            await FormService.addResearchContract(user, body);
+            await StudentFormService.addResearchContract(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -436,7 +436,7 @@ export class FormController {
             const body = req.body as ResearchContract;
             const formId = req.params.id;
 
-            await FormService.updateResearchContract(user, formId, body);
+            await StudentFormService.updateResearchContract(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -449,7 +449,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteResearchContract(user, id);
+            await StudentFormService.deleteResearchContract(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -462,7 +462,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getCitation(user);
+            const data = await StudentFormService.getCitation(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -475,7 +475,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as Citation;
 
-            await FormService.addCitation(user, body);
+            await StudentFormService.addCitation(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -491,7 +491,7 @@ export class FormController {
             const body = req.body as Citation;
             const formId = req.params.id;
 
-            await FormService.updateCitation(user, formId, body);
+            await StudentFormService.updateCitation(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -504,7 +504,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteCitation(user, id);
+            await StudentFormService.deleteCitation(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -517,7 +517,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getAwardAndNomination(user);
+            const data = await StudentFormService.getAwardAndNomination(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -530,7 +530,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as AwardAndNomination;
 
-            await FormService.addAwardAndNomination(user, body);
+            await StudentFormService.addAwardAndNomination(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -546,7 +546,7 @@ export class FormController {
             const body = req.body as AwardAndNomination;
             const formId = req.params.id;
 
-            await FormService.updateAwardAndNomination(user, formId, body);
+            await StudentFormService.updateAwardAndNomination(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -559,7 +559,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteAwardAndNomination(user, id);
+            await StudentFormService.deleteAwardAndNomination(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -572,7 +572,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getAcademyMember(user);
+            const data = await StudentFormService.getAcademyMember(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -585,7 +585,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as AcademyMember;
 
-            await FormService.addAcademyMember(user, body);
+            await StudentFormService.addAcademyMember(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -601,7 +601,7 @@ export class FormController {
             const body = req.body as AcademyMember;
             const formId = req.params.id;
 
-            await FormService.updateAcademyMember(user, formId, body);
+            await StudentFormService.updateAcademyMember(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -614,7 +614,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteAcademyMember(user, id);
+            await StudentFormService.deleteAcademyMember(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -627,7 +627,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getEditorialMember(user);
+            const data = await StudentFormService.getEditorialMember(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -640,7 +640,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as EditorialMember;
 
-            await FormService.addEditorialMember(user, body);
+            await StudentFormService.addEditorialMember(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -656,7 +656,7 @@ export class FormController {
             const body = req.body as EditorialMember;
             const formId = req.params.id;
 
-            await FormService.updateEditorialMember(user, formId, body);
+            await StudentFormService.updateEditorialMember(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -669,7 +669,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteEditorialMember(user, id);
+            await StudentFormService.deleteEditorialMember(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -682,7 +682,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getOrganizedEvent(user);
+            const data = await StudentFormService.getOrganizedEvent(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -695,7 +695,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as OrganizedEvent;
 
-            await FormService.addOrganizedEvent(user, body);
+            await StudentFormService.addOrganizedEvent(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -711,7 +711,7 @@ export class FormController {
             const body = req.body as OrganizedEvent;
             const formId = req.params.id;
 
-            await FormService.updateOrganizedEvent(user, formId, body);
+            await StudentFormService.updateOrganizedEvent(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -724,7 +724,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteOrganizedEvent(user, id);
+            await StudentFormService.deleteOrganizedEvent(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -737,7 +737,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getWithoutActivity(user);
+            const data = await StudentFormService.getWithoutActivity(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -750,7 +750,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as WithoutActivity;
 
-            await FormService.addWithoutActivity(user, body);
+            await StudentFormService.addWithoutActivity(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -766,7 +766,7 @@ export class FormController {
             const body = req.body as WithoutActivity;
             const formId = req.params.id;
 
-            await FormService.updateWithoutActivity(user, formId, body);
+            await StudentFormService.updateWithoutActivity(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -779,7 +779,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteWithoutActivity(user, id);
+            await StudentFormService.deleteWithoutActivity(user, id);
             res.end();
         } catch (err) {
             next(err);
@@ -792,7 +792,7 @@ export class FormController {
             const token = req.get('Authorization') as string;
             const user = JwtService.verifyToken(token) as Student;
 
-            const data = await FormService.getDidacticActivity(user);
+            const data = await StudentFormService.getDidacticActivity(user);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -805,7 +805,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const body = req.body as DidacticActivity;
 
-            await FormService.addDidacticActivity(user, body);
+            await StudentFormService.addDidacticActivity(user, body);
 
             res.statusCode = StatusCode.CREATED;
             res.end();
@@ -821,7 +821,7 @@ export class FormController {
             const body = req.body as DidacticActivity;
             const formId = req.params.id;
 
-            await FormService.updateDidacticActivity(user, formId, body);
+            await StudentFormService.updateDidacticActivity(user, formId, body);
             res.end();
         } catch (err) {
             next(err);
@@ -834,7 +834,7 @@ export class FormController {
             const user = JwtService.verifyToken(token) as Student;
             const id = req.params.id;
 
-            await FormService.deleteDidacticActivity(user, id);
+            await StudentFormService.deleteDidacticActivity(user, id);
             res.end();
         } catch (err) {
             next(err);

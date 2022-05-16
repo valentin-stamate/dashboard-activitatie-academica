@@ -2,7 +2,7 @@ import {Coordinator, Student} from "../database/models";
 import {StudentModel} from "../database/sequelize";
 import {ResponseMessage, StatusCode} from "../services/rest.util";
 import {ResponseError} from "../middleware/middleware";
-import {UserService} from "./user.service";
+import {StudentService} from "./student.service";
 
 export class CoordinatorService {
 
@@ -30,7 +30,7 @@ export class CoordinatorService {
             throw new ResponseError(ResponseMessage.NO_USER_FOUND, StatusCode.NOT_FOUND);
         }
 
-        return await UserService.getForms(existingStudent.toJSON() as Student);
+        return await StudentService.getForms(existingStudent.toJSON() as Student);
     }
 
 }

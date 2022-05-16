@@ -7,8 +7,8 @@ import fileUpload from "express-fileupload";
 import {sequelizeInit} from "./app/database/sequelize";
 import {Middleware} from "./app/middleware/middleware";
 import {registerAuthEndpoints} from "./app/endpoints/auth.endpoints";
-import {registerFormsEndpoints} from "./app/endpoints/forms.endpoints";
-import {registerUserEndpoints} from "./app/endpoints/user.endpoints";
+import {registerStudentFormsEndpoints} from "./app/endpoints/student.forms.endpoints";
+import {registerStudentEndpoints} from "./app/endpoints/student.endpoints";
 import {registerAdminEndpoints} from "./app/endpoints/admin.endpoints";
 import {registerCoordinatorEndpoints} from "./app/endpoints/coordinator.endpoints";
 
@@ -51,8 +51,8 @@ app.use(fileUpload());
 registerAuthEndpoints(app);
 
 /** ------------------======================= User Only =======================------------------ */
-registerUserEndpoints(app);
-registerFormsEndpoints(app);
+registerStudentEndpoints(app);
+registerStudentFormsEndpoints(app);
 
 /** ------------------======================= Admin only =======================------------------ */
 registerAdminEndpoints(app);

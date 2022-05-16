@@ -22,7 +22,7 @@ import {UtilService} from "../services/util.service";
 import {ResponseError} from "../middleware/middleware";
 import {ResponseMessage, StatusCode} from "../services/rest.util";
 
-export class FormService {
+export class StudentFormService {
 
     /** Articole științifice publicate în extenso în reviste cotate Web of Science cu factor de impact */
     static async getScientificArticleISI(user: Student): Promise<any> {
