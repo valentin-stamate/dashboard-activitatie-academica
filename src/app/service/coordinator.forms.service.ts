@@ -6,7 +6,6 @@ import {ResponseMessage, StatusCode} from "../services/rest.util";
 import {
     CoordinatorReferentialActivityModel,
     CoordinatorScientificActivityModel,
-    ScientificArticleISIModel
 } from "../database/sequelize";
 
 export class CoordinatorFormsService {
