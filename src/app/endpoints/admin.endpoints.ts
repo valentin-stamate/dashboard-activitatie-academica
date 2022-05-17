@@ -4,8 +4,8 @@ import {Middleware} from "../middleware/middleware";
 import {AdminController} from "../controller/admin.controller";
 
 export function registerAdminEndpoints(app: Express) {
-    app.get(EndpointIdentifier.USER, Middleware.adminMiddleware, AdminController.allUsers);
-    app.delete(`${EndpointIdentifier.USER}/:id`, Middleware.adminMiddleware, AdminController.deleteUser);
+    app.get(EndpointIdentifier.STUDENT, Middleware.adminMiddleware, AdminController.allStudents);
+    app.delete(`${EndpointIdentifier.STUDENT}/:id`, Middleware.adminMiddleware, AdminController.deleteStudent);
 
     app.get(EndpointIdentifier.BASE_INFORMATION, Middleware.adminMiddleware, AdminController.getBaseInformation);
     app.post(EndpointIdentifier.BASE_INFORMATION, Middleware.adminMiddleware, AdminController.importBaseInformation);

@@ -1,10 +1,10 @@
-import {Coordinator, EmailResult, Student} from "../database/models";
+import {Coordinator, EmailResult} from "../database/models";
 import {
     AcademyMemberModel,
     AllowedStudentsModel,
     AwardAndNominationModel,
     CitationModel,
-    CoordinatorModel,
+    CoordinatorModel, CoordinatorReferentialActivityModel, CoordinatorScientificActivityModel,
     DidacticActivityModel,
     EditorialMemberModel,
     ISIProceedingModel,
@@ -19,7 +19,6 @@ import {
     TranslationModel,
     WithoutActivityModel
 } from "../database/sequelize";
-import {Op} from "@sequelize/core";
 import {ResponseError} from "../middleware/middleware";
 import {ResponseMessage, StatusCode} from "../services/rest.util";
 import {UploadedFile} from "express-fileupload";
@@ -31,22 +30,20 @@ import {DocxService} from "../services/file/docx.service";
 import {UtilService} from "../services/util.service";
 import sha256 from "crypto-js/sha256";
 import {CryptoUtil} from "../services/crypto.util";
+import XLSX from "xlsx";
 
 export class AdminService {
 
     /* Get all the users except to the one that is making the request */
-    static async allUsers(userExcept: Student): Promise<any> {
+    static async allStudents(): Promise<any> {
         const rows = await StudentModel.findAll({
-            where: {
-                id: {[Op.not]: userExcept.id},
-            },
             order: ['id'],
         });
 
         return rows.map(item => item.toJSON());
     }
 
-    static async deleteUser(id: number): Promise<void> {
+    static async deleteStudent(id: number): Promise<void> {
         const row = await StudentModel.findOne({
             where: {
                 id: id
@@ -62,11 +59,8 @@ export class AdminService {
     }
 
     /* Get all base information except to the one that is making the request */
-    static async getBaseInformation(user: Student) {
+    static async getBaseInformation() {
         return (await AllowedStudentsModel.findAll({
-            where: {
-                identifier: {[Op.not]: user.identifier},
-            },
             order: ['id'],
         })).map(item => item.toJSON());
     }
@@ -135,8 +129,7 @@ export class AdminService {
     }
 
     static async exportForms(): Promise<Buffer> {
-        const XLSX = require('XLSX');
-
+        /* Student Data */
         let scArticleISI =     (await ScientificArticleISIModel.findAll({order: ['id'],})).map(item => item.toJSON());
         let isiProceedings =   (await ISIProceedingModel.findAll({order: ['id'],})).map(item => item.toJSON());
         let scArticleBDI =     (await ScientificArticleBDIModel.findAll({order: ['id'],})).map(item => item.toJSON());
@@ -169,25 +162,43 @@ export class AdminService {
         const withoutActivitySheet = FormsService.getWithoutActivitySheet(withoutActivity);
         const didacticActivitySheet = FormsService.getDidacticActivitySheet(didacticActivity);
 
-        const workBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workBook, scISISheet, 'Articole ştiintifice...ISI...');
-        XLSX.utils.book_append_sheet(workBook, isiProceedingsSheet, 'ISI proceedings');
-        XLSX.utils.book_append_sheet(workBook, scArticleBDISheet, 'Articole științifice...BDI..');
-        XLSX.utils.book_append_sheet(workBook, scBookSheet, 'Cărţi ştiinţifice...');
-        XLSX.utils.book_append_sheet(workBook, translationSheet, 'Traduceri');
-        XLSX.utils.book_append_sheet(workBook, scCommunicationSheet, 'Comunicări...');
-        XLSX.utils.book_append_sheet(workBook, patentSheet, 'Brevete');
-        XLSX.utils.book_append_sheet(workBook, researchContractSheet, 'Contracte de cercetare');
-        XLSX.utils.book_append_sheet(workBook, citationSheet, 'Citări');
-        XLSX.utils.book_append_sheet(workBook, awardsNominationSheet, 'Premii si nominalizari');
-        XLSX.utils.book_append_sheet(workBook, academyMemberSheet, 'Membru în academii');
-        XLSX.utils.book_append_sheet(workBook, editorialMemberSheet, 'Membru în echipa editorială');
-        XLSX.utils.book_append_sheet(workBook, organizedEventSheet, 'Evenimente organizate');
-        XLSX.utils.book_append_sheet(workBook, withoutActivitySheet, 'Fără activitate științifică');
-        XLSX.utils.book_append_sheet(workBook, didacticActivitySheet, 'Activitate didactică');
+        const studentDataWorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(studentDataWorkBook, scISISheet, 'Articole ştiintifice...ISI...');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, isiProceedingsSheet, 'ISI proceedings');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, scArticleBDISheet, 'Articole științifice...BDI..');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, scBookSheet, 'Cărţi ştiinţifice...');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, translationSheet, 'Traduceri');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, scCommunicationSheet, 'Comunicări...');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, patentSheet, 'Brevete');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, researchContractSheet, 'Contracte de cercetare');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, citationSheet, 'Citări');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, awardsNominationSheet, 'Premii si nominalizari');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, academyMemberSheet, 'Membru în academii');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, editorialMemberSheet, 'Membru în echipa editorială');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, organizedEventSheet, 'Evenimente organizate');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, withoutActivitySheet, 'Fără activitate științifică');
+        XLSX.utils.book_append_sheet(studentDataWorkBook, didacticActivitySheet, 'Activitate didactică');
 
-        /* Generate Excel Buffer and return */
-        return new Buffer(XLSX.write(workBook, {bookType: 'xlsx', type: 'buffer'}));
+        /* Coordinators Data */
+        const coordinatorScientificActivity = (await CoordinatorScientificActivityModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        const coordinatorReferenceActivity =  (await CoordinatorReferentialActivityModel.findAll({order: ['id'],})).map(item => item.toJSON());
+
+        const coordinatorScientificActivitySheet = FormsService.getCoordinatorScientificActivitySheet(coordinatorScientificActivity);
+        const coordinatorReferenceActivitySheet = FormsService.getCoordinatorReferenceActivitySheet(coordinatorReferenceActivity);
+
+        const coordinatorDataWorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(coordinatorDataWorkBook, coordinatorScientificActivitySheet, 'Activitatea științifică');
+        XLSX.utils.book_append_sheet(coordinatorDataWorkBook, coordinatorReferenceActivitySheet, 'Activitatea referențială');
+
+        const studentFormsBuffer = new Buffer(XLSX.write(studentDataWorkBook, {bookType: 'xlsx', type: 'buffer'}));
+        const coordinatorFormsBuffer = new Buffer(XLSX.write(coordinatorDataWorkBook, {bookType: 'xlsx', type: 'buffer'}));
+
+        const zip = new JSZip();
+        /* Generate Excel Buffer With Exported Student Data */
+        zip.file(`forms_students_${UtilService.stringDate(new Date())}.xlsx`, studentFormsBuffer, {compression: 'DEFLATE'});
+        zip.file(`forms_coordinator_${UtilService.stringDate(new Date())}.xlsx`, coordinatorFormsBuffer, {compression: 'DEFLATE'});
+
+        return await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' });
     }
 
     static async faz(timetableFile: UploadedFile, afterTableNote: string, ignoreStart: number, ignoreEnd: number): Promise<any> {

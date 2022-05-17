@@ -31,7 +31,7 @@ export enum EndpointIdentifier {
     DIDACTIC_ACTIVITY = '/api/didactic-activity',
 
     /** Admin */
-    USER = '/api/user',
+    STUDENT = '/api/student',
     BASE_INFORMATION = '/api/base-information',
     SEMESTER_ACTIVITY_EMAIL = '/api/semester-activity',
     EXPORT_FORMS = '/api/export-forms',

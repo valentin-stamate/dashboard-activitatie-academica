@@ -1,6 +1,4 @@
 import {NextFunction, Request, Response} from "express";
-import {JwtService} from "../services/jwt.service";
-import {Coordinator, Student} from "../database/models";
 import {ResponseError} from "../middleware/middleware";
 import {ContentType, ResponseMessage, StatusCode} from "../services/rest.util";
 import {UploadedFile} from "express-fileupload";
@@ -12,22 +10,19 @@ export class AdminController {
     /************************************************************************************
      *                               Admin only
      ***********************************************************************************/
-    static async allUsers(req: Request<any>, res: Response, next: NextFunction) {
+    static async allStudents(req: Request<any>, res: Response, next: NextFunction) {
         try {
-            const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-
-            const data = await AdminService.allUsers(user);
+            const data = await AdminService.allStudents();
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
         }
     }
 
-    static async deleteUser(req: Request<any>, res: Response, next: NextFunction) {
+    static async deleteStudent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const id = req.params.id;
-            await AdminService.deleteUser(id);
+            await AdminService.deleteStudent(id);
 
             res.end();
         } catch (err) {
@@ -37,10 +32,7 @@ export class AdminController {
 
     static async getBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
         try {
-            const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-
-            const data = await AdminService.getBaseInformation(user);
+            const data = await AdminService.getBaseInformation();
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -127,10 +119,10 @@ export class AdminController {
         try {
             const fileBuffer: Buffer = await AdminService.exportForms();
 
-            const fileName = `data_${UtilService.stringDate(new Date())}.xlsx`;
+            const fileName = `data_${UtilService.stringDate(new Date())}.zip`;
 
             res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-            res.setHeader('Content-type', ContentType.XLSX);
+            res.setHeader('Content-type', ContentType.ZIP);
 
             res.end(fileBuffer);
         } catch (err) {

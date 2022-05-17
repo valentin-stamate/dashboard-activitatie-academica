@@ -2565,14 +2565,14 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "{{host}}/api/coordinator/scientific-activity",
+									"raw": "{{host}}/api/coordinator/referential-activity",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"api",
 										"coordinator",
-										"scientific-activity"
+										"referential-activity"
 									]
 								}
 							},
@@ -2615,14 +2615,14 @@
 									]
 								},
 								"url": {
-									"raw": "{{host}}/api/coordinator/scientific-activity",
+									"raw": "{{host}}/api/coordinator/referential-activity",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"api",
 										"coordinator",
-										"scientific-activity"
+										"referential-activity"
 									]
 								}
 							},
@@ -2640,14 +2640,14 @@
 									}
 								],
 								"url": {
-									"raw": "{{host}}/api/coordinator/scientific-activity",
+									"raw": "{{host}}/api/coordinator/referential-activity",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"api",
 										"coordinator",
-										"scientific-activity"
+										"referential-activity"
 									]
 								}
 							},
@@ -2712,7 +2712,7 @@
 			"name": "Admin",
 			"item": [
 				{
-					"name": "User",
+					"name": "Students",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -2735,20 +2735,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/api/user",
+							"raw": "{{host}}/api/student",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"user"
+								"student"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "User",
+					"name": "Student",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -2768,13 +2768,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/api/user/2",
+							"raw": "{{host}}/api/student/2",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"user",
+								"student",
 								"2"
 							]
 						}

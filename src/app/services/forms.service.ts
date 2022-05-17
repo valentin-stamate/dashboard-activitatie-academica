@@ -1,7 +1,7 @@
 import {
     AcademyMember,
     AwardAndNomination,
-    Citation,
+    Citation, CoordinatorReferentialActivity, CoordinatorScientificActivity,
     DidacticActivity,
     EditorialMember,
     ISIProceeding,
@@ -19,6 +19,33 @@ import XLSX, {WorkSheet} from "xlsx";
 
 /* The final form method :D */
 export class FormsService {
+
+    static getCoordinatorScientificActivitySheet(rows: CoordinatorScientificActivity[]): WorkSheet {
+        const parsedRows = rows.map((item) => {
+            return {
+                'Nume şi prenume': item.fullName,
+                'Număr publicaţii indexate Web of Science/ERIH/altele cu factor de impact': item.publicationNumberWebOfScience,
+                'Comisii/comitete/asociații științifice internaționale în care are calitatea de membru': item.committees,
+                'Conferințe/comisii la care a participat ca invitat/expert': item.conferences,
+                'Anul raportării': item.reportYear,
+            };
+        });
+
+        return XLSX.utils.json_to_sheet(parsedRows);
+    }
+
+    static getCoordinatorReferenceActivitySheet(rows: CoordinatorReferentialActivity[]): WorkSheet {
+        const parsedRows = rows.map((item) => {
+            return {
+                'Nume, prenume referent de la IOSUD UAIC': item.fullName,
+                'Domeniul de doctorat': item.thesisDomain,
+                'Teza la care a fost referent': item.thesisReference,
+                'IOSUD organizatoare a tezei evaluate': item.IOSUD,
+            };
+        });
+
+        return XLSX.utils.json_to_sheet(parsedRows);
+    }
 
     static getScientificArticleISISheet(rows: ScientificArticleISI[]): WorkSheet {
         const parsedRows = rows.map((item) => {
