@@ -18,42 +18,33 @@ export class CoordinatorFormsService {
         })).map(item => item.toJSON());
     }
 
-    static async addCoordinatorScientificActivity(coordinator: Coordinator, data: CoordinatorScientificActivity): Promise<void> {
-        if (!UtilService.checkFormFields(data)) {
-            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
-        }
-
-        await CoordinatorScientificActivityModel.create({
-            ...data,
-            ownerId: coordinator.id,
-        });
-        return;
-    }
-
-    static async updateCoordinatorScientificActivity(coordinator: Coordinator, formId: number, data: CoordinatorScientificActivity): Promise<void> {
+    static async updateCoordinatorScientificActivity(coordinator: Coordinator, data: CoordinatorScientificActivity): Promise<void> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
 
         const row = await CoordinatorScientificActivityModel.findOne({
             where: {
-                id: formId,
                 ownerId: coordinator.id,
             }
         });
 
         if (row === null) {
-            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+            await CoordinatorScientificActivityModel.create({
+                ...data,
+                ownerId: coordinator.id,
+            });
+
+            return;
         }
 
         await row.set({...data}).save();
         return;
     }
 
-    static async deleteCoordinatorScientificActivity(coordinator: Coordinator, formId: number): Promise<void> {
+    static async deleteCoordinatorScientificActivity(coordinator: Coordinator): Promise<void> {
         const row = await CoordinatorScientificActivityModel.findOne({
             where: {
-                id: formId,
                 ownerId: coordinator.id,
             }
         });
@@ -74,42 +65,32 @@ export class CoordinatorFormsService {
         })).map(item => item.toJSON());
     }
 
-    static async addCoordinatorReferentialActivity(coordinator: Coordinator, data: CoordinatorReferentialActivity): Promise<void> {
-        if (!UtilService.checkFormFields(data)) {
-            throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
-        }
-
-        await CoordinatorReferentialActivityModel.create({
-            ...data,
-            ownerId: coordinator.id,
-        });
-        return;
-    }
-
-    static async updateCoordinatorReferentialActivity(coordinator: Coordinator, formId: number, data: CoordinatorReferentialActivity): Promise<void> {
+    static async updateCoordinatorReferentialActivity(coordinator: Coordinator, data: CoordinatorReferentialActivity): Promise<void> {
         if (!UtilService.checkFormFields(data)) {
             throw new ResponseError(ResponseMessage.FORM_FIELD_ERROR, StatusCode.BAD_REQUEST);
         }
 
         const row = await CoordinatorReferentialActivityModel.findOne({
             where: {
-                id: formId,
                 ownerId: coordinator.id,
             }
         });
 
         if (row === null) {
-            throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
+            await CoordinatorReferentialActivityModel.create({
+                ...data,
+                ownerId: coordinator.id,
+            });
+            return;
         }
 
         await row.set({...data}).save();
         return;
     }
 
-    static async deleteCoordinatorReferentialActivity(coordinator: Coordinator, formId: number): Promise<void> {
+    static async deleteCoordinatorReferentialActivity(coordinator: Coordinator): Promise<void> {
         const row = await CoordinatorReferentialActivityModel.findOne({
             where: {
-                id: formId,
                 ownerId: coordinator.id,
             }
         });

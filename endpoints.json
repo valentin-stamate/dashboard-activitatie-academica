@@ -2464,61 +2464,6 @@
 						{
 							"name": "Coordinator Scientific Activity",
 							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "{{coordinator_token}}",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "fullName",
-											"value": "Demo name",
-											"type": "text"
-										},
-										{
-											"key": "publicationNumberWebOfScience",
-											"value": "",
-											"type": "text"
-										},
-										{
-											"key": "committees",
-											"value": "",
-											"type": "text"
-										},
-										{
-											"key": "conferences",
-											"value": "",
-											"type": "text"
-										},
-										{
-											"key": "reportYear",
-											"value": "",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{host}}/api/coordinator/scientific-activity",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"api",
-										"coordinator",
-										"scientific-activity"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Coordinator Scientific Activity",
-							"request": {
 								"method": "PATCH",
 								"header": [
 									{
@@ -2532,27 +2477,27 @@
 									"formdata": [
 										{
 											"key": "fullName",
-											"value": "",
+											"value": "Demo Name",
 											"type": "text"
 										},
 										{
 											"key": "publicationNumberWebOfScience",
-											"value": "",
+											"value": "323 I guess",
 											"type": "text"
 										},
 										{
 											"key": "committees",
-											"value": "",
+											"value": "One",
 											"type": "text"
 										},
 										{
 											"key": "conferences",
-											"value": "",
+											"value": "Conference",
 											"type": "text"
 										},
 										{
 											"key": "reportYear",
-											"value": "",
+											"value": "2012",
 											"type": "text"
 										}
 									]
@@ -2603,6 +2548,9 @@
 					"item": [
 						{
 							"name": "Coordinator Referential Activity",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
 							"request": {
 								"method": "GET",
 								"header": [
@@ -2612,55 +2560,9 @@
 										"type": "text"
 									}
 								],
-								"url": {
-									"raw": "{{host}}/api/coordinator/scientific-activity",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"api",
-										"coordinator",
-										"scientific-activity"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Coordinator Referential Activity",
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "{{coordinator_token}}",
-										"type": "text"
-									}
-								],
 								"body": {
 									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "fullName",
-											"value": "",
-											"type": "text"
-										},
-										{
-											"key": "thesisDomain",
-											"value": "",
-											"type": "text"
-										},
-										{
-											"key": "thesisReference",
-											"value": "",
-											"type": "text"
-										},
-										{
-											"key": "IOSUD",
-											"value": "",
-											"type": "text"
-										}
-									]
+									"formdata": []
 								},
 								"url": {
 									"raw": "{{host}}/api/coordinator/scientific-activity",
@@ -2687,8 +2589,33 @@
 										"type": "text"
 									}
 								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "Full Name",
+											"type": "text"
+										},
+										{
+											"key": "thesisDomain",
+											"value": "Computer Science",
+											"type": "text"
+										},
+										{
+											"key": "thesisReference",
+											"value": "Reference",
+											"type": "text"
+										},
+										{
+											"key": "IOSUD",
+											"value": "ISOSU",
+											"type": "text"
+										}
+									]
+								},
 								"url": {
-									"raw": "{{host}}/api/coordinator/scientific-activity?fullName&thesisDomain&thesisReference&IOSUD",
+									"raw": "{{host}}/api/coordinator/scientific-activity",
 									"host": [
 										"{{host}}"
 									],
@@ -2696,24 +2623,6 @@
 										"api",
 										"coordinator",
 										"scientific-activity"
-									],
-									"query": [
-										{
-											"key": "fullName",
-											"value": null
-										},
-										{
-											"key": "thesisDomain",
-											"value": null
-										},
-										{
-											"key": "thesisReference",
-											"value": null
-										},
-										{
-											"key": "IOSUD",
-											"value": null
-										}
 									]
 								}
 							},

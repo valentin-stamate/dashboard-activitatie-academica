@@ -3,7 +3,6 @@ import {JwtService} from "../services/jwt.service";
 import {Coordinator} from "../database/models";
 import {CoordinatorFormsService} from "../service/coordinator.forms.service";
 import {CoordinatorReferentialActivity, CoordinatorScientificActivity} from "../database/form.models";
-import {StatusCode} from "../services/rest.util";
 
 export class CoordinatorFormsController {
 
@@ -20,29 +19,13 @@ export class CoordinatorFormsController {
         }
     }
 
-    static async addCoordinatorScientificActivity(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const token = req.get('Authorization') as string;
-            const coordinator = JwtService.verifyToken(token) as Coordinator;
-            const body = req.body as CoordinatorScientificActivity;
-
-            await CoordinatorFormsService.addCoordinatorScientificActivity(coordinator, body);
-
-            res.statusCode = StatusCode.CREATED;
-            res.end();
-        } catch (err) {
-            next(err);
-        }
-    }
-
     static async updateCoordinatorScientificActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
             const coordinator = JwtService.verifyToken(token) as Coordinator;
             const body = req.body as CoordinatorScientificActivity;
-            const formId = req.params.id;
 
-            await CoordinatorFormsService.updateCoordinatorScientificActivity(coordinator, formId, body);
+            await CoordinatorFormsService.updateCoordinatorScientificActivity(coordinator, body);
             res.end();
         } catch (err) {
             next(err);
@@ -53,9 +36,8 @@ export class CoordinatorFormsController {
         try {
             const token = req.get('Authorization') as string;
             const coordinator = JwtService.verifyToken(token) as Coordinator;
-            const id = req.params.id;
 
-            await CoordinatorFormsService.deleteCoordinatorScientificActivity(coordinator, id);
+            await CoordinatorFormsService.deleteCoordinatorScientificActivity(coordinator);
             res.end();
         } catch (err) {
             next(err);
@@ -75,29 +57,13 @@ export class CoordinatorFormsController {
         }
     }
 
-    static async addCoordinatorReferentialActivity(req: Request<any>, res: Response, next: NextFunction) {
-        try {
-            const token = req.get('Authorization') as string;
-            const coordinator = JwtService.verifyToken(token) as Coordinator;
-            const body = req.body as CoordinatorReferentialActivity;
-
-            await CoordinatorFormsService.addCoordinatorReferentialActivity(coordinator, body);
-
-            res.statusCode = StatusCode.CREATED;
-            res.end();
-        } catch (err) {
-            next(err);
-        }
-    }
-
     static async updateCoordinatorReferentialActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
             const coordinator = JwtService.verifyToken(token) as Coordinator;
             const body = req.body as CoordinatorReferentialActivity;
-            const formId = req.params.id;
 
-            await CoordinatorFormsService.updateCoordinatorReferentialActivity(coordinator, formId, body);
+            await CoordinatorFormsService.updateCoordinatorReferentialActivity(coordinator, body);
             res.end();
         } catch (err) {
             next(err);
@@ -108,9 +74,8 @@ export class CoordinatorFormsController {
         try {
             const token = req.get('Authorization') as string;
             const coordinator = JwtService.verifyToken(token) as Coordinator;
-            const id = req.params.id;
 
-            await CoordinatorFormsService.deleteCoordinatorReferentialActivity(coordinator, id);
+            await CoordinatorFormsService.deleteCoordinatorReferentialActivity(coordinator);
             res.end();
         } catch (err) {
             next(err);
