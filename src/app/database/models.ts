@@ -1,6 +1,16 @@
-export interface EmailResult {
+export interface EmailEndpointResponse {
+    emailPreview: EmailPreview[];
+    successfulEmails: SuccessfulEmail[];
+}
+
+export interface SuccessfulEmail {
     email: string;
     success: boolean;
+}
+
+export interface EmailPreview {
+    destination: string;
+    html: string;
 }
 
 export interface AllowedStudent {

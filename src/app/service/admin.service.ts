@@ -1,4 +1,4 @@
-import {Coordinator, EmailResult} from "../database/models";
+import {Coordinator, EmailEndpointResponse, SuccessfulEmail} from "../database/models";
 import {
     AcademyMemberModel,
     AllowedStudentsModel,
@@ -92,10 +92,14 @@ export class AdminService {
         return;
     }
 
-    static async sendSemesterActivityEmail(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[]): Promise<any> {
+    static async sendSemesterActivityEmail(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], send: boolean): Promise<EmailEndpointResponse> {
         const semesterActivityDataList = XLSXService.parseSemesterActivityTimetable(file);
 
-        const emailResults: EmailResult[] = [];
+        const emailEndpointResponse: EmailEndpointResponse = {
+            emailPreview: [],
+            successfulEmails: [],
+        };
+
         for (let data of semesterActivityDataList) {
             if (recipientExceptList.some(item => item === data.emailTo)) {
                 continue;
@@ -107,6 +111,14 @@ export class AdminService {
 
             const emailContent = emailTemplate.replace(new RegExp(/{{activity}}/g), emailActivityContent);
 
+            emailEndpointResponse.emailPreview.push({
+                destination: data.emailTo,
+                html: emailContent,
+            });
+
+            if (!send) {
+                continue;
+            }
             /* Sending the email */
 
             try {
@@ -117,15 +129,15 @@ export class AdminService {
                     html: emailContent,
                 });
 
-                emailResults.push({email: data.emailTo, success: true});
+                emailEndpointResponse.successfulEmails.push({email: data.emailTo, success: true});
             } catch (err) {
                 console.log(err);
-                emailResults.push({email: data.emailTo, success: false});
+                emailEndpointResponse.successfulEmails.push({email: data.emailTo, success: false});
             }
 
         }
 
-        return emailResults;
+        return emailEndpointResponse;
     }
 
     static async exportForms(): Promise<Buffer> {
@@ -216,10 +228,13 @@ export class AdminService {
         return await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' });
     }
 
-    static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[]): Promise<EmailResult[]> {
+    static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], send: boolean): Promise<EmailEndpointResponse> {
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file);
 
-        const emailResults: EmailResult[] = [];
+        const emailEndpointResponse: EmailEndpointResponse = {
+            emailPreview: [],
+            successfulEmails: [],
+        };
 
         for (let data of verbalProcessDataList) {
             if (recipientExceptList.some(item => item === data.studentEmail)) {
@@ -233,6 +248,15 @@ export class AdminService {
             emailContent = emailContent.replace(new RegExp(/{{report}}/g), data.report[1]);
             emailContent = emailContent.replace(new RegExp(/{{studentName}}/g), data.studentName);
 
+            emailEndpointResponse.emailPreview.push({
+                destination: data.studentEmail,
+                html: emailContent,
+            });
+
+            if (!send) {
+                continue;
+            }
+
             try {
                 await MailService.sendMail({
                     from: from,
@@ -245,26 +269,29 @@ export class AdminService {
                     }],
                 });
 
-                emailResults.push({
+                emailEndpointResponse.successfulEmails.push({
                     email: data.studentEmail,
                     success: true,
                 });
             } catch (err) {
                 console.log(err);
-                emailResults.push({
+                emailEndpointResponse.successfulEmails.push({
                     email: data.studentEmail,
-                    success: true,
+                    success: false,
                 });
             }
         }
 
-        return emailResults;
+        return emailEndpointResponse;
     }
 
-    static async sendThesisEmailNotification(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[]) {
+    static async sendThesisEmailNotification(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], sent: boolean): Promise<EmailEndpointResponse> {
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file);
 
-        const emailResults: EmailResult[] = [];
+        const emailEndpointResponse: EmailEndpointResponse = {
+            emailPreview: [],
+            successfulEmails: [],
+        };
 
         for (const data of verbalProcessDataList) {
             if (recipientExceptList.some(item => item === data.studentEmail)) {
@@ -282,6 +309,15 @@ export class AdminService {
             emailContent = emailContent.replace(new RegExp(/{{coordinator}}/g), data.coordinators[0].coordinatorName);
             emailContent = emailContent.replace(new RegExp(/{{commission}}/g), commission);
 
+            emailEndpointResponse.emailPreview.push({
+                destination: data.studentEmail,
+                html: emailContent,
+            });
+
+            if (!sent) {
+                continue;
+            }
+
             try {
                 await MailService.sendMail({
                     subject: `${subject} ${data.report[1]}`,
@@ -291,21 +327,21 @@ export class AdminService {
                     html: emailContent,
                 });
 
-                emailResults.push({
+                emailEndpointResponse.successfulEmails.push({
                     email: data.studentEmail,
                     success: true,
                 });
             } catch (err) {
                 console.log(err);
 
-                emailResults.push({
+                emailEndpointResponse.successfulEmails.push({
                     email: data.studentEmail,
                     success: false,
                 });
             }
         }
 
-        return emailResults;
+        return emailEndpointResponse;
     }
 
     static async importCoordinators(file: UploadedFile): Promise<number> {

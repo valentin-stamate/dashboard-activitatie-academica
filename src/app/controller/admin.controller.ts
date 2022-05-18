@@ -4,6 +4,7 @@ import {ContentType, ResponseMessage, StatusCode} from "../services/rest.util";
 import {UploadedFile} from "express-fileupload";
 import {UtilService} from "../services/util.service";
 import {AdminService} from "../service/admin.service";
+import {EmailEndpointResponse} from "../database/models";
 
 export class AdminController {
 
@@ -95,6 +96,7 @@ export class AdminController {
         const subject = body.subject;
         const from = body.from;
         const recipientExcept = body.exceptRecipient;
+        const send = `${body.send}` === 'true';
 
         let recipientExceptList: string[] = [];
         if (recipientExcept !== undefined) {
@@ -108,7 +110,7 @@ export class AdminController {
         }
 
         try {
-            const data = await AdminService.sendSemesterActivityEmail(email, subject, from, file, recipientExceptList);
+            const data = await AdminService.sendSemesterActivityEmail(email, subject, from, file, recipientExceptList, send);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -177,6 +179,7 @@ export class AdminController {
         const subject = body.subject;
         const from = body.from;
         const recipientExcept = body.exceptRecipient;
+        const send = `${body.send}` === 'true';
 
         let recipientExceptList: string[] = [];
         if (recipientExcept !== undefined) {
@@ -191,7 +194,7 @@ export class AdminController {
 
         try {
             const file = files.file as UploadedFile;
-            const emailResults = await AdminService.sendVerbalProcess(email, subject, from, file, recipientExceptList);
+            const emailResults = await AdminService.sendVerbalProcess(email, subject, from, file, recipientExceptList, send);
 
             res.end(JSON.stringify(emailResults));
         } catch (err) {
@@ -218,6 +221,7 @@ export class AdminController {
         const subject = body.subject;
         const from = body.from;
         const recipientExcept = body.exceptRecipient;
+        const send = `${body.send}` === 'true';
 
         let recipientExceptList: string[] = [];
         if (recipientExcept !== undefined) {
@@ -231,7 +235,7 @@ export class AdminController {
         }
 
         try {
-            const data = await AdminService.sendThesisEmailNotification(email, subject, from, file, recipientExceptList);
+            const data = await AdminService.sendThesisEmailNotification(email, subject, from, file, recipientExceptList, send);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
