@@ -28,6 +28,8 @@ export class FormsService {
                 'Comisii/comitete/asociații științifice internaționale în care are calitatea de membru': item.committees,
                 'Conferințe/comisii la care a participat ca invitat/expert': item.conferences,
                 'Anul raportării': item.reportYear,
+                'Ultima modificare': item.updatedAt,
+                'Data creării': item.createdAt,
             };
         });
 
@@ -41,6 +43,8 @@ export class FormsService {
                 'Domeniul de doctorat': item.thesisDomain,
                 'Teza la care a fost referent': item.thesisReference,
                 'IOSUD organizatoare a tezei evaluate': item.IOSUD,
+                'Ultima modificare': item.updatedAt,
+                'Data creării': item.createdAt,
             };
         });
 

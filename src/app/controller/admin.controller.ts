@@ -4,7 +4,6 @@ import {ContentType, ResponseMessage, StatusCode} from "../services/rest.util";
 import {UploadedFile} from "express-fileupload";
 import {UtilService} from "../services/util.service";
 import {AdminService} from "../service/admin.service";
-import {EmailEndpointResponse} from "../database/models";
 
 export class AdminController {
 
@@ -31,9 +30,9 @@ export class AdminController {
         }
     }
 
-    static async getBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
+    static async getAllowedUsers(req: Request<any>, res: Response, next: NextFunction) {
         try {
-            const data = await AdminService.getBaseInformation();
+            const data = await AdminService.getAllowedUsers();
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -41,7 +40,7 @@ export class AdminController {
 
     }
 
-    static async importBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
+    static async importAllowedUsers(req: Request<any>, res: Response, next: NextFunction) {
         if (!req.files) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
@@ -55,7 +54,7 @@ export class AdminController {
         }
 
         try {
-            const rowsCreated = await AdminService.importBaseInformation(file);
+            const rowsCreated = await AdminService.importAllowedUsers(file);
 
             res.statusCode = StatusCode.CREATED;
 
@@ -66,11 +65,11 @@ export class AdminController {
         }
     }
 
-    static async deleteBaseInformation(req: Request<any>, res: Response, next: NextFunction) {
+    static async deleteAllowedStudent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const id = req.params.id;
 
-            await AdminService.deleteBaseInformation(id);
+            await AdminService.deleteAllowedStudent(id);
             res.end();
         } catch (err) {
             next(err);

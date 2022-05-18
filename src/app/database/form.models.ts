@@ -23,6 +23,7 @@ export interface CoordinatorReferentialActivity {
     thesisDomain: string;
     thesisReference: string;
     IOSUD: string;
+    reportYear: number;
 
     updatedAt: Date;
     createdAt: Date;

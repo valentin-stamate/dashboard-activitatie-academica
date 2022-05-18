@@ -11,6 +11,7 @@ export class CoordinatorService {
         return (await StudentModel.findAll({
             where: {
                 coordinatorName: coordinator.name,
+                isActive: true,
             }}))
             .map(item => {
                 const studentJSON = item.toJSON();
@@ -23,6 +24,7 @@ export class CoordinatorService {
             where: {
                 identifier: studentIdentifier,
                 coordinatorName: coordinator.name,
+                isActive: true,
             }
         });
 

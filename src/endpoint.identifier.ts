@@ -32,7 +32,7 @@ export enum EndpointIdentifier {
 
     /** Admin */
     STUDENT = '/api/student',
-    BASE_INFORMATION = '/api/base-information',
+    ALLOWED_STUDENTS = '/api/allowed-student',
     SEMESTER_ACTIVITY_EMAIL = '/api/semester-activity',
     EXPORT_FORMS = '/api/export-forms',
     FAZ = '/api/faz',

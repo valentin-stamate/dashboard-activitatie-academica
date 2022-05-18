@@ -7,6 +7,7 @@ export enum ResponseMessage {
     NO_AUTH_TOKEN = 'There is no authentication key available',
     INVALID_TOKEN = 'Invalid token',
     USER_NOT_EXISTS = 'Valid token, but user doesn\'t exist',
+    INACTIVE_USER = 'Inactive user',
     ADMIN_ONLY = 'Unauthorized, admin permission only',
     DATA_NOT_FOUND = 'Data not found',
     DATA_TAKEN = 'Some data is already taken',

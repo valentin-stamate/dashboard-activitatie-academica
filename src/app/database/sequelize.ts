@@ -67,6 +67,7 @@ async function initializeTables(force: boolean) {
             attendanceYear:      {type: DataTypes.INTEGER, unique: false, allowNull: false,},
             coordinatorName:     {type: DataTypes.STRING, unique: false, allowNull: false,},
             coordinatorFunction: {type: DataTypes.STRING, unique: false, allowNull: false,},
+            isActive:            {type: DataTypes.BOOLEAN, unique: false, allowNull: false,},
         },
         {...options, tableName: 'students',}
     );
@@ -109,6 +110,7 @@ async function initializeTables(force: boolean) {
         thesisDomain: {type: DataTypes.STRING,},
         thesisReference: {type: DataTypes.STRING,},
         IOSUD: {type: DataTypes.STRING,},
+        reportYear: {type: DataTypes.INTEGER,},
     }, {...options});
     CoordinatorModel.hasMany(CoordinatorReferentialActivityModel, {
         sourceKey: 'id',
@@ -478,6 +480,7 @@ export async function sequelizeInit(force: boolean) {
         attendanceYear: 2019,
         coordinatorName: 'Buraza Ion',
         coordinatorFunction: 'Prof.univ.dr',
+        isActive: true,
     });
 
     await CoordinatorModel.create({

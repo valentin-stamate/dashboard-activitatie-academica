@@ -40,6 +40,13 @@ export class Middleware {
                 return;
             }
 
+            const student = row.toJSON() as Student;
+
+            if (!student.isActive) {
+                next(new ResponseError(ResponseMessage.INACTIVE_USER, StatusCode.FORBIDDEN));
+                return;
+            }
+
             res.setHeader('Content-Type', ContentType.JSON);
             next();
         } catch (err) {

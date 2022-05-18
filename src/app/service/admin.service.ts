@@ -59,16 +59,18 @@ export class AdminService {
     }
 
     /* Get all base information except to the one that is making the request */
-    static async getBaseInformation() {
+    static async getAllowedUsers() {
         return (await AllowedStudentsModel.findAll({
             order: ['id'],
         })).map(item => item.toJSON());
     }
 
-    static async importBaseInformation(file: UploadedFile): Promise<number> {
+    static async importAllowedUsers(file: UploadedFile): Promise<number> {
         const baseInformationList = XLSXService.parseExistingStudents(file);
 
         let rowsCreated = 0;
+
+        await AllowedStudentsModel.destroy();
         for (let data of baseInformationList) {
             await AllowedStudentsModel.create(data as any);
             rowsCreated++;
@@ -77,7 +79,7 @@ export class AdminService {
         return rowsCreated;
     }
 
-    static async deleteBaseInformation(id: number) {
+    static async deleteAllowedStudent(id: number) {
         const row = await AllowedStudentsModel.findOne({
             where: {
                 id: id,
@@ -142,21 +144,33 @@ export class AdminService {
 
     static async exportForms(): Promise<Buffer> {
         /* Student Data */
-        let scArticleISI =     (await ScientificArticleISIModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let isiProceedings =   (await ISIProceedingModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let scArticleBDI =     (await ScientificArticleBDIModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let scBook =           (await ScientificBookModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let translation =      (await TranslationModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let scCommunication =  (await ScientificCommunicationModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let patent =           (await PatentModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let researchContract = (await ResearchContractModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let citation =         (await CitationModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let awardsNomination = (await AwardAndNominationModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let academyMember =    (await AcademyMemberModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let editorialMember =  (await EditorialMemberModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let organizedEvent =   (await OrganizedEventModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let withoutActivity =  (await WithoutActivityModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        let didacticActivity = (await DidacticActivityModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let studentsRows = (await StudentModel.findAll({
+            where: {isActive: true,},
+            order: ['id'],
+            include: [
+                ScientificArticleISIModel, ISIProceedingModel, ScientificArticleBDIModel, ScientificBookModel,
+                TranslationModel, ScientificCommunicationModel, PatentModel, ResearchContractModel, CitationModel,
+                AwardAndNominationModel, AcademyMemberModel, EditorialMemberModel, OrganizedEventModel,
+                WithoutActivityModel, DidacticActivityModel,
+            ],
+        })).map(item => item.toJSON());
+
+        /* I know this it's not readable but yeah, many forms */
+        let scArticleISI = studentsRows.reduce((prev, item) => {prev.push(...item.ScientificArticleISIModels); return prev;}, []);
+        let isiProceedings = studentsRows.reduce((prev, item) => { prev.push(...item.ISIProceedingModels); return prev;}, []);
+        let scArticleBDI = studentsRows.reduce((prev, item) => {prev.push(...item.ScientificArticleBDIModels); return prev;}, []);
+        let scBook = studentsRows.reduce((prev, item) => {prev.push(...item.ScientificBookModels); return prev;}, []);
+        let translation = studentsRows.reduce((prev, item) => {prev.push(...item.TranslationModels); return prev;}, []);
+        let scCommunication = studentsRows.reduce((prev, item) => {prev.push(...item.ScientificCommunicationModels); return prev;}, []);
+        let patent = studentsRows.reduce((prev, item) => {prev.push(...item.PatentModels); return prev;}, []);
+        let researchContract = studentsRows.reduce((prev, item) => {prev.push(...item.ResearchContractModels); return prev;}, []);
+        let citation = studentsRows.reduce((prev, item) => {prev.push(...item.CitationModels); return prev;}, []);
+        let awardsNomination = studentsRows.reduce((prev, item) => {prev.push(...item.AwardAndNominationModels); return prev;}, []);
+        let academyMember = studentsRows.reduce((prev, item) => {prev.push(...item.AcademyMemberModels); return prev;}, []);
+        let editorialMember = studentsRows.reduce((prev, item) => {prev.push(...item.EditorialMemberModels); return prev;}, []);
+        let organizedEvent = studentsRows.reduce((prev, item) => {prev.push(...item.OrganizedEventModels); return prev;}, []);
+        let withoutActivity = studentsRows.reduce((prev, item) => {prev.push(...item.WithoutActivityModels); return prev;}, []);
+        let didacticActivity = studentsRows.reduce((prev, item) => {prev.push(...item.DidacticActivityModels); return prev;}, []);
 
         const scISISheet = FormsService.getScientificArticleISISheet(scArticleISI);
         const isiProceedingsSheet = FormsService.getISIProceedingsSheet(isiProceedings);
@@ -192,8 +206,15 @@ export class AdminService {
         XLSX.utils.book_append_sheet(studentDataWorkBook, didacticActivitySheet, 'Activitate didactică');
 
         /* Coordinators Data */
-        const coordinatorScientificActivity = (await CoordinatorScientificActivityModel.findAll({order: ['id'],})).map(item => item.toJSON());
-        const coordinatorReferenceActivity =  (await CoordinatorReferentialActivityModel.findAll({order: ['id'],})).map(item => item.toJSON());
+        let coordinatorsRows = (await CoordinatorModel.findAll({
+            order: ['id'],
+            include: [
+                CoordinatorScientificActivityModel, CoordinatorReferentialActivityModel,
+            ],
+        })).map(item => item.toJSON());
+
+        const coordinatorScientificActivity = coordinatorsRows.reduce((prev, item) => {prev.push(...item.CoordinatorScientificActivityModels); return prev;}, []);
+        const coordinatorReferenceActivity = coordinatorsRows.reduce((prev, item) => {prev.push(...item.CoordinatorReferentialActivityModels); return prev;}, []);
 
         const coordinatorScientificActivitySheet = FormsService.getCoordinatorScientificActivitySheet(coordinatorScientificActivity);
         const coordinatorReferenceActivitySheet = FormsService.getCoordinatorReferenceActivitySheet(coordinatorReferenceActivity);

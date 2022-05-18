@@ -92,6 +92,7 @@ export class AuthService {
             attendanceYear: studentPreInformation.attendanceYear,
             coordinatorName: coordinatorFullName[1],
             coordinatorFunction: coordinatorFullName[0],
+            isActive: true,
         }
 
         try {
@@ -110,7 +111,7 @@ export class AuthService {
     }
 
     static async loginStudent(identifier: string, loginEmail: string) {
-        const row = await StudentModel.findOne({
+        const existingStudent = await StudentModel.findOne({
             where: {
                 identifier: identifier,
                 [Op.or]: [
@@ -120,8 +121,14 @@ export class AuthService {
             }
         });
 
-        if (!row) {
+        if (!existingStudent) {
             throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
+        }
+
+        const student = existingStudent.toJSON() as Student;
+
+        if (!student.isActive) {
+            throw new ResponseError(ResponseMessage.INACTIVE_USER, StatusCode.FORBIDDEN);
         }
 
         const generatedCode = UtilService.generateRandomString(16);
@@ -159,6 +166,12 @@ export class AuthService {
 
         if (!existingStudent) {
             throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
+        }
+
+        const student = existingStudent.toJSON() as Student;
+
+        if (!student.isActive) {
+            throw new ResponseError(ResponseMessage.INACTIVE_USER, StatusCode.FORBIDDEN);
         }
 
         const existingKey = await AuthorizationKeyModel.findOne({

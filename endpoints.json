@@ -2611,6 +2611,11 @@
 											"key": "IOSUD",
 											"value": "ISOSU",
 											"type": "text"
+										},
+										{
+											"key": "reportYear",
+											"value": "2021",
+											"type": "text"
 										}
 									]
 								},
@@ -2712,168 +2717,431 @@
 			"name": "Admin",
 			"item": [
 				{
-					"name": "Students",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Email",
+					"item": [
+						{
+							"name": "Semester Activity",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Valentin/Desktop/Thesis/Docs/activitate_ore_semestru.xlsx"
+										},
+										{
+											"key": "subject",
+											"value": "Școala Doctorală de Informatica - orar semestrul 2, an univ. 2021-2022",
+											"type": "text"
+										},
+										{
+											"key": "from",
+											"value": "Secretariat FII Adriana Bejinariu <stamatevalentin125@gmail.com>",
+											"type": "text"
+										},
+										{
+											"key": "emailTemplate",
+											"value": "Bună ziua,<br>\nPentru activitățile din cadrul Școlii Doctorale de Informatică este nevoie să alocați la orar intervale pentru următoarele ore:<br>\n<br>\n{{activity}}<br>\n<br>\nPersoană de contact orar sem 1.<br>\nLect.univ.dr. Pistol Ionuţ-Cristian  ipistol@info.uaic.ro pistol.ionutcristian@gmail.com<br>\n<br>\nPersoană de contact orar semestrul 2.<br>\nConf.univ.dr. Arusoaie Andrei arusoaie.andrei@info.uaic.ro andrei.arusoaie@gmail.com<br>   \n<br>\nVa mulțumesc anticipat,<br>",
+											"type": "text"
+										},
+										{
+											"key": "exceptRecipient",
+											"value": "alex@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "send",
+											"value": "false",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/semester-activity",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"semester-activity"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{host}}/api/student",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"student"
-							]
+						{
+							"name": "Verbal Process",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Valentin/Desktop/Thesis/Docs/anuntare_rapoarte_drd.xlsx"
+										},
+										{
+											"key": "subject",
+											"value": "Școala Doctorală de Informatica - PV raport",
+											"type": "text"
+										},
+										{
+											"key": "from",
+											"value": "Secretariat FII Adriana Bejinariu <stamatevalentin125@gmail.com>",
+											"type": "text"
+										},
+										{
+											"key": "emailTemplate",
+											"value": "Bună ziua,<br>\nVă trimit atașat Procesul-Verbal pentru susținerea raportului nr. {{report}} al drd. {{studentName}}<br>\nO zi bună,<br>\n--<br>\nBejinariu Adriana - Secretar Școala Doctorală de Informatică<br>\nUniversitatea „Alexandru Ioan Cuza\" din Iași<br>\nTelefon: 0232 201102 int. 2329<br>\n",
+											"type": "text"
+										},
+										{
+											"key": "exceptRecipient",
+											"value": "alex@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "send",
+											"value": "false",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/verbal-process",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"verbal-process"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Thesis Notification",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Valentin/Desktop/Thesis/Docs/anuntare_rapoarte_drd.xlsx"
+										},
+										{
+											"key": "subject",
+											"value": "Școala Doctorală de Informatica - Informare Susținere Raport",
+											"type": "text"
+										},
+										{
+											"key": "from",
+											"value": "Secretariat FII Adriana Bejinariu <stamatevalentin125@gmail.com>",
+											"type": "text"
+										},
+										{
+											"key": "emailTemplate",
+											"value": "Bună ziua,<br>\nRaportul cu titlul \"{{reportTitle}}\" este programat la data de {{date}}. Vă invităm să vă consultați cu coordonatorul științific în termen util.<br>\n<br>\nCererea de susținere sau amânare a raportului va fi depusă la Secretariat (C201-stânga) cu o lună înainte de data programată a susținerii referatului, în 2 exemplare.<br>\nFormularele sunt disponibile pe site-ul Scolii Doctorale, <a href=\"https://www.info.uaic.ro/regulamente-formulare-scoala-doctorala/\" target=\"_blank\">regulamente formulare școala doctorală</a> , secțiunea Formulare.<br>\n<br>\nMembri comisiei de îndrumare sunt:<br>\nConducător ştiinţific: {{coordinator}}<br>\n{{commission}}<br>\n <br>\nO zi bună,<br>\n--\n<small style=\"color: #888888\"><i>\nBejinariu Adriana - Secretar Școala Doctorală de Informatică<br>\nUniversitatea „Alexandru Ioan Cuza\" din Iași<br>\nTelefon: 0232 201102 int. 2329<br>\n</i></small>",
+											"type": "text"
+										},
+										{
+											"key": "exceptRecipient",
+											"value": "alex@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "send",
+											"value": "true",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/thesis-notification",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"thesis-notification"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "Coordinator",
+					"item": [
+						{
+							"name": "Coordinators",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Valentin/Desktop/Date_conectare_coordonatori.xlsx"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/coordinators",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinators"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Import Coordinators",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Valentin/Desktop/Date_conectare_coordonatori.xlsx"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/import-coordinators",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"import-coordinators"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				},
 				{
 					"name": "Student",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
+					"item": [
+						{
+							"name": "Students",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/student",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"student"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{host}}/api/student/2",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"student",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Base Information",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": []
-						},
-						"url": {
-							"raw": "{{host}}/api/base-information",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"base-information"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Base Information",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/Valentin/Desktop/base_information.xlsx"
+						{
+							"name": "Student",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/student/2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"student",
+										"2"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{host}}/api/base-information",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"base-information"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Base Information",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": []
+						{
+							"name": "Allowed Students",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{host}}/api/allowed-students",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"allowed-students"
+									]
+								}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{host}}/api/base-information/5",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"base-information",
-								"5"
-							]
+						{
+							"name": "Allowed Student",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Valentin/Desktop/base_information.xlsx"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/allowed-students",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"allowed-students"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Allowed Student",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{host}}/api/allowed-students/5",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"allowed-students",
+										"5"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
 					"name": "Export Forms",
@@ -2906,168 +3174,6 @@
 							"path": [
 								"api",
 								"export-forms"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Semester Activity",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/Valentin/Desktop/activitate_ore_semestru.xlsx"
-								},
-								{
-									"key": "subject",
-									"value": "Școala Doctorală de Informatica - orar semestrul 2, an univ. 2021-2022",
-									"type": "text"
-								},
-								{
-									"key": "from",
-									"value": "Secretariat FII Adriana Bejinariu <stamatevalentin125@gmail.com>",
-									"type": "text"
-								},
-								{
-									"key": "emailTemplate",
-									"value": "Bună ziua,<br>\nPentru activitățile din cadrul Școlii Doctorale de Informatică este nevoie să alocați la orar intervale pentru următoarele ore:<br>\n<br>\n{{activity}}<br>\n<br>\nPersoană de contact orar sem 1.<br>\nLect.univ.dr. Pistol Ionuţ-Cristian  ipistol@info.uaic.ro pistol.ionutcristian@gmail.com<br>\n<br>\nPersoană de contact orar semestrul 2.<br>\nConf.univ.dr. Arusoaie Andrei arusoaie.andrei@info.uaic.ro andrei.arusoaie@gmail.com<br>   \n<br>\nVa mulțumesc anticipat,<br>",
-									"type": "text"
-								},
-								{
-									"key": "exceptRecipient",
-									"value": "alex@gmail.com",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/semester-activity",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"semester-activity"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Verbal Process",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/Valentin/Desktop/anuntare_rapoarte_drd.xlsx"
-								},
-								{
-									"key": "subject",
-									"value": "Școala Doctorală de Informatica - PV raport",
-									"type": "text"
-								},
-								{
-									"key": "from",
-									"value": "Secretariat FII Adriana Bejinariu <stamatevalentin125@gmail.com>",
-									"type": "text"
-								},
-								{
-									"key": "emailTemplate",
-									"value": "Bună ziua,<br>\nVă trimit atașat Procesul-Verbal pentru susținerea raportului nr. {{report}} al drd. {{studentName}}<br>\nO zi bună,<br>\n--<br>\nBejinariu Adriana - Secretar Școala Doctorală de Informatică<br>\nUniversitatea „Alexandru Ioan Cuza\" din Iași<br>\nTelefon: 0232 201102 int. 2329<br>\n",
-									"type": "text"
-								},
-								{
-									"key": "exceptRecipient",
-									"value": "alex@gmail.com",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/verbal-process",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"verbal-process"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Thesis Notification",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/Valentin/Desktop/anuntare_rapoarte_drd.xlsx"
-								},
-								{
-									"key": "subject",
-									"value": "Școala Doctorală de Informatica - Informare Susținere Raport",
-									"type": "text"
-								},
-								{
-									"key": "from",
-									"value": "Secretariat FII Adriana Bejinariu <stamatevalentin125@gmail.com>",
-									"type": "text"
-								},
-								{
-									"key": "emailTemplate",
-									"value": "Bună ziua,<br>\nRaportul cu titlul \"{{reportTitle}}\" este programat la data de {{date}}. Vă invităm să vă consultați cu coordonatorul științific în termen util.<br>\n<br>\nCererea de susținere sau amânare a raportului va fi depusă la Secretariat (C201-stânga) cu o lună înainte de data programată a susținerii referatului, în 2 exemplare.<br>\nFormularele sunt disponibile pe site-ul Scolii Doctorale, <a href=\"https://www.info.uaic.ro/regulamente-formulare-scoala-doctorala/\" target=\"_blank\">regulamente formulare școala doctorală</a> , secțiunea Formulare.<br>\n<br>\nMembri comisiei de îndrumare sunt:<br>\nConducător ştiinţific: {{coordinator}}<br>\n{{commission}}<br>\n <br>\nO zi bună,<br>\n--\n<small style=\"color: #888888\"><i>\nBejinariu Adriana - Secretar Școala Doctorală de Informatică<br>\nUniversitatea „Alexandru Ioan Cuza\" din Iași<br>\nTelefon: 0232 201102 int. 2329<br>\n</i></small>",
-									"type": "text"
-								},
-								{
-									"key": "exceptRecipient",
-									"value": "alex@gmail.com",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/thesis-notification",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"thesis-notification"
 							]
 						}
 					},
@@ -3117,77 +3223,6 @@
 							"path": [
 								"api",
 								"faz"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Import Coordinators",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/Valentin/Desktop/Date_conectare_coordonatori.xlsx"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/import-coordinators",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"import-coordinators"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Coordinators",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/Valentin/Desktop/Date_conectare_coordonatori.xlsx"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/api/coordinators",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"coordinators"
 							]
 						}
 					},

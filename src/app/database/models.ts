@@ -35,6 +35,7 @@ export interface Student {
     attendanceYear: number;
     coordinatorName: string;
     coordinatorFunction: string;
+    isActive: boolean;
 
     createdAt?: Date;
     updatedAt?: Date;
