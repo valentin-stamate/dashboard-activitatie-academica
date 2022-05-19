@@ -1,4 +1,4 @@
-import {Coordinator, EmailEndpointResponse, SuccessfulEmail} from "../database/models";
+import {Coordinator, EmailEndpointResponse} from "../database/models";
 import {
     AcademyMemberModel,
     AllowedStudentsModel,
@@ -114,7 +114,9 @@ export class AdminService {
             const emailContent = emailTemplate.replace(new RegExp(/{{activity}}/g), emailActivityContent);
 
             emailEndpointResponse.emailPreview.push({
-                destination: data.emailTo,
+                from: from,
+                to: data.emailTo,
+                subject: subject,
                 html: emailContent,
             });
 
@@ -270,7 +272,9 @@ export class AdminService {
             emailContent = emailContent.replace(new RegExp(/{{studentName}}/g), data.studentName);
 
             emailEndpointResponse.emailPreview.push({
-                destination: data.studentEmail,
+                from: from,
+                to: data.studentEmail,
+                subject: subject,
                 html: emailContent,
             });
 
@@ -331,7 +335,9 @@ export class AdminService {
             emailContent = emailContent.replace(new RegExp(/{{commission}}/g), commission);
 
             emailEndpointResponse.emailPreview.push({
-                destination: data.studentEmail,
+                from: from,
+                to: data.studentEmail,
+                subject: subject,
                 html: emailContent,
             });
 

@@ -9,7 +9,9 @@ export interface SuccessfulEmail {
 }
 
 export interface EmailPreview {
-    destination: string;
+    from: string;
+    to: string;
+    subject: string;
     html: string;
 }
 
