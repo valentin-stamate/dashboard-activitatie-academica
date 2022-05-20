@@ -18,7 +18,6 @@ import {JwtService} from "../services/jwt.service";
 export class AuthService {
 
     static async check(user: any): Promise<number> {
-        console.log(user);
 
         let studentRow = await StudentModel.findOne({
             where: {
