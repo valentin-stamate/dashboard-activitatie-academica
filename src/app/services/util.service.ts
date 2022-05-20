@@ -1,5 +1,18 @@
 export class UtilService {
 
+    /* dateA < dateB = true */
+    static compareDatesWithoutDay(dateA: Date, dateB: Date): boolean {
+        if (dateA.getFullYear() < dateB.getFullYear()) {
+            return true;
+        }
+
+        if (dateA.getFullYear() > dateB.getFullYear()) {
+            return false;
+        }
+
+        return dateA.getMonth() < dateB.getMonth();
+    }
+
     static generateRandomString(length: number = 64) {
         let result = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

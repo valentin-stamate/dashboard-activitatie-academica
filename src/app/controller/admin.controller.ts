@@ -191,9 +191,17 @@ export class AdminController {
             return;
         }
 
+        if (isNaN(Date.parse(body.startDate)) || isNaN(Date.parse(body.endDate))) {
+            next(new ResponseError(ResponseMessage.INVALID_DATE, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        const startDate = new Date(body.startDate);
+        const endDate = new Date(body.endDate);
+
         try {
             const file = files.file as UploadedFile;
-            const emailResults = await AdminService.sendVerbalProcess(email, subject, from, file, recipientExceptList, send);
+            const emailResults = await AdminService.sendVerbalProcess(email, subject, from, file, recipientExceptList, send, startDate, endDate);
 
             res.end(JSON.stringify(emailResults));
         } catch (err) {
@@ -217,8 +225,8 @@ export class AdminController {
 
         const file = files.file as UploadedFile;
         const email = body.emailTemplate;
-        const subject = body.subject;
         const from = body.from;
+        const subject = body.subject;
         const recipientExcept = body.exceptRecipient;
         const send = `${body.send}` === 'true';
 
@@ -228,13 +236,21 @@ export class AdminController {
             recipientExceptList = parsedRecipientExcept.split(',');
         }
 
-        if (email === undefined || subject === undefined || from === undefined || file === undefined) {
+        if (email === undefined || subject === undefined || from === undefined || file === undefined || !body.startDate || !body.endDate) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
+        if (isNaN(Date.parse(body.startDate)) || isNaN(Date.parse(body.endDate))) {
+            next(new ResponseError(ResponseMessage.INVALID_DATE, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        const startDate = new Date(body.startDate);
+        const endDate = new Date(body.endDate);
+
         try {
-            const data = await AdminService.sendThesisEmailNotification(email, subject, from, file, recipientExceptList, send);
+            const data = await AdminService.sendThesisEmailNotification(email, subject, from, file, recipientExceptList, send, startDate, endDate);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);

@@ -11,10 +11,13 @@ export function registerAdminEndpoints(app: Express) {
     app.post(EndpointIdentifier.ALLOWED_STUDENTS, Middleware.adminMiddleware, AdminController.importAllowedUsers);
     app.delete(`${EndpointIdentifier.ALLOWED_STUDENTS}/:id`, Middleware.adminMiddleware, AdminController.deleteAllowedStudent);
 
-    app.post(EndpointIdentifier.SEMESTER_ACTIVITY_EMAIL, Middleware.adminMiddleware, AdminController.sendSemesterActivityEmail);
     app.post(EndpointIdentifier.FAZ, Middleware.adminMiddleware, AdminController.faz);
+
+    /* Email endpoints */
+    app.post(EndpointIdentifier.SEMESTER_ACTIVITY_EMAIL, Middleware.adminMiddleware, AdminController.sendSemesterActivityEmail);
     app.post(EndpointIdentifier.VERBAL_PROCESS, Middleware.adminMiddleware, AdminController.sendVerbalProcess);
     app.post(EndpointIdentifier.THESIS_NOTIFICATION, Middleware.adminMiddleware, AdminController.sendThesisEmailNotification);
+
     app.get(EndpointIdentifier.EXPORT_FORMS, Middleware.adminMiddleware, AdminController.exportForms);
     app.post(EndpointIdentifier.IMPORT_COORDINATORS, Middleware.adminMiddleware, AdminController.importCoordinators);
     app.get(EndpointIdentifier.COORDINATORS, Middleware.adminMiddleware, AdminController.getCoordinators);

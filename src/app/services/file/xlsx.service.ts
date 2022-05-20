@@ -179,7 +179,7 @@ export class XLSXService {
     }
 
     /** Se parseaza fisierul cu anuntarea rapoartelor */
-    static parseReportAnnouncement(file: UploadedFile): VerbalProcessData[] {
+    static parseReportAnnouncement(file: UploadedFile, startDate: Date, endDate: Date): VerbalProcessData[] {
         const verbalProcessDataList: VerbalProcessData[] = [];
 
         const workBook = XLSX.read(file.data);
@@ -194,27 +194,32 @@ export class XLSXService {
             const coordinationFuncName = UtilService.splitSplitProfessorName(firstRow[ReportsAnnouncementHeaders.COORDINATOR])
             const year = new Date(firstRow[ReportsAnnouncementHeaders.ATTENDANCE_DATE]).getFullYear();
 
-            const r1Data = [new Date(secondRow[ReportsAnnouncementHeaders.R1]), thirdRow[ReportsAnnouncementHeaders.R1]];
-            const r2Data = [new Date(secondRow[ReportsAnnouncementHeaders.R2]), thirdRow[ReportsAnnouncementHeaders.R2]];
-            const r3Data = [new Date(secondRow[ReportsAnnouncementHeaders.R3]), thirdRow[ReportsAnnouncementHeaders.R3]];
+            /* rnData = [Data Prog., Data.Prez, Title] */
+            const r1Data = [new Date(firstRow[ReportsAnnouncementHeaders.R1]), new Date(secondRow[ReportsAnnouncementHeaders.R1]), thirdRow[ReportsAnnouncementHeaders.R1]];
+            const r2Data = [new Date(firstRow[ReportsAnnouncementHeaders.R2]), new Date(secondRow[ReportsAnnouncementHeaders.R2]), thirdRow[ReportsAnnouncementHeaders.R2]];
+            const r3Data = [new Date(firstRow[ReportsAnnouncementHeaders.R3]), new Date(secondRow[ReportsAnnouncementHeaders.R3]), thirdRow[ReportsAnnouncementHeaders.R3]];
 
             let lastData = undefined;
             let source = undefined;
 
+            const matchDate = (date: Date, startDate: Date, endDate: Date): boolean => {
+                return UtilService.compareDatesWithoutDay(startDate, date) && UtilService.compareDatesWithoutDay(date, endDate);
+            };
+
             /* Getting the latest date from 'Data Prez.' */
-            if (!isNaN(r1Data[0])) {
-                lastData = r1Data;
-                source = ReportsAnnouncementHeaders.R1;
+            if (matchDate(r3Data[0], startDate, endDate) && isNaN(r3Data[1])) {
+                lastData = r3Data;
+                source = ReportsAnnouncementHeaders.R3;
             }
 
-            if (!isNaN(r2Data[0])) {
-                lastData = r1Data;
+            if (matchDate(r2Data[0], startDate, endDate) && isNaN(r2Data[1])) {
+                lastData = r2Data;
                 source = ReportsAnnouncementHeaders.R2;
             }
 
-            if (!isNaN(r3Data[0])) {
+            if (matchDate(r1Data[0], startDate, endDate) && isNaN(r1Data[1])) {
                 lastData = r1Data;
-                source = ReportsAnnouncementHeaders.R3;
+                source = ReportsAnnouncementHeaders.R1;
             }
 
             /* Don't make the Verbal Process for those who have no date into the 'Data Prez.' */
@@ -230,7 +235,7 @@ export class XLSXService {
                 coordinatorEmail: firstRow[ReportsAnnouncementHeaders.COORDINATOR_EMAIL],
                 presentationDate: lastData[0],
                 attendanceYear: year,
-                reportTitle: lastData[1],
+                reportTitle: lastData[2],
                 report: source,
                 coordinators: [
                     {number: 1, coordinatorName: coordinationFuncName.join(' '), commission: 'Conducător ştiinţific'},

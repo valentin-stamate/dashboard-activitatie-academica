@@ -18,6 +18,7 @@ export enum ResponseMessage {
     FORM_FIELD_ERROR = 'The form should not contain empty fields',
     INVALID_CREDENTIALS = 'Invalid credentials',
     MAIL_ERROR = 'Mail error',
+    INVALID_DATE = 'Invalid date',
 }
 
 export enum ContentType {
