@@ -191,17 +191,9 @@ export class AdminController {
             return;
         }
 
-        if (isNaN(Date.parse(body.startDate)) || isNaN(Date.parse(body.endDate))) {
-            next(new ResponseError(ResponseMessage.INVALID_DATE, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const startDate = new Date(body.startDate);
-        const endDate = new Date(body.endDate);
-
         try {
             const file = files.file as UploadedFile;
-            const emailResults = await AdminService.sendVerbalProcess(email, subject, from, file, recipientExceptList, send, startDate, endDate);
+            const emailResults = await AdminService.sendVerbalProcess(email, subject, from, file, recipientExceptList, send);
 
             res.end(JSON.stringify(emailResults));
         } catch (err) {

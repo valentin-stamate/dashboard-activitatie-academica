@@ -251,8 +251,8 @@ export class AdminService {
         return await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' });
     }
 
-    static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], send: boolean, startDate: Date, endDate: Date): Promise<EmailEndpointResponse> {
-        const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, startDate, endDate);
+    static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], send: boolean): Promise<EmailEndpointResponse> {
+        const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, true);
 
         const emailEndpointResponse: EmailEndpointResponse = {
             emailPreview: [],
@@ -311,7 +311,7 @@ export class AdminService {
     }
 
     static async sendThesisEmailNotification(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], sent: boolean, startDate: Date, endDate: Date): Promise<EmailEndpointResponse> {
-        const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, startDate, endDate);
+        const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, false, startDate, endDate);
 
         const emailEndpointResponse: EmailEndpointResponse = {
             emailPreview: [],
