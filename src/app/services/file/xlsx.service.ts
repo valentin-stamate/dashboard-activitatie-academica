@@ -196,12 +196,17 @@ export class XLSXService {
             const year = new Date(firstRow[ReportsAnnouncementHeaders.ATTENDANCE_DATE]).getFullYear();
 
             /* rnData = [Data Prog., Data.Prez, Title] */
-            const r1Data = [new Date(firstRow[ReportsAnnouncementHeaders.R1]), new Date(secondRow[ReportsAnnouncementHeaders.R1]), thirdRow[ReportsAnnouncementHeaders.R1]];
-            const r2Data = [new Date(firstRow[ReportsAnnouncementHeaders.R2]), new Date(secondRow[ReportsAnnouncementHeaders.R2]), thirdRow[ReportsAnnouncementHeaders.R2]];
-            const r3Data = [new Date(firstRow[ReportsAnnouncementHeaders.R3]), new Date(secondRow[ReportsAnnouncementHeaders.R3]), thirdRow[ReportsAnnouncementHeaders.R3]];
+            const r1Data = [new Date(firstRow[ReportsAnnouncementHeaders.R1]), secondRow[ReportsAnnouncementHeaders.R1], thirdRow[ReportsAnnouncementHeaders.R1]];
+            const r2Data = [new Date(firstRow[ReportsAnnouncementHeaders.R2]), secondRow[ReportsAnnouncementHeaders.R2], thirdRow[ReportsAnnouncementHeaders.R2]];
+            const r3Data = [new Date(firstRow[ReportsAnnouncementHeaders.R3]), secondRow[ReportsAnnouncementHeaders.R3], thirdRow[ReportsAnnouncementHeaders.R3]];
 
             let lastData = undefined;
             let source = undefined;
+
+            /* If the cell is empty, put undefined, else put the date if it's valid or a date object otherwise */
+            r1Data[1] = r1Data[1] === undefined ? undefined : (isNaN(new Date(r1Data[1]) as any) ? new Date() : new Date(r1Data[1]));
+            r2Data[1] = r2Data[1] === undefined ? undefined : (isNaN(new Date(r2Data[1]) as any) ? new Date() : new Date(r2Data[1]));
+            r3Data[1] = r3Data[1] === undefined ? undefined : (isNaN(new Date(r3Data[1]) as any) ? new Date() : new Date(r3Data[1]));
 
             if (firstAlgorithm) {
                 /* Ia cel mai din stanga raport care nu are o data valida din 'Data Prez.' */

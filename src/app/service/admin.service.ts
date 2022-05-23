@@ -118,6 +118,7 @@ export class AdminService {
                 to: data.emailTo,
                 subject: subject,
                 html: emailContent,
+                attachments: [],
             });
 
             if (!send) {
@@ -276,6 +277,7 @@ export class AdminService {
                 to: data.studentEmail,
                 subject: subject,
                 html: emailContent,
+                attachments: [filename],
             });
 
             if (!send) {
@@ -339,6 +341,7 @@ export class AdminService {
                 to: data.studentEmail,
                 subject: subject,
                 html: emailContent,
+                attachments: [],
             });
 
             if (!sent) {

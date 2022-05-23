@@ -13,6 +13,7 @@ export interface EmailPreview {
     to: string;
     subject: string;
     html: string;
+    attachments: string[];
 }
 
 export interface AllowedStudent {
