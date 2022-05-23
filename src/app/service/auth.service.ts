@@ -96,6 +96,7 @@ export class AuthService {
 
         try {
             await MailService.sendMail({
+                subject: SignupMessage.subject,
                 from: EmailDefaults.FROM,
                 to: email,
                 html: SignupMessage.getHtml(email),
@@ -137,6 +138,7 @@ export class AuthService {
 
         try {
             await MailService.sendMail({
+                subject: LoginMessage.subject,
                 from: EmailDefaults.FROM,
                 to: loginEmail,
                 html: LoginMessage.getHtml(generatedCode),
@@ -225,6 +227,7 @@ export class AuthService {
 
         try {
             await MailService.sendMail({
+                subject: AdminLoginMessage.subject,
                 from: EmailDefaults.FROM,
                 to: email,
                 html: AdminLoginMessage.getHtml(generatedCode),

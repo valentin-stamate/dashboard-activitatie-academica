@@ -128,8 +128,8 @@ export class AdminService {
 
             try {
                 await MailService.sendMail({
-                    from: from,
                     subject: subject,
+                    from: from,
                     to: data.emailTo,
                     html: emailContent,
                 });
@@ -286,8 +286,8 @@ export class AdminService {
 
             try {
                 await MailService.sendMail({
-                    from: from,
                     subject: `${subject} nr. ${data.report[1]} - drd. ${data.studentName}`,
+                    from: from,
                     to: data.studentEmail,
                     html: emailContent,
                     attachments: [{

@@ -29,24 +29,30 @@ export class MailService {
 }
 
 export class LoginMessage {
+    static subject = '[Login] Școala Doctorală FII';
+
     static getHtml(code: string) {
         return `Hello! In order to log in paste this code into the app <b>${code}</b> .`;
     }
 }
 
 export class SignupMessage {
+    static subject = '[Signup] Școala Doctorală FII';
+
     static getHtml(firstname: string) {
         return `Hello: ${firstname}! Welcome!`;
     }
 }
 
 export class AdminLoginMessage {
+    static subject = '[Login] Școala Doctorală FII';
+
     static getHtml(code: string) {
         return `Hello! In order to log in paste this code into the app <b>${code}</b> .`;
     }
 }
 
 export enum EmailDefaults {
-    FROM = 'Scoala Doctorala FII <adriana.bejinariu@info.uaic.ro>',
+    FROM = 'Școala Doctorală FII <adriana.bejinariu@info.uaic.ro>',
     APP_NAME = 'Școala Doctorală de Informatică',
 }
