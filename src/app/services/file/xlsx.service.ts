@@ -28,8 +28,10 @@ export class XLSXService {
     *   * pentru ficare profesor, prin fiecare zi a lunii care nu se afla in intervalul de ignorare,
      *    daca profesorul are activitate in ziua curenta a lunii (Eg. Luni, Marti), se insumeaza toate
      *    activitatile din ziua curenta care au acelasi tip de activitate
-     *    * se adauga in lista datele */
-    static parseFAZ(timetableFile: UploadedFile, ignoreStart: number, ignoreEnd: number): FAZData[] {
+     *    * se adauga in lista datele
+     *
+     *    <b>Only god knows what I did here.</b> */
+    static parseFAZ(timetableFile: UploadedFile, month: number, ignoreStart: number, ignoreEnd: number): FAZData[] {
         /* ignoreStart and ignoreEnd are by default -1 if the user doesn't specify a date */
 
         const fazDataList: FAZData[] = [];
@@ -100,21 +102,11 @@ export class XLSXService {
         /* Get the number of days in the current month, month count, current year
         * in order to loop through all the month days. */
         const currentDate = new Date();
+        currentDate.setMonth(month);
+
         const monthDays = UtilService.daysInMonth(currentDate); // 1 - First Day
         const currentMonth = currentDate.getMonth(); // January = 0
         const currentYear = currentDate.getFullYear();
-
-        const activityTypes: string[] = [
-            'Membru comisie de îndrumare CSRD',
-            'Îndrumare teză de doctorat TD',
-            'Tehnici fundamentale din domeniul temei de cercetare CAD',
-            'Tehnici fundamentale din domeniul temei de cercetare SAD',
-            'Metode și metodologii în cercetarea în lnformatica CAD',
-            'Metode și metodologii în cercetarea în lnformatica SAD',
-            'Tehnici specifice avansate din domeniul temei de cercetare CAD',
-            'Tehnici specifice avansate din domeniul temei de cercetare SAD',
-            'Etică și lntegritate Academică CAD',
-        ];
 
         /* For every professor the hours will be calculated for the full month */
         for (let professor of professorList) {

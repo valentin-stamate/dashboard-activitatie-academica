@@ -305,12 +305,22 @@ export class DocxService {
             }
         });
 
-        const details = new Paragraph({
+        const detailsA = new Paragraph({
             children: [
                 new TextRun({text: `Înmatriculat la doctorat în anul ${data.attendanceYear}, în domeniul INFORMATICĂ`, font: font, size: 24, break: 2}),
-                new TextRun({text: `Tema raportului ştiinţific susţinut `, font: font, size: 24, break: 2}),
+            ],
+            alignment: AlignmentType.START,
+        });
+        const detailsB = new Paragraph({
+            children: [
+                new TextRun({text: `Tema raportului ştiinţific susţinut `, font: font, size: 24, break: 1}),
                 new TextRun({text: `"${data.reportTitle}"`, font: font, size: 24, italics: true}),
-                new TextRun({text: ` `, font: font, size: 24, break: 1}),
+            ],
+            alignment: AlignmentType.JUSTIFIED,
+        });
+        const detailsC = new Paragraph({
+            children: [
+                new TextRun({text: ` `, font: font, size: 24}),
             ],
             alignment: AlignmentType.START,
         });
@@ -397,7 +407,9 @@ export class DocxService {
                     children: [
                         header,
                         title,
-                        details,
+                        detailsA,
+                        detailsB,
+                        detailsC,
                         table,
                         footer,
                     ]

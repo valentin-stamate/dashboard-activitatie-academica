@@ -135,7 +135,7 @@ export class AdminController {
         const body = req.body;
         const files = req.files;
 
-        if (!files || body.ignoreStart === undefined || body.ignoreEnd === undefined || body.afterTableNote === undefined) {
+        if (!files || !body.ignoreStart || !body.ignoreEnd || !body.afterTableNote || !body.month) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -147,8 +147,13 @@ export class AdminController {
             return;
         }
 
+        if (isNaN(parseInt(body.month))) {
+            next(new ResponseError(ResponseMessage.INVALID_FORM, StatusCode.BAD_REQUEST));
+            return;
+        }
+
         try {
-            const fileBuffer = await AdminService.faz(timetableFile, body.afterTableNote, body.ignoreStart, body.ignoreEnd);
+            const fileBuffer = await AdminService.faz(timetableFile, body.afterTableNote, parseInt(body.month), body.ignoreStart, body.ignoreEnd);
             const fileName = `faz_${UtilService.stringDate(new Date())}.zip`;
 
             res.setHeader('Content-disposition', 'attachment; filename=' + fileName);

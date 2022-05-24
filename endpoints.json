@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "69b3c12a-b969-42ff-a033-bd984ea3c0cb",
 		"name": "Thesis Rest API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12026756"
 	},
 	"item": [
 		{
@@ -2755,7 +2756,7 @@
 										},
 										{
 											"key": "exceptRecipient",
-											"value": "alex@gmail.com",
+											"value": "",
 											"type": "text"
 										},
 										{
@@ -2873,12 +2874,22 @@
 										},
 										{
 											"key": "exceptRecipient",
-											"value": "alex@gmail.com",
+											"value": "",
 											"type": "text"
 										},
 										{
 											"key": "send",
-											"value": "true",
+											"value": "false",
+											"type": "text"
+										},
+										{
+											"key": "startDate",
+											"value": "08/12/2021",
+											"type": "text"
+										},
+										{
+											"key": "endDate",
+											"value": "05/12/2023",
 											"type": "text"
 										}
 									]

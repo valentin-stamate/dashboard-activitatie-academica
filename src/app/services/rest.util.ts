@@ -19,6 +19,7 @@ export enum ResponseMessage {
     INVALID_CREDENTIALS = 'Invalid credentials',
     MAIL_ERROR = 'Mail error',
     INVALID_DATE = 'Invalid date',
+    INVALID_FORM = 'Invalid form',
 }
 
 export enum ContentType {

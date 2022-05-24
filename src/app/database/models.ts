@@ -14,6 +14,7 @@ export interface EmailPreview {
     subject: string;
     html: string;
     attachments: string[];
+    cc: string[];
 }
 
 export interface AllowedStudent {

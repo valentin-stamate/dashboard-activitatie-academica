@@ -48,14 +48,14 @@ export class UtilService {
     /* Eg. Conf. Prog Lorem Ipsum -> [Conf. Prof, Lorem Ipsum] */
     static splitSplitProfessorName(fullProfessorName: string) {
         const nameItems = fullProfessorName.split(' ');
-        const professorPosition = nameItems.splice(0, 1).join(' ');
+        const professorPosition = nameItems.splice(0, 3).join(' ');
         const professorName = nameItems.join(' ');
 
         return [professorPosition, professorName];
     }
 
     static daysInMonth(date: Date) {
-        return new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
+        return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     }
 
     /* This function checks if all fields are filled with something */

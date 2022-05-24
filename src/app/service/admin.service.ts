@@ -119,6 +119,7 @@ export class AdminService {
                 subject: subject,
                 html: emailContent,
                 attachments: [],
+                cc: [],
             });
 
             if (!send) {
@@ -237,8 +238,8 @@ export class AdminService {
         return await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' });
     }
 
-    static async faz(timetableFile: UploadedFile, afterTableNote: string, ignoreStart: number, ignoreEnd: number): Promise<any> {
-        const fazProfessorDataList = XLSXService.parseFAZ(timetableFile, ignoreStart, ignoreEnd);
+    static async faz(timetableFile: UploadedFile, afterTableNote: string, month: number, ignoreStart: number, ignoreEnd: number): Promise<any> {
+        const fazProfessorDataList = XLSXService.parseFAZ(timetableFile, month, ignoreStart, ignoreEnd);
 
         const zip = new JSZip();
 
@@ -266,7 +267,8 @@ export class AdminService {
             }
 
             const buffer = await DocxService.getVerbalProcessDOCXBuffer(data);
-            const filename = `Proces_verbal_${data.studentName} ${data.report}.docx`;
+            const filename = `Proces_verbal_raport_${data.studentName} ${data.report}.docx`;
+            const parsedSubject = `${subject} ${data.report[1]} ${data.studentName}`;
 
             let emailContent = emailTemplate;
             emailContent = emailContent.replace(new RegExp(/{{report}}/g), data.report[1]);
@@ -274,10 +276,11 @@ export class AdminService {
 
             emailEndpointResponse.emailPreview.push({
                 from: from,
-                to: data.studentEmail,
-                subject: subject,
+                to: data.coordinatorEmail,
+                subject: parsedSubject,
                 html: emailContent,
                 attachments: [filename],
+                cc: [],
             });
 
             if (!send) {
@@ -286,9 +289,9 @@ export class AdminService {
 
             try {
                 await MailService.sendMail({
-                    subject: `${subject} nr. ${data.report[1]} - drd. ${data.studentName}`,
+                    subject: parsedSubject,
                     from: from,
-                    to: data.studentEmail,
+                    to: data.coordinatorEmail,
                     html: emailContent,
                     attachments: [{
                         content: buffer,
@@ -336,12 +339,15 @@ export class AdminService {
             emailContent = emailContent.replace(new RegExp(/{{coordinator}}/g), data.coordinators[0].coordinatorName);
             emailContent = emailContent.replace(new RegExp(/{{commission}}/g), commission);
 
+            const parsedSubject = `${subject} ${data.studentName}`;
+
             emailEndpointResponse.emailPreview.push({
                 from: from,
                 to: data.studentEmail,
-                subject: subject,
+                subject: parsedSubject,
                 html: emailContent,
                 attachments: [],
+                cc: [data.coordinatorEmail],
             });
 
             if (!sent) {
@@ -350,7 +356,7 @@ export class AdminService {
 
             try {
                 await MailService.sendMail({
-                    subject: `${subject} ${data.report[1]}`,
+                    subject: parsedSubject,
                     from: from,
                     to: data.studentEmail,
                     cc: [data.coordinatorEmail],

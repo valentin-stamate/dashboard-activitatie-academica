@@ -130,13 +130,16 @@ export class Middleware {
     static errorHandler(err: ResponseError, req: Request<any>, res: Response, next: NextFunction) {
         let statusError = 500;
 
-        if (err.status !== undefined) {
+        if (err.status) {
             statusError = err.status;
         }
 
+        console.log('----------------------------=============================================================================----------------------------');
         console.log(err);
+        console.log('----------------------------=============================================================================----------------------------');
         res.setHeader('Content-Type', ContentType.TEXT);
-        res.status(statusError).send(err.message);
+        res.statusCode = statusError;
+        res.end(err.message);
     }
 }
 

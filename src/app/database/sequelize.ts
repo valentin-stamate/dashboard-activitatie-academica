@@ -455,7 +455,7 @@ export async function sequelizeInit(force: boolean) {
     await AllowedStudentsModel.create({
         fullName: 'Stamate Valentin',
         identifier: 'valentin',
-        coordinator: 'Prof.univ.dr. Lenuța Alboaie',
+        coordinator: 'Prof. univ. dr. Lenuța Alboaie',
         attendanceYear: 2022,
     });
 
@@ -479,13 +479,13 @@ export async function sequelizeInit(force: boolean) {
         alternativeEmail: 'valentin.stamate@info.uaic.ro',
         attendanceYear: 2019,
         coordinatorName: 'Buraza Ion',
-        coordinatorFunction: 'Prof.univ.dr',
+        coordinatorFunction: 'Prof. univ. dr',
         isActive: true,
     });
 
     await CoordinatorModel.create({
         name: 'Buraza Ion',
-        function: 'Prof.univ.dr',
+        function: 'Prof. univ. dr',
         email: 'stamatevalentin125@gmail.com',
         password: sha256(CryptoUtil.scufflePassword('admin')).toString(),
     });
