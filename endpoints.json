@@ -249,7 +249,7 @@
 			]
 		},
 		{
-			"name": "User",
+			"name": "Student",
 			"item": [
 				{
 					"name": "Scientific Article ISI",
@@ -2751,7 +2751,7 @@
 										},
 										{
 											"key": "emailTemplate",
-											"value": "Bună ziua,<br>\nPentru activitățile din cadrul Școlii Doctorale de Informatică este nevoie să alocați la orar intervale pentru următoarele ore:<br>\n<br>\n{{activity}}<br>\n<br>\nPersoană de contact orar sem 1.<br>\nLect.univ.dr. Pistol Ionuţ-Cristian  ipistol@info.uaic.ro pistol.ionutcristian@gmail.com<br>\n<br>\nPersoană de contact orar semestrul 2.<br>\nConf.univ.dr. Arusoaie Andrei arusoaie.andrei@info.uaic.ro andrei.arusoaie@gmail.com<br>   \n<br>\nVa mulțumesc anticipat,<br>",
+											"value": "Bună ziua,<br>\nPentru activitățile din cadrul Școlii Doctorale de Informatică este nevoie să alocați la orar intervale pentru următoarele ore:<br>\n<br>\n{{activity}}<br>\n<br>\nPersoană de contact orar sem 1.<br>\nLect. univ. dr. Pistol Ionuţ-Cristian ipistol@info.uaic.ro pistol.ionutcristian@gmail.com<br>\n<br>\nPersoană de contact orar semestrul 2.<br>\nConf. univ. dr. Arusoaie Andrei arusoaie.andrei@info.uaic.ro andrei.arusoaie@gmail.com<br>   \n<br>\nVa mulțumesc anticipat,<br>",
 											"type": "text"
 										},
 										{
@@ -2820,7 +2820,7 @@
 										},
 										{
 											"key": "send",
-											"value": "false",
+											"value": "true",
 											"type": "text"
 										}
 									]
@@ -3207,7 +3207,7 @@
 								{
 									"key": "timetable",
 									"type": "file",
-									"src": "/C:/Users/Valentin/Desktop/orar_scoala_doctorala.xlsx"
+									"src": "/C:/Users/Valentin/Desktop/Thesis/Docs/orar_scoala_doctorala.xlsx"
 								},
 								{
 									"key": "ignoreStart",
@@ -3221,7 +3221,12 @@
 								},
 								{
 									"key": "afterTableNote",
-									"value": "În semestrul I, anul universitar 2021-2022 datorită virusului COVID-19, activitatea didactică s-a desfășurat în sistem online   conform orarului stabilit.",
+									"value": "În semestrul I, anul universitar 2021-2022 datorită virusului COVID-19, activitatea didactică s-a desfășurat în sistem online conform orarului stabilit.",
+									"type": "text"
+								},
+								{
+									"key": "month",
+									"value": "0",
 									"type": "text"
 								}
 							]
