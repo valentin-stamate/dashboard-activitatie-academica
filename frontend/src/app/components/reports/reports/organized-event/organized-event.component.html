@@ -1,0 +1,112 @@
+<nav class="panel middle-block fill">
+  <p class="panel-heading">
+    Evenimente organizate
+  </p>
+
+  <div class="p-5">
+
+    <form (ngSubmit)="onSubmit($event)" class="flex-column" #userForm>
+
+      <div *ngIf="responseMessage !== ''">
+        <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+      </div>
+
+      <div>
+        <div class="field">
+          <label class="label">Denumirea manifestării</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="manifestationName" [(ngModel)]="form.manifestationName">
+          </div>
+        </div>
+
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="label">Data de început</label>
+              <div class="control">
+                <input  [disabled]="readonly" class="input" type="date" name="publicationDate" #startDate [value]="form.startDate | date:'yyyy-MM-dd'" (input)="form.startDate=getDate(startDate)">
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="field">
+              <label class="label">Data de sfârșit</label>
+              <div class="control">
+                <input  [disabled]="readonly" class="input" type="date" name="publicationDate" #endDate [value]="form.endDate | date:'yyyy-MM-dd'" (input)="form.endDate=getDate(endDate)">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="field">
+          <label class="label">Locul de desfășurare</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="manifestationPlace" [(ngModel)]="form.manifestationPlace">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Tipul manifestarii</label>
+          <div class="control">
+            <div class="select">
+              <select name="manifestationType" [(ngModel)]="form.manifestationType" [disabled]="readonly">
+                <option *ngFor="let item of manifestationType">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Clasificarea manifestării în funcție de participare</label>
+          <div class="control">
+            <div class="select">
+              <select name="manifestationClassification" [(ngModel)]="form.manifestationClassification" [disabled]="readonly">
+                <option *ngFor="let item of manifestationClassification">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Link-ul manifestării</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="link" placeholder="https://google.com" name="manifestationLink" [(ngModel)]="form.manifestationLink">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Persoana de contact (cu precizarea datelor de identificare)</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="contactPerson" [(ngModel)]="form.contactPerson">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Observații</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="observations" [(ngModel)]="form.observations">
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="field is-grouped" *ngIf="!readonly">
+        <div class="control" *ngIf="!editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Trimite</button>
+        </div>
+        <div class="control" *ngIf="editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Modifică</button>
+        </div>
+        <div class="control">
+          <button type="button" class="button is-light" (click)="onCancel()">Anulează</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</nav>

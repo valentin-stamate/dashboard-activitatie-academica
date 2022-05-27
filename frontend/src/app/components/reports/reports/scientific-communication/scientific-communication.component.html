@@ -1,0 +1,91 @@
+<nav class="panel middle-block fill">
+  <p class="panel-heading">
+    Comunicări în manifestări științifice
+  </p>
+
+  <div class="p-5">
+
+    <form (ngSubmit)="onSubmit($event)" class="flex-column" #userForm>
+
+      <div *ngIf="responseMessage !== ''">
+        <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+      </div>
+
+      <div>
+        <div class="field">
+          <label class="label">Autori</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="authors" [(ngModel)]="form.authors">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Tipul comunicării</label>
+          <div class="control">
+            <div class="select">
+              <select name="communicationType" [(ngModel)]="form.communicationType" [disabled]="readonly">
+                <option *ngFor="let item of communicationType">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Anul prezentării</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="number" placeholder="2022" name="presentationYear" [(ngModel)]="form.presentationYear">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Denumirea manifestării științifice</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="scientificManifestationName" [(ngModel)]="form.scientificManifestationName">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Tipul manifestării</label>
+          <div class="control">
+            <div class="select">
+              <select name="manifestationType" [(ngModel)]="form.manifestationType" [disabled]="readonly">
+                <option *ngFor="let item of manifestationType">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Link către site-ul manifestării</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="link" placeholder="https://google.com" name="scientificManifestationLink" [(ngModel)]="form.scientificManifestationLink">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Observații</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="observations" [(ngModel)]="form.observations">
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="field is-grouped" *ngIf="!readonly">
+        <div class="control" *ngIf="!editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Trimite</button>
+        </div>
+        <div class="control" *ngIf="editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Modifică</button>
+        </div>
+        <div class="control">
+          <button type="button" class="button is-light" (click)="onCancel()">Anulează</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</nav>

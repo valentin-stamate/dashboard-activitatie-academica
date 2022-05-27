@@ -1,0 +1,42 @@
+
+<!-- Logos -->
+<div class="app-logos">
+  <div class="app-actual-logos">
+    <img class="nav-logo" src="./assets/fii-logo.svg" alt="">
+    <img class="nav-logo" src="./assets/uaic-logo.png" alt="">
+  </div>
+</div>
+
+<!-- Navbar -->
+<div class="app-navbar is-primary has-background-info">
+  <nav class="navbar is-white max-width has-background-info" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu" *ngIf="navigation === true">
+      <div class="navbar-start">
+        <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleHomeActiveLink()" routerLink="/home"><b>Acasă</b></a>
+        <a class="navbar-item has-text-white app-navbar-item" routerLinkActive="link-active" routerLink="/reports" *ngIf="userType === userTypes.STUDENT"><b>Raportare Cercetare Doctoranzi</b></a>
+        <a class="navbar-item has-text-white app-navbar-item" routerLinkActive="link-active" routerLink="/coordinator-students" *ngIf="userType === userTypes.COORDINATOR"><b>Formularele completate de doctoranzi</b></a>
+        <a class="navbar-item has-text-white app-navbar-item" routerLinkActive="link-active" routerLink="/coordinator-activity" *ngIf="userType === userTypes.COORDINATOR"><b>Raportare Activitate Coordonatori</b></a>
+        <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleAdminActiveLink()" routerLink="/admin/users" *ngIf="userType === userTypes.ADMIN"><b>Admin</b></a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-info" routerLinkActive="is-active" routerLink="/user"><b>{{user.identifier}}</b></a>
+            <a class="button is-warning" (click)="onLogout($event)"><b>Logout</b></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </nav>
+
+</div>

@@ -1,0 +1,60 @@
+<nav class="panel middle-block fill">
+  <p class="panel-heading">
+    Membru în academii
+  </p>
+
+  <div class="p-5">
+
+    <form (ngSubmit)="onSubmit($event)" class="flex-column" #userForm>
+
+      <div *ngIf="responseMessage !== ''">
+        <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+      </div>
+
+      <div>
+        <div class="field">
+          <label class="label">Anul admiterii</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="number" placeholder="2022" name="admissionYear" [(ngModel)]="form.admissionYear">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Denumirea academiei</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="academyName" [(ngModel)]="form.academyName">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Tip membru</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="memberType" [(ngModel)]="form.memberType">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Observații</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="observations" [(ngModel)]="form.observations">
+          </div>
+        </div>
+      </div>
+
+
+      <div class="field is-grouped" *ngIf="!readonly">
+        <div class="control" *ngIf="!editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Trimite</button>
+        </div>
+        <div class="control" *ngIf="editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Modifică</button>
+        </div>
+        <div class="control">
+          <button type="button" class="button is-light" (click)="onCancel()">Anulează</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</nav>

@@ -1,0 +1,102 @@
+<nav class="panel middle-block fill">
+  <p class="panel-heading">
+    Contracte de cercetare
+  </p>
+
+  <div class="p-5">
+
+    <form (ngSubmit)="onSubmit($event)" class="flex-column" #userForm>
+
+      <div *ngIf="responseMessage !== ''">
+        <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+      </div>
+
+      <div>
+        <div class="field">
+          <label class="label">Denumire contract de cercetare / proiect</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="researchContractNameOrProject" [(ngModel)]="form.researchContractNameOrProject">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Cod proiect (dacă există)</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="projectCode" [(ngModel)]="form.projectCode">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Finanțator</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="financier" [(ngModel)]="form.financier">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Funcție</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="function" [(ngModel)]="form.function">
+          </div>
+        </div>
+
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="label">Data de start a proiectului</label>
+              <div class="control">
+                <input  [disabled]="readonly" class="input" type="date" value="2022-12-20" #startDate name="startProjectPeriod"
+                       [value]="form.startProjectPeriod | date: 'yyyy-MM-dd'" (input)="form.startProjectPeriod=getDate(startDate)">
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="field">
+              <label class="label">Data de sfârșit a proiectului</label>
+              <div class="control">
+                <input  [disabled]="readonly" class="input" type="date" value="2022-12-20" #endDate name="endProjectPeriod"
+                       [value]="form.endProjectPeriod | date: 'yyyy-MM-dd'" (input)="form.endProjectPeriod=getDate(endDate)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Tipul contractului</label>
+          <div class="control">
+            <div class="select">
+              <select name="contractType" [(ngModel)]="form.contractType" [disabled]="readonly">
+                <option *ngFor="let item of contractType">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Observații</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="observations" [(ngModel)]="form.observations">
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="field is-grouped" *ngIf="!readonly">
+        <div class="control" *ngIf="!editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Trimite</button>
+        </div>
+        <div class="control" *ngIf="editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Modifică</button>
+        </div>
+        <div class="control">
+          <button type="button" class="button is-light" (click)="onCancel()">Anulează</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</nav>

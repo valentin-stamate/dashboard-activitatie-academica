@@ -1,0 +1,94 @@
+<nav class="panel middle-block fill">
+  <p class="panel-heading">
+    Brevete
+  </p>
+
+  <div class="p-5">
+
+    <form (ngSubmit)="onSubmit($event)" class="flex-column" #userForm>
+
+      <div *ngIf="responseMessage !== ''">
+        <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+      </div>
+
+      <div>
+        <div class="field">
+          <label class="label">Titlul brevetului / CBI ( cerere de brevet de invenţie)</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="patentTitleOrCBI" [(ngModel)]="form.patentTitleOrCBI">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Autori</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="authors" [(ngModel)]="form.authors">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Anul obținerii brevetului / depunerii CBI</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="number" placeholder="2022" name="yearOfObtainingPatent" [(ngModel)]="form.yearOfObtainingPatent">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Număr brevet</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="number" placeholder="0" name="patentNumber" [(ngModel)]="form.patentNumber">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Tipul brevetului</label>
+          <div class="control">
+            <div class="select">
+              <select name="patentType" [(ngModel)]="form.patentType" [disabled]="readonly">
+                <option *ngFor="let item of patentType">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Autoritate eminenta (OSIM, altele)</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="authority" [(ngModel)]="form.authority">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Țara</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="country" [(ngModel)]="form.country">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Observații</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="observations" [(ngModel)]="form.observations">
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="field is-grouped" *ngIf="!readonly">
+        <div class="control" *ngIf="!editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Trimite</button>
+        </div>
+        <div class="control" *ngIf="editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Modifică</button>
+        </div>
+        <div class="control">
+          <button type="button" class="button is-light" (click)="onCancel()">Anulează</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</nav>

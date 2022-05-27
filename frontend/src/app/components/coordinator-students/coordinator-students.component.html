@@ -1,0 +1,338 @@
+<app-navbar [navigation]="true"></app-navbar>
+
+<div class="page">
+  <div class="page-content">
+
+    <div class="columns">
+
+
+      <div class="column">
+        <!-- Students -->
+        <nav class="panel middle-block fill">
+          <div class="panel-heading">
+            <div>Studenți-Doctoranzi (conturi active)</div>
+            <div class="is-flex-grow-1"></div>
+          </div>
+
+          <div class="p-5 flex-column">
+
+            <div class="list scroll">
+
+              <div class="block list-item" *ngFor="let item of coordinatorStudents">
+                <div>
+                  <div>{{item.fullName}}</div>
+                  <div class="small-text">{{item.identifier}}</div>
+                  <div class="small-text">{{item.email}}</div>
+                </div>
+
+                <div class="spacer"></div>
+                <button class="button is-info" (click)="onStudentSelect(item)" [class.is-loading]="item.loading" [disabled]="selectedStudentId === item.id">Selectează</button>
+              </div>
+
+            </div>
+
+          </div>
+        </nav>
+
+        <!-- Student Reports -->
+        <nav class="panel middle-block fill">
+          <div class="panel-heading">
+            <div>Istoric Formulare</div>
+            <div class="is-flex-grow-1"></div>
+          </div>
+
+          <div class="mt-5 pl-5 pr-5 pb-5 flex-column reports-list-scroll">
+
+            <div *ngIf="totalForms === 0">Istoricul este gol.</div>
+
+            <div *ngIf="formsResponseMessage !== ''">
+              <i class="fa-solid fa-circle-info"></i> {{formsResponseMessage}}
+            </div>
+
+            <div class="flex-column" *ngIf="scArticlesISIList.length !== 0">
+              <b class="forms-title-sticky">
+                Articole ştiintifice publicate în extenso în reviste cotate Web of Science cu factor de impact
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of scArticlesISIList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 1)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="isiProceedingsList.length !== 0">
+              <b class="forms-title-sticky">
+                ISI proceedings
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of isiProceedingsList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 2)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="scArticleBDIList.length !== 0">
+              <b class="forms-title-sticky">
+                Articole științifice publicate în extenso în reviste indexate BDI și reviste de specialitate
+                neindexate
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of scArticleBDIList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 3)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="scBookList.length !== 0">
+              <b class="forms-title-sticky">
+                Cărţi ştiinţifice sau capitole de cărți publicate în edituri
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of scBookList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 4)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="translationList.length !== 0">
+              <b class="forms-title-sticky">
+                Traduceri
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of translationList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 5)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="scCommunicationList.length !== 0">
+              <b class="forms-title-sticky">
+                Comunicări în manifestări științifice
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of scCommunicationList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 6)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="patentList.length !== 0">
+              <b class="forms-title-sticky">
+                Brevete
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of patentList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 7)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="researchContractList.length !== 0">
+              <b class="forms-title-sticky">
+                Contracte de cercetare
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of researchContractList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 8)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="citationList.length !== 0">
+              <b class="forms-title-sticky">
+                Citări
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of citationList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 9)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="awardsNominationList.length !== 0">
+              <b class="forms-title-sticky">
+                Premii si nominalizari
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of awardsNominationList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 10)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="academyMemberList.length !== 0">
+              <b class="forms-title-sticky">
+                Membru în academii
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of academyMemberList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 11)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="editorialMemberList.length !== 0">
+              <b class="forms-title-sticky">
+                Membru în echipa editorială
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of editorialMemberList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 12)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="organizedEventList.length !== 0">
+              <b class="forms-title-sticky">
+                Evenimente organizate
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of organizedEventList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 13)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="withoutActivityList.length !== 0">
+              <b class="forms-title-sticky">
+                Fără activitate științifică
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of withoutActivityList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 14)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-column" *ngIf="didacticActivityList.length !== 0">
+              <b class="forms-title-sticky">
+                Activitate didactică
+              </b>
+              <div class="list p-2">
+                <div class="block list-item" *ngFor="let item of didacticActivityList">
+                  <div>
+                    <div class="small-text">Modificat: {{toDateStr(item.updatedAt!)}}</div>
+                    <div class="small-text">Creat: {{toDateStr(item.createdAt!)}}</div>
+                  </div>
+
+                  <div class="spacer"></div>
+                  <button class="button is-warning" (click)="onFormSelect(item, 15)">Vizualizează</button>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+        </nav>
+      </div>
+
+      <div class="column">
+        <!-- Formulare -->
+        <app-no-report *ngIf="currentFormSelected === 0"></app-no-report>
+        <app-scientific-article-isi [readonly]="true" [form]="form" *ngIf="currentFormSelected === 1"></app-scientific-article-isi>
+        <app-isi-proceedings [readonly]="true" [form]="form" *ngIf="currentFormSelected === 2"></app-isi-proceedings>
+        <app-scientific-article-bdi [readonly]="true" [form]="form" *ngIf="currentFormSelected === 3"></app-scientific-article-bdi>
+        <app-scientific-book [readonly]="true" [form]="form" *ngIf="currentFormSelected === 4"></app-scientific-book>
+        <app-translation [readonly]="true" [form]="form" *ngIf="currentFormSelected === 5"></app-translation>
+        <app-scientific-communication [readonly]="true" [form]="form" *ngIf="currentFormSelected === 6"></app-scientific-communication>
+        <app-patent [readonly]="true" [form]="form" *ngIf="currentFormSelected === 7"></app-patent>
+        <app-research-contract [readonly]="true" [form]="form" *ngIf="currentFormSelected === 8"></app-research-contract>
+        <app-citation [readonly]="true" [form]="form" *ngIf="currentFormSelected === 9"></app-citation>
+        <app-award-nomination [readonly]="true" [form]="form" *ngIf="currentFormSelected === 10"></app-award-nomination>
+        <app-academy-member [readonly]="true" [form]="form" *ngIf="currentFormSelected === 11"></app-academy-member>
+        <app-editorial-member [readonly]="true" [form]="form" *ngIf="currentFormSelected === 12"></app-editorial-member>
+        <app-organized-event [readonly]="true" [form]="form" *ngIf="currentFormSelected === 13"></app-organized-event>
+        <app-without-activity [readonly]="true" [form]="form" *ngIf="currentFormSelected === 14"></app-without-activity>
+        <app-didactic-activity [readonly]="true" [form]="form" *ngIf="currentFormSelected === 15"></app-didactic-activity>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

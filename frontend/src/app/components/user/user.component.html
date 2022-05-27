@@ -1,0 +1,88 @@
+<app-navbar [navigation]="true"></app-navbar>
+
+<div class="page">
+  <div class="page-content">
+
+    <div *ngIf="responseMessage !== ''">
+      <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+    </div>
+
+    <div class="columns">
+
+      <div class="column is-flex is-justify-content-center">
+        <nav class="panel" style="width: 512px">
+          <div class="panel-heading is-flex">
+            <div>Informații cont</div>
+            <div class="is-flex-grow-1"></div>
+            <button *ngIf="loading" class="button is-loading icon is-ghost"></button>
+          </div>
+
+          <div class="p-5 flex-column">
+            <fieldset disabled>
+
+              <div class="field">
+                <label class="label">Nr. Matricol</label>
+                <div class="control">
+                  <input class="input" type="text" value="{{student.identifier}}">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Nume Prenume</label>
+                <div class="control">
+                  <input class="input" type="text" value="{{student.fullName}}">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                  <input class="input" type="email" value="{{student.email}}">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Email alternativ</label>
+                <div class="control">
+                  <input class="input" type="email" value="{{student.alternativeEmail}}">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Email alternativ</label>
+                <div class="control">
+                  <input class="input" type="email" value="{{student.alternativeEmail}}">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Anul înmatriculării</label>
+                <div class="control">
+                  <input class="input" type="text" value="{{student.attendanceYear}}">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Coordonator</label>
+                <div class="control">
+                  <input class="input" type="text" value="{{student.coordinatorFunction + ' ' + student.coordinatorName}}">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Daca creării contului</label>
+                <div class="control">
+                  <input class="input" type="text" value="{{student.createdAt.toLocaleString('ro-RO')}}">
+                </div>
+              </div>
+
+            </fieldset>
+          </div>
+        </nav>
+      </div>
+
+    </div>
+
+
+  </div>
+</div>

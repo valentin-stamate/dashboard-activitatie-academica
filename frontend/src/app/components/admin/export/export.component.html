@@ -1,0 +1,59 @@
+<div *ngIf="notificationMessage !== ''" class="notification is-info notification-sticky">
+  <button class="delete" (click)="onCloseNotification()"></button>
+  <i class="fa-solid fa-circle-info"></i> {{notificationMessage}}
+</div>
+
+<nav class="panel middle-block fill">
+  <p class="panel-heading">Export</p>
+
+
+  <div class="p-5 flex-column content">
+
+    <div>Apasă pe butonul descarcă pentru a exporta toate datele studenților și a doctoranzilor.</div>
+
+    <div class="columns">
+
+      <div class="column">
+
+        <div class="simple-card white">
+          <div>
+            <div><b>Lista formularelor completate de doctoranzi:</b></div>
+            <ul>
+              <li *ngFor="let item of reports">{{item}}</li>
+            </ul>
+          </div>
+
+          <br>
+
+          <div>Numărul curent de formulare: <strong>{{reports.length}}</strong></div>
+        </div>
+
+
+      </div>
+
+      <div class="column">
+
+        <div class="simple-card white">
+          <div>
+            <div><b>Lista formularelor completate de coordonatori:</b></div>
+            <ul>
+              <li *ngFor="let item of coordinatorReports">{{item}}</li>
+            </ul>
+          </div>
+
+          <br>
+
+          <div>Numărul curent de formulare: <strong>{{coordinatorReports.length}}</strong></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="buttons">
+      <button class="button is-info" [class.is-loading]="loading" (click)="onDownload()">Descarcare</button>
+    </div>
+
+
+  </div>
+</nav>

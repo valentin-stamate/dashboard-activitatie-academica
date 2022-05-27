@@ -1,0 +1,87 @@
+<nav class="panel middle-block fill">
+  <p class="panel-heading">
+    Premii si nominalizari
+  </p>
+
+  <div class="p-5">
+
+    <form (ngSubmit)="onSubmit($event)" class="flex-column" #userForm>
+
+      <div *ngIf="responseMessage !== ''">
+        <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+      </div>
+
+      <div>
+        <div class="field">
+          <label class="label">Anul acordarii premiului</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="number" placeholder="2022" name="yearOfAward" [(ngModel)]="form.yearOfAward">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Denumirea premiului</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="awardName" [(ngModel)]="form.awardName">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Tipul premiului</label>
+          <div class="control">
+            <div class="select">
+              <select name="awardType" [(ngModel)]="form.awardType" [disabled]="readonly">
+                <option *ngFor="let item of awardType">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Organizația care a acordat premiul</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="organizationThatGiveTheAward" [(ngModel)]="form.organizationThatGiveTheAward">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Țara</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="country" [(ngModel)]="form.country">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Acordat pentru activitatea didactică / cercetare</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="awardedFor" [(ngModel)]="form.awardedFor">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Observații</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="observations" [(ngModel)]="form.observations">
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="field is-grouped" *ngIf="!readonly">
+        <div class="control" *ngIf="!editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Trimite</button>
+        </div>
+        <div class="control" *ngIf="editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Modifică</button>
+        </div>
+        <div class="control">
+          <button type="button" class="button is-light" (click)="onCancel()">Anulează</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</nav>

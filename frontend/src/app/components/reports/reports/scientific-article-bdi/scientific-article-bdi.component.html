@@ -1,0 +1,162 @@
+<nav class="panel middle-block fill">
+  <p class="panel-heading">
+    Articole științifice publicate în extenso în reviste indexate BDI și reviste de specialitate
+    neindexate
+  </p>
+
+  <div class="p-5">
+
+    <form (ngSubmit)="onSubmit($event)" class="flex-column" #userForm>
+
+      <div *ngIf="responseMessage !== ''">
+        <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+      </div>
+
+      <div>
+        <div class="field">
+          <label class="label">Domenii de ierarhizare</label>
+          <div class="control">
+            <div class="select">
+              <select name="hierarchyDomains" [(ngModel)]="form.hierarchyDomains" [disabled]="readonly">
+                <option *ngFor="let item of hierarchyDomains">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Titlul articolului</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="articleTitle" [(ngModel)]="form.articleTitle">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Autori</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="authors" [(ngModel)]="form.authors">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Denumire revistă indexată BDI</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="bdiIndexedMagazine" [(ngModel)]="form.bdiIndexedMagazine">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Anul publicării</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="number" placeholder="2022" name="publicationYear" [(ngModel)]="form.publicationYear">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Volum</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="volume" [(ngModel)]="form.volume">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Număr</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="number" placeholder="1" name="number" [(ngModel)]="form.number">
+          </div>
+        </div>
+
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="label">Nr. pagină de start</label>
+              <div class="control">
+                <input  [disabled]="readonly" class="input" type="number" placeholder="0" name="startingPage" [(ngModel)]="form.startingPage">
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="field">
+              <label class="label">Nr. pagina de sfârșit</label>
+              <div class="control">
+                <input  [disabled]="readonly" class="input" type="number" placeholder="1" name="endingPage" [(ngModel)]="form.endingPage">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Revista internațională</label>
+          <div class="control">
+            <div class="select">
+              <select name="internationalMagazine" [(ngModel)]="form.internationalMagazine" [disabled]="readonly">
+                <option *ngFor="let item of international">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Clasificare CNATDCU</label>
+          <div class="control">
+            <div class="select">
+              <select name="cnatdcuClassification" [(ngModel)]="form.cnatdcuClassification" [disabled]="readonly">
+                <option *ngFor="let item of cnadtcuClassification">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Link articol indexat</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="link" placeholder="https://google.com" name="indexedArticleLink" [(ngModel)]="form.indexedArticleLink">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Baza de date BDI</label>
+          <div class="control">
+            <div class="select">
+              <select name="bdiDatabase" [(ngModel)]="form.bdiDatabase" [disabled]="readonly">
+                <option *ngFor="let item of bdiDatabases">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Linkul bazei de date BDI</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="link" placeholder="https://google.com" name="bdiDatabaseLink" [(ngModel)]="form.bdiDatabaseLink">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Observații</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="observations" [(ngModel)]="form.observations">
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="field is-grouped" *ngIf="!readonly">
+        <div class="control" *ngIf="!editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Trimite</button>
+        </div>
+        <div class="control" *ngIf="editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Modifică</button>
+        </div>
+        <div class="control">
+          <button type="button" class="button is-light" (click)="onCancel()">Anulează</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</nav>

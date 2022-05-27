@@ -1,0 +1,132 @@
+<app-navbar [navigation]="true"></app-navbar>
+
+<div class="page">
+  <div class="page-content">
+
+    <div class="columns">
+
+      <div class="column">
+        <nav class="panel middle-block fill">
+          <div class="panel-heading is-flex is-flex-direction-row">
+            <div>Activitatea științifică a conducatorului de doctorat</div>
+            <div class="is-flex-grow-1"></div>
+            <button *ngIf="existingScientificActivity" class="button icon is-success"></button>
+            <button *ngIf="!existingScientificActivity" class="button icon is-warning"></button>
+          </div>
+
+          <div class="p-5 flex-column">
+
+            <form (ngSubmit)="onUpdateCoordinatorScientificActivity($event, coordinatorScientificActivityForm)" #coordinatorScientificActivityForm enctype="multipart/form-data">
+              <div class="field">
+                <label class="label">Nume şi prenume</label>
+                <div class="control">
+                  <input class="input" type="text" name="fullName" [(ngModel)]="coordinatorScientificActivity.fullName">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Număr publicaţii indexate Web of Science/ERIH/altele cu factor de impact</label>
+                <div class="control">
+                  <input class="input" type="text" name="publicationNumberWebOfScience" [(ngModel)]="coordinatorScientificActivity.publicationNumberWebOfScience">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Comisii/comitete/asociații științifice internaționale în care are calitatea de membru</label>
+                <div class="control">
+                  <input class="input" type="text" name="committees" [(ngModel)]="coordinatorScientificActivity.committees">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Conferințe/comisii la care a participat ca invitat/expert
+                </label>
+                <div class="control">
+                  <input class="input" type="text" name="conferences" [(ngModel)]="coordinatorScientificActivity.conferences">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Anul raportării</label>
+                <div class="control">
+                  <input class="input" type="number" name="reportYear" [(ngModel)]="coordinatorScientificActivity.reportYear">
+                </div>
+              </div>
+
+              <div class="buttons">
+                <button type="submit" class="button is-success">Trimite</button>
+                <button type="button" class="button is-danger" *ngIf="existingScientificActivity" (click)="onDeleteCoordinatorScientificActivity()">Șterge</button>
+              </div>
+
+            </form>
+
+          </div>
+        </nav>
+      </div>
+
+      <div class="column">
+        <nav class="panel middle-block fill">
+          <div class="panel-heading is-flex is-flex-direction-row">
+            <div>
+              Activitatea referențială a conducătorului de doctorat/abilitat de la
+              IOSU-UAIC
+            </div>
+            <div class="is-flex-grow-1"></div>
+            <button *ngIf="existingReferentialActivity" class="button icon is-success"></button>
+            <button *ngIf="!existingReferentialActivity" class="button icon is-warning"></button>
+          </div>
+
+          <div class="p-5 flex-column">
+
+            <form (ngSubmit)="onUpdateCoordinatorReferentialActivity($event, coordinatorReferentialActivityForm)" #coordinatorReferentialActivityForm enctype="multipart/form-data">
+              <div class="field">
+                <label class="label">Nume, prenume referent de la IOSUD UAIC</label>
+                <div class="control">
+                  <input class="input" type="text" name="fullName" [(ngModel)]="coordinatorReferentialActivity.fullName">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Domeniul de doctorat</label>
+                <div class="control">
+                  <input class="input" type="text" name="thesisDomain" [(ngModel)]="coordinatorReferentialActivity.thesisDomain">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Teza la care a fost referent</label>
+                <div class="control">
+                  <input class="input" type="text" name="thesisReference" [(ngModel)]="coordinatorReferentialActivity.thesisReference">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">IOSUD organizatoare a tezei evaluate</label>
+                <div class="control">
+                  <input class="input" type="text" name="IOSUD" [(ngModel)]="coordinatorReferentialActivity.IOSUD">
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Anul raportării</label>
+                <div class="control">
+                  <input class="input" type="number" name="reportYear" [(ngModel)]="coordinatorScientificActivity.reportYear">
+                </div>
+              </div>
+
+              <div class="buttons">
+                <button type="submit" class="button is-success">Trimite</button>
+                <button type="button" class="button is-danger" *ngIf="existingReferentialActivity" (click)="onDeleteCoordinatorReferentialActivity()">Șterge</button>
+              </div>
+
+            </form>
+
+          </div>
+        </nav>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+

@@ -1,0 +1,220 @@
+<app-navbar [navigation]="false"></app-navbar>
+
+<div class="auth-layout">
+
+  <h2 class="auth-title">Școala Doctorală de Informatică <br> Aplicația de management a activității academice</h2>
+
+  <div class="box login-box">
+
+    <div class="flex-column">
+      <div>
+        <h4 class="title is-4">Autentificare</h4>
+      </div>
+
+      <div>
+        <h6 class="subtitle is-6">
+          Pentru autentificare mai întâi trebuie să aveți un cont creat în aplicație.
+        </h6>
+      </div>
+
+      <!-- Student Form -->
+      <form (submit)="onLoginStudent($event, form)" #form class="flex-column" enctype="multipart/form-data" *ngIf="authType === 1">
+
+        <div *ngIf="responseMessage !== ''">
+          <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+        </div>
+
+        <div>
+          <div class="field">
+            <label class="label">Număr matricol</label>
+            <div class="control has-icons-left">
+              <input class="input" type="text" name="identifier" placeholder="343223424RDS4324234" value="valentin">
+              <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Parola</label>
+            <div class="control has-icons-left">
+              <input class="input" type="email" name="email" placeholder="user@email.com" value="stamatevalentin125@gmail.com">
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="field" *ngIf="authWithCode">
+            <label class="label">Code</label>
+            <div class="control has-icons-left">
+              <input class="input" type="password" name="code" placeholder="********">
+              <span class="icon is-small is-left">
+                <i class="fa-solid fa-key"></i>
+              </span>
+            </div>
+            <p class="help is-success">Codul de autentificare este trimis pe email.</p>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <label class="radio">
+                <input type="radio" name="question" (change)="changeAuthType(1)" [checked]="authType - 1 === 0">
+                Sunt student
+              </label>
+              <label class="radio">
+                <input type="radio" name="question" (change)="changeAuthType(2)" [checked]="authType - 2 === 0">
+                Sunt coordonator
+              </label>
+              <label class="radio">
+                <input type="radio" name="question" (change)="changeAuthType(3)" [checked]="authType - 3 === 0">
+                Sunt admin
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-link" [class.is-loading]="loading">Trimite</button>
+          </div>
+          <div class="control">
+            <a type="button" class="button is-light" routerLink="/signup">Creare cont</a>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Coordinator Form -->
+      <form (submit)="onLoginCoordinator($event, form)" #form class="flex-column" enctype="multipart/form-data" *ngIf="authType === 2">
+
+        <div *ngIf="responseMessage !== ''">
+          <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+        </div>
+
+        <div>
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control has-icons-left">
+              <input class="input" type="text" name="email" placeholder="demo@gmail.com" value="stamatevalentin125@gmail.com">
+              <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Parola</label>
+            <div class="control has-icons-left">
+              <input class="input" type="password" name="password" placeholder="********" value="admin">
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <label class="radio">
+                <input type="radio" name="question" (change)="changeAuthType(1)" [checked]="authType - 1 === 0">
+                Sunt student
+              </label>
+              <label class="radio">
+                <input type="radio" name="question" (change)="changeAuthType(2)" [checked]="authType - 2 === 0">
+                Sunt coordonator
+              </label>
+              <label class="radio">
+                <input type="radio" name="question" (change)="changeAuthType(3)" [checked]="authType - 3 === 0">
+                Sunt admin
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-link" [class.is-loading]="loading">Trimite</button>
+          </div>
+          <div class="control">
+            <a type="button" class="button is-light" routerLink="/signup">Creare cont</a>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Admin Form -->
+      <form (submit)="onLoginAdmin($event, form)" #form class="flex-column" enctype="multipart/form-data" *ngIf="authType === 3">
+
+        <div *ngIf="responseMessage !== ''">
+          <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+        </div>
+
+        <div>
+          <div class="field">
+            <label class="label">Nume de utilizator</label>
+            <div class="control has-icons-left">
+              <input class="input" type="text" name="username" placeholder="firstname.lastname" value="valentin">
+              <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control has-icons-left">
+              <input class="input" type="email" name="email" placeholder="admin@email.com" value="stamatevalentin125@gmail.com">
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="field" *ngIf="authWithCode">
+            <label class="label">Code</label>
+            <div class="control has-icons-left">
+              <input class="input" type="password" name="code" placeholder="********">
+              <span class="icon is-small is-left">
+                <i class="fa-solid fa-key"></i>
+              </span>
+            </div>
+            <p class="help is-success">Codul de autentificare este trimis pe email.</p>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <label class="radio">
+                <input type="radio" name="question" (change)="changeAuthType(1)" [checked]="authType - 1 === 0">
+                Sunt student
+              </label>
+              <label class="radio">
+                <input type="radio" name="question" (change)="changeAuthType(2)" [checked]="authType - 2 === 0">
+                Sunt coordonator
+              </label>
+              <label class="radio">
+                <input type="radio" name="question" (change)="changeAuthType(3)" [checked]="authType - 3 === 0">
+                Sunt admin
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-link" [class.is-loading]="loading">Trimite</button>
+          </div>
+          <div class="control">
+            <a type="button" class="button is-light" routerLink="/signup">Creare cont</a>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

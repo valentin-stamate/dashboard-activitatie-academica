@@ -1,0 +1,189 @@
+<div *ngIf="notificationMessage !== ''" class="notification is-info notification-sticky">
+  <button class="delete" (click)="onCloseNotification()"></button>
+  <i class="fa-solid fa-circle-info"></i> {{notificationMessage}}
+</div>
+
+<div class="columns">
+
+  <div class="column">
+    <nav class="panel middle-block fill">
+      <p class="panel-heading">Proces-Verbal</p>
+
+      <div class="p-5 flex-column">
+
+        <div class="simple-card white">
+          Conducătorii de doctorat primesc Procesul Verbal, în format Word, completat automat cu
+          informaţiile raportului care va fi susținut de studentul-doctorand la data menționată.
+
+          <p>Structura fișierului trebuie să arate astfel:</p>
+          <button class="button is-info mt-4" (click)="onOpenFileStructureModal()">Deschide</button>
+        </div>
+
+        <form class="flex-column" #form>
+
+          <div>
+            <div class="field">
+              <label class="label">De la</label>
+              <div class="control">
+                <input class="input" type="text" name="from" value="{{emailFrom}}">
+                <small>Trebuie sa fie in formatul <span class="tag is-info is-light">Nume Prenume &lt;name@email.com&gt;</span></small>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Subiect</label>
+              <div class="control">
+                <input class="input" type="text" name="subject" value="{{emailSubject}}">
+                <small>Se va completa automat cu numarul raportului si numele doctorandului</small>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Excludere Email</label>
+              <div class="control">
+                <input class="input" type="text" name="exceptRecipient" placeholder="eg. valentin.stamate@info.uaic.ro,stamatevalentin125@gmail.com">
+                <small>A se separa fiecare email prin virgulă fară spații</small>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Conținut Email</label>
+              <div class="control">
+                <textarea class="textarea" name="emailTemplate" rows="10" [(ngModel)]="emailTemplate" #template></textarea>
+                <small>Suportă formatare HTML</small><br>
+                <small>Textele de tipul {{'{{'}}cheie}} sunt inlocuite in aplicatie cu continutul necesar.</small>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Previzualizare template</label>
+              <div class="textarea is-unselectable preview" [innerHTML]="preRenderHtml(emailTemplate)" #preview></div>
+            </div>
+
+            <div class="file" [class.has-name]="filename !== ''">
+              <label class="file-label">
+                <input class="file-input" type="file" name="file" accept=".xlsx" (change)="onFileInputChange(fileInput)" #fileInput>
+                <span class="file-cta">
+                  <span class="file-icon"><i class="fas fa-upload"></i></span>
+                  <span class="file-label">Încarcă fișierul cu anuntarea repoartelor...</span>
+                </span>
+
+                <span class="file-name" *ngIf="filename !== ''">
+                  {{filename}}
+                </span>
+              </label>
+            </div>
+
+
+          </div>
+
+          <div class="field is-grouped">
+            <div class="control">
+              <button type="button" class="button is-info" [class.is-loading]="previewEmailLoading" (click)="onPreviewEmail($event, form, template, preview)">Previzualizează</button>
+            </div>
+
+            <div class="control">
+              <button type="button" class="button is-link" [class.is-loading]="organizationEmailLoading" (click)="onSubmit($event, form, template, preview)">Trimite</button>
+            </div>
+
+            <div class="control" *ngIf="organizationEmailFinish">
+              <button type="button" class="button" (click)="onOpenModal()">Deschie Rezultat</button>
+            </div>
+          </div>
+
+        </form>
+
+
+      </div>
+    </nav>
+
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal" [class.is-active]="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content">
+    <div class="notification is-flex is-justify-content-center p-5">
+      <div>
+        <table class="table fill">
+          <thead>
+          <tr>
+            <th>Email</th>
+            <th>Trimis</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of modalData">
+            <th>{{item.email}}</th>
+            <th *ngIf="!item.success"><i class="fa-solid fa-circle-x"></i></th>
+            <th *ngIf="item.success"><i class="fa-solid fa-circle-check"></i></th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <button class="modal-close is-large" aria-label="close" (click)="onCloseModal()"></button>
+</div>
+
+<!-- Email Preview -->
+<div class="modal" [class.is-active]="previewModal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content" style="background-color: #eaeaea">
+    <div class="preview-mail-component">
+
+      <div class="email-preview" *ngFor="let item of previewModalData">
+        <div><b>De la:</b> {{item.from}}</div>
+        <div><b>Destinatar:</b> {{item.to}}</div>
+        <div><b>Subiect:</b> {{item.subject}}</div>
+        <div *ngIf="item.cc.length !== 0"><b>CC:</b> {{item.cc.join(', ')}}</div>
+        <div><b>Conținut email</b>
+          <div class="textarea is-unselectable preview" [innerHTML]="item.html"></div>
+        </div>
+        <div *ngIf="item.attachments.length !== 0">
+          <div><b>Atașamente:</b></div>
+          <div class="attachment" *ngFor="let attachment of item.attachments">{{attachment}}</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="modal-close is-large" aria-label="close" (click)="onCloseModal()"></button>
+</div>
+
+<!-- Coordinator File Structure Modal -->
+<div class="modal" [class.is-active]="fileStructureModal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content modal-width" style="width: 1024px">
+    <div class="notification is-flex is-justify-content-center p-5">
+      <div>
+        <table class="table fill">
+          <thead>
+          <tr>
+            <th>Nr. crt</th>
+            <th>Conducator de doctorat</th>
+            <th>Adresa de email coordonator</th>
+            <th>Comisie de indrumare</th>
+            <th>Doctorand</th>
+            <th>Adresa de email</th>
+            <th>...</th>
+            <th>Referate</th>
+            <th>R1</th>
+            <th>R2</th>
+            <th>R3</th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <button class="modal-close is-large" aria-label="close" (click)="onCloseModal()"></button>
+</div>

@@ -1,0 +1,127 @@
+<nav class="panel middle-block fill">
+  <p class="panel-heading">
+    Articole științifice publicate în extenso în
+    reviste cotate Web of Science cu factor de impact
+  </p>
+
+  <div class="p-5">
+
+    <form (ngSubmit)="onSubmit($event)" class="flex-column" #userForm>
+
+      <div *ngIf="responseMessage !== ''">
+        <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+      </div>
+
+      <div>
+        <div class="field">
+          <label class="label">Titlul articolului</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Demo" [(ngModel)]="form.articleTitle" name="articleTitle" [disabled]="readonly">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Autori</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Demo" [(ngModel)]="form.authors" name="authors" [disabled]="readonly">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Data publicării</label>
+          <div class="control">
+            <input class="input" type="date" name="publicationDate" #myDate [value]="form.publicationDate | date:'yyyy-MM-dd'" (input)="form.publicationDate=getDate(myDate)" [disabled]="readonly">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Volum</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Demo" [(ngModel)]="form.volume" name="volume" [disabled]="readonly">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">ISSUE</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Demo" [(ngModel)]="form.issue" name="issue" [disabled]="readonly">
+          </div>
+        </div>
+
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="label">Nr. pagină de start</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="0" [(ngModel)]="form.startingPage" name="startingPage" [disabled]="readonly">
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="field">
+              <label class="label">Nr. pagina de sfârșit</label>
+              <div class="control">
+                <input class="input" type="number" placeholder="1" [(ngModel)]="form.endingPage" name="endingPage" [disabled]="readonly">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Factor de impact</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Demo" [(ngModel)]="form.impactFactor" name="impactFactor" [disabled]="readonly">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Clasificare CNATDCU</label>
+          <div class="control">
+            <div class="select">
+              <select [(ngModel)]="form.cnatdcuClassification" name="cnatdcuClassification" [disabled]="readonly">
+                <option *ngFor="let item of cnadtcuClassification; index as i">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">DOI</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Demo" [(ngModel)]="form.doi" name="doi" [disabled]="readonly">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Denumire conferință</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Demo" [(ngModel)]="form.conferenceName" name="conferenceName" [disabled]="readonly">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Observații</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Demo" [(ngModel)]="form.observations" name="observations" [disabled]="readonly">
+          </div>
+        </div>
+      </div>
+
+
+      <div class="field is-grouped" *ngIf="!readonly">
+        <div class="control" *ngIf="!editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Trimite</button>
+        </div>
+        <div class="control" *ngIf="editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Modifică</button>
+        </div>
+        <div class="control">
+          <button type="button" class="button is-light" (click)="onCancel()">Anulează</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</nav>

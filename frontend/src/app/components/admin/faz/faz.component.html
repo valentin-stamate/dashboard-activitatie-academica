@@ -1,0 +1,152 @@
+<div *ngIf="notificationMessage !== ''" class="notification is-info notification-sticky">
+  <button class="delete" (click)="onCloseNotification()"></button>
+  <i class="fa-solid fa-circle-info"></i> {{notificationMessage}}
+</div>
+
+<nav class="panel middle-block fill">
+  <p class="panel-heading">FAZ</p>
+
+  <div class="p-5 flex-column content">
+
+    <div class="simple-card white">
+      Fișele de activitate zilnică (FAZ) sunt realizate lunar cu ajutorul unui fisier .xlsx.
+      Acest fișier conține intervalul orar pentru activitățile semestriale ale fiecărui cadru didactic iar fișierul
+      rezultat este o arhivă .zip ce conține FAZ-ul fiecărui cadru didactic în format Word.
+      Această funcție permite alegerea intervalului dorit pentru realizarea FAZ-urilor, putând fi excluse
+      perioadele de vacanță și sesiunile de examen.
+
+      <p>Structura fișierului trebuie să arate astfel:</p>
+      <button class="button is-info" (click)="onOpenFileStructureModal()">Deschide</button>
+    </div>
+
+
+    <form class="flex-column" enctype="multipart/form-data" (submit)="onDownload($event, form)" #form>
+
+      <div class="columns">
+
+        <div class="column">
+          <div class="field">
+            <label class="label">Ziua de start</label>
+            <div class="select">
+              <select name="month">
+                <option>Select dropdown</option>
+                <option value="0">Ianuarie</option>
+                <option value="1">Februarie</option>
+                <option value="2">Martie</option>
+                <option value="3">Aprilie</option>
+                <option value="4">Mai</option>
+                <option value="5">Iunie</option>
+                <option value="6">Iulie</option>
+                <option value="7">August</option>
+                <option value="8">Septembrie</option>
+                <option value="9">Octombrie</option>
+                <option value="10">Noiembrie</option>
+                <option value="11">Decembrie</option>
+              </select>
+            </div>
+            <div><small>Luna din anul curent pentru care se generează FAZ-ul</small></div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="field">
+            <label class="label">Ziua de start</label>
+            <div class="control">
+              <input class="input" type="number" name="ignoreStart" value="0">
+              <small>Ziua de start din luna curentă pentru care se ignoră</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="field">
+            <label class="label">Ziua de sfârșit</label>
+            <div class="control">
+              <input class="input" type="number" name="ignoreEnd" value="0">
+              <small>Ziua de sfârșit din luna curentă pentru care se ignoră</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label class="label">Footer</label>
+        <div class="control">
+          <input class="input" type="text" name="afterTableNote" value="{{fazFooter}}">
+          <small>Textul ce apare imediat după tabelul cu activitatea din FAZ</small>
+        </div>
+      </div>
+
+      <div class="file" [class.has-name]="filename !== ''">
+        <label class="file-label">
+          <input class="file-input" type="file" name="timetable" accept=".xlsx" (change)="onFileInputChange(fileInput)" #fileInput>
+          <span class="file-cta">
+                  <span class="file-icon"><i class="fas fa-upload"></i></span>
+                  <span class="file-label">Încarcă orarul profesorilor...</span>
+                </span>
+
+          <span class="file-name" *ngIf="filename !== ''">
+                  {{filename}}
+                </span>
+        </label>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-link" [class.is-loading]="loading">Descarca FAZ</button>
+        </div>
+      </div>
+
+    </form>
+
+
+  </div>
+</nav>
+
+<!-- Coordinator File Structure Modal -->
+<div class="modal" [class.is-active]="fileStructureModal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content modal-width" style="width: 1024px">
+    <div class="notification is-flex is-justify-content-center p-5">
+      <div>
+        <table class="table fill">
+          <thead>
+          <tr>
+            <th>De la</th>
+            <th>Până la</th>
+            <th>Disciplina</th>
+            <th>Activitate</th>
+            <th>Prescurtare activitate</th>
+            <th>Profesor</th>
+            <th>ore pe saptamana FAZ</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th>Luni</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>12:00</th>
+            <th>13:00</th>
+            <th>Scoala Doctorala</th>
+            <th>Membru comisie de îndrumare</th>
+            <th>CSRD</th>
+            <th>Lect. dr. Olariu Florentin Emanuel</th>
+            <th>1,08</th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <button class="modal-close is-large" aria-label="close" (click)="onCloseModal()"></button>
+</div>

@@ -1,0 +1,91 @@
+<nav class="panel middle-block fill">
+  <p class="panel-heading">
+    Membru în echipa editorială
+  </p>
+
+  <div class="p-5">
+
+    <form (ngSubmit)="onSubmit($event)" class="flex-column" #userForm>
+
+      <div *ngIf="responseMessage !== ''">
+        <i class="fa-solid fa-circle-info"></i> {{responseMessage}}
+      </div>
+
+      <div>
+        <div class="field">
+          <label class="label">Denumire comitet</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="committee" [(ngModel)]="form.committeeName">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Denumire revistă / editură</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="magazineName" [(ngModel)]="form.magazineName">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Anul intrării în comitet</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="number" placeholder="2022" name="yearOfCommitteeAttendance" [(ngModel)]="form.yearOfCommitteeAttendance">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Calitatea</label>
+          <div class="control">
+            <div class="select">
+              <select name="quality" [(ngModel)]="form.quality" [disabled]="readonly">
+                <option *ngFor="let item of quality">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Tipul revistei</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="ISI / BDI / ALTUL (să se specifice)" name="magazineType" [(ngModel)]="form.magazineType">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Național / Internațional</label>
+          <div class="control">
+            <div class="select">
+              <select name="nationalOrInternational" [(ngModel)]="form.nationalOrInternational">
+                <option *ngFor="let item of nationalInternational">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Observații</label>
+          <div class="control">
+            <input  [disabled]="readonly" class="input" type="text" placeholder="Demo" name="observations" [(ngModel)]="form.observations">
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="field is-grouped" *ngIf="!readonly">
+        <div class="control" *ngIf="!editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Trimite</button>
+        </div>
+        <div class="control" *ngIf="editMode">
+          <button class="button is-link" [class.is-loading]="loading" [disabled]="!checkForm(userForm)">Modifică</button>
+        </div>
+        <div class="control">
+          <button type="button" class="button is-light" (click)="onCancel()">Anulează</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</nav>
