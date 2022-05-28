@@ -1,4 +1,6 @@
-const host = 'http://localhost:8080';
+import {environment} from "../../environments/environment";
+
+const host = environment.serverHost;
 
 /* Took from the backend */
 export class RestEndpoints {

@@ -45,3 +45,4 @@
 * Notify Parent : https://stackoverflow.com/a/40516734/10805602
 * Keep router link active on children components : https://stackoverflow.com/a/55879738/10805602
 * Get the filename from file input : https://stackoverflow.com/a/9234894/10805602
+* Run angular in a container : https://wkrzywiec.medium.com/build-and-run-angular-application-in-a-docker-container-b65dbbc50be8

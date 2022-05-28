@@ -1,7 +1,6 @@
 import {DataTypes, Model, Sequelize} from '@sequelize/core';
 import {CryptoUtil} from "../services/crypto.util";
 import sha256 from "crypto-js/sha256";
-import {CoordinatorScientificActivity} from "./form.models";
 
 require('dotenv').config();
 const env = process.env as any;

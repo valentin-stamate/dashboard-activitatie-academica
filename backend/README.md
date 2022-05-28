@@ -1,4 +1,3 @@
-
 ## Resources
 
 * GraphQl with Express : https://graphql.org/graphql-js/running-an-express-graphql-server
@@ -121,3 +120,20 @@
 * SheeJs Date : https://stackoverflow.com/a/53163756/10805602
 * Docx to Pdf : https://stackoverflow.com/a/65549867/10805602
 * https://www.npmjs.com/package/crypto-js
+* ts-node bug https://github.com/facebook/jest/issues/12655
+
+## ENV
+* PORT (default is 8080)
+* NODE_ENV (development | production)
+* PASSWORD_SECRET (used as a salt for encryption)
+* TOKEN_SECRET (used for jwt)
+* DB_DIALECT
+* DB_HOST
+* DB_USERNAME
+* DB_PASSWORD
+* DB_NAME
+* SMTP_HOST
+* SMTP_USER
+* SMTP_PASS
+* SMTP_SECURE
+* INITIALIZE (force initialize the database and populates it with the default users)

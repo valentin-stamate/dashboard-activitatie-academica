@@ -1,5 +1,5 @@
 {
-  "name": "systemmanagement-backend",
+  "name": "backend",
   "version": "0.0.1",
   "description": "systemmanagement-backend initialised with create-express-typescript-application.",
   "main": "src/index.ts",
@@ -25,7 +25,7 @@
     "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",
     "nodemon": "^2.0.15",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.8.0",
     "typescript": "^4.5.2"
   },
   "dependencies": {

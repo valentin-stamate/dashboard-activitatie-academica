@@ -14,12 +14,15 @@ import {registerCoordinatorEndpoints} from "./app/endpoints/coordinator.endpoint
 
 /** ENV */
 require('dotenv').config();
+const env = process.env;
 
 /** Initialize Express App */
 const app: Express = express();
 
+console.log(env.INITIALIZE);
+
 /** Initialize Database */
-sequelizeInit(false)
+sequelizeInit(`${env.INITIALIZE}` === 'true')
     .then(r => {})
     .catch(err => console.log(err));
 
@@ -32,13 +35,13 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // Handle logs in console during development
-if (process.env.NODE_ENV === 'development' || config.NODE_ENV === 'development') {
+if (env.NODE_ENV === 'development' || config.NODE_ENV === 'development') {
     app.use(morgan('dev'));
     app.use(cors({origin: ['http://localhost:4200', 'http://localhost:9876']}));
 }
 
 // Handle security and origin in production
-if (process.env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
+if (env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
     app.use(helmet());
 }
 
