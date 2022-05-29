@@ -15,6 +15,7 @@ import {registerCoordinatorEndpoints} from "./app/endpoints/coordinator.endpoint
 /** ENV */
 require('dotenv').config();
 const env = process.env;
+const allowedClients: string[] = ['http://85.122.23.125:4200'];
 
 /** Initialize Express App */
 const app: Express = express();
@@ -37,12 +38,13 @@ app.use(express.urlencoded({extended: true}));
 // Handle logs in console during development
 if (env.NODE_ENV === 'development' || config.NODE_ENV === 'development') {
     app.use(morgan('dev'));
-    app.use(cors({origin: ['http://localhost:4200', 'http://localhost:9876']}));
+    app.use(cors({origin: allowedClients}));
 }
 
 // Handle security and origin in production
 if (env.NODE_ENV === 'production' || config.NODE_ENV === 'production') {
     app.use(helmet());
+    app.use(cors({origin: allowedClients}));
 }
 
 /************************************************************************************
