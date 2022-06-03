@@ -1,16 +1,16 @@
 import {NextFunction, Request, Response} from "express";
 import {JwtService} from "../services/jwt.service";
-import {Student} from "../database/models";
+import {StudentModel} from "../database/db.models";
 import {
-    AcademyMember,
-    AwardAndNomination,
-    Citation, DidacticActivity, EditorialMember,
-    ISIProceeding, OrganizedEvent, Patent, ResearchContract,
-    ScientificArticleBDI,
-    ScientificArticleISI,
-    ScientificBook, ScientificCommunication,
-    Translation, WithoutActivity
-} from "../database/form.models";
+    AcademyMemberModel,
+    AwardAndNominationModel,
+    CitationModel, DidacticActivityModel, EditorialMemberModel,
+    ISIProceedingModel, OrganizedEventModel, PatentModel, ResearchContractModel,
+    ScientificArticleBDIModel,
+    ScientificArticleISIModel,
+    ScientificBookModel, ScientificCommunicationModel,
+    TranslationModel, WithoutActivityModel
+} from "../database/forms/db.student.form.models";
 import {StatusCode} from "../services/rest.util";
 import {StudentFormService} from "../service/student.form.service";
 
@@ -20,7 +20,7 @@ export class StudentFormController {
     static async getScientificArticleISI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getScientificArticleISI(user);
             res.end(JSON.stringify(data));
@@ -32,8 +32,8 @@ export class StudentFormController {
     static async addScientificArticleISI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ScientificArticleISI;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ScientificArticleISIModel;
 
             await StudentFormService.addScientificArticleISI(user, body);
 
@@ -47,8 +47,8 @@ export class StudentFormController {
     static async updateScientificArticleISI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ScientificArticleISI;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ScientificArticleISIModel;
             const formId = req.params.id;
 
             await StudentFormService.updateScientificArticleISI(user, formId, body);
@@ -61,7 +61,7 @@ export class StudentFormController {
     static async deleteScientificArticleISI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteScientificArticleISI(user, id);
@@ -75,7 +75,7 @@ export class StudentFormController {
     static async getISIProceeding(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getISIProceeding(user);
             res.end(JSON.stringify(data));
@@ -87,8 +87,8 @@ export class StudentFormController {
     static async addISIProceeding(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ISIProceeding;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ISIProceedingModel;
 
             await StudentFormService.addISIProceeding(user, body);
 
@@ -102,8 +102,8 @@ export class StudentFormController {
     static async updateISIProceeding(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ISIProceeding;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ISIProceedingModel;
             const formId = req.params.id;
 
             await StudentFormService.updateISIProceeding(user, formId, body);
@@ -116,7 +116,7 @@ export class StudentFormController {
     static async deleteISIProceeding(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteISIProceeding(user, id);
@@ -130,7 +130,7 @@ export class StudentFormController {
     static async getScientificArticleBDI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getScientificArticleBDI(user);
             res.end(JSON.stringify(data));
@@ -142,8 +142,8 @@ export class StudentFormController {
     static async addScientificArticleBDI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ScientificArticleBDI;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ScientificArticleBDIModel;
 
             await StudentFormService.addScientificArticleBDI(user, body);
 
@@ -157,8 +157,8 @@ export class StudentFormController {
     static async updateScientificArticleBDI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ScientificArticleBDI;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ScientificArticleBDIModel;
             const formId = req.params.id;
 
             await StudentFormService.updateScientificArticleBDI(user, formId, body);
@@ -171,7 +171,7 @@ export class StudentFormController {
     static async deleteScientificArticleBDI(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteScientificArticleBDI(user, id);
@@ -185,7 +185,7 @@ export class StudentFormController {
     static async getScientificBook(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getScientificBook(user);
             res.end(JSON.stringify(data));
@@ -197,8 +197,8 @@ export class StudentFormController {
     static async addScientificBook(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ScientificBook;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ScientificBookModel;
 
             await StudentFormService.addScientificBook(user, body);
 
@@ -212,8 +212,8 @@ export class StudentFormController {
     static async updateScientificBook(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ScientificBook;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ScientificBookModel;
             const formId = req.params.id;
 
             await StudentFormService.updateScientificBook(user, formId, body);
@@ -226,7 +226,7 @@ export class StudentFormController {
     static async deleteScientificBook(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteScientificBook(user, id);
@@ -240,7 +240,7 @@ export class StudentFormController {
     static async getTranslation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getTranslation(user);
             res.end(JSON.stringify(data));
@@ -252,8 +252,8 @@ export class StudentFormController {
     static async addTranslation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as Translation;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as TranslationModel;
 
             await StudentFormService.addTranslation(user, body);
 
@@ -267,8 +267,8 @@ export class StudentFormController {
     static async updateTranslation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as Translation;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as TranslationModel;
             const formId = req.params.id;
 
             await StudentFormService.updateTranslation(user, formId, body);
@@ -281,7 +281,7 @@ export class StudentFormController {
     static async deleteTranslation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteTranslation(user, id);
@@ -295,7 +295,7 @@ export class StudentFormController {
     static async getScientificCommunication(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getScientificCommunication(user);
             res.end(JSON.stringify(data));
@@ -307,8 +307,8 @@ export class StudentFormController {
     static async addScientificCommunication(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ScientificCommunication;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ScientificCommunicationModel;
 
             await StudentFormService.addScientificCommunication(user, body);
 
@@ -322,8 +322,8 @@ export class StudentFormController {
     static async updateScientificCommunication(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ScientificCommunication;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ScientificCommunicationModel;
             const formId = req.params.id;
 
             await StudentFormService.updateScientificCommunication(user, formId, body);
@@ -336,7 +336,7 @@ export class StudentFormController {
     static async deleteScientificCommunication(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteScientificCommunication(user, id);
@@ -350,7 +350,7 @@ export class StudentFormController {
     static async getPatent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getPatent(user);
             res.end(JSON.stringify(data));
@@ -362,8 +362,8 @@ export class StudentFormController {
     static async addPatent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as Patent;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as PatentModel;
 
             await StudentFormService.addPatent(user, body);
 
@@ -377,8 +377,8 @@ export class StudentFormController {
     static async updatePatent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as Patent;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as PatentModel;
             const formId = req.params.id;
 
             await StudentFormService.updatePatent(user, formId, body);
@@ -391,7 +391,7 @@ export class StudentFormController {
     static async deletePatent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deletePatent(user, id);
@@ -405,7 +405,7 @@ export class StudentFormController {
     static async getResearchContract(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getResearchContract(user);
             res.end(JSON.stringify(data));
@@ -417,8 +417,8 @@ export class StudentFormController {
     static async addResearchContract(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ResearchContract;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ResearchContractModel;
 
             await StudentFormService.addResearchContract(user, body);
 
@@ -432,8 +432,8 @@ export class StudentFormController {
     static async updateResearchContract(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as ResearchContract;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as ResearchContractModel;
             const formId = req.params.id;
 
             await StudentFormService.updateResearchContract(user, formId, body);
@@ -446,7 +446,7 @@ export class StudentFormController {
     static async deleteResearchContract(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteResearchContract(user, id);
@@ -460,7 +460,7 @@ export class StudentFormController {
     static async getCitation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getCitation(user);
             res.end(JSON.stringify(data));
@@ -472,8 +472,8 @@ export class StudentFormController {
     static async addCitation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as Citation;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as CitationModel;
 
             await StudentFormService.addCitation(user, body);
 
@@ -487,8 +487,8 @@ export class StudentFormController {
     static async updateCitation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as Citation;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as CitationModel;
             const formId = req.params.id;
 
             await StudentFormService.updateCitation(user, formId, body);
@@ -501,7 +501,7 @@ export class StudentFormController {
     static async deleteCitation(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteCitation(user, id);
@@ -515,7 +515,7 @@ export class StudentFormController {
     static async getAwardAndNomination(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getAwardAndNomination(user);
             res.end(JSON.stringify(data));
@@ -527,8 +527,8 @@ export class StudentFormController {
     static async addAwardAndNomination(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as AwardAndNomination;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as AwardAndNominationModel;
 
             await StudentFormService.addAwardAndNomination(user, body);
 
@@ -542,8 +542,8 @@ export class StudentFormController {
     static async updateAwardAndNomination(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as AwardAndNomination;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as AwardAndNominationModel;
             const formId = req.params.id;
 
             await StudentFormService.updateAwardAndNomination(user, formId, body);
@@ -556,7 +556,7 @@ export class StudentFormController {
     static async deleteAwardAndNomination(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteAwardAndNomination(user, id);
@@ -570,7 +570,7 @@ export class StudentFormController {
     static async getAcademyMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getAcademyMember(user);
             res.end(JSON.stringify(data));
@@ -582,8 +582,8 @@ export class StudentFormController {
     static async addAcademyMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as AcademyMember;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as AcademyMemberModel;
 
             await StudentFormService.addAcademyMember(user, body);
 
@@ -597,8 +597,8 @@ export class StudentFormController {
     static async updateAcademyMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as AcademyMember;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as AcademyMemberModel;
             const formId = req.params.id;
 
             await StudentFormService.updateAcademyMember(user, formId, body);
@@ -611,7 +611,7 @@ export class StudentFormController {
     static async deleteAcademyMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteAcademyMember(user, id);
@@ -625,7 +625,7 @@ export class StudentFormController {
     static async getEditorialMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getEditorialMember(user);
             res.end(JSON.stringify(data));
@@ -637,8 +637,8 @@ export class StudentFormController {
     static async addEditorialMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as EditorialMember;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as EditorialMemberModel;
 
             await StudentFormService.addEditorialMember(user, body);
 
@@ -652,8 +652,8 @@ export class StudentFormController {
     static async updateEditorialMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as EditorialMember;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as EditorialMemberModel;
             const formId = req.params.id;
 
             await StudentFormService.updateEditorialMember(user, formId, body);
@@ -666,7 +666,7 @@ export class StudentFormController {
     static async deleteEditorialMember(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteEditorialMember(user, id);
@@ -680,7 +680,7 @@ export class StudentFormController {
     static async getOrganizedEvent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getOrganizedEvent(user);
             res.end(JSON.stringify(data));
@@ -692,8 +692,8 @@ export class StudentFormController {
     static async addOrganizedEvent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as OrganizedEvent;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as OrganizedEventModel;
 
             await StudentFormService.addOrganizedEvent(user, body);
 
@@ -707,8 +707,8 @@ export class StudentFormController {
     static async updateOrganizedEvent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as OrganizedEvent;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as OrganizedEventModel;
             const formId = req.params.id;
 
             await StudentFormService.updateOrganizedEvent(user, formId, body);
@@ -721,7 +721,7 @@ export class StudentFormController {
     static async deleteOrganizedEvent(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteOrganizedEvent(user, id);
@@ -735,7 +735,7 @@ export class StudentFormController {
     static async getWithoutActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getWithoutActivity(user);
             res.end(JSON.stringify(data));
@@ -747,8 +747,8 @@ export class StudentFormController {
     static async addWithoutActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as WithoutActivity;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as WithoutActivityModel;
 
             await StudentFormService.addWithoutActivity(user, body);
 
@@ -762,8 +762,8 @@ export class StudentFormController {
     static async updateWithoutActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as WithoutActivity;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as WithoutActivityModel;
             const formId = req.params.id;
 
             await StudentFormService.updateWithoutActivity(user, formId, body);
@@ -776,7 +776,7 @@ export class StudentFormController {
     static async deleteWithoutActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteWithoutActivity(user, id);
@@ -790,7 +790,7 @@ export class StudentFormController {
     static async getDidacticActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
 
             const data = await StudentFormService.getDidacticActivity(user);
             res.end(JSON.stringify(data));
@@ -802,8 +802,8 @@ export class StudentFormController {
     static async addDidacticActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as DidacticActivity;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as DidacticActivityModel;
 
             await StudentFormService.addDidacticActivity(user, body);
 
@@ -817,8 +817,8 @@ export class StudentFormController {
     static async updateDidacticActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
-            const body = req.body as DidacticActivity;
+            const user = JwtService.verifyToken(token) as StudentModel;
+            const body = req.body as DidacticActivityModel;
             const formId = req.params.id;
 
             await StudentFormService.updateDidacticActivity(user, formId, body);
@@ -831,7 +831,7 @@ export class StudentFormController {
     static async deleteDidacticActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const user = JwtService.verifyToken(token) as Student;
+            const user = JwtService.verifyToken(token) as StudentModel;
             const id = req.params.id;
 
             await StudentFormService.deleteDidacticActivity(user, id);

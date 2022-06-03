@@ -1,8 +1,8 @@
 import {NextFunction, Request, Response,} from "express";
-import {AdminModel, CoordinatorModel, StudentModel} from "../database/sequelize";
 import {JwtService} from "../services/jwt.service";
-import {Admin, Coordinator, Student} from "../database/models";
 import {ContentType, ResponseMessage, StatusCode} from "../services/rest.util";
+import {AdminModel, CoordinatorModel, StudentModel} from "../database/db.models";
+import {dbConnection} from "../database/connect";
 
 export class Middleware {
     /** Middleware for unauthorized users. In this case every request can pass. */
@@ -13,36 +13,38 @@ export class Middleware {
 
     /** Middleware for authorized students. In order for the request to pass the user should exist. */
     static async studentMiddleware (req: Request<any>, res: Response, next: NextFunction) {
+        const studentRepo = dbConnection.getRepository(StudentModel);
+
         try {
             const token = req.get('Authorization');
 
-            if (!token) {
+            if (token == null) {
                 next(new ResponseError(ResponseMessage.NO_AUTH_TOKEN, StatusCode.UNAUTHORIZED));
                 return;
             }
 
-            const user = JwtService.verifyToken(token) as Student;
+            const student = JwtService.verifyToken(token) as StudentModel;
 
-            if (user === null) {
+            if (student === null) {
                 next(new ResponseError(ResponseMessage.INVALID_TOKEN, StatusCode.IM_A_TEAPOT));
                 return;
             }
 
-            const row = await StudentModel.findOne({where: {
-                    id: user.id,
-                    fullName: user.fullName || 'none',
-                    identifier: user.identifier || 'none',
-                    email: user.email || 'none',
-                }});
+            const existingStudent = await studentRepo.findOne({
+                where: {
+                    id: student.id,
+                    fullName: student.fullName ?? '',
+                    identifier: student.identifier ?? '',
+                    email: student.email ?? '',
+                }
+            });
 
-            if (row === null) {
+            if (existingStudent == null) {
                 next(new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.IM_A_TEAPOT));
                 return;
             }
 
-            const student = row.toJSON() as Student;
-
-            if (!student.isActive) {
+            if (!existingStudent.isActive) {
                 next(new ResponseError(ResponseMessage.INACTIVE_USER, StatusCode.FORBIDDEN));
                 return;
             }
@@ -56,30 +58,34 @@ export class Middleware {
 
     /** Middleware for coordinators users. */
     static async coordinatorMiddleware (req: Request<any>, res: Response, next: NextFunction) {
+        const coordinatorRepo = dbConnection.getRepository(CoordinatorModel);
+
         try {
 
             const token = req.get('Authorization');
 
-            if (!token) {
+            if (token == null) {
                 next(new ResponseError(ResponseMessage.NO_AUTH_TOKEN, StatusCode.UNAUTHORIZED));
                 return;
             }
 
-            const user = JwtService.verifyToken(token) as Coordinator;
+            const coordinator = JwtService.verifyToken(token) as CoordinatorModel;
 
-            if (user === null) {
+            if (coordinator == null) {
                 next(new ResponseError(ResponseMessage.INVALID_TOKEN, StatusCode.IM_A_TEAPOT));
                 return;
             }
 
-            const row = await CoordinatorModel.findOne({where: {
-                    id: user.id,
-                    name: user.name || 'none',
-                    function: user.function || 'none',
-                    email: user.email || 'none',
-                }});
+            const existingCoordinator = await coordinatorRepo.findOne({
+                where: {
+                    id: coordinator.id,
+                    name: coordinator.name ?? '',
+                    function: coordinator.function ?? '',
+                    email: coordinator.email ?? '',
+                }
+            });
 
-            if (row === null) {
+            if (existingCoordinator == null) {
                 next(new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.IM_A_TEAPOT));
                 return;
             }
@@ -93,27 +99,31 @@ export class Middleware {
 
     /** Middleware for admin users. */
     static async adminMiddleware (req: Request<any>, res: Response, next: NextFunction) {
+        const adminRepo = dbConnection.getRepository(AdminModel);
+
         try {
             const token = req.get('Authorization');
 
-            if (!token) {
+            if (token == null) {
                 next(new ResponseError(ResponseMessage.NO_AUTH_TOKEN, StatusCode.UNAUTHORIZED));
                 return;
             }
 
-            const user = JwtService.verifyToken(token) as Admin;
+            const admin = JwtService.verifyToken(token) as AdminModel;
 
-            if (user === null) {
+            if (admin == null) {
                 next(new ResponseError(ResponseMessage.INVALID_TOKEN, StatusCode.IM_A_TEAPOT));
                 return;
             }
 
-            const row = await AdminModel.findOne({where: {
-                    id: user.id,
-                    username: user.username || 'none',
-                }});
+            const existingAdmin = await adminRepo.findOne({
+                where: {
+                    id: admin.id,
+                    username: admin.username ?? '',
+                }
+            });
 
-            if (row === null) {
+            if (existingAdmin == null) {
                 next(new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.IM_A_TEAPOT));
                 return;
             }

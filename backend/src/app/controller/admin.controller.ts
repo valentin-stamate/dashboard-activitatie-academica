@@ -30,9 +30,9 @@ export class AdminController {
         }
     }
 
-    static async getAllowedUsers(req: Request<any>, res: Response, next: NextFunction) {
+    static async getAllowedStudents(req: Request<any>, res: Response, next: NextFunction) {
         try {
-            const data = await AdminService.getAllowedUsers();
+            const data = await AdminService.getAllowedStudents();
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -41,7 +41,7 @@ export class AdminController {
     }
 
     static async importAllowedUsers(req: Request<any>, res: Response, next: NextFunction) {
-        if (!req.files) {
+        if (req.files == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -80,12 +80,12 @@ export class AdminController {
         const body = req.body;
         const files = req.files;
 
-        if (!files) {
+        if (files == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
-        if (!files.file) {
+        if (files.file == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -135,14 +135,14 @@ export class AdminController {
         const body = req.body;
         const files = req.files;
 
-        if (!files || !body.ignoreStart || !body.ignoreEnd || !body.afterTableNote || !body.month) {
+        if (files == null || body.ignoreStart == null || body.ignoreEnd == null || body.afterTableNote == null || body.month == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
         const timetableFile = files.timetable as UploadedFile;
 
-        if (timetableFile === undefined) {
+        if (timetableFile == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -168,12 +168,12 @@ export class AdminController {
         const body = req.body;
         const files = req.files;
 
-        if (!files) {
+        if (files == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
-        if (files.file === undefined) {
+        if (files.file == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -210,12 +210,12 @@ export class AdminController {
         const body = req.body;
         const files = req.files;
 
-        if (!files) {
+        if (files == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
-        if (files.file === undefined) {
+        if (files.file == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -257,12 +257,12 @@ export class AdminController {
     static async importCoordinators(req: Request<any>, res: Response, next: NextFunction) {
         const files = req.files;
 
-        if (!files) {
+        if (files == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
-        if (files.file === undefined) {
+        if (files.file == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }

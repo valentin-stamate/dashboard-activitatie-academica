@@ -1,7 +1,7 @@
 export enum ResponseMessage {
     INCOMPLETE_FORM = 'Please complete all the fields',
     USER_NOT_REGISTERED = 'The user is not registered in our database',
-    NO_USER_FOUND = 'No user was found with these credentials',
+    USER_NOT_FOUND = 'User not found',
     INVALID_AUTH_KEY = 'The authorization key provided is invalid',
     SOMETHING_WRONG = 'Something went wrong',
     NO_AUTH_TOKEN = 'There is no authentication key available',
@@ -20,6 +20,8 @@ export enum ResponseMessage {
     MAIL_ERROR = 'Mail error',
     INVALID_DATE = 'Invalid date',
     INVALID_FORM = 'Invalid form',
+    COORDINATOR_NOT_FOUND = 'Coordinator not found',
+    FORM_NOT_FOUND = 'The form was not found',
 }
 
 export enum ContentType {

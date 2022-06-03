@@ -1,47 +1,43 @@
-import {
-    AdminModel,
-    AllowedStudentsModel,
-    AuthorizationKeyModel,
-    CoordinatorModel,
-    StudentModel
-} from "../database/sequelize";
 import {ResponseError} from "../middleware/middleware";
 import {ResponseMessage, StatusCode} from "../services/rest.util";
-import {Op} from "@sequelize/core";
-import {Admin, AllowedStudent, AuthorizationKey, Coordinator, Student} from "../database/models";
+import {AdminModel, AllowedStudentModel, AuthorizationKeyModel, CoordinatorModel, StudentModel} from "../database/db.models";
 import {UtilService} from "../services/util.service";
 import {CryptoUtil} from "../services/crypto.util";
 import sha256 from "crypto-js/sha256";
 import {AdminLoginMessage, EmailDefaults, LoginMessage, MailService, SignupMessage} from "../services/email.service";
 import {JwtService} from "../services/jwt.service";
+import {dbConnection} from "../database/connect";
 
 export class AuthService {
 
     static async check(user: any): Promise<number> {
+        const studentRepo = dbConnection.getRepository(StudentModel);
+        const coordinatorRepo = dbConnection.getRepository(CoordinatorModel);
+        const adminRepo = dbConnection.getRepository(AdminModel);
 
-        let studentRow = await StudentModel.findOne({
+        let studentRow = await studentRepo.findOne({
             where: {
                 id: user.id,
-                fullName: user.fullName || 'none',
-                identifier: user.identifier || 'none',
-                email: user.email || 'none',
+                fullName: user.fullName ?? '',
+                identifier: user.identifier ?? '',
+                email: user.email ?? '',
             }});
 
-        let coordinatorRow = await CoordinatorModel.findOne({
+        let coordinatorRow = await coordinatorRepo.findOne({
             where: {
                 id: user.id,
-                name: user.name || 'none',
-                function: user.function || 'none',
-                email: user.email || 'none',
+                name: user.name ?? '',
+                function: user.function ?? '',
+                email: user.email ?? '',
             }});
 
-        let adminRow = await AdminModel.findOne({
+        let adminRow = await adminRepo.findOne({
             where: {
                 id: user.id,
-                username: user.username || 'none',
+                username: user.username ?? 'none',
             }});
 
-        if (!studentRow && !coordinatorRow && !adminRow) {
+        if (studentRow == null && coordinatorRow == null && adminRow == null) {
             throw new ResponseError(ResponseMessage.USER_NOT_EXISTS, StatusCode.NOT_FOUND);
         }
 
@@ -57,11 +53,12 @@ export class AuthService {
     }
 
     static async signupStudent(identifier: string, email: string, alternativeEmail: string): Promise<void> {
-        const existingUser = await StudentModel.findOne({
+        const studentRepo = dbConnection.getRepository(StudentModel);
+        const allowedStudentRepo = dbConnection.getRepository(AllowedStudentModel);
+
+        const existingUser = await studentRepo.findOne({
             where: {
-                [Op.or]: [
-                    {identifier: identifier},
-                ]
+                identifier: identifier,
             }
         });
 
@@ -69,30 +66,25 @@ export class AuthService {
             throw new ResponseError(ResponseMessage.DATA_TAKEN, StatusCode.BAD_REQUEST);
         }
 
-        const row = await AllowedStudentsModel.findOne({
+        const existingAllowedStudent = await allowedStudentRepo.findOne({
             where: {
                 identifier: identifier
             }
         });
 
-        if (row === null) {
+        if (existingAllowedStudent == null) {
             throw new ResponseError(ResponseMessage.USER_NOT_REGISTERED, StatusCode.NOT_ACCEPTABLE);
         }
 
-        const studentPreInformation = row.toJSON() as AllowedStudent;
-
-        const coordinatorFullName = UtilService.splitSplitProfessorName(studentPreInformation.coordinator);
-
-        const student: Student = {
+        const studentModel = StudentModel.fromObject({
             identifier: identifier,
-            fullName: studentPreInformation.fullName,
+            fullName: existingAllowedStudent.fullName,
             email: email,
             alternativeEmail: alternativeEmail,
-            attendanceYear: studentPreInformation.attendanceYear,
-            coordinatorName: coordinatorFullName[1],
-            coordinatorFunction: coordinatorFullName[0],
-            isActive: true,
-        }
+            attendanceYear: existingAllowedStudent.attendanceYear,
+            coordinatorName: existingAllowedStudent.coordinatorName,
+            coordinatorFunction: existingAllowedStudent.coordinatorFunction,
+        });
 
         try {
             await MailService.sendMail({
@@ -106,35 +98,39 @@ export class AuthService {
             throw new ResponseError(ResponseMessage.MAIL_ERROR, StatusCode.BAD_REQUEST);
         }
 
-        await StudentModel.create(student as any);
+        await studentRepo.save(studentModel);
         return;
     }
 
     static async loginStudent(identifier: string, loginEmail: string) {
-        const existingStudent = await StudentModel.findOne({
-            where: {
-                identifier: identifier,
-                [Op.or]: [
-                    {email: loginEmail},
-                    {alternativeEmail: loginEmail}
-                ]
-            }
+        const studentRepo = dbConnection.getRepository(StudentModel);
+        const authorizationKeyRepo = dbConnection.getRepository(AuthorizationKeyModel);
+
+        const existingStudent = await studentRepo.findOne({
+            where: [
+                {
+                    identifier: identifier,
+                    email: loginEmail
+                },
+                {
+                    identifier: identifier,
+                    alternativeEmail: loginEmail
+                }
+            ]
         });
 
-        if (!existingStudent) {
-            throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
+        if (existingStudent == null) {
+            throw new ResponseError(ResponseMessage.USER_NOT_FOUND, StatusCode.NOT_FOUND);
         }
 
-        const student = existingStudent.toJSON() as Student;
-
-        if (!student.isActive) {
+        if (!existingStudent.isActive) {
             throw new ResponseError(ResponseMessage.INACTIVE_USER, StatusCode.FORBIDDEN);
         }
 
         const generatedCode = UtilService.generateRandomString(16);
-        const authorizationKey: AuthorizationKey = {
+        const authorizationKey: AuthorizationKeyModel = AuthorizationKeyModel.fromObject({
             key: generatedCode
-        }
+        });
 
         try {
             await MailService.sendMail({
@@ -144,7 +140,7 @@ export class AuthService {
                 html: LoginMessage.getHtml(generatedCode),
             });
 
-            await AuthorizationKeyModel.create(authorizationKey as any);
+            await authorizationKeyRepo.save(authorizationKey);
         } catch (err) {
             console.log(err);
             throw new ResponseError(ResponseMessage.MAIL_ERROR, StatusCode.BAD_REQUEST);
@@ -154,76 +150,86 @@ export class AuthService {
     }
 
     static async loginStudentWithCode(identifier: string, loginEmail: string, code: string) {
+        const studentRepo = dbConnection.getRepository(StudentModel);
+        const authorizationKeyRepo = dbConnection.getRepository(AuthorizationKeyModel);
 
-        const existingStudent = await StudentModel.findOne({
-            where: {
-                identifier: identifier,
-                [Op.or]: [
-                    {email: loginEmail},
-                    {alternativeEmail: loginEmail}
-                ]
-            }
+        const existingStudent = await studentRepo.findOne({
+            where: [
+                {
+                    identifier: identifier,
+                    email: loginEmail
+                },
+                {
+                    identifier: identifier,
+                    alternativeEmail: loginEmail
+                }
+
+            ]
         });
 
-        if (!existingStudent) {
+        if (existingStudent == null) {
             throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
         }
 
-        const student = existingStudent.toJSON() as Student;
-
-        if (!student.isActive) {
+        if (!existingStudent.isActive) {
             throw new ResponseError(ResponseMessage.INACTIVE_USER, StatusCode.FORBIDDEN);
         }
 
-        const existingKey = await AuthorizationKeyModel.findOne({
+        const existingKey = await authorizationKeyRepo.findOne({
             where: {
                 key: code,
             }
         });
 
-        if (!existingKey) {
+        if (existingKey == null) {
             throw new ResponseError(ResponseMessage.INVALID_AUTH_KEY, StatusCode.NOT_FOUND);
         }
 
-        await existingKey.destroy();
-        return JwtService.generateAccessTokenForStudent(existingStudent.toJSON() as Student);
+        await authorizationKeyRepo.remove(existingKey);
+        return JwtService.generateAccessTokenForStudent(existingStudent);
     }
 
     static async loginCoordinator(email: string, code: string): Promise<string> {
+        const coordinatorRepo = dbConnection.getRepository(CoordinatorModel);
+
         const hashedPassword = sha256(CryptoUtil.scufflePassword(code)).toString();
 
-        const row = await CoordinatorModel.findOne({
+        const existingUser = await coordinatorRepo.findOne({
             where: {
                 email: email,
                 password: hashedPassword,
             }
         });
 
-        if (row === null) {
+        if (existingUser == null) {
             throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
         }
 
-        const user = row.toJSON() as Coordinator;
-
-        return JwtService.generateAccessTokenForCoordinator(user);
+        return JwtService.generateAccessTokenForCoordinator(existingUser);
     }
 
-    static async loginAdmin(identifier: string, email: string): Promise<void> {
-        const existingAdmin = await AdminModel.findOne({
+    static async loginAdmin(username: string, email: string): Promise<void> {
+        const adminRepo = dbConnection.getRepository(AdminModel);
+        const authorizationKeyRepo = dbConnection.getRepository(AuthorizationKeyModel);
+
+        console.log(username);
+        console.log(email);
+
+        const existingAdmin = await adminRepo.findOne({
             where: {
-                username: identifier,
+                username: username,
                 email: email,
             }
         });
 
-        if (!existingAdmin) {
-            throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
+        if (existingAdmin == null) {
+            throw new ResponseError(ResponseMessage.USER_NOT_FOUND, StatusCode.NOT_FOUND);
         }
 
         const generatedCode = UtilService.generateRandomString(16);
-        const authorizationKey: AuthorizationKey = {
+        const authorizationKey = AuthorizationKeyModel.fromObject({
             key: generatedCode
-        }
+        });
 
         try {
             await MailService.sendMail({
@@ -233,7 +239,7 @@ export class AuthService {
                 html: AdminLoginMessage.getHtml(generatedCode),
             });
 
-            await AuthorizationKeyModel.create(authorizationKey as any);
+            await authorizationKeyRepo.save(authorizationKey);
         } catch (err) {
             console.log(err);
             throw new ResponseError(ResponseMessage.MAIL_ERROR, StatusCode.BAD_REQUEST);
@@ -243,28 +249,31 @@ export class AuthService {
     }
 
     static async loginAdminWithCode(identifier: string, email: string, code: string): Promise<string> {
-        const existingAdmin = await AdminModel.findOne({
+        const adminRepo = dbConnection.getRepository(AdminModel);
+        const authorizationKeyRepo = dbConnection.getRepository(AuthorizationKeyModel);
+
+        const existingAdmin = await adminRepo.findOne({
             where: {
                 username: identifier,
                 email: email,
             }
         });
 
-        if (!existingAdmin) {
+        if (existingAdmin == null) {
             throw new ResponseError(ResponseMessage.INVALID_CREDENTIALS, StatusCode.NOT_FOUND);
         }
 
-        const existingKey = await AuthorizationKeyModel.findOne({
+        const existingKey = await authorizationKeyRepo.findOne({
             where: {
                 key: code,
             }
         });
 
-        if (!existingKey) {
+        if (existingKey == null) {
             throw new ResponseError(ResponseMessage.INVALID_AUTH_KEY, StatusCode.NOT_FOUND);
         }
 
-        await existingKey.destroy();
-        return JwtService.generateAccessTokenForAdmin(existingAdmin.toJSON() as Admin);
+        await authorizationKeyRepo.remove(existingKey);
+        return JwtService.generateAccessTokenForAdmin(existingAdmin);
     }
 }

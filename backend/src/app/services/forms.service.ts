@@ -1,26 +1,30 @@
 import {
-    AcademyMember,
-    AwardAndNomination,
-    Citation, CoordinatorReferentialActivity, CoordinatorScientificActivity,
-    DidacticActivity,
-    EditorialMember,
-    ISIProceeding,
-    OrganizedEvent,
-    Patent,
-    ResearchContract,
-    ScientificArticleBDI,
-    ScientificArticleISI,
-    ScientificBook,
-    ScientificCommunication,
-    Translation,
-    WithoutActivity
-} from "../database/form.models";
+    AcademyMemberModel,
+    AwardAndNominationModel,
+    CitationModel,
+    DidacticActivityModel,
+    EditorialMemberModel,
+    ISIProceedingModel,
+    OrganizedEventModel,
+    PatentModel,
+    ResearchContractModel,
+    ScientificArticleBDIModel,
+    ScientificArticleISIModel,
+    ScientificBookModel,
+    ScientificCommunicationModel,
+    TranslationModel,
+    WithoutActivityModel
+} from "../database/forms/db.student.form.models";
 import XLSX, {WorkSheet} from "xlsx";
+import {
+    CoordinatorReferentialActivityModel,
+    CoordinatorScientificActivityModel
+} from "../database/forms/db.coordinator.forms";
 
 /* The final form method :D */
 export class FormsService {
 
-    static getCoordinatorScientificActivitySheet(rows: CoordinatorScientificActivity[]): WorkSheet {
+    static getCoordinatorScientificActivitySheet(rows: CoordinatorScientificActivityModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
                 'Nume şi prenume': item.fullName,
@@ -36,7 +40,7 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getCoordinatorReferenceActivitySheet(rows: CoordinatorReferentialActivity[]): WorkSheet {
+    static getCoordinatorReferenceActivitySheet(rows: CoordinatorReferentialActivityModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
                 'Nume, prenume referent de la IOSUD UAIC': item.fullName,
@@ -51,10 +55,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getScientificArticleISISheet(rows: ScientificArticleISI[]): WorkSheet {
+    static getScientificArticleISISheet(rows: ScientificArticleISIModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Titlul articolului': item.articleTitle,
                 'Autori': item.authors,
                 'Data publicării': item.publicationDate,
@@ -75,10 +79,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getISIProceedingsSheet(rows: ISIProceeding[]): WorkSheet {
+    static getISIProceedingsSheet(rows: ISIProceedingModel[]): WorkSheet {
         const parseRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Autor': item.authors,
                 'Denumire conferință': item.conferenceName,
                 'Tip volum indexat': item.indexedVolumeType,
@@ -97,10 +101,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parseRows);
     }
 
-    static getScientificArticleBDISheet(rows: ScientificArticleBDI[]): WorkSheet {
+    static getScientificArticleBDISheet(rows: ScientificArticleBDIModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Domenii de ierarhizare': item.hierarchyDomains,
                 'Titlul articolului': item.articleTitle,
                 'Autori': item.authors,
@@ -124,10 +128,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getScientificBookSheet(rows: ScientificBook[]): WorkSheet {
+    static getScientificBookSheet(rows: ScientificBookModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Domenii de ierarhizare': item.hierarchyDomains,
                 'Titlul capitolului': item.chapterTitle,
                 'Autori': item.authors,
@@ -146,10 +150,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getTranslationSheet(rows: Translation[]): WorkSheet {
+    static getTranslationSheet(rows: TranslationModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Domenii de ierarhizare': item.hierarchyDomains,
                 'Titlul traducerii': item.translationTitle,
                 'Autori': item.authors,
@@ -169,10 +173,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getScientificCommunicationSheet(rows: ScientificCommunication[]): WorkSheet {
+    static getScientificCommunicationSheet(rows: ScientificCommunicationModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Autori': item.authors,
                 'Tipul comunicării': item.communicationType,
                 'Anul prezentării': item.presentationYear,
@@ -188,10 +192,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getPatentSheet(rows: Patent[]): WorkSheet {
+    static getPatentSheet(rows: PatentModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Titlul brevetului / CBI': item.patentType,
                 'Autori': item.authors,
                 'Anul obținerii brevetului / depunerii CBI': item.yearOfObtainingPatent,
@@ -208,10 +212,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getResearchContractSheet(rows: ResearchContract[]): WorkSheet {
+    static getResearchContractSheet(rows: ResearchContractModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Denumire contract de cercetare / proiect': item.researchContractNameOrProject,
                 'Cod proiect': item.projectCode,
                 'Finanțator': item.financier,
@@ -228,10 +232,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getCitationSheet(rows: Citation[]): WorkSheet {
+    static getCitationSheet(rows: CitationModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Titlul articolului': item.articleTitle,
                 'Autori': item.authors,
                 'Titlul publicației unde este citat articolul': item.publicationTitleWhereReferenced,
@@ -255,10 +259,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getAwardAndNominationSheet(rows: AwardAndNomination[]): WorkSheet {
+    static getAwardAndNominationSheet(rows: AwardAndNominationModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Anul acordării premiului': item.yearOfAward,
                 'Denumirea premiului': item.awardName,
                 'Tipul premiului': item.awardType,
@@ -274,10 +278,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getAcademyMemberSheet(rows: AcademyMember[]): WorkSheet {
+    static getAcademyMemberSheet(rows: AcademyMemberModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Anul admiterii': item.admissionYear,
                 'Denumirea academiei': item.academyName,
                 'Tip membru': item.memberType,
@@ -290,10 +294,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getEditorialMemberSheet(rows: EditorialMember[]): WorkSheet {
+    static getEditorialMemberSheet(rows: EditorialMemberModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Denumire comitet': item.committeeName,
                 'Denumire revista / editura': item.magazineName,
                 'Anul intrarii în comitet': item.yearOfCommitteeAttendance,
@@ -309,10 +313,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getOrganizedEventSheet(rows: OrganizedEvent[]): WorkSheet {
+    static getOrganizedEventSheet(rows: OrganizedEventModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Denumirea manifestării': item.manifestationName,
                 'Data de început': item.startDate,
                 'Data de sfârșit': item.endDate,
@@ -330,10 +334,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getWithoutActivitySheet(rows: WithoutActivity[]): WorkSheet {
+    static getWithoutActivitySheet(rows: WithoutActivityModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Observații': item.observations,
                 'Ultima modificare': item.updatedAt,
                 'Data creării': item.createdAt,
@@ -343,10 +347,10 @@ export class FormsService {
         return XLSX.utils.json_to_sheet(parsedRows);
     }
 
-    static getDidacticActivitySheet(rows: DidacticActivity[]): WorkSheet {
+    static getDidacticActivitySheet(rows: DidacticActivityModel[]): WorkSheet {
         const parsedRows = rows.map((item) => {
             return {
-                'Număr matricol': item.owner,
+                'Număr matricol': "item.owner",
                 'Denumire disciplină': item.className,
                 'Tipul activitații': item.activityType,
                 'Anul susținerii activității': item.yearOfAttendingActivity,

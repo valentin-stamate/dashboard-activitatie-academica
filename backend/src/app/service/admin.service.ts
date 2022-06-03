@@ -1,24 +1,3 @@
-import {Coordinator, EmailEndpointResponse} from "../database/models";
-import {
-    AcademyMemberModel,
-    AllowedStudentsModel,
-    AwardAndNominationModel,
-    CitationModel,
-    CoordinatorModel, CoordinatorReferentialActivityModel, CoordinatorScientificActivityModel,
-    DidacticActivityModel,
-    EditorialMemberModel,
-    ISIProceedingModel,
-    OrganizedEventModel,
-    PatentModel,
-    ResearchContractModel,
-    ScientificArticleBDIModel,
-    ScientificArticleISIModel,
-    ScientificBookModel,
-    ScientificCommunicationModel,
-    StudentModel,
-    TranslationModel,
-    WithoutActivityModel
-} from "../database/sequelize";
 import {ResponseError} from "../middleware/middleware";
 import {ResponseMessage, StatusCode} from "../services/rest.util";
 import {UploadedFile} from "express-fileupload";
@@ -28,51 +7,69 @@ import {FormsService} from "../services/forms.service";
 import JSZip from "jszip";
 import {DocxService} from "../services/file/docx.service";
 import {UtilService} from "../services/util.service";
-import sha256 from "crypto-js/sha256";
-import {CryptoUtil} from "../services/crypto.util";
 import XLSX from "xlsx";
+import {AllowedStudentModel, CoordinatorModel, StudentModel} from "../database/db.models";
+import {dbConnection} from "../database/connect";
+import {EmailEndpointResponse} from "./models";
+import {
+    AcademyMemberModel,
+    AwardAndNominationModel,
+    CitationModel, DidacticActivityModel, EditorialMemberModel,
+    ISIProceedingModel, OrganizedEventModel, PatentModel, ResearchContractModel,
+    ScientificArticleBDIModel,
+    ScientificArticleISIModel, ScientificBookModel, ScientificCommunicationModel, TranslationModel, WithoutActivityModel
+} from "../database/forms/db.student.form.models";
+import {
+    CoordinatorReferentialActivityModel,
+    CoordinatorScientificActivityModel
+} from "../database/forms/db.coordinator.forms";
 
 export class AdminService {
 
     /* Get all the users except to the one that is making the request */
-    static async allStudents(): Promise<any> {
-        const rows = await StudentModel.findAll({
-            order: ['id'],
+    static async allStudents(): Promise<StudentModel[]> {
+        return await dbConnection.getRepository(StudentModel).find({
+            order: {
+                id: "ASC",
+            }
         });
-
-        return rows.map(item => item.toJSON());
     }
 
     static async deleteStudent(id: number): Promise<void> {
-        const row = await StudentModel.findOne({
+        const studentRepo = dbConnection.getRepository(StudentModel);
+        const existingStudent = await studentRepo.findOne({
             where: {
                 id: id
             }
         });
 
-        if (row === null) {
+        if (existingStudent == null) {
             throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
         }
 
-        await row.destroy();
+        await studentRepo.remove(existingStudent);
         return;
     }
 
     /* Get all base information except to the one that is making the request */
-    static async getAllowedUsers() {
-        return (await AllowedStudentsModel.findAll({
-            order: ['id'],
-        })).map(item => item.toJSON());
+    static async getAllowedStudents(): Promise<AllowedStudentModel[]> {
+        return await dbConnection.getRepository(AllowedStudentModel).find({
+            order: {
+                id: "ASC",
+            }
+        });
     }
 
     static async importAllowedUsers(file: UploadedFile): Promise<number> {
         const baseInformationList = XLSXService.parseExistingStudents(file);
 
         let rowsCreated = 0;
+        const allowedStudentsRepo = dbConnection.getRepository(AllowedStudentModel);
 
-        await AllowedStudentsModel.destroy();
+        await allowedStudentsRepo.clear();
         for (let data of baseInformationList) {
-            await AllowedStudentsModel.create(data as any);
+            const model = AllowedStudentModel.fromObject(data);
+            await allowedStudentsRepo.save(model);
             rowsCreated++;
         }
 
@@ -80,17 +77,18 @@ export class AdminService {
     }
 
     static async deleteAllowedStudent(id: number) {
-        const row = await AllowedStudentsModel.findOne({
+        const allowedStudentRepo = dbConnection.getRepository(AllowedStudentModel);
+        const existingAllowedStudent = await allowedStudentRepo.findOne({
             where: {
                 id: id,
             }
         });
 
-        if (row === null) {
+        if (existingAllowedStudent === null) {
             throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
         }
 
-        await row.destroy();
+        await allowedStudentRepo.remove(existingAllowedStudent);
         return;
     }
 
@@ -148,33 +146,50 @@ export class AdminService {
 
     static async exportForms(): Promise<Buffer> {
         /* Student Data */
-        let studentsRows = (await StudentModel.findAll({
-            where: {isActive: true,},
-            order: ['id'],
-            include: [
-                ScientificArticleISIModel, ISIProceedingModel, ScientificArticleBDIModel, ScientificBookModel,
-                TranslationModel, ScientificCommunicationModel, PatentModel, ResearchContractModel, CitationModel,
-                AwardAndNominationModel, AcademyMemberModel, EditorialMemberModel, OrganizedEventModel,
-                WithoutActivityModel, DidacticActivityModel,
-            ],
-        })).map(item => item.toJSON());
+        const studentRepo = dbConnection.getRepository(StudentModel);
+        const studentsRows: StudentModel[] = await studentRepo.find({
+            where: {
+                isActive: true,
+            },
+            order: {
+                id: "ASC",
+            },
+            relations: [
+                "scientificArticleISI",
+                "isiProceeding",
+                "scientificArticleBDI",
+                "scientificBook",
+                "translation",
+                "scientificCommunication",
+                "patent",
+                "researchContract",
+                "citation",
+                "awardAndNomination",
+                "academyMember",
+                "editorialMember",
+                "organizedEvent",
+                "withoutActivity",
+                "didacticActivity",
+            ]
+        });
 
         /* I know this it's not readable but yeah, many forms */
-        let scArticleISI = studentsRows.reduce((prev, item) => {prev.push(...item.ScientificArticleISIModels); return prev;}, []);
-        let isiProceedings = studentsRows.reduce((prev, item) => { prev.push(...item.ISIProceedingModels); return prev;}, []);
-        let scArticleBDI = studentsRows.reduce((prev, item) => {prev.push(...item.ScientificArticleBDIModels); return prev;}, []);
-        let scBook = studentsRows.reduce((prev, item) => {prev.push(...item.ScientificBookModels); return prev;}, []);
-        let translation = studentsRows.reduce((prev, item) => {prev.push(...item.TranslationModels); return prev;}, []);
-        let scCommunication = studentsRows.reduce((prev, item) => {prev.push(...item.ScientificCommunicationModels); return prev;}, []);
-        let patent = studentsRows.reduce((prev, item) => {prev.push(...item.PatentModels); return prev;}, []);
-        let researchContract = studentsRows.reduce((prev, item) => {prev.push(...item.ResearchContractModels); return prev;}, []);
-        let citation = studentsRows.reduce((prev, item) => {prev.push(...item.CitationModels); return prev;}, []);
-        let awardsNomination = studentsRows.reduce((prev, item) => {prev.push(...item.AwardAndNominationModels); return prev;}, []);
-        let academyMember = studentsRows.reduce((prev, item) => {prev.push(...item.AcademyMemberModels); return prev;}, []);
-        let editorialMember = studentsRows.reduce((prev, item) => {prev.push(...item.EditorialMemberModels); return prev;}, []);
-        let organizedEvent = studentsRows.reduce((prev, item) => {prev.push(...item.OrganizedEventModels); return prev;}, []);
-        let withoutActivity = studentsRows.reduce((prev, item) => {prev.push(...item.WithoutActivityModels); return prev;}, []);
-        let didacticActivity = studentsRows.reduce((prev, item) => {prev.push(...item.DidacticActivityModels); return prev;}, []);
+        let scArticleISI = studentsRows.reduce((prev, item) => {prev.push(...(item.scientificArticleISI ?? [])); return prev;}, [] as ScientificArticleISIModel[]);
+
+        let isiProceedings = studentsRows.reduce((prev, item) => { prev.push(...(item.isiProceeding ?? [])); return prev;}, [] as ISIProceedingModel[]);
+        let scArticleBDI = studentsRows.reduce((prev, item) => {prev.push(...(item.scientificArticleBDI ?? [])); return prev;}, [] as ScientificArticleBDIModel[]);
+        let scBook = studentsRows.reduce((prev, item) => {prev.push(...(item.scientificBook ?? [])); return prev;}, [] as ScientificBookModel[]);
+        let translation = studentsRows.reduce((prev, item) => {prev.push(...(item.translation ?? [])); return prev;}, [] as TranslationModel[]);
+        let scCommunication = studentsRows.reduce((prev, item) => {prev.push(...(item.scientificCommunication ?? [])); return prev;}, [] as ScientificCommunicationModel[]);
+        let patent = studentsRows.reduce((prev, item) => {prev.push(...(item.patent ?? [])); return prev;}, [] as PatentModel[]);
+        let researchContract = studentsRows.reduce((prev, item) => {prev.push(...(item.researchContract ?? [])); return prev;}, [] as ResearchContractModel[]);
+        let citation = studentsRows.reduce((prev, item) => {prev.push(...(item.citation ?? [])); return prev;}, [] as CitationModel[]);
+        let awardsNomination = studentsRows.reduce((prev, item) => {prev.push(...(item.awardAndNomination ?? [])); return prev;}, [] as AwardAndNominationModel[]);
+        let academyMember = studentsRows.reduce((prev, item) => {prev.push(...(item.academyMember ?? [])); return prev;}, [] as AcademyMemberModel[]);
+        let editorialMember = studentsRows.reduce((prev, item) => {prev.push(...(item.editorialMember ?? [])); return prev;}, [] as EditorialMemberModel[]);
+        let organizedEvent = studentsRows.reduce((prev, item) => {prev.push(...(item.organizedEvent ?? [])); return prev;}, [] as OrganizedEventModel[]);
+        let withoutActivity = studentsRows.reduce((prev, item) => {prev.push(...(item.withoutActivity ?? [])); return prev;}, [] as WithoutActivityModel[]);
+        let didacticActivity = studentsRows.reduce((prev, item) => {prev.push(...(item.didacticActivity ?? [])); return prev;}, [] as DidacticActivityModel[]);
 
         const scISISheet = FormsService.getScientificArticleISISheet(scArticleISI);
         const isiProceedingsSheet = FormsService.getISIProceedingsSheet(isiProceedings);
@@ -210,15 +225,19 @@ export class AdminService {
         XLSX.utils.book_append_sheet(studentDataWorkBook, didacticActivitySheet, 'Activitate didactică');
 
         /* Coordinators Data */
-        let coordinatorsRows = (await CoordinatorModel.findAll({
-            order: ['id'],
-            include: [
-                CoordinatorScientificActivityModel, CoordinatorReferentialActivityModel,
+        const coordinatorRepo = dbConnection.getRepository(CoordinatorModel);
+        let coordinatorsRows: CoordinatorModel[] = (await coordinatorRepo.find({
+            order: {
+                id: "ASC",
+            },
+            relations: [
+                "scientificActivity",
+                "referentialActivity",
             ],
-        })).map(item => item.toJSON());
+        }));
 
-        const coordinatorScientificActivity = coordinatorsRows.reduce((prev, item) => {prev.push(...item.CoordinatorScientificActivityModels); return prev;}, []);
-        const coordinatorReferenceActivity = coordinatorsRows.reduce((prev, item) => {prev.push(...item.CoordinatorReferentialActivityModels); return prev;}, []);
+        const coordinatorScientificActivity = coordinatorsRows.reduce((prev, item) => {prev.push(item.scientificActivity); return prev;}, [] as CoordinatorScientificActivityModel[]);
+        const coordinatorReferenceActivity = coordinatorsRows.reduce((prev, item) => {prev.push(item.referentialActivity); return prev;}, [] as CoordinatorReferentialActivityModel[]);
 
         const coordinatorScientificActivitySheet = FormsService.getCoordinatorScientificActivitySheet(coordinatorScientificActivity);
         const coordinatorReferenceActivitySheet = FormsService.getCoordinatorReferenceActivitySheet(coordinatorReferenceActivity);
@@ -383,20 +402,21 @@ export class AdminService {
     static async importCoordinators(file: UploadedFile): Promise<number> {
         const coordinators = XLSXService.parseCoordinatorsExcel(file);
 
-        await CoordinatorModel.destroy({where: {}});
+        const coordinatorRepo = dbConnection.getRepository(CoordinatorModel);
+        await coordinatorRepo.clear();
 
         let rowsCreated = 0;
         for (let item of coordinators) {
-            item.password = sha256(CryptoUtil.scufflePassword(item.password)).toString();
-            await CoordinatorModel.create(item as any);
+            const model = CoordinatorModel.fromObject(item);
+            await coordinatorRepo.create(model);
             rowsCreated++;
         }
 
         return rowsCreated;
     }
 
-    static async getCoordinators(): Promise<Coordinator[]> {
-        return (await CoordinatorModel.findAll({where: {}})).map(item => item.toJSON() as Coordinator);
+    static async getCoordinators(): Promise<CoordinatorModel[]> {
+        return await dbConnection.getRepository(CoordinatorModel).find();
     }
 
 }

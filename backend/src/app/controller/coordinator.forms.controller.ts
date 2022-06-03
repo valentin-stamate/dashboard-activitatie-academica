@@ -1,8 +1,11 @@
 import {NextFunction, Request, Response} from "express";
 import {JwtService} from "../services/jwt.service";
-import {Coordinator} from "../database/models";
+import {CoordinatorModel} from "../database/db.models";
 import {CoordinatorFormsService} from "../service/coordinator.forms.service";
-import {CoordinatorReferentialActivity, CoordinatorScientificActivity} from "../database/form.models";
+import {
+    CoordinatorReferentialActivityModel,
+    CoordinatorScientificActivityModel
+} from "../database/forms/db.coordinator.forms";
 
 export class CoordinatorFormsController {
 
@@ -10,7 +13,7 @@ export class CoordinatorFormsController {
     static async getCoordinatorScientificActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const coordinator = JwtService.verifyToken(token) as Coordinator;
+            const coordinator = JwtService.verifyToken(token) as CoordinatorModel;
 
             const data = await CoordinatorFormsService.getCoordinatorScientificActivity(coordinator);
             res.end(JSON.stringify(data));
@@ -22,8 +25,8 @@ export class CoordinatorFormsController {
     static async updateCoordinatorScientificActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const coordinator = JwtService.verifyToken(token) as Coordinator;
-            const body = req.body as CoordinatorScientificActivity;
+            const coordinator = JwtService.verifyToken(token) as CoordinatorModel;
+            const body = req.body as CoordinatorScientificActivityModel;
 
             await CoordinatorFormsService.updateCoordinatorScientificActivity(coordinator, body);
             res.end();
@@ -35,7 +38,7 @@ export class CoordinatorFormsController {
     static async deleteCoordinatorScientificActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const coordinator = JwtService.verifyToken(token) as Coordinator;
+            const coordinator = JwtService.verifyToken(token) as CoordinatorModel;
 
             await CoordinatorFormsService.deleteCoordinatorScientificActivity(coordinator);
             res.end();
@@ -48,7 +51,7 @@ export class CoordinatorFormsController {
     static async getCoordinatorReferentialActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const coordinator = JwtService.verifyToken(token) as Coordinator;
+            const coordinator = JwtService.verifyToken(token) as CoordinatorModel;
 
             const data = await CoordinatorFormsService.getCoordinatorReferentialActivity(coordinator);
             res.end(JSON.stringify(data));
@@ -60,8 +63,8 @@ export class CoordinatorFormsController {
     static async updateCoordinatorReferentialActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const coordinator = JwtService.verifyToken(token) as Coordinator;
-            const body = req.body as CoordinatorReferentialActivity;
+            const coordinator = JwtService.verifyToken(token) as CoordinatorModel;
+            const body = req.body as CoordinatorReferentialActivityModel;
 
             await CoordinatorFormsService.updateCoordinatorReferentialActivity(coordinator, body);
             res.end();
@@ -73,7 +76,7 @@ export class CoordinatorFormsController {
     static async deleteCoordinatorReferentialActivity(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const token = req.get('Authorization') as string;
-            const coordinator = JwtService.verifyToken(token) as Coordinator;
+            const coordinator = JwtService.verifyToken(token) as CoordinatorModel;
 
             await CoordinatorFormsService.deleteCoordinatorReferentialActivity(coordinator);
             res.end();

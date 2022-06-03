@@ -3,7 +3,7 @@ import XLSX from "xlsx";
 import {ResponseError} from "../../middleware/middleware";
 import {ResponseMessage, StatusCode} from "../rest.util";
 import {UtilService} from "../util.service";
-import {AllowedStudent, Coordinator} from "../../database/models";
+import {AllowedStudentModel, CoordinatorModel} from "../../database/db.models";
 import {
     FAZData,
     FAZDayActivity,
@@ -269,8 +269,8 @@ export class XLSXService {
     }
 
     /** In acest fisier sunt studentii care pot avea cont in aplicatie */
-    static parseExistingStudents(file: UploadedFile): AllowedStudent[] {
-        const baseInformationList: AllowedStudent[] = [];
+    static parseExistingStudents(file: UploadedFile): AllowedStudentModel[] {
+        const baseInformationList: AllowedStudentModel[] = [];
 
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
@@ -278,12 +278,15 @@ export class XLSXService {
         const sheetRows: any = XLSX.utils.sheet_to_json(sheet)
 
         for (const item of sheetRows) {
-            const data: AllowedStudent = {
+            const coordinatorName = UtilService.splitSplitProfessorName(item[BaseInformationHeaders.COORDINATOR]);
+
+            const data: AllowedStudentModel = AllowedStudentModel.fromObject({
                 identifier: item[BaseInformationHeaders.IDENTIFIER],
                 fullName: item[BaseInformationHeaders.NAME],
-                coordinator: item[BaseInformationHeaders.COORDINATOR],
+                coordinatorName: coordinatorName[1],
+                coordinatorFunction: coordinatorName[0],
                 attendanceYear: item[BaseInformationHeaders.ATTENDANCE_YEAR],
-            };
+            });
 
             baseInformationList.push(data);
         }
@@ -339,8 +342,8 @@ export class XLSXService {
     }
 
     /** Se parseaza excelul cu coordonatori */
-    static parseCoordinatorsExcel(file: UploadedFile): Coordinator[] {
-        const list: Coordinator[] = [];
+    static parseCoordinatorsExcel(file: UploadedFile): CoordinatorModel[] {
+        const list: CoordinatorModel[] = [];
 
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
@@ -351,12 +354,12 @@ export class XLSXService {
             /* Name and the function */
             const fullName = UtilService.splitSplitProfessorName(row[CoordinatorsHeaders.NAME_FUNCTION]);
 
-            list.push({
+            list.push(CoordinatorModel.fromObject({
                 name: fullName[1],
                 function: fullName[0],
                 email: row[CoordinatorsHeaders.EMAIL],
                 password: '' + row[CoordinatorsHeaders.CODE],
-            });
+            }));
         }
 
         return list;

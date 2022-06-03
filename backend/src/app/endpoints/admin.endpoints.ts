@@ -7,7 +7,7 @@ export function registerAdminEndpoints(app: Express) {
     app.get(EndpointIdentifier.STUDENT, Middleware.adminMiddleware, AdminController.allStudents);
     app.delete(`${EndpointIdentifier.STUDENT}/:id`, Middleware.adminMiddleware, AdminController.deleteStudent);
 
-    app.get(EndpointIdentifier.ALLOWED_STUDENTS, Middleware.adminMiddleware, AdminController.getAllowedUsers);
+    app.get(EndpointIdentifier.ALLOWED_STUDENTS, Middleware.adminMiddleware, AdminController.getAllowedStudents);
     app.post(EndpointIdentifier.ALLOWED_STUDENTS, Middleware.adminMiddleware, AdminController.importAllowedUsers);
     app.delete(`${EndpointIdentifier.ALLOWED_STUDENTS}/:id`, Middleware.adminMiddleware, AdminController.deleteAllowedStudent);
 

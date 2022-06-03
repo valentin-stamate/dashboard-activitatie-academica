@@ -58,17 +58,6 @@ export class UtilService {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     }
 
-    /* This function checks if all fields are filled with something */
-    static checkFormFields(form: any) {
-        for (let [key, value] of Object.entries(form)) {
-            if (value === '') {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     static async sleep(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }

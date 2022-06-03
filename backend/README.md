@@ -121,6 +121,7 @@
 * Docx to Pdf : https://stackoverflow.com/a/65549867/10805602
 * https://www.npmjs.com/package/crypto-js
 * ts-node bug https://github.com/facebook/jest/issues/12655
+* TypeORM find: https://typeorm.io/find-options
 
 ## ENV
 * PORT (default is 8080)
@@ -136,4 +137,5 @@
 * SMTP_USER
 * SMTP_PASS
 * SMTP_SECURE
-* INITIALIZE (force initialize the database and populates it with the default users)
+* POPULATE_DB (force initialize the database and populates it with the default users)
+* DB_LOGGING

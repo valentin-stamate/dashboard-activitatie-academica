@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import {Admin, Coordinator, Student} from "../database/models";
+import {AdminModel, CoordinatorModel, StudentModel} from "../database/db.models";
 import {UserType} from "./user.type";
 
 require('dotenv').config();
@@ -12,7 +12,7 @@ const env = process.env as any;
  * 3 for Admin */
 export class JwtService {
 
-    static generateAccessTokenForStudent(user: Student) {
+    static generateAccessTokenForStudent(user: StudentModel) {
         return jwt.sign({
                 id: user.id,
                 fullName: user.fullName,
@@ -23,7 +23,7 @@ export class JwtService {
             env.TOKEN_SECRET);
     }
 
-    static generateAccessTokenForCoordinator(coordinator: Coordinator) {
+    static generateAccessTokenForCoordinator(coordinator: CoordinatorModel) {
         return jwt.sign({
             id: coordinator.id,
             name: coordinator.name,
@@ -33,7 +33,7 @@ export class JwtService {
         }, env.TOKEN_SECRET);
     }
 
-    static generateAccessTokenForAdmin(coordinator: Admin) {
+    static generateAccessTokenForAdmin(coordinator: AdminModel) {
         return jwt.sign({
             id: coordinator.id,
             username: coordinator.username,

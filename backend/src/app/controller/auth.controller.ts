@@ -33,7 +33,7 @@ export class AuthController {
         const email = body.email;
         const alternativeEmail = body.alternativeEmail;
 
-        if (!identifier || !email || !alternativeEmail) {
+        if (identifier == null || email == null || alternativeEmail == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
@@ -54,7 +54,7 @@ export class AuthController {
         const identifier = body.identifier;
         const email = body.email;
 
-        if (!identifier || !email) {
+        if (identifier == null || email == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
         }
 
@@ -75,7 +75,7 @@ export class AuthController {
         const email = body.email;
         const code = body.code;
 
-        if (!identifier || !email || !code) {
+        if (identifier == null || email == null || code == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
         }
 
@@ -95,7 +95,7 @@ export class AuthController {
         const email = body.email;
         const password = body.password;
 
-        if (!email || !password) {
+        if (email == null || password == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
         }
 
@@ -115,7 +115,7 @@ export class AuthController {
         const username = body.username;
         const email = body.email;
 
-        if (!username || !email) {
+        if (username == null || email == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
         }
 
@@ -136,7 +136,7 @@ export class AuthController {
         const email = body.email;
         const code = body.code;
 
-        if (!username || !email || !code) {
+        if (username == null || email == null || code == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
         }
 
