@@ -122,6 +122,7 @@
 * https://www.npmjs.com/package/crypto-js
 * ts-node bug https://github.com/facebook/jest/issues/12655
 * TypeORM find: https://typeorm.io/find-options
+* Capitalize all words: https://www.codegrepper.com/code-examples/javascript/capitalize+all+words+javascript
 
 ## ENV
 * PORT (default is 8080)

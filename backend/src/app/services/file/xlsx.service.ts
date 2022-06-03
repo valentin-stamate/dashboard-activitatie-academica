@@ -154,7 +154,7 @@ export class XLSXService {
 
             }
 
-            const nameItems = UtilService.splitSplitProfessorName(professor);
+            const nameItems = UtilService.splitProfessorName(professor);
 
             const fazProfessorData: FAZData = {
                 professorName: nameItems[1],
@@ -184,7 +184,7 @@ export class XLSXService {
             const secondRow = jsonSheet[i + 1];
             const thirdRow = jsonSheet[i + 2];
 
-            const coordinationFuncName = UtilService.splitSplitProfessorName(firstRow[ReportsAnnouncementHeaders.COORDINATOR])
+            const coordinationFuncName = UtilService.splitProfessorName(firstRow[ReportsAnnouncementHeaders.COORDINATOR])
             const year = new Date(firstRow[ReportsAnnouncementHeaders.ATTENDANCE_DATE]).getFullYear();
 
             /* rnData = [Data Prog., Data.Prez, Title] */
@@ -278,7 +278,7 @@ export class XLSXService {
         const sheetRows: any = XLSX.utils.sheet_to_json(sheet)
 
         for (const item of sheetRows) {
-            const coordinatorName = UtilService.splitSplitProfessorName(item[BaseInformationHeaders.COORDINATOR]);
+            const coordinatorName = UtilService.splitProfessorName(item[BaseInformationHeaders.COORDINATOR]);
 
             const data: AllowedStudentModel = AllowedStudentModel.fromObject({
                 identifier: item[BaseInformationHeaders.IDENTIFIER],
@@ -352,7 +352,7 @@ export class XLSXService {
 
         for (let row of rows) {
             /* Name and the function */
-            const fullName = UtilService.splitSplitProfessorName(row[CoordinatorsHeaders.NAME_FUNCTION]);
+            const fullName = UtilService.splitProfessorName(row[CoordinatorsHeaders.NAME_FUNCTION]);
 
             list.push(CoordinatorModel.fromObject({
                 name: fullName[1],

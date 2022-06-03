@@ -45,13 +45,29 @@ export class UtilService {
         return `${number}`;
     }
 
-    /* Eg. Conf. Prog Lorem Ipsum -> [Conf. Prof, Lorem Ipsum] */
-    static splitSplitProfessorName(fullProfessorName: string) {
-        const nameItems = fullProfessorName.split(' ');
-        const professorPosition = nameItems.splice(0, 3).join(' ');
-        const professorName = nameItems.join(' ');
+    /* Eg: Conf. Prof. Lorem Ipsum -> [Conf. Prof, Lorem Ipsum] */
+    static splitProfessorName(fullProfessorName: string) {
+        fullProfessorName = fullProfessorName.toUpperCase();
+        const lastPointIndex = fullProfessorName.lastIndexOf('.');
 
-        return [professorPosition, professorName];
+        if (lastPointIndex === -1) {
+            return ['', fullProfessorName]
+        }
+
+        let professorFunction = fullProfessorName.slice(0, lastPointIndex);
+        let professorName = fullProfessorName.slice(lastPointIndex + 1);
+
+        if (professorFunction !== '') {
+            professorFunction = professorFunction.split('.').join('. ');
+            professorFunction += '.';
+        }
+
+        return [professorFunction.replace(/ +/g, ' ').trim(), professorName.replace(/ +/g, ' ').trim()];
+    }
+
+    /* Eg: CONF. UNIV. PROF, LOREM-IPSUM DOLOR -> Conf. univ. prof. Lorem-Ipsum Dolor */
+    static joinProfessorName(rawProfessorName: string, rawProfessorFunction: string) {
+        return `${this.capitalizeFirst(rawProfessorName)} ${rawProfessorFunction.split('-').map(item => this.capitalizeAllWords(item)).join('-')}`;
     }
 
     static daysInMonth(date: Date) {
@@ -60,6 +76,14 @@ export class UtilService {
 
     static async sleep(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    static capitalizeFirst(text: string) {
+        return text.charAt(1).toUpperCase() + text.slice(1);
+    }
+
+    static capitalizeAllWords(text: string) {
+        return text.replace(/(?:^|\s)\S/g, a => a.toUpperCase());
     }
 
 }

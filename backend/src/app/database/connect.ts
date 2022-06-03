@@ -13,6 +13,7 @@ import {
     ScientificBookModel, ScientificCommunicationModel, TranslationModel, WithoutActivityModel
 } from "./forms/db.student.form.models";
 import {CoordinatorReferentialActivityModel, CoordinatorScientificActivityModel} from "./forms/db.coordinator.forms";
+import {UtilService} from "../services/util.service";
 config();
 
 const env = process.env as any;
@@ -52,9 +53,12 @@ export async function populateDatabase() {
         email: 'stamatevalentin125@gmail.com',
     });
 
+    const fullProfessorName = 'Prof.   univ. dr.  Buraza Costel';
+    const [professorFunction, professorName] = UtilService.splitProfessorName(fullProfessorName);
+
     const coordinatorModel = CoordinatorModel.fromObject({
-        name: 'Ion',
-        function: 'Prof. univ. dr',
+        name: professorName,
+        function: professorFunction,
         email: 'stamatevalentin125@gmail.com',
         password: 'admin',
     });
@@ -65,8 +69,8 @@ export async function populateDatabase() {
         email: 'stamatevalentin125@gmail.com',
         alternativeEmail: 'valentin.stamate@info.uaic.ro',
         attendanceYear: 2019,
-        coordinatorName: 'Buraza Ion',
-        coordinatorFunction: 'Prof. univ. dr',
+        coordinatorName: professorName,
+        coordinatorFunction: professorFunction,
         isActive: true,
     });
 
