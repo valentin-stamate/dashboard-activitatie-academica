@@ -1,4 +1,4 @@
-export enum BaseInformationHeaders {
+export enum AllowedStudentsHeaders {
     IDENTIFIER = 'Matricol',
     NAME = 'Nume și prenume',
     COORDINATOR = 'Conducătorul de doctorat',
@@ -31,21 +31,21 @@ export enum CoordinatorsHeaders {
 }
 
 export enum ReportsAnnouncementHeaders {
-    NUMBER = '"Nr. crt"',
+    // NUMBER = '"Nr. crt"',
     COORDINATOR = 'Conducator de doctorat',
     COORDINATOR_EMAIL = 'Adresa de email coordonator',
     COMMISSION = 'Comisie de indrumare',
     STUDENT_NAME = 'Doctorand',
     EMAIL = 'Adresa de email',
-    PHONE = 'Telefon',
-    FOUNDING = 'Finantare',
-    LEARNING_TYPE = 'Forma de invatam.',
+    // PHONE = 'Telefon',
+    // FOUNDING = 'Finantare',
+    // LEARNING_TYPE = 'Forma de invatam.',
     ATTENDANCE_DATE = 'Data inceperii stagiului',
-    STUDY_YEAR = 'Anul de studii',
-    STUDY_DURATION = 'Durata studiilor',
-    THESIS_STATUS = 'Stadiu teza',
-    OBSERVATIONS = 'Observatii',
-    PATENTS = 'Referate',
+    // STUDY_YEAR = 'Anul de studii',
+    // STUDY_DURATION = 'Durata studiilor',
+    // THESIS_STATUS = 'Stadiu teza',
+    // OBSERVATIONS = 'Observatii',
+    // PATENTS = 'Referate',
     R1 = 'R1',
     R2 = 'R2',
     R3 = 'R3',

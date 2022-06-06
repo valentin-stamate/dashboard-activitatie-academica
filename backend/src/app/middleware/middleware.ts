@@ -147,14 +147,19 @@ export class Middleware {
         console.log('----------------------------=============================================================================----------------------------');
         console.log(err);
         console.log('----------------------------=============================================================================----------------------------');
-        res.setHeader('Content-Type', ContentType.TEXT);
+        res.setHeader('Content-Type', err.contentType);
         res.statusCode = statusError;
+
+        if (err.contentType === ContentType.JSON) {
+            res.end(JSON.stringify(err.message));
+        }
+
         res.end(err.message);
     }
 }
 
 export class ResponseError extends Error {
-    constructor(public message: string, public status: number = 500) {
+    constructor(public message: any, public status: number = 500, public contentType: ContentType = ContentType.TEXT) {
         super(message);
     }
 }

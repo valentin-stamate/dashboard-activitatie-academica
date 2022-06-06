@@ -1,5 +1,5 @@
 import {ResponseError} from "../middleware/middleware";
-import {ResponseMessage, StatusCode} from "../services/rest.util";
+import {ContentType, ResponseMessage, StatusCode} from "../services/rest.util";
 import {UploadedFile} from "express-fileupload";
 import {XLSXService, XLSXVerificationService} from "../services/file/xlsx.service";
 import {MailService} from "../services/email.service";
@@ -23,6 +23,12 @@ import {
     CoordinatorReferentialActivityModel,
     CoordinatorScientificActivityModel
 } from "../database/forms/db.coordinator.forms";
+import {
+    AllowedStudentsHeaders,
+    CoordinatorsHeaders,
+    ReportsAnnouncementHeaders,
+    TimetableHeaders
+} from "../services/file/xlsx.utils";
 
 export class AdminService {
 
@@ -61,6 +67,12 @@ export class AdminService {
     }
 
     static async importAllowedUsers(file: UploadedFile): Promise<number> {
+        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(AllowedStudentsHeaders));
+
+        if (checkingResult != null) {
+            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+        }
+
         const baseInformationList = XLSXService.parseExistingStudents(file);
 
         let rowsCreated = 0;
@@ -221,6 +233,12 @@ export class AdminService {
     }
 
     static async importCoordinators(file: UploadedFile): Promise<number> {
+        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(CoordinatorsHeaders));
+
+        if (checkingResult != null) {
+            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+        }
+
         const coordinators = XLSXService.parseCoordinatorsExcel(file);
 
         const coordinatorRepo = dbConnection.getRepository(CoordinatorModel);

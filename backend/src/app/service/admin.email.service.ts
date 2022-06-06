@@ -2,18 +2,19 @@ import {UploadedFile} from "express-fileupload";
 import {EmailEndpointResponse} from "./models";
 import {XLSXService, XLSXVerificationService} from "../services/file/xlsx.service";
 import {ResponseError} from "../middleware/middleware";
-import {StatusCode} from "../services/rest.util";
+import {ContentType, StatusCode} from "../services/rest.util";
 import {MailService} from "../services/email.service";
 import {DOCXService} from "../services/file/docx.service";
 import {UtilService} from "../services/util.service";
+import {SemesterTimetableHeaders, TimetableHeaders} from "../services/file/xlsx.utils";
 
 export class AdminEmailService {
 
     static async sendSemesterActivityEmail(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], send: boolean): Promise<EmailEndpointResponse> {
-        const checkingResult = XLSXVerificationService.verifySemesterActivityTimetable(file);
+        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(TimetableHeaders));
 
         if (checkingResult != null) {
-            throw new ResponseError(`Invalid file. Expected ${checkingResult.expected.join('|')} got ${checkingResult.got.join('|')}`, StatusCode.BAD_REQUEST);
+            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
         }
 
         const semesterActivityDataList = XLSXService.parseSemesterActivityTimetable(file);
@@ -68,6 +69,12 @@ export class AdminEmailService {
     }
 
     static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], send: boolean): Promise<EmailEndpointResponse> {
+        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(SemesterTimetableHeaders));
+
+        if (checkingResult != null) {
+            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+        }
+
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, true);
 
         const emailEndpointResponse: EmailEndpointResponse = {
@@ -130,6 +137,12 @@ export class AdminEmailService {
     }
 
     static async sendThesisEmailNotification(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], sent: boolean, startDate: Date, endDate: Date): Promise<EmailEndpointResponse> {
+        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(SemesterTimetableHeaders));
+
+        if (checkingResult != null) {
+            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+        }
+
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, false, startDate, endDate);
 
         const emailEndpointResponse: EmailEndpointResponse = {

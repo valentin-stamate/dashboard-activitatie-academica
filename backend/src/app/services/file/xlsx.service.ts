@@ -12,7 +12,7 @@ import {
     VerbalProcessData
 } from "./xlsx.models";
 import {
-    BaseInformationHeaders, CoordinatorsHeaders,
+    AllowedStudentsHeaders, CoordinatorsHeaders,
     ReportsAnnouncementHeaders,
     SemesterTimetableHeaders,
     TimetableHeaders
@@ -277,14 +277,14 @@ export class XLSXService {
         const sheetRows: any = XLSX.utils.sheet_to_json(sheet)
 
         for (const item of sheetRows) {
-            const coordinatorName = UtilService.splitProfessorName(item[BaseInformationHeaders.COORDINATOR]);
+            const coordinatorName = UtilService.splitProfessorName(item[AllowedStudentsHeaders.COORDINATOR]);
 
             const data: AllowedStudentModel = AllowedStudentModel.fromObject({
-                identifier: item[BaseInformationHeaders.IDENTIFIER],
-                fullName: item[BaseInformationHeaders.NAME],
+                identifier: item[AllowedStudentsHeaders.IDENTIFIER],
+                fullName: item[AllowedStudentsHeaders.NAME],
                 coordinatorName: coordinatorName[1],
                 coordinatorFunction: coordinatorName[0],
-                attendanceYear: item[BaseInformationHeaders.ATTENDANCE_YEAR],
+                attendanceYear: item[AllowedStudentsHeaders.ATTENDANCE_YEAR],
             });
 
             baseInformationList.push(data);
@@ -367,16 +367,13 @@ export class XLSXService {
 }
 
 export class XLSXVerificationService {
-    /** Verifica daca fisierul **ore_semestrul_2_-SD-FII_final_v1** este valid. */
-    static verifySemesterActivityTimetable(file: UploadedFile): {expected: string[], got: string[]} | null {
+    /** Verifica daca fisierul excel este valid.
+     *  Returnează null in caz de succes, si alcel obiect altfel */
+    static checkExcelFile(file: UploadedFile, matchingHeaders: string[]): {expected: string[], got: string[]} | null {
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
 
         const headers = this.getSheetHeaders(sheet);
-        const matchingHeaders = Object.values(SemesterTimetableHeaders);
-
-        console.log(headers.sort().toString());
-        console.log(matchingHeaders.sort().toString());
 
         if (headers.sort().toString() === matchingHeaders.sort().toString()) {
             return null;
