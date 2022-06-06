@@ -176,7 +176,7 @@ export class CoordinatorScientificActivity {
   createdAt?: Date;
 }
 
-/** Activitatea referențială a conducătorului de doctorat/abilitat de la IOSU-UAIC */
+/** Activitatea referențială a conducătorului de doctorat/abilitat de la IOSUD-UAIC */
 export class CoordinatorReferentialActivity {
   id?: number;
   ownerId?: number;

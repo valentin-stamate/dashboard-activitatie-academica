@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {CoordinatorReferentialActivity, CoordinatorScientificActivity} from "../reports/reports.util";
-import axios, {AxiosRequestConfig} from "axios";
+import axios, {AxiosError, AxiosRequestConfig} from "axios";
 import {RestEndpoints} from "../../models/rest.endpoints";
 import {Cookies, CookieService} from "../../service/cookie.service";
 
@@ -49,6 +49,7 @@ export class CoordinatorActivityComponent implements OnInit {
     }).finally(() => {
 
     });
+
   }
 
   onUpdateCoordinatorScientificActivity(event: Event, form: HTMLFormElement) {
@@ -59,7 +60,7 @@ export class CoordinatorActivityComponent implements OnInit {
     axios.patch(RestEndpoints.COORDINATOR_SCIENTIFIC_ACTIVITY, formData, this.config)
       .then(res => {
 
-      }).catch(err => {
+      }).catch((err: AxiosError) => {
 
       }).finally(() => {
         this.onGetCoordinatorScientificActivity();
