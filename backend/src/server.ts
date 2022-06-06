@@ -11,12 +11,10 @@ import {registerAdminEndpoints} from "./app/endpoints/admin.endpoints";
 import {registerCoordinatorEndpoints} from "./app/endpoints/coordinator.endpoints";
 import {dbConnection, populateDatabase} from "./app/database/connect";
 
+/** ENV */
 import {config} from "dotenv";
 config();
-
-/** ENV */
 const env = process.env;
-const allowedClients: string[] = ['http://85.122.23.125:4200', 'http://localhost:4200'];
 
 /** Initialize Express App */
 const app: Express = express();
@@ -43,23 +41,23 @@ dbConnection.initialize()
 app.set('json spaces', 4);
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(fileUpload());
 
 // Handle logs in console during development
 if (env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
-    app.use(cors({origin: allowedClients}));
+    app.use(cors({origin: ['http://localhost:4200']}));
 }
 
 // Handle security and origin in production
 if (env.NODE_ENV === 'production') {
     app.use(helmet());
-    app.use(cors({origin: allowedClients}));
+    app.use(cors({origin: ['http://85.122.23.125:4200']}));
 }
 
 /************************************************************************************
  *                               Register all REST routes
  ***********************************************************************************/
-app.use(fileUpload());
 
 /**  ------------------======================= Visitor Only =======================------------------ */
 registerAuthEndpoints(app);
@@ -80,4 +78,8 @@ registerCoordinatorEndpoints(app);
  ***********************************************************************************/
 app.use(Middleware.errorHandler);
 
-export default app;
+// Start the application by listening to specific port
+const port = Number(env.PORT || 8080);
+app.listen(port, () => {
+    console.info(`Express application started on port: ${port}`);
+});

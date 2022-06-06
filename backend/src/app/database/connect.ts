@@ -1,8 +1,13 @@
-import {CryptoUtil} from "../services/crypto.util";
-import sha256 from "crypto-js/sha256";
 import {config} from "dotenv";
 import { DataSource } from "typeorm";
-import {AdminModel, AllowedStudentModel, AuthorizationKeyModel, CoordinatorModel, StudentModel} from "./db.models";
+import {
+    AdminModel,
+    AllowedStudentModel,
+    AuthorizationKeyModel,
+    CoordinatorModel,
+    FileModel,
+    StudentModel
+} from "./db.models";
 import {
     AcademyMemberModel,
     AwardAndNominationModel,
@@ -29,6 +34,9 @@ export const dbConnection = new DataSource({
     logging: env.DB_LOGGING === 'true',
     entities: [
         AllowedStudentModel, StudentModel, CoordinatorModel, AdminModel, AuthorizationKeyModel,
+
+        /* Files */
+        FileModel,
 
         /* Student forms */
         ScientificArticleISIModel, ISIProceedingModel, ScientificArticleBDIModel, ScientificBookModel,

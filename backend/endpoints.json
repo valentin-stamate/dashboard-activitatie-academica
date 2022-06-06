@@ -100,7 +100,7 @@
 								},
 								{
 									"key": "code",
-									"value": "obj95CaKLw80ENKv",
+									"value": "vdCbmR4vtZ0njGF8",
 									"type": "text"
 								}
 							]
@@ -204,7 +204,7 @@
 								},
 								{
 									"key": "code",
-									"value": "yvDnpRFhr8FtX46y",
+									"value": "7z1MpYEPk7sMnPDi",
 									"type": "text"
 								}
 							]
@@ -2478,7 +2478,7 @@
 									"formdata": [
 										{
 											"key": "fullName",
-											"value": "Demo Name",
+											"value": "Demo Names",
 											"type": "text"
 										},
 										{
@@ -2662,6 +2662,123 @@
 					]
 				},
 				{
+					"name": "Files",
+					"item": [
+						{
+							"name": "Get Files",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/coordinator/file",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"file"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Download File",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/coordinator/download-file/4",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"download-file",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Upload FIle",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Valentin/Desktop/greseala_fatala_2021-06-02 20-38-58.mkv"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/api/coordinator/file",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"file"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete File",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/coordinator/file/8",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"coordinator",
+										"file",
+										"8"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Coordinator Students",
 					"request": {
 						"method": "GET",
@@ -2688,6 +2805,9 @@
 				},
 				{
 					"name": "Coordinator Student Forms",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [
@@ -2697,6 +2817,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
 						"url": {
 							"raw": "{{host}}/api/coordinator/student-forms/valentin",
 							"host": [
@@ -2737,7 +2861,7 @@
 										{
 											"key": "file",
 											"type": "file",
-											"src": "/C:/Users/Valentin/Desktop/Thesis/Docs/activitate_ore_semestru.xlsx"
+											"src": "/C:/Users/Valentin/Desktop/ore_semestrul_2_-SD-FII_final_v1.xlsx"
 										},
 										{
 											"key": "subject",
@@ -2982,6 +3106,59 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Get Coordinator Files",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/admin/coordinator-files/6",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"coordinator-files",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Download Coordinator File",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/admin/download-coordinator-file/1/8",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"download-coordinator-file",
+										"1",
+										"8"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -3077,13 +3254,13 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "{{host}}/api/allowed-students",
+									"raw": "{{host}}/api/allowed-student",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"api",
-										"allowed-students"
+										"allowed-student"
 									]
 								}
 							},
@@ -3111,13 +3288,13 @@
 									]
 								},
 								"url": {
-									"raw": "{{host}}/api/allowed-students",
+									"raw": "{{host}}/api/allowed-student",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"api",
-										"allowed-students"
+										"allowed-student"
 									]
 								}
 							},
@@ -3139,13 +3316,13 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "{{host}}/api/allowed-students/5",
+									"raw": "{{host}}/api/allowed-student/5",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"api",
-										"allowed-students",
+										"allowed-student",
 										"5"
 									]
 								}
@@ -3270,7 +3447,7 @@
 	"variable": [
 		{
 			"key": "host",
-			"value": "",
+			"value": "http://localhost:8080",
 			"type": "string"
 		},
 		{

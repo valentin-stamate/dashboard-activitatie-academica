@@ -56,6 +56,7 @@ export class AuthController {
 
         if (identifier == null || email == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
         }
 
         try {
@@ -77,6 +78,7 @@ export class AuthController {
 
         if (identifier == null || email == null || code == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
         }
 
         try {
@@ -97,6 +99,7 @@ export class AuthController {
 
         if (email == null || password == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
         }
 
         try {
@@ -117,6 +120,7 @@ export class AuthController {
 
         if (username == null || email == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
         }
 
         try {
@@ -138,6 +142,7 @@ export class AuthController {
 
         if (username == null || email == null || code == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            return;
         }
 
         try {

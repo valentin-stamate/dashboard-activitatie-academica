@@ -1,4 +1,14 @@
-import {Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from "typeorm";
 import {
     AcademyMemberModel,
     AwardAndNominationModel,
@@ -139,12 +149,16 @@ export class CoordinatorModel {
     @Column({nullable: false})
     password!: string;
 
-    @OneToOne(() => CoordinatorScientificActivityModel)
+    @OneToOne(() => CoordinatorScientificActivityModel, {nullable: true})
     @JoinColumn()
-    scientificActivity!: CoordinatorScientificActivityModel;
-    @OneToOne(() => CoordinatorReferentialActivityModel)
+    scientificActivity?: CoordinatorScientificActivityModel | null;
+    @OneToOne(() => CoordinatorReferentialActivityModel, {nullable: true})
     @JoinColumn()
-    referentialActivity!: CoordinatorReferentialActivityModel;
+    referentialActivity?: CoordinatorReferentialActivityModel | null;
+
+    @OneToMany(() => FileModel, relation => relation.coordinator)
+    files?: FileModel[];
+
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     createdAt!: Date;
@@ -158,6 +172,39 @@ export class CoordinatorModel {
         model.function = object.function || '';
         model.email = object.email || '';
         model.password = sha256(CryptoUtil.scufflePassword(object.password)).toString();
+
+        return model;
+    }
+}
+
+@Entity()
+export class FileModel {
+    @PrimaryGeneratedColumn()
+    id!: number;
+
+    @Column()
+    name!: string
+
+    @Column({type: "bytea"})
+    data!: Buffer;
+
+    @Column()
+    mimeType!:string
+
+    @ManyToOne(() => CoordinatorModel, relation => relation.files)
+    coordinator!: CoordinatorModel;
+
+    @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+    createdAt!: Date;
+    @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
+    updatedAt!: Date;
+
+    static fromObject(object: any): FileModel {
+        const model = new FileModel();
+
+        model.name = object.name ?? '';
+        model.data = object.data ?? Buffer.from('');
+        model.mimeType = object.mimeType ?? '';
 
         return model;
     }

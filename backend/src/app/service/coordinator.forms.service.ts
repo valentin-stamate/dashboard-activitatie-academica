@@ -84,6 +84,8 @@ export class CoordinatorFormsService {
             throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
         }
 
+        existingCoordinator.scientificActivity = null;
+        await coordinatorRepo.save(existingCoordinator);
         await scientificActivityRepo.remove(existingScientificActivity);
         return;
     }
@@ -162,6 +164,8 @@ export class CoordinatorFormsService {
             throw new ResponseError(ResponseMessage.DATA_NOT_FOUND, StatusCode.NOT_FOUND);
         }
 
+        existingCoordinator.referentialActivity = null;
+        await coordinatorRepo.save(existingCoordinator);
         await referentialActivityRepo.remove(existingReferentialActivity);
         return;
     }

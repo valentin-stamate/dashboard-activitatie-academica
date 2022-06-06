@@ -29,7 +29,7 @@ const monthMap = [
     'Decembrie',
 ];
 
-export class DocxService {
+export class DOCXService {
 
     /* Faz */
     static async getFazDOCXBuffer(data: FAZData, afterTableNote: string): Promise<Buffer> {
@@ -84,7 +84,7 @@ export class DocxService {
             alignment: AlignmentType.CENTER
         });
 
-        const fazRows = DocxService.generateFazDOCXTableRows(data.monthlyActivity);
+        const fazRows = DOCXService.generateFazDOCXTableRows(data.monthlyActivity);
 
         /* Calculate the total hours in a month */
         let totalCADHours = 0;
@@ -325,7 +325,7 @@ export class DocxService {
             alignment: AlignmentType.START,
         });
 
-        const tableRows = DocxService.getVerbalProcessTableRows(data.coordinators);
+        const tableRows = DOCXService.getVerbalProcessTableRows(data.coordinators);
 
         const table = new Table({
             rows: [

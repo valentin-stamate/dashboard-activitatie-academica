@@ -22,6 +22,8 @@ export enum ResponseMessage {
     INVALID_FORM = 'Invalid form',
     COORDINATOR_NOT_FOUND = 'Coordinator not found',
     FORM_NOT_FOUND = 'The form was not found',
+    FILES_NOT_FOUND = 'No files found',
+    FILE_NOT_FOUND = 'No file found',
 }
 
 export enum ContentType {

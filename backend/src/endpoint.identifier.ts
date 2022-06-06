@@ -40,6 +40,8 @@ export enum EndpointIdentifier {
     THESIS_NOTIFICATION = '/api/thesis-notification',
     IMPORT_COORDINATORS = '/api/import-coordinators',
     COORDINATORS = '/api/coordinators',
+    ADMIN_COORDINATOR_FILES = '/api/admin/coordinator-files',
+    ADMIN_DOWNLOAD_COORDINATOR_FILES = '/api/admin/download-coordinator-file',
 
     /* Coordinator */
     COORDINATOR_STUDENTS = '/api/coordinator/students',
@@ -47,5 +49,8 @@ export enum EndpointIdentifier {
 
     COORDINATOR_SCIENTIFIC_ACTIVITY = '/api/coordinator/scientific-activity',
     COORDINATOR_REFERENTIAL_ACTIVITY = '/api/coordinator/referential-activity',
+
+    COORDINATOR_FILE = '/api/coordinator/file',
+    COORDINATOR_DOWNLOAD_FILE = '/api/coordinator/download-file',
 
 }

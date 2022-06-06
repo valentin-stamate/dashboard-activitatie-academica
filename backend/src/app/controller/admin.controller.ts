@@ -4,12 +4,40 @@ import {ContentType, ResponseMessage, StatusCode} from "../services/rest.util";
 import {UploadedFile} from "express-fileupload";
 import {UtilService} from "../services/util.service";
 import {AdminService} from "../service/admin.service";
+import {JwtService} from "../services/jwt.service";
+import {AdminModel, CoordinatorModel} from "../database/db.models";
+import {CoordinatorService} from "../service/coordinator.service";
 
 export class AdminController {
 
-    /************************************************************************************
-     *                               Admin only
-     ***********************************************************************************/
+    static async getCoordinatorFiles(req: Request<any>, res: Response, next: NextFunction) {
+        try {
+            const id = req.params.id;
+
+            const files = await CoordinatorService.getFiles(id);
+            res.end(JSON.stringify(files));
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    static async downloadCoordinatorFile(req: Request<any>, res: Response, next: NextFunction) {
+        const fileId = req.params.fileId;
+        const coordinatorId = req.params.coordinatorId;
+
+        try {
+            const fileModel = await CoordinatorService.downloadFile(coordinatorId, fileId);
+
+            console.log(fileModel.name);
+
+            res.setHeader('Content-disposition', 'attachment; filename=' + fileModel.name);
+            res.setHeader('Content-type', fileModel.mimeType);
+            res.end(fileModel.data);
+        } catch (err) {
+            next(err);
+        }
+    }
+
     static async allStudents(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const data = await AdminService.allStudents();
@@ -76,46 +104,6 @@ export class AdminController {
         }
     }
 
-    static async sendSemesterActivityEmail(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-        const files = req.files;
-
-        if (files == null) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        if (files.file == null) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const file = files.file as UploadedFile;
-        const email = body.emailTemplate;
-        const subject = body.subject;
-        const from = body.from;
-        const recipientExcept = body.exceptRecipient;
-        const send = `${body.send}` === 'true';
-
-        let recipientExceptList: string[] = [];
-        if (recipientExcept !== undefined) {
-            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
-            recipientExceptList = parsedRecipientExcept.split(',');
-        }
-
-        if (email === undefined || subject === undefined || from === undefined || file === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        try {
-            const data = await AdminService.sendSemesterActivityEmail(email, subject, from, file, recipientExceptList, send);
-            res.end(JSON.stringify(data));
-        } catch (err) {
-            next(err);
-        }
-    }
-
     static async exportForms(req: Request<any>, res: Response, next: NextFunction) {
         try {
             const fileBuffer: Buffer = await AdminService.exportForms();
@@ -159,96 +147,6 @@ export class AdminController {
             res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
             res.setHeader('Content-type', ContentType.ZIP);
             res.end(fileBuffer);
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async sendVerbalProcess(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-        const files = req.files;
-
-        if (files == null) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        if (files.file == null) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const file = files.file as UploadedFile;
-        const email = body.emailTemplate;
-        const subject = body.subject;
-        const from = body.from;
-        const recipientExcept = body.exceptRecipient;
-        const send = `${body.send}` === 'true';
-
-        let recipientExceptList: string[] = [];
-        if (recipientExcept !== undefined) {
-            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
-            recipientExceptList = parsedRecipientExcept.split(',');
-        }
-
-        if (email === undefined || subject === undefined || from === undefined || file === undefined) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        try {
-            const file = files.file as UploadedFile;
-            const emailResults = await AdminService.sendVerbalProcess(email, subject, from, file, recipientExceptList, send);
-
-            res.end(JSON.stringify(emailResults));
-        } catch (err) {
-            next(err);
-        }
-    }
-
-    static async sendThesisEmailNotification(req: Request<any>, res: Response, next: NextFunction) {
-        const body = req.body;
-        const files = req.files;
-
-        if (files == null) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        if (files.file == null) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const file = files.file as UploadedFile;
-        const email = body.emailTemplate;
-        const from = body.from;
-        const subject = body.subject;
-        const recipientExcept = body.exceptRecipient;
-        const send = `${body.send}` === 'true';
-
-        let recipientExceptList: string[] = [];
-        if (recipientExcept !== undefined) {
-            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
-            recipientExceptList = parsedRecipientExcept.split(',');
-        }
-
-        if (email === undefined || subject === undefined || from === undefined || file === undefined || !body.startDate || !body.endDate) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        if (isNaN(Date.parse(body.startDate)) || isNaN(Date.parse(body.endDate))) {
-            next(new ResponseError(ResponseMessage.INVALID_DATE, StatusCode.BAD_REQUEST));
-            return;
-        }
-
-        const startDate = new Date(body.startDate);
-        const endDate = new Date(body.endDate);
-
-        try {
-            const data = await AdminService.sendThesisEmailNotification(email, subject, from, file, recipientExceptList, send, startDate, endDate);
-            res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
         }

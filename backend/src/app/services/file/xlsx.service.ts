@@ -1,5 +1,5 @@
 import {UploadedFile} from "express-fileupload";
-import XLSX from "xlsx";
+import XLSX, {WorkSheet} from "xlsx";
 import {ResponseError} from "../../middleware/middleware";
 import {ResponseMessage, StatusCode} from "../rest.util";
 import {UtilService} from "../util.service";
@@ -20,7 +20,6 @@ import {
 
 /* The comments here will be explained in romaninan because este mai usor sa explic ce se intampla, si fara diacritice */
 export class XLSXService {
-
 
     /** Se parseaza orarul profesorilor si se genereaza FAZ-ul petru fiecare.
     * Ideea din spate este urmatoarea:
@@ -365,4 +364,35 @@ export class XLSXService {
         return list;
     }
 
+}
+
+export class XLSXVerificationService {
+    /** Verifica daca fisierul **ore_semestrul_2_-SD-FII_final_v1** este valid. */
+    static verifySemesterActivityTimetable(file: UploadedFile): {expected: string[], got: string[]} | null {
+        const workBook = XLSX.read(file.data);
+        const sheet = workBook.Sheets[workBook.SheetNames[0]];
+
+        const headers = this.getSheetHeaders(sheet);
+        const matchingHeaders = Object.values(SemesterTimetableHeaders);
+
+        console.log(headers.sort().toString());
+        console.log(matchingHeaders.sort().toString());
+
+        if (headers.sort().toString() === matchingHeaders.sort().toString()) {
+            return null;
+        }
+
+        return {
+            expected: matchingHeaders,
+            got: headers,
+        };
+    }
+
+    /** Ia headerele din sheet. Presupunem deja ca in header sunt numai valori simple de tipul string. */
+    static getSheetHeaders(sheet: WorkSheet) {
+        const headerRegex = new RegExp('^([A-Za-z]+)1=\'(.*)$');
+
+        const cells = XLSX.utils.sheet_to_formulae(sheet);
+        return cells.filter(item => headerRegex.test(item)).map(item => item.split("='")[1]);
+    }
 }

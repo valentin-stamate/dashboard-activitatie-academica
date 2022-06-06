@@ -2,12 +2,12 @@
   "name": "backend",
   "version": "0.0.1",
   "description": "systemmanagement-backend initialised with create-express-typescript-application.",
-  "main": "src/index.ts",
+  "main": "src/server.ts",
   "scripts": {
     "build": "tsc",
-    "start": "npx nodemon ./src/index.ts",
-    "dev": "ts-node ./src/index.ts",
-    "dev:nodemon": "nodemon -w src -e ts,json -x ts-node ./src/index.ts",
+    "start": "npx nodemon ./src/server.ts",
+    "dev": "ts-node ./src/server.ts",
+    "dev:nodemon": "nodemon -w src -e ts,json -x ts-node ./src/server.ts",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/**/*.ts'"
   },
   "keywords": [

@@ -1,11 +1,11 @@
 import {ResponseError} from "../middleware/middleware";
 import {ResponseMessage, StatusCode} from "../services/rest.util";
 import {UploadedFile} from "express-fileupload";
-import {XLSXService} from "../services/file/xlsx.service";
+import {XLSXService, XLSXVerificationService} from "../services/file/xlsx.service";
 import {MailService} from "../services/email.service";
 import {FormsService} from "../services/forms.service";
 import JSZip from "jszip";
-import {DocxService} from "../services/file/docx.service";
+import {DOCXService} from "../services/file/docx.service";
 import {UtilService} from "../services/util.service";
 import XLSX from "xlsx";
 import {AllowedStudentModel, CoordinatorModel, StudentModel} from "../database/db.models";
@@ -90,58 +90,6 @@ export class AdminService {
 
         await allowedStudentRepo.remove(existingAllowedStudent);
         return;
-    }
-
-    static async sendSemesterActivityEmail(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], send: boolean): Promise<EmailEndpointResponse> {
-        const semesterActivityDataList = XLSXService.parseSemesterActivityTimetable(file);
-
-        const emailEndpointResponse: EmailEndpointResponse = {
-            emailPreview: [],
-            successfulEmails: [],
-        };
-
-        for (let data of semesterActivityDataList) {
-            if (recipientExceptList.some(item => item === data.emailTo)) {
-                continue;
-            }
-
-            let emailActivityContent: string = data.professorActivity
-                .map(item => `${item.activity} ${item.weekHours} ore/săptămână`)
-                .join(`<br>`);
-
-            const emailContent = emailTemplate.replace(new RegExp(/{{activity}}/g), emailActivityContent);
-
-            emailEndpointResponse.emailPreview.push({
-                from: from,
-                to: data.emailTo,
-                subject: subject,
-                html: emailContent,
-                attachments: [],
-                cc: [],
-            });
-
-            if (!send) {
-                continue;
-            }
-            /* Sending the email */
-
-            try {
-                await MailService.sendMail({
-                    subject: subject,
-                    from: from,
-                    to: data.emailTo,
-                    html: emailContent,
-                });
-
-                emailEndpointResponse.successfulEmails.push({email: data.emailTo, success: true});
-            } catch (err) {
-                console.log(err);
-                emailEndpointResponse.successfulEmails.push({email: data.emailTo, success: false});
-            }
-
-        }
-
-        return emailEndpointResponse;
     }
 
     static async exportForms(): Promise<Buffer> {
@@ -236,8 +184,8 @@ export class AdminService {
             ],
         }));
 
-        const coordinatorScientificActivity = coordinatorsRows.reduce((prev, item) => {prev.push(item.scientificActivity); return prev;}, [] as CoordinatorScientificActivityModel[]);
-        const coordinatorReferenceActivity = coordinatorsRows.reduce((prev, item) => {prev.push(item.referentialActivity); return prev;}, [] as CoordinatorReferentialActivityModel[]);
+        const coordinatorScientificActivity = coordinatorsRows.reduce((prev, item) => {prev.push(...(item.scientificActivity == null ? [] : [item.scientificActivity])); return prev;}, [] as CoordinatorScientificActivityModel[]);
+        const coordinatorReferenceActivity = coordinatorsRows.reduce((prev, item) => {prev.push(...(item.referentialActivity == null ? [] : [item.referentialActivity])); return prev;}, [] as CoordinatorReferentialActivityModel[]);
 
         const coordinatorScientificActivitySheet = FormsService.getCoordinatorScientificActivitySheet(coordinatorScientificActivity);
         const coordinatorReferenceActivitySheet = FormsService.getCoordinatorReferenceActivitySheet(coordinatorReferenceActivity);
@@ -263,140 +211,13 @@ export class AdminService {
         const zip = new JSZip();
 
         for (let data of fazProfessorDataList) {
-            const docxBuffer = DocxService.getFazDOCXBuffer(data, afterTableNote);
+            const docxBuffer = DOCXService.getFazDOCXBuffer(data, afterTableNote);
 
             /* Append the buffer to the zip */
             zip.file(`FAZ ${data.professorFunction} ${data.professorName}.docx`, docxBuffer, {compression: 'DEFLATE'});
         }
 
         return await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' });
-    }
-
-    static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], send: boolean): Promise<EmailEndpointResponse> {
-        const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, true);
-
-        const emailEndpointResponse: EmailEndpointResponse = {
-            emailPreview: [],
-            successfulEmails: [],
-        };
-
-        for (let data of verbalProcessDataList) {
-            if (recipientExceptList.some(item => item === data.studentEmail)) {
-                continue;
-            }
-
-            const buffer = await DocxService.getVerbalProcessDOCXBuffer(data);
-            const filename = `Proces_verbal_raport_${data.studentName} ${data.report}.docx`;
-            const parsedSubject = `${subject} ${data.report[1]} ${data.studentName}`;
-
-            let emailContent = emailTemplate;
-            emailContent = emailContent.replace(new RegExp(/{{report}}/g), data.report[1]);
-            emailContent = emailContent.replace(new RegExp(/{{studentName}}/g), data.studentName);
-
-            emailEndpointResponse.emailPreview.push({
-                from: from,
-                to: data.coordinatorEmail,
-                subject: parsedSubject,
-                html: emailContent,
-                attachments: [filename],
-                cc: [],
-            });
-
-            if (!send) {
-                continue;
-            }
-
-            try {
-                await MailService.sendMail({
-                    subject: parsedSubject,
-                    from: from,
-                    to: data.coordinatorEmail,
-                    html: emailContent,
-                    attachments: [{
-                        content: buffer,
-                        filename: filename,
-                    }],
-                });
-
-                emailEndpointResponse.successfulEmails.push({
-                    email: data.studentEmail,
-                    success: true,
-                });
-            } catch (err) {
-                console.log(err);
-                emailEndpointResponse.successfulEmails.push({
-                    email: data.studentEmail,
-                    success: false,
-                });
-            }
-        }
-
-        return emailEndpointResponse;
-    }
-
-    static async sendThesisEmailNotification(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], sent: boolean, startDate: Date, endDate: Date): Promise<EmailEndpointResponse> {
-        const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, false, startDate, endDate);
-
-        const emailEndpointResponse: EmailEndpointResponse = {
-            emailPreview: [],
-            successfulEmails: [],
-        };
-
-        for (const data of verbalProcessDataList) {
-            if (recipientExceptList.some(item => item === data.studentEmail)) {
-                continue;
-            }
-
-            let commission = '';
-            commission += `${data.coordinators[1].coordinatorName}<br>`;
-            commission += `${data.coordinators[2].coordinatorName}<br>`;
-            commission += `${data.coordinators[3].coordinatorName}`;
-
-            let emailContent = emailTemplate;
-            emailContent = emailContent.replace(new RegExp(/{{date}}/g), UtilService.simpleStringDate(data.presentationDate));
-            emailContent = emailContent.replace(new RegExp(/{{reportTitle}}/g), data.reportTitle);
-            emailContent = emailContent.replace(new RegExp(/{{coordinator}}/g), data.coordinators[0].coordinatorName);
-            emailContent = emailContent.replace(new RegExp(/{{commission}}/g), commission);
-
-            const parsedSubject = `${subject} ${data.studentName}`;
-
-            emailEndpointResponse.emailPreview.push({
-                from: from,
-                to: data.studentEmail,
-                subject: parsedSubject,
-                html: emailContent,
-                attachments: [],
-                cc: [data.coordinatorEmail],
-            });
-
-            if (!sent) {
-                continue;
-            }
-
-            try {
-                await MailService.sendMail({
-                    subject: parsedSubject,
-                    from: from,
-                    to: data.studentEmail,
-                    cc: [data.coordinatorEmail],
-                    html: emailContent,
-                });
-
-                emailEndpointResponse.successfulEmails.push({
-                    email: data.studentEmail,
-                    success: true,
-                });
-            } catch (err) {
-                console.log(err);
-
-                emailEndpointResponse.successfulEmails.push({
-                    email: data.studentEmail,
-                    success: false,
-                });
-            }
-        }
-
-        return emailEndpointResponse;
     }
 
     static async importCoordinators(file: UploadedFile): Promise<number> {

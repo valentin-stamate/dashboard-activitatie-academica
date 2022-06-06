@@ -16,4 +16,11 @@ export function registerCoordinatorEndpoints(app: Express) {
     app.patch(EndpointIdentifier.COORDINATOR_REFERENTIAL_ACTIVITY, Middleware.coordinatorMiddleware, CoordinatorFormsController.updateCoordinatorReferentialActivity);
     app.delete(EndpointIdentifier.COORDINATOR_REFERENTIAL_ACTIVITY, Middleware.coordinatorMiddleware, CoordinatorFormsController.deleteCoordinatorReferentialActivity);
 
+    app.get(EndpointIdentifier.COORDINATOR_FILE, Middleware.coordinatorMiddleware, CoordinatorController.getFiles);
+    app.get(`${EndpointIdentifier.COORDINATOR_DOWNLOAD_FILE}/:id`, Middleware.coordinatorMiddleware, CoordinatorController.downloadFile);
+
+    app.post(EndpointIdentifier.COORDINATOR_FILE, Middleware.coordinatorMiddleware, CoordinatorController.uploadFile);
+    app.delete(`${EndpointIdentifier.COORDINATOR_FILE}/:id`, Middleware.coordinatorMiddleware, CoordinatorController.deleteFile);
+
+
 }
