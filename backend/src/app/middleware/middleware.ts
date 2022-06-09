@@ -147,11 +147,17 @@ export class Middleware {
         console.log('----------------------------=============================================================================----------------------------');
         console.log(err);
         console.log('----------------------------=============================================================================----------------------------');
-        res.setHeader('Content-Type', err.contentType);
+
+        if (err.contentType == null) {
+            res.setHeader('Content-Type', ContentType.TEXT);
+        } else {
+            res.setHeader('Content-Type', err.contentType);
+        }
         res.statusCode = statusError;
 
         if (err.contentType === ContentType.JSON) {
             res.end(JSON.stringify(err.message));
+            return;
         }
 
         res.end(err.message);

@@ -4,6 +4,35 @@
 $gap: 16px;
 $padding: 32px;
 
+.email-recipient-container {
+  display: flex;
+  gap: 8px;
+}
+
+.email-recipient {
+  display: flex;
+  gap: 4px;
+  background-color: #e7e7e7;
+  padding: 4px 18px 4px 8px;
+  font-size: 0.75rem;
+  border-radius: 16px;
+
+  .email-button {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #dcdcdc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .email-button:hover {
+    background-color: #d3d3d3;
+  }
+}
+
 .attachment {
   display: flex;
   border-radius: 4px;

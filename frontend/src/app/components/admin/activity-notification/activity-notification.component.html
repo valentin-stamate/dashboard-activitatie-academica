@@ -22,6 +22,18 @@
 
         <form class="flex-column" #form>
 
+          <div class="file" [class.has-name]="filename !== ''">
+            <label class="file-label">
+              <input class="file-input" type="file" name="file" accept=".xlsx" (change)="onFileInputChange(fileInput)" #fileInput>
+              <span class="file-cta">
+                  <span class="file-icon"><i class="fas fa-upload"></i></span>
+                  <span class="file-label">Încarcă fișierul cu anuntarea repoartelor...</span>
+                </span>
+            </label>
+          </div>
+
+          <div *ngIf="filename !== ''"><small>Fișierul <b>{{filename}}</b> încărcat cu success.</small></div>
+
           <div>
             <div class="field">
               <label class="label">De la</label>
@@ -36,14 +48,6 @@
               <div class="control">
                 <input class="input" type="text" name="subject" value="{{emailSubject}}">
                 <small>Se va completa automat cu numarul raportului si numele doctorandului</small>
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Excludere Email</label>
-              <div class="control">
-                <input class="input" type="text" name="exceptRecipient" placeholder="eg. valentin.stamate@info.uaic.ro,stamatevalentin125@gmail.com">
-                <small>A se separa fiecare email prin virgulă fară spații</small>
               </div>
             </div>
 
@@ -73,44 +77,57 @@
 
             </div>
 
-            <div class="field">
-              <label class="label">Data de start</label>
-              <div class="control">
-                <textarea class="textarea" name="emailTemplate" rows="10" [(ngModel)]="emailTemplate" #template></textarea>
-                <small>Suportă formatare HTML</small><br>
-                <small>Textele de tipul {{'{{'}}cheie}} sunt inlocuite in aplicatie cu continutul necesar.</small>
+            <div class="is-flex">
+              <label class="label">Trimitere email la: &nbsp;</label>
+
+              <div>
+                <div class="email-recipient-container">
+
+                  <div class="email-recipient" *ngFor="let item of emailToList">
+                    <div>{{item}}</div>
+                    <div class="email-button" (click)="onDeleteEmail(item)">x</div>
+                  </div>
+
+                </div>
               </div>
+
             </div>
 
-            <div class="field">
-              <label class="label">Previzualizare template</label>
-              <div class="textarea is-unselectable preview" [innerHTML]="preRenderHtml(emailTemplate)" #preview></div>
+            <div class="buttons">
+              <button class="button is-primary" [disabled]="filename === ''" (click)="onExtractEmails($event, form, template, preview)">Extragere emailuri</button>
             </div>
 
-            <div class="file" [class.has-name]="filename !== ''">
-              <label class="file-label">
-                <input class="file-input" type="file" name="file" accept=".xlsx" (change)="onFileInputChange(fileInput)" #fileInput>
-                <span class="file-cta">
-                  <span class="file-icon"><i class="fas fa-upload"></i></span>
-                  <span class="file-label">Încarcă fișierul cu anuntarea repoartelor...</span>
-                </span>
+            <div class="columns">
 
-                <span class="file-name" *ngIf="filename !== ''">
-                  {{filename}}
-                </span>
-              </label>
+              <div class="column">
+                <div class="field">
+                  <label class="label">Data de start</label>
+                  <div class="control">
+                    <textarea class="textarea" name="emailTemplate" rows="10" [(ngModel)]="emailTemplate" #template></textarea>
+                    <small>Suportă formatare HTML</small><br>
+                    <small>Textele de tipul {{'{{'}}cheie}} sunt inlocuite in aplicatie cu continutul necesar.</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="column">
+                <div class="field">
+                  <label class="label">Previzualizare template</label>
+                  <div class="textarea is-unselectable preview" [innerHTML]="preRenderHtml(emailTemplate)" #preview></div>
+                </div>
+              </div>
+
             </div>
-
 
           </div>
 
           <div class="field is-grouped">
             <div class="control">
-              <button type="button" class="button is-info" [class.is-loading]="previewEmailLoading" (click)="onPreviewEmail($event, form, template, preview)">Verificare trimitere email</button>
+              <button type="button" class="button is-info" [class.is-loading]="previewEmailLoading" (click)="onPreviewEmail($event, form, template, preview)" [disabled]="filename === ''">Verificare trimitere email</button>
             </div>
 
             <div class="control">
-              <button type="button" class="button is-link" [class.is-loading]="organizationEmailLoading" (click)="onSubmit($event, form, template, preview)">Trimite</button>
+              <button type="button" class="button is-link" [class.is-loading]="organizationEmailLoading" (click)="onSubmit($event, form, template, preview)" [disabled]="filename === ''">Trimite</button>
             </div>
 
             <div class="control" *ngIf="organizationEmailFinish">

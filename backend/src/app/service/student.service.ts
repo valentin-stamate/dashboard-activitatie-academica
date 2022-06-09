@@ -2,17 +2,39 @@ import {ResponseError} from "../middleware/middleware";
 import {ResponseMessage, StatusCode} from "../services/rest.util";
 import {StudentModel} from "../database/db.models";
 import {dbConnection} from "../database/connect";
+import {MailService} from "../services/email.service";
 
 export class StudentService {
+    
+    static async sendMail(student: StudentModel, subject: string, to: string, htmlEmail: string) {
+        const studentRepo = dbConnection.getRepository(StudentModel);
+        
+        const existingStudent = await studentRepo.findOne({
+            where: {
+                identifier: student.identifier,
+            }
+        });
 
+        if (existingStudent == null) {
+            throw new ResponseError(ResponseMessage.USER_NOT_FOUND);
+        }
+        
+        await MailService.sendMail({
+            subject: subject,
+            from: `Școala Doctorală FII - ${existingStudent.fullName} <${existingStudent.email}>`,
+            to: to,
+            html: htmlEmail,
+        });
+    }
+    
     static async getInformation(studentModel: StudentModel): Promise<StudentModel> {
-        const existingUser = await dbConnection.getRepository(StudentModel).findOne({
+        const existingStudent = await dbConnection.getRepository(StudentModel).findOne({
             where: {
                 id: studentModel.id
             }
         });
 
-        if (existingUser == null) {
+        if (existingStudent == null) {
             throw new ResponseError(ResponseMessage.USER_NOT_FOUND);
         }
 

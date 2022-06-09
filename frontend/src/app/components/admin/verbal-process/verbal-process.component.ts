@@ -32,6 +32,8 @@ export class VerbalProcessComponent implements OnInit {
 
   config: AxiosRequestConfig;
 
+  emailToList: string[] = [];
+
   constructor() {
     const token = CookieService.readCookie(Cookies.AUTH);
     this.config = {
@@ -43,16 +45,45 @@ export class VerbalProcessComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  onDeleteEmail(email: string) {
+    this.emailToList = this.emailToList.filter(item => item !== email);
+  }
+
   preRenderHtml(html: string) {
     return UtilService.preRenderHtml(html);
+  }
+
+  onExtractEmails(event: Event, form: HTMLFormElement, template: HTMLTextAreaElement, preview: HTMLDivElement) {
+    event.preventDefault();
+
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    formData.set('emailTemplate', preview.innerHTML.replace(new RegExp('email-key', 'g'), ''));
+    formData.set('send', 'false');
+    formData.set('getEmails', 'true');
+    formData.set('emailTo', this.emailToList.join(','));
+
+    axios.post(RestEndpoints.VERBAL_PROCESS, formData, this.config)
+      .then(res => {
+        this.emailToList = res.data;
+      }).catch(err => {
+        console.log(err.response.data);
+        this.notificationMessage = 'Fișier invalid';
+      }).finally(() => {
+
+      });
+
   }
 
   onSubmit(event: Event, form: HTMLFormElement, template: HTMLTextAreaElement, preview: HTMLDivElement) {
     event.preventDefault();
 
     const formData = new FormData(form);
-    formData.set('send', `${true}`);
     formData.set('emailTemplate', preview.innerHTML.replace(new RegExp('email-key', 'g'), ''));
+    formData.set('send', 'true');
+    formData.set('getEmails', 'false');
+    formData.set('emailTo', this.emailToList.join(','));
 
     this.organizationEmailLoading = true;
     this.organizationEmailFinish = false;
@@ -76,8 +107,10 @@ export class VerbalProcessComponent implements OnInit {
     event.preventDefault();
 
     const formData = new FormData(form);
-    formData.set('send', `${false}`);
     formData.set('emailTemplate', preview.innerHTML.replace(new RegExp('email-key', 'g'), ''));
+    formData.set('send', 'false');
+    formData.set('getEmails', 'false');
+    formData.set('emailTo', this.emailToList.join(','));
 
     this.previewEmailLoading = true;
 

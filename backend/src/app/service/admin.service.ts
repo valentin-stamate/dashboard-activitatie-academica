@@ -73,15 +73,28 @@ export class AdminService {
             throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
         }
 
-        const baseInformationList = XLSXService.parseExistingStudents(file);
+        const allowedStudentsList = XLSXService.parseExistingStudents(file);
 
         let rowsCreated = 0;
         const allowedStudentsRepo = dbConnection.getRepository(AllowedStudentModel);
+        const studentsRepo = dbConnection.getRepository(StudentModel);
 
         await allowedStudentsRepo.clear();
-        for (let data of baseInformationList) {
+
+        await studentsRepo.createQueryBuilder()
+            .update()
+            .set({isActive: false})
+            .execute();
+
+        for (let data of allowedStudentsList) {
             const model = AllowedStudentModel.fromObject(data);
             await allowedStudentsRepo.save(model);
+
+            await studentsRepo.createQueryBuilder()
+                .update()
+                .set({isActive: true})
+                .where(`identifier = :identifier`, {identifier: model.identifier});
+
             rowsCreated++;
         }
 
@@ -217,8 +230,8 @@ export class AdminService {
         return await zip.generateAsync( { type : "nodebuffer", compression: 'DEFLATE' });
     }
 
-    static async faz(timetableFile: UploadedFile, afterTableNote: string, month: number, ignoreStart: number, ignoreEnd: number): Promise<any> {
-        const fazProfessorDataList = XLSXService.parseFAZ(timetableFile, month, ignoreStart, ignoreEnd);
+    static async faz(timetableFile: UploadedFile, afterTableNote: string, month: number, intervals: Interval[]): Promise<any> {
+        const fazProfessorDataList = XLSXService.parseFAZ(timetableFile, month, intervals);
 
         const zip = new JSZip();
 
@@ -258,4 +271,9 @@ export class AdminService {
         return await dbConnection.getRepository(CoordinatorModel).find();
     }
 
+}
+
+export interface Interval {
+    start: number;
+    end: number;
 }

@@ -81,6 +81,11 @@ export class StudentModel {
     coordinatorFunction!: string;
     @Column({nullable: false})
     isActive!: boolean;
+    /* gen R1, R2, R3 */
+    @Column({nullable: true})
+    report!: string;
+    @Column({nullable: true})
+    reportUpdate!: Date;
 
     @OneToMany(() => ScientificArticleISIModel, relation => relation.student)
     scientificArticleISI?: ScientificArticleISIModel[];

@@ -3,6 +3,7 @@ import {EndpointIdentifier} from "../../endpoint.identifier";
 import {Middleware} from "../middleware/middleware";
 import {CoordinatorController} from "../controller/coordinator.controller";
 import {CoordinatorFormsController} from "../controller/coordinator.forms.controller";
+import {CoordinatorStudentFormsController} from "../controller/coordinator.student.forms.controller";
 
 export function registerCoordinatorEndpoints(app: Express) {
     app.get(EndpointIdentifier.COORDINATOR_STUDENTS, Middleware.coordinatorMiddleware, CoordinatorController.getCoordinatorStudents);
@@ -22,5 +23,5 @@ export function registerCoordinatorEndpoints(app: Express) {
     app.post(EndpointIdentifier.COORDINATOR_FILE, Middleware.coordinatorMiddleware, CoordinatorController.uploadFile);
     app.delete(`${EndpointIdentifier.COORDINATOR_FILE}/:id`, Middleware.coordinatorMiddleware, CoordinatorController.deleteFile);
 
-
+    app.get(`${EndpointIdentifier.EXPORT_SCIENTIFIC_ARTICLE_ISI}/:studentIdentifier/:reportId`, Middleware.coordinatorMiddleware, CoordinatorStudentFormsController.getScientificArticleISI);
 }

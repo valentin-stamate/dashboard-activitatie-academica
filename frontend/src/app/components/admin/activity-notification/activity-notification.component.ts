@@ -32,6 +32,8 @@ export class ActivityNotificationComponent implements OnInit {
 
   config: AxiosRequestConfig;
 
+  emailToList: string[] = [];
+
   constructor() {
     const token = CookieService.readCookie(Cookies.AUTH);
     this.config = {
@@ -44,16 +46,53 @@ export class ActivityNotificationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onDeleteEmail(email: string) {
+    this.emailToList = this.emailToList.filter(item => item !== email);
+  }
+
   preRenderHtml(html: string) {
     return UtilService.preRenderHtml(html);
+  }
+
+  onExtractEmails(event: Event, form: HTMLFormElement, template: HTMLTextAreaElement, preview: HTMLDivElement) {
+    event.preventDefault();
+
+    console.log('efsd')
+
+    const formData = new FormData(form);
+    formData.set('emailTemplate', preview.innerHTML.replace(new RegExp('email-key', 'g'), ''));
+    formData.set('send', 'false');
+    formData.set('getEmails', 'true');
+    formData.set('emailTo', this.emailToList.join(','));
+
+    axios.post(RestEndpoints.REPORT_NOTIFICATION, formData, this.config)
+      .then(res => {
+        this.emailToList = res.data;
+        console.log(res.data)
+
+      }).catch(err => {
+        console.log(err.response.data);
+
+        if (typeof err.response.data === typeof '') {
+          this.notificationMessage = err.response.data;
+        } else {
+          this.notificationMessage = 'Fișier invalid';
+        }
+
+      }).finally(() => {
+
+      });
+
   }
 
   onSubmit(event: Event, form: HTMLFormElement, template: HTMLTextAreaElement, preview: HTMLDivElement) {
     event.preventDefault();
 
     const formData = new FormData(form);
-    formData.set('send', `${true}`);
     formData.set('emailTemplate', preview.innerHTML.replace(new RegExp('email-key', 'g'), ''));
+    formData.set('send', 'true');
+    formData.set('getEmails', 'false');
+    formData.set('emailTo', this.emailToList.join(','));
 
     this.organizationEmailLoading = true;
     this.organizationEmailFinish = false;
@@ -65,11 +104,11 @@ export class ActivityNotificationComponent implements OnInit {
         this.modalData = data.successfulEmails;
         this.organizationEmailFinish = true;
       }).catch(err => {
-      console.log(err);
-      this.notificationMessage = err.response.data;
-    }).finally(() => {
-      this.organizationEmailLoading = false;
-    });
+        console.log(err);
+        this.notificationMessage = err.response.data;
+      }).finally(() => {
+        this.organizationEmailLoading = false;
+      });
 
   }
 
@@ -77,8 +116,10 @@ export class ActivityNotificationComponent implements OnInit {
     event.preventDefault();
 
     const formData = new FormData(form);
-    formData.set('send', `${false}`);
     formData.set('emailTemplate', preview.innerHTML.replace(new RegExp('email-key', 'g'), ''));
+    formData.set('send', 'false');
+    formData.set('getEmails', 'false');
+    formData.set('emailTo', this.emailToList.join(','));
 
     this.previewEmailLoading = true;
 

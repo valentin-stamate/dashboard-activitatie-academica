@@ -24,22 +24,22 @@ export class AdminEmailController {
         const email = body.emailTemplate;
         const subject = body.subject;
         const from = body.from;
-        const recipientExcept = body.exceptRecipient;
+        const emailToListString = body.emailTo;
         const send = `${body.send}` === 'true';
-
-        let recipientExceptList: string[] = [];
-        if (recipientExcept !== undefined) {
-            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
-            recipientExceptList = parsedRecipientExcept.split(',');
-        }
-
-        if (email === undefined || subject === undefined || from === undefined || file === undefined) {
+        const getEmails = `${body.getEmails}` === 'true';
+        
+        if (emailToListString == null || email == null || subject == null || from == null || file == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
+        
+        let emailToList: string[] = [];
+
+        const parsedRecipientExcept = emailToListString.replace(new RegExp(/ /g), '');
+        emailToList = parsedRecipientExcept.split(',');
 
         try {
-            const data = await AdminEmailService.sendSemesterActivityEmail(email, subject, from, file, recipientExceptList, send);
+            const data = await AdminEmailService.sendSemesterActivityEmail(email, subject, from, file, emailToList, getEmails, send);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);
@@ -64,23 +64,23 @@ export class AdminEmailController {
         const email = body.emailTemplate;
         const subject = body.subject;
         const from = body.from;
-        const recipientExcept = body.exceptRecipient;
+        const emailToListString = body.emailTo;
         const send = `${body.send}` === 'true';
+        const getEmails = `${body.getEmails}` === 'true';
 
-        let recipientExceptList: string[] = [];
-        if (recipientExcept !== undefined) {
-            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
-            recipientExceptList = parsedRecipientExcept.split(',');
-        }
-
-        if (email === undefined || subject === undefined || from === undefined || file === undefined) {
+        if (emailToListString == null || email == null || subject == null || from == null || file == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
+        let emailToList: string[] = [];
+
+        const parsedRecipientExcept = emailToListString.replace(new RegExp(/ /g), '');
+        emailToList = parsedRecipientExcept.split(',');
+
         try {
             const file = files.file as UploadedFile;
-            const emailResults = await AdminEmailService.sendVerbalProcess(email, subject, from, file, recipientExceptList, send);
+            const emailResults = await AdminEmailService.sendVerbalProcess(email, subject, from, file, emailToList, getEmails, send);
 
             res.end(JSON.stringify(emailResults));
         } catch (err) {
@@ -106,19 +106,19 @@ export class AdminEmailController {
         const email = body.emailTemplate;
         const from = body.from;
         const subject = body.subject;
-        const recipientExcept = body.exceptRecipient;
+        const emailToListString = body.emailTo;
         const send = `${body.send}` === 'true';
+        const getEmails = `${body.getEmails}` === 'true';
 
-        let recipientExceptList: string[] = [];
-        if (recipientExcept !== undefined) {
-            const parsedRecipientExcept = recipientExcept.replace(new RegExp(/ /g), '');
-            recipientExceptList = parsedRecipientExcept.split(',');
-        }
-
-        if (email === undefined || subject === undefined || from === undefined || file === undefined || !body.startDate || !body.endDate) {
+        if (emailToListString == null || email == null || subject == null || from == null || file == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
+
+        let emailToList: string[] = [];
+
+        const parsedRecipientExcept = emailToListString.replace(new RegExp(/ /g), '');
+        emailToList = parsedRecipientExcept.split(',');
 
         if (isNaN(Date.parse(body.startDate)) || isNaN(Date.parse(body.endDate))) {
             next(new ResponseError(ResponseMessage.INVALID_DATE, StatusCode.BAD_REQUEST));
@@ -129,7 +129,7 @@ export class AdminEmailController {
         const endDate = new Date(body.endDate);
 
         try {
-            const data = await AdminEmailService.sendThesisEmailNotification(email, subject, from, file, recipientExceptList, send, startDate, endDate);
+            const data = await AdminEmailService.sendThesisEmailNotification(email, subject, from, file, emailToList, getEmails, send, startDate, endDate);
             res.end(JSON.stringify(data));
         } catch (err) {
             next(err);

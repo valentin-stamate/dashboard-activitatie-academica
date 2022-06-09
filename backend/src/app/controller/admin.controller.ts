@@ -123,11 +123,12 @@ export class AdminController {
         const body = req.body;
         const files = req.files;
 
-        if (files == null || body.ignoreStart == null || body.ignoreEnd == null || body.afterTableNote == null || body.month == null) {
+        if (files == null || body.intervals == null || body.afterTableNote == null || body.month == null) {
             next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
             return;
         }
 
+        const intervals = JSON.parse(body.intervals);
         const timetableFile = files.timetable as UploadedFile;
 
         if (timetableFile == null) {
@@ -141,7 +142,7 @@ export class AdminController {
         }
 
         try {
-            const fileBuffer = await AdminService.faz(timetableFile, body.afterTableNote, parseInt(body.month), body.ignoreStart, body.ignoreEnd);
+            const fileBuffer = await AdminService.faz(timetableFile, body.afterTableNote, parseInt(body.month), intervals);
             const fileName = `faz_${UtilService.stringDate(new Date())}.zip`;
 
             res.setHeader('Content-disposition', 'attachment; filename=' + fileName);

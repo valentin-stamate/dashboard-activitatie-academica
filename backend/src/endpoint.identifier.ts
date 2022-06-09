@@ -11,7 +11,8 @@ export enum EndpointIdentifier {
     LOGIN_ADMIN_CODE = '/api/login-admin-code',
     LOGIN_COORDINATOR = '/api/login-coordinator',
 
-    /** User */
+    /** Student */
+    STUDENT_EMAIL = '/api/email',
     FORMS = `/api/forms`,
     INFORMATION = '/api/information',
     SCIENTIFIC_ARTICLE_ISI = '/api/sc-article-isi',
@@ -52,5 +53,7 @@ export enum EndpointIdentifier {
 
     COORDINATOR_FILE = '/api/coordinator/file',
     COORDINATOR_DOWNLOAD_FILE = '/api/coordinator/download-file',
+
+    EXPORT_SCIENTIFIC_ARTICLE_ISI = '/api/export/scientific-article-isi',
 
 }

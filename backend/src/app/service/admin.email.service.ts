@@ -6,12 +6,12 @@ import {ContentType, StatusCode} from "../services/rest.util";
 import {MailService} from "../services/email.service";
 import {DOCXService} from "../services/file/docx.service";
 import {UtilService} from "../services/util.service";
-import {SemesterTimetableHeaders, TimetableHeaders} from "../services/file/xlsx.utils";
+import {ReportsAnnouncementHeaders, SemesterTimetableHeaders} from "../services/file/xlsx.utils";
 
 export class AdminEmailService {
 
-    static async sendSemesterActivityEmail(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], send: boolean): Promise<EmailEndpointResponse> {
-        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(TimetableHeaders));
+    static async sendSemesterActivityEmail(emailTemplate: string, subject: string, from: string, file: UploadedFile, emailToList: string[], getEmails: boolean, send: boolean): Promise<EmailEndpointResponse | string[]> {
+        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(SemesterTimetableHeaders));
 
         if (checkingResult != null) {
             throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
@@ -19,13 +19,17 @@ export class AdminEmailService {
 
         const semesterActivityDataList = XLSXService.parseSemesterActivityTimetable(file);
 
+        if (getEmails) {
+            return semesterActivityDataList.map(item => item.emailTo);
+        }
+
         const emailEndpointResponse: EmailEndpointResponse = {
             emailPreview: [],
             successfulEmails: [],
         };
 
         for (let data of semesterActivityDataList) {
-            if (recipientExceptList.some(item => item === data.emailTo)) {
+            if (!emailToList.some(item => item === data.emailTo)) {
                 continue;
             }
 
@@ -68,8 +72,8 @@ export class AdminEmailService {
         return emailEndpointResponse;
     }
 
-    static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], send: boolean): Promise<EmailEndpointResponse> {
-        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(SemesterTimetableHeaders));
+    static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, emailToList: string[], getEmails: boolean, send: boolean): Promise<EmailEndpointResponse | string[]> {
+        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(ReportsAnnouncementHeaders));
 
         if (checkingResult != null) {
             throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
@@ -77,13 +81,17 @@ export class AdminEmailService {
 
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, true);
 
+        if (getEmails) {
+            return verbalProcessDataList.map(item => item.coordinatorEmail);
+        }
+
         const emailEndpointResponse: EmailEndpointResponse = {
             emailPreview: [],
             successfulEmails: [],
         };
 
         for (let data of verbalProcessDataList) {
-            if (recipientExceptList.some(item => item === data.studentEmail)) {
+            if (!emailToList.some(item => item === data.studentEmail)) {
                 continue;
             }
 
@@ -136,8 +144,8 @@ export class AdminEmailService {
         return emailEndpointResponse;
     }
 
-    static async sendThesisEmailNotification(emailTemplate: string, subject: string, from: string, file: UploadedFile, recipientExceptList: string[], sent: boolean, startDate: Date, endDate: Date): Promise<EmailEndpointResponse> {
-        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(SemesterTimetableHeaders));
+    static async sendThesisEmailNotification(emailTemplate: string, subject: string, from: string, file: UploadedFile, emailToList: string[], getEmails: boolean, sent: boolean, startDate: Date, endDate: Date): Promise<EmailEndpointResponse | string[]> {
+        const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(ReportsAnnouncementHeaders));
 
         if (checkingResult != null) {
             throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
@@ -145,13 +153,17 @@ export class AdminEmailService {
 
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, false, startDate, endDate);
 
+        if (getEmails) {
+            return verbalProcessDataList.map(item => item.coordinatorEmail);
+        }
+
         const emailEndpointResponse: EmailEndpointResponse = {
             emailPreview: [],
             successfulEmails: [],
         };
 
         for (const data of verbalProcessDataList) {
-            if (recipientExceptList.some(item => item === data.studentEmail)) {
+            if (!emailToList.some(item => item === data.studentEmail)) {
                 continue;
             }
 

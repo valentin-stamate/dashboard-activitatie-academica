@@ -17,6 +17,7 @@ import {
     SemesterTimetableHeaders,
     TimetableHeaders
 } from "./xlsx.utils";
+import {Interval} from "../../service/admin.service";
 
 /* The comments here will be explained in romaninan because este mai usor sa explic ce se intampla, si fara diacritice */
 export class XLSXService {
@@ -30,7 +31,7 @@ export class XLSXService {
      *    * se adauga in lista datele
      *
      *    <b>Only god knows what I did here.</b> */
-    static parseFAZ(timetableFile: UploadedFile, month: number, ignoreStart: number, ignoreEnd: number): FAZData[] {
+    static parseFAZ(timetableFile: UploadedFile, month: number, intervals: Interval[]): FAZData[] {
         /* ignoreStart and ignoreEnd are by default -1 if the user doesn't specify a date */
 
         const fazDataList: FAZData[] = [];
@@ -114,7 +115,14 @@ export class XLSXService {
             /* Loop through each day of the month and see if that professor has something to do */
             const monthlyDays: FAZDayActivity[] = [];
             for (let i = 1; i <= monthDays; i++) {
-                if (ignoreStart <= i && i <= ignoreEnd) {
+                let foundToIgnore = false;
+                for (let interval of intervals) {
+                    if (interval.start <= i && i <= interval.end) {
+                        foundToIgnore = true;
+                        break;
+                    }
+                }
+                if (foundToIgnore) {
                     continue;
                 }
 
@@ -238,7 +246,7 @@ export class XLSXService {
             }
 
             /* Don't make the Verbal Process for those who have no date into the 'Data Prez.' */
-            if (lastData === undefined || source === undefined) {
+            if (lastData == null || source == null) {
                 console.log('The fuck');
                 continue;
             }
@@ -373,23 +381,32 @@ export class XLSXVerificationService {
         const workBook = XLSX.read(file.data);
         const sheet = workBook.Sheets[workBook.SheetNames[0]];
 
-        const headers = this.getSheetHeaders(sheet);
+        const fileHeaders = this.getSheetHeaders(sheet).sort();
+        matchingHeaders = matchingHeaders.sort();
 
-        if (headers.sort().toString() === matchingHeaders.sort().toString()) {
-            return null;
+        const fileHeadersSet = new Set<string>(fileHeaders);
+
+        for (let header of matchingHeaders) {
+            if (!fileHeadersSet.has(header)) {
+                return {
+                    expected: matchingHeaders,
+                    got: fileHeaders,
+                };
+            }
         }
 
-        return {
-            expected: matchingHeaders,
-            got: headers,
-        };
+        return null;
     }
 
     /** Ia headerele din sheet. Presupunem deja ca in header sunt numai valori simple de tipul string. */
-    static getSheetHeaders(sheet: WorkSheet) {
+    static getSheetHeaders(sheet: WorkSheet): string[] {
         const headerRegex = new RegExp('^([A-Za-z]+)1=\'(.*)$');
 
         const cells = XLSX.utils.sheet_to_formulae(sheet);
         return cells.filter(item => headerRegex.test(item)).map(item => item.split("='")[1]);
     }
+
+    // static preprocessHeader(header: string): string {
+    //     return header.replace(/(\n)|(\r)/g, ' ').replace(/ +/g, ' ').trim();
+    // }
 }
