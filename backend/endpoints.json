@@ -2428,6 +2428,50 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Send Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{student_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "subject",
+									"value": "Test",
+									"type": "text"
+								},
+								{
+									"key": "to",
+									"value": "photo.backup.vst.02@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "htmlEmail",
+									"value": "Hello",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/email",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"email"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -2701,7 +2745,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{host}}/api/coordinator/download-file/4",
+									"raw": "{{host}}/api/coordinator/download-file/7",
 									"host": [
 										"{{host}}"
 									],
@@ -2709,7 +2753,7 @@
 										"api",
 										"coordinator",
 										"download-file",
-										"4"
+										"7"
 									]
 								}
 							},
@@ -2771,6 +2815,38 @@
 										"coordinator",
 										"file",
 										"8"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Student Forms",
+					"item": [
+						{
+							"name": "Export Scientific Article ISI",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{coordinator_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{host}}/api/export/scientific-article-isi/valentin/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"export",
+										"scientific-article-isi",
+										"valentin",
+										"1"
 									]
 								}
 							},
@@ -2879,13 +2955,18 @@
 											"type": "text"
 										},
 										{
-											"key": "exceptRecipient",
-											"value": "",
+											"key": "emailTo",
+											"value": "stamatevalentin125@gmail.com",
 											"type": "text"
 										},
 										{
 											"key": "send",
 											"value": "false",
+											"type": "text"
+										},
+										{
+											"key": "getEmails",
+											"value": "true",
 											"type": "text"
 										}
 									]
@@ -2920,7 +3001,7 @@
 										{
 											"key": "file",
 											"type": "file",
-											"src": "/C:/Users/Valentin/Desktop/Thesis/Docs/anuntare_rapoarte_drd.xlsx"
+											"src": "/C:/Users/Valentin/Desktop/anuntare_rapoarte_drd.xlsx"
 										},
 										{
 											"key": "subject",
@@ -2933,17 +3014,22 @@
 											"type": "text"
 										},
 										{
+											"key": "emailTo",
+											"value": "alex@gmail.com",
+											"type": "text"
+										},
+										{
 											"key": "emailTemplate",
 											"value": "Bună ziua,<br>\nVă trimit atașat Procesul-Verbal pentru susținerea raportului nr. {{report}} al drd. {{studentName}}<br>\nO zi bună,<br>\n--<br>\nBejinariu Adriana - Secretar Școala Doctorală de Informatică<br>\nUniversitatea „Alexandru Ioan Cuza\" din Iași<br>\nTelefon: 0232 201102 int. 2329<br>\n",
 											"type": "text"
 										},
 										{
-											"key": "exceptRecipient",
-											"value": "alex@gmail.com",
+											"key": "send",
+											"value": "false",
 											"type": "text"
 										},
 										{
-											"key": "send",
+											"key": "getEmails",
 											"value": "true",
 											"type": "text"
 										}
@@ -2979,7 +3065,7 @@
 										{
 											"key": "file",
 											"type": "file",
-											"src": "/C:/Users/Valentin/Desktop/Thesis/Docs/anuntare_rapoarte_drd.xlsx"
+											"src": "/C:/Users/Valentin/Desktop/anuntare_rapoarte_drd.xlsx"
 										},
 										{
 											"key": "subject",
@@ -2992,18 +3078,13 @@
 											"type": "text"
 										},
 										{
-											"key": "emailTemplate",
-											"value": "Bună ziua,<br>\nRaportul cu titlul \"{{reportTitle}}\" este programat la data de {{date}}. Vă invităm să vă consultați cu coordonatorul științific în termen util.<br>\n<br>\nCererea de susținere sau amânare a raportului va fi depusă la Secretariat (C201-stânga) cu o lună înainte de data programată a susținerii referatului, în 2 exemplare.<br>\nFormularele sunt disponibile pe site-ul Scolii Doctorale, <a href=\"https://www.info.uaic.ro/regulamente-formulare-scoala-doctorala/\" target=\"_blank\">regulamente formulare școala doctorală</a> , secțiunea Formulare.<br>\n<br>\nMembri comisiei de îndrumare sunt:<br>\nConducător ştiinţific: {{coordinator}}<br>\n{{commission}}<br>\n <br>\nO zi bună,<br>\n--\n<small style=\"color: #888888\"><i>\nBejinariu Adriana - Secretar Școala Doctorală de Informatică<br>\nUniversitatea „Alexandru Ioan Cuza\" din Iași<br>\nTelefon: 0232 201102 int. 2329<br>\n</i></small>",
-											"type": "text"
-										},
-										{
-											"key": "exceptRecipient",
+											"key": "emailTo",
 											"value": "",
 											"type": "text"
 										},
 										{
-											"key": "send",
-											"value": "false",
+											"key": "emailTemplate",
+											"value": "Ansdand",
 											"type": "text"
 										},
 										{
@@ -3014,6 +3095,16 @@
 										{
 											"key": "endDate",
 											"value": "05/12/2023",
+											"type": "text"
+										},
+										{
+											"key": "getEmails",
+											"value": "true",
+											"type": "text"
+										},
+										{
+											"key": "send",
+											"value": "false",
 											"type": "text"
 										}
 									]
@@ -3119,7 +3210,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{host}}/api/admin/coordinator-files/6",
+									"raw": "{{host}}/api/admin/coordinator-files/1",
 									"host": [
 										"{{host}}"
 									],
@@ -3127,7 +3218,7 @@
 										"api",
 										"admin",
 										"coordinator-files",
-										"6"
+										"1"
 									]
 								}
 							},
@@ -3145,7 +3236,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{host}}/api/admin/download-coordinator-file/1/8",
+									"raw": "{{host}}/api/admin/download-coordinator-file/1/7",
 									"host": [
 										"{{host}}"
 									],
@@ -3154,7 +3245,7 @@
 										"admin",
 										"download-coordinator-file",
 										"1",
-										"8"
+										"7"
 									]
 								}
 							},
@@ -3384,16 +3475,11 @@
 								{
 									"key": "timetable",
 									"type": "file",
-									"src": "/C:/Users/Valentin/Desktop/Thesis/Docs/orar_scoala_doctorala.xlsx"
+									"src": "/C:/Users/Valentin/Desktop/scoala_doctorala_sem2_2021-2022.xlsx"
 								},
 								{
-									"key": "ignoreStart",
+									"key": "intervals",
 									"value": "10",
-									"type": "text"
-								},
-								{
-									"key": "ignoreEnd",
-									"value": "20",
 									"type": "text"
 								},
 								{

@@ -66,7 +66,7 @@ export class NavbarComponent implements OnInit {
 
     const paths: string[] = [
       '/admin', '/admin/users', '/admin/semester-activity', '/admin/export', '/admin/faz',
-      '/admin/email', '/admin/verbal-process', '/admin/thesis-notification',
+      '/admin/email', '/admin/verbal-process', '/admin/thesis-notification', '/admin/coordinators',
     ];
     return paths.includes(relativePath);
   }

@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import {AllowedStudent, Coordinator, Student} from "../../../models/models";
 import axios, {AxiosRequestConfig} from "axios";
-import {RestEndpoints} from "../../../models/rest.endpoints";
+import {AllowedStudent, Coordinator, FileModel, Student} from "../../../models/models";
 import {Cookies, CookieService} from "../../../service/cookie.service";
+import {RestEndpoints} from "../../../models/rest.endpoints";
 import {UtilService} from "../../../service/util.service";
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  selector: 'app-coordinators',
+  templateUrl: './coordinators.component.html',
+  styleUrls: ['./coordinators.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class CoordinatorsComponent implements OnInit {
   notificationMessage: string = '';
   modal = false;
   coordinatorModal = false;
@@ -29,10 +29,14 @@ export class UsersComponent implements OnInit {
   filteredUserList: Student[] = [];
 
   filename = '';
+  filenameCoordinatorFile = '';
 
   coordinatorsList: Coordinator[] = [];
   allowedStudentsImportLoading = false;
   coordinatorsImportLoading = false;
+
+  currentSelected: Coordinator = {} as any;
+  files: FileModel[] = [];
 
   constructor() {
     const token = CookieService.readCookie(Cookies.AUTH);
@@ -49,6 +53,31 @@ export class UsersComponent implements OnInit {
     this.onStudentsRefresh();
   }
 
+  onSelectCoordinator(coordinator: Coordinator) {
+    this.currentSelected = coordinator;
+
+    axios.get(`${RestEndpoints.COORDINATOR_FILES}/${coordinator.id}`, this.config)
+      .then(res => {
+        this.files = res.data;
+      }).catch(err => {
+
+      }).finally(() => {
+
+      })
+
+  }
+
+  onDownloadFile(coordinator: Coordinator, file: FileModel) {
+    axios.get(`${RestEndpoints.DOWNLOAD_COORDINATOR_FILE}/${coordinator.id}/${file.id}`, {...this.config, responseType: 'blob'})
+      .then(res => {
+        UtilService.downloadBuffer(res.data, file.name);
+      }).catch(err => {
+
+    }).finally(() => {
+
+    })
+  }
+
   onAllowedStudentsRefresh() {
     this.allowedStudentsLoading = true;
 
@@ -58,25 +87,11 @@ export class UsersComponent implements OnInit {
           return {...item, loading: false};
         });
       }).catch(err => {
-        this.notificationMessage = err.response.data;
-      }).finally(() => {
-        this.allowedStudentsLoading = false;
-        this.onAllowedStudentsFilterChange(this.baseInfoSearchString);
-      });
-  }
-
-  onAllowedStudentsDelete(item: AllowedStudent) {
-    item.loading = true;
-
-    axios.delete(`${RestEndpoints.ALLOWED_STUDENT}/${item.id}`, this.config)
-      .then(res => {
-
-      }).catch(err => {
-        this.notificationMessage = err.response.data;
-      }).finally(() => {
-        item.loading = false;
-        this.onAllowedStudentsRefresh();
-      });
+      this.notificationMessage = err.response.data;
+    }).finally(() => {
+      this.allowedStudentsLoading = false;
+      this.onAllowedStudentsFilterChange(this.baseInfoSearchString);
+    });
   }
 
   onAllowedStudentsFilterChange(filterValue: string) {
@@ -88,24 +103,6 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  onAllowedStudentsImport(event: Event, form: HTMLFormElement) {
-    event.preventDefault();
-
-    const formData = new FormData(form);
-
-    this.allowedStudentsImportLoading = true;
-    axios.post(RestEndpoints.ALLOWED_STUDENT, formData, this.config)
-      .then(res => {
-        this.notificationMessage = `Numărul de studenți adăugați cu succes: ${res.data}`;
-      }).catch(err => {
-        this.notificationMessage = err.response.data;
-      }).finally(() => {
-        this.allowedStudentsImportLoading = false;
-        this.onAllowedStudentsRefresh();
-      });
-
-  }
-
   onRefreshCoordinators() {
     this.coordinatorsImportLoading = true;
 
@@ -115,10 +112,27 @@ export class UsersComponent implements OnInit {
           return {...item, loading: false};
         });
       }).catch(err => {
-        this.notificationMessage = err.response.data;
-      }).finally(() => {
-        this.coordinatorsImportLoading = false;
-      });
+      this.notificationMessage = err.response.data;
+    }).finally(() => {
+      this.coordinatorsImportLoading = false;
+    });
+  }
+
+  onCoordinatorsImport(event: Event, form: HTMLFormElement) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    this.coordinatorsImportLoading = true;
+    axios.post(RestEndpoints.IMPORT_COORDINATORS, formData, this.config)
+      .then(res => {
+        this.notificationMessage = `Numărul de coordonatori adăugați cu succes: ${res.data}`;
+      }).catch(err => {
+      this.notificationMessage = err.response.data;
+    }).finally(() => {
+      this.coordinatorsImportLoading = false;
+      this.onRefreshCoordinators();
+    });
   }
 
   onStudentsRefresh() {
@@ -127,25 +141,11 @@ export class UsersComponent implements OnInit {
       .then(res => {
         this.usersList = res.data;
       }).catch(err => {
-        this.notificationMessage = err.response.data;
-      }).finally(() => {
-        this.usersLoading = false;
-        this.onUserSearchChange(this.usersSearchString);
-      });
-  }
-
-  onUserDelete(item: Student) {
-    item.loading = true;
-
-    axios.delete(`${RestEndpoints.STUDENT}/${item.id}`, this.config)
-      .then(res => {
-        this.onStudentsRefresh();
-      }).catch(err => {
-        this.notificationMessage = err.response.data;
-      }).finally(() => {
-        item.loading = false;
-      });
-
+      this.notificationMessage = err.response.data;
+    }).finally(() => {
+      this.usersLoading = false;
+      this.onUserSearchChange(this.usersSearchString);
+    });
   }
 
   onUserSearchChange(searchString: string) {
@@ -175,6 +175,10 @@ export class UsersComponent implements OnInit {
     this.modal = true;
   }
 
+  onOpenCoordinatorModal() {
+    this.coordinatorModal = true;
+  }
+
   onFileInputChange(input: HTMLInputElement) {
     const filename = UtilService.getFilenameFromInput(input);
 
@@ -183,4 +187,11 @@ export class UsersComponent implements OnInit {
     }
   }
 
+  onFileInputChangeFormCoordinator(input: HTMLInputElement) {
+    const filename = UtilService.getFilenameFromInput(input);
+
+    if (filename) {
+      this.filenameCoordinatorFile = filename;
+    }
+  }
 }

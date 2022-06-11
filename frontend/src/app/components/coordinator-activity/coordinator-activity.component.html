@@ -6,6 +6,7 @@
     <div class="columns">
 
       <div class="column">
+
         <nav class="panel middle-block fill">
           <div class="panel-heading is-flex is-flex-direction-row">
             <div>Activitatea științifică a conducatorului de doctorat</div>
@@ -62,9 +63,7 @@
 
           </div>
         </nav>
-      </div>
 
-      <div class="column">
         <nav class="panel middle-block fill">
           <div class="panel-heading is-flex is-flex-direction-row">
             <div>
@@ -123,6 +122,49 @@
 
           </div>
         </nav>
+
+        <nav class="panel middle-block fill">
+          <div class="panel-heading is-flex is-flex-direction-row">
+            <div>
+              Încărcare fișier doveditor
+            </div>
+          </div>
+
+          <div class="p-5 flex-column">
+
+            <form class="flex-column" enctype="multipart/form-data" (submit)="onUploadFile($event, form)" #form>
+
+              <div class="file">
+                <label class="file-label">
+                  <input class="file-input" type="file" name="file" (change)="onFileInputChange(uploadInput)" #uploadInput>
+                  <span class="file-cta">
+                    <span class="file-icon"><i class="fas fa-upload"></i></span>
+                    <span class="file-label">Incarcă fișier...</span>
+                  </span>
+                </label>
+              </div>
+
+              <div *ngIf="filename !== ''"><small>Fișierul <b>{{filename}}</b> încărcat cu success.</small></div>
+
+              <div class="buttons">
+                <button type="submit" class="button is-primary" [disabled]="filename === ''">Trimite</button>
+              </div>
+
+            </form>
+
+
+            <div class="subtitle">Listă fișiere încărcate</div>
+
+            <div class="file-buttons">
+              <div *ngFor="let item of files">
+                <button class="button is-small" (click)="onDownloadFile(item)">{{item.name}}</button>
+                <button class="button is-small is-danger" (click)="onDeleteFile(item)">X</button>
+              </div>
+            </div>
+
+          </div>
+        </nav>
+
       </div>
 
     </div>

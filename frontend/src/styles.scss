@@ -4,6 +4,11 @@
 $gap: 16px;
 $padding: 32px;
 
+.file-buttons {
+  display: flex;
+  gap: 12px;
+}
+
 .email-recipient-container {
   display: flex;
   gap: 8px;

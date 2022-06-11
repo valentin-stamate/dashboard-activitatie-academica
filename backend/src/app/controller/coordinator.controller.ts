@@ -62,6 +62,9 @@ export class CoordinatorController {
 
             res.setHeader('Content-disposition', 'attachment; filename=' + fileModel.name);
             res.setHeader('Content-type', fileModel.mimeType);
+
+            console.log(fileModel.data);
+
             res.end(fileModel.data);
         } catch (err) {
             next(err);

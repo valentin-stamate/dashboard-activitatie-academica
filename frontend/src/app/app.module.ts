@@ -35,6 +35,7 @@ import { ActivityNotificationComponent } from './components/admin/activity-notif
 import { CoordinatorActivityComponent } from './components/coordinator-activity/coordinator-activity.component';
 import { CoordinatorStudentsComponent } from './components/coordinator-students/coordinator-students.component';
 import { NoReportComponent } from './components/reports/reports/no-report/no-report.component';
+import { CoordinatorsComponent } from './components/admin/coordinators/coordinators.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { NoReportComponent } from './components/reports/reports/no-report/no-rep
     CoordinatorActivityComponent,
     CoordinatorStudentsComponent,
     NoReportComponent,
+    CoordinatorsComponent,
   ],
   imports: [
     BrowserModule,

@@ -6,7 +6,6 @@
 <div class="columns">
 
   <div class="column">
-
     <!-- Import Students -->
     <nav class="panel middle-block fill">
       <div class="panel-heading">
@@ -28,7 +27,7 @@
         </div>
 
         <form class="flex-column" enctype="multipart/form-data" (ngSubmit)="onAllowedStudentsImport($event, importStudentsForm)" #importStudentsForm>
-          <div class="file" [class.has-name]="filename !== ''">
+          <div class="file">
             <label class="file-label">
               <input class="file-input" type="file" name="file" accept=".xlsx" (change)="onFileInputChange(importStudentsFileInput)" #importStudentsFileInput>
               <span class="file-cta">
@@ -39,12 +38,10 @@
                   Incarcă fișier...
                 </span>
               </span>
-
-              <span class="file-name" *ngIf="filename !== ''">
-                  {{filename}}
-              </span>
             </label>
           </div>
+
+          <div *ngIf="filename !== ''"><small>Fișierul <b>{{filename}}</b> încărcat cu success.</small></div>
 
           <div class="field is-grouped">
             <div class="control">
@@ -56,7 +53,9 @@
 
       </div>
     </nav>
+  </div>
 
+  <div class="column">
     <!-- Allowed Students -->
     <nav class="panel middle-block fill">
       <div class="panel-heading is-flex">
@@ -92,97 +91,7 @@
 
       </div>
     </nav>
-
   </div>
-
-  <div class="column">
-
-    <!-- Import Coordinators -->
-    <nav class="panel middle-block fill">
-      <div class="panel-heading">
-        <div>Import coordonatori</div>
-        <div class="is-flex-grow-1"></div>
-        <button *ngIf="allowedStudentsImportLoading" class="button is-loading icon is-ghost"></button>
-      </div>
-
-      <div class="p-5 flex-column">
-
-        <div class="simple-card white">
-          <p>Aici se poate încărca fișierul cu datele coordonatorilor.
-            Un coordonatori se va putea loga in aplicatie imediat cu marca.</p>
-          <p>În urma importului conturile vechi vor fi sterse.</p>
-          <p>Structura fișierului trebuie să arate astfel:</p>
-          <button class="button is-info mt-4" (click)="onOpenCoordinatorModal()">Deschide</button>
-        </div>
-
-        <form class="flex-column" enctype="multipart/form-data" (ngSubmit)="onCoordinatorsImport($event, importCoordinatorsForm)" #importCoordinatorsForm>
-          <div class="file" [class.has-name]="filenameCoordinatorFile !== ''">
-            <label class="file-label">
-              <input class="file-input" type="file" name="file" accept=".xlsx" (change)="onFileInputChangeFormCoordinator(coordinatorsFileInput)" #coordinatorsFileInput>
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-upload"></i>
-                </span>
-                <span class="file-label">
-                  Incarcă fișier...
-                </span>
-              </span>
-
-              <span class="file-name" *ngIf="filenameCoordinatorFile !== ''">
-                  {{filenameCoordinatorFile}}
-              </span>
-            </label>
-          </div>
-
-          <div class="field is-grouped">
-            <div class="control">
-              <button class="button is-link" [class.is-loading]="coordinatorsImportLoading">Trimite</button>
-            </div>
-          </div>
-
-        </form>
-
-      </div>
-    </nav>
-
-    <!-- Coordinators -->
-    <nav class="panel middle-block fill">
-      <div class="panel-heading is-flex">
-        <div>Coordonatori</div>
-        <div class="is-flex-grow-1"></div>
-        <button *ngIf="coordinatorsImportLoading" class="button is-loading icon is-ghost"></button>
-      </div>
-
-      <div class="p-5 flex-column">
-
-        <div class="simple-card white">
-            Aici se găsesc informațiile extrase din componenta "Import".
-        </div>
-
-<!--        <div class="field">-->
-<!--          <div class="control">-->
-<!--            <input class="input" type="text" placeholder="Cautare" (ngModelChange)="onAllowedStudentsFilterChange(baseInfoSearch.value)" #baseInfoSearch [(ngModel)]="baseInfoSearchString">-->
-<!--          </div>-->
-<!--        </div>-->
-
-        <div class="list scroll">
-          <div class="block list-item" *ngFor="let item of coordinatorsList">
-            <div>
-              <div>{{item.function}} {{item.name}}</div>
-              <div class="small-text">{{item.email}}</div>
-              <div class="small-text">{{toDateStr(item.createdAt)}}</div>
-            </div>
-
-<!--            <div class="spacer"></div>-->
-<!--            <button class="button is-danger" (click)="onAllowedStudentsDelete(item)" [class.is-loading]="item.loading">Șterge</button>-->
-          </div>
-        </div>
-
-      </div>
-    </nav>
-
-  </div>
-
 
 </div>
 

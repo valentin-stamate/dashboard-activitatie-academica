@@ -43,10 +43,15 @@ export class RestEndpoints {
 
   static COORDINATORS = `${host}/api/coordinators`;
   static IMPORT_COORDINATORS = `${host}/api/import-coordinators`;
+  static COORDINATOR_FILES = `${host}/api/admin/coordinator-files`;
+  static DOWNLOAD_COORDINATOR_FILE = `${host}/api/admin/download-coordinator-file`;
 
   /** Coordinator */
   static COORDINATOR_STUDENTS = `${host}/api/coordinator/students`;
   static COORDINATOR_STUDENT_FORMS = `${host}/api/coordinator/student-forms`;
   static COORDINATOR_SCIENTIFIC_ACTIVITY = `${host}/api/coordinator/scientific-activity`;
   static COORDINATOR_REFERENTIAL_ACTIVITY = `${host}/api/coordinator/referential-activity`;
+
+  static COORDINATOR_FILE = `${host}/api/coordinator/file`;
+  static COORDINATOR_DOWNLOAD_FILE = `${host}/api/coordinator/download-file`;
 }

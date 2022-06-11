@@ -1,0 +1,178 @@
+<div *ngIf="notificationMessage !== ''" class="notification is-info notification-sticky">
+  <button class="delete" (click)="onCloseNotification()"></button>
+  <i class="fa-solid fa-circle-info"></i> {{notificationMessage}}
+</div>
+
+<div class="columns">
+
+  <div class="column">
+    <!-- Import Coordinators -->
+    <nav class="panel middle-block fill">
+      <div class="panel-heading">
+        <div>Import coordonatori</div>
+        <div class="is-flex-grow-1"></div>
+        <button *ngIf="allowedStudentsImportLoading" class="button is-loading icon is-ghost"></button>
+      </div>
+
+      <div class="p-5 flex-column">
+
+        <div class="simple-card white">
+          <p>Aici se poate încărca fișierul cu datele coordonatorilor.
+            Un coordonatori se va putea loga in aplicatie imediat cu marca.</p>
+          <p>În urma importului conturile vechi vor fi sterse.</p>
+          <p>Structura fișierului trebuie să arate astfel:</p>
+          <button class="button is-info mt-4" (click)="onOpenCoordinatorModal()">Deschide</button>
+        </div>
+
+        <form class="flex-column" enctype="multipart/form-data" (ngSubmit)="onCoordinatorsImport($event, importCoordinatorsForm)" #importCoordinatorsForm>
+          <div class="file">
+            <label class="file-label">
+              <input class="file-input" type="file" name="file" accept=".xlsx" (change)="onFileInputChangeFormCoordinator(coordinatorsFileInput)" #coordinatorsFileInput>
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Incarcă fișier...
+                </span>
+              </span>
+            </label>
+          </div>
+
+          <div *ngIf="filename !== ''"><small>Fișierul <b>{{filename}}</b> încărcat cu success.</small></div>
+
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-link" [class.is-loading]="coordinatorsImportLoading">Trimite</button>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </nav>
+  </div>
+
+  <div class="column">
+    <!-- Coordinators -->
+    <nav class="panel middle-block fill">
+      <div class="panel-heading is-flex">
+        <div>Coordonatori</div>
+        <div class="is-flex-grow-1"></div>
+        <button *ngIf="coordinatorsImportLoading" class="button is-loading icon is-ghost"></button>
+      </div>
+
+      <div class="p-5 flex-column">
+
+        <div class="simple-card white">
+          Aici se găsesc informațiile extrase din componenta "Import".
+        </div>
+
+        <!--        <div class="field">-->
+        <!--          <div class="control">-->
+        <!--            <input class="input" type="text" placeholder="Cautare" (ngModelChange)="onAllowedStudentsFilterChange(baseInfoSearch.value)" #baseInfoSearch [(ngModel)]="baseInfoSearchString">-->
+        <!--          </div>-->
+        <!--        </div>-->
+
+        <div class="list scroll">
+          <div class="block list-item" *ngFor="let item of coordinatorsList">
+            <div>
+              <div>{{item.function}} {{item.name}}</div>
+              <div class="small-text">{{item.email}}</div>
+              <div class="small-text">{{toDateStr(item.createdAt)}}</div>
+            </div>
+
+            <div class="is-flex-grow-1"></div>
+
+            <div>
+              <button class="button is-info" (click)="onSelectCoordinator(item)">Selectează</button>
+            </div>
+
+            <!--            <div class="spacer"></div>-->
+            <!--            <button class="button is-danger" (click)="onAllowedStudentsDelete(item)" [class.is-loading]="item.loading">Șterge</button>-->
+          </div>
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- Coordinators files -->
+    <nav class="panel middle-block fill" *ngIf="currentSelected.name != null">
+      <div class="panel-heading is-flex">
+        <div>Fisiere {{currentSelected.name}}</div>
+      </div>
+
+      <div class="p-5 flex-column">
+        <div class="file-buttons">
+          <button *ngFor="let item of files" class="button is-small" (click)="onDownloadFile(currentSelected, item)">{{item.name}}</button>
+        </div>
+
+      </div>
+    </nav>
+
+  </div>
+
+</div>
+
+<!-- Student email-preview-modal -->
+<div class="modal" [class.is-active]="modal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content modal-width">
+    <div class="notification is-flex is-justify-content-center p-5">
+      <div>
+        <table class="table fill">
+          <thead>
+          <tr>
+            <th>Matricol</th>
+            <th>Nume și prenume</th>
+            <th>Conducătorul de doctorat</th>
+            <th>Anul înmatriculării</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th>310910401RSL191241</th>
+            <th>Stamate Valentin</th>
+            <th>Lenuța Alboaie</th>
+            <th>2019</th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <button class="modal-close is-large" aria-label="close" (click)="onCloseModal()"></button>
+</div>
+
+<!-- Coordinator File Structure Modal -->
+<div class="modal" [class.is-active]="coordinatorModal">
+  <div class="modal-background"></div>
+
+  <div class="modal-content modal-width">
+    <div class="notification is-flex is-justify-content-center p-5">
+      <div>
+        <table class="table fill">
+          <thead>
+          <tr>
+            <th>Marca</th>
+            <th>Nume prenume conducator de doctorat</th>
+            <th>Email</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th>1234</th>
+            <th>Prof.dr. Lenuța Alboaie</th>
+            <th>user@email.com</th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <button class="modal-close is-large" aria-label="close" (click)="onCloseModal()"></button>
+</div>
+

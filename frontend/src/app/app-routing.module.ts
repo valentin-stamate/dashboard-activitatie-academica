@@ -36,6 +36,7 @@ import {VerbalProcessComponent} from "./components/admin/verbal-process/verbal-p
 import {ActivityNotificationComponent} from "./components/admin/activity-notification/activity-notification.component";
 import {CoordinatorActivityComponent} from "./components/coordinator-activity/coordinator-activity.component";
 import {CoordinatorStudentsComponent} from "./components/coordinator-students/coordinator-students.component";
+import {CoordinatorsComponent} from "./components/admin/coordinators/coordinators.component";
 
 const routes: Routes = [
   /** Unknown user */
@@ -72,6 +73,7 @@ const routes: Routes = [
   /** Admin */
   {path: 'admin', component: AdminComponent, children: [
       {path: 'users', component: UsersComponent},
+      {path: 'coordinators', component: CoordinatorsComponent},
       {path: 'email', component: SemesterActivityComponent},
       {path: 'verbal-process', component: VerbalProcessComponent},
       {path: 'thesis-notification', component: ActivityNotificationComponent},

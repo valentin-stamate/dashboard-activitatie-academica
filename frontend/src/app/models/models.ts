@@ -1,3 +1,15 @@
+import * as Buffer from "buffer";
+
+export interface FileModel {
+  id: number;
+  name: string
+  data: any; // Buffer actually
+  mimeType:string
+  coordinator: Coordinator;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface EmailEndpointResponse {
   emailPreview: EmailPreview[];
   successfulEmails: SuccessfulEmail[];
@@ -51,6 +63,8 @@ export interface Student {
   attendanceYear: number;
   coordinatorName: string;
   coordinatorFunction: string;
+  report: string;
+  reportUpdate: Date;
 
   createdAt: Date;
   updatedAt: Date;
