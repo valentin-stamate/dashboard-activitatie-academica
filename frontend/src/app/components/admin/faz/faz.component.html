@@ -49,23 +49,35 @@
         </div>
 
         <div class="column">
-          <div class="field">
-            <label class="label">Ziua de start</label>
-            <div class="control">
-              <input class="input" type="number" name="ignoreStart" value="0">
-              <small>Ziua de start din luna curentă pentru care se ignoră</small>
+
+          <div class="columns" *ngFor="let interval of intervals; let i = index">
+
+            <div class="column">
+              <div class="field">
+                <label class="label">Ziua de start</label>
+                <div class="control">
+                  <input class="input" type="number" [(ngModel)]="interval.start" name="intervalStart_{{i}}">
+                  <small>Ziua de start din luna curentă pentru care se ignoră</small>
+                </div>
+              </div>
             </div>
+
+            <div class="column">
+              <div class="field">
+                <label class="label">Ziua de sfârșit</label>
+                <div class="control">
+                  <input class="input" type="number" [(ngModel)]="interval.end" name="intervalEnd_{{i}}">
+                  <small>Ziua de sfârșit din luna curentă pentru care se ignoră</small>
+                </div>
+              </div>
+            </div>
+
           </div>
+
         </div>
 
-        <div class="column">
-          <div class="field">
-            <label class="label">Ziua de sfârșit</label>
-            <div class="control">
-              <input class="input" type="number" name="ignoreEnd" value="0">
-              <small>Ziua de sfârșit din luna curentă pentru care se ignoră</small>
-            </div>
-          </div>
+        <div class="column is-one-fifth">
+          <button type="button" class="button is-info" (click)="addInterval()">Adaugă Interval</button>
         </div>
 
       </div>

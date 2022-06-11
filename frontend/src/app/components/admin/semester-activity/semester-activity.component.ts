@@ -69,7 +69,11 @@ export class SemesterActivityComponent implements OnInit {
         this.emailToList = res.data;
       }).catch(err => {
         console.log(err.response.data);
-        this.notificationMessage = 'Fișier invalid';
+        if (typeof err.response.data === typeof '') {
+          this.notificationMessage = err.response.data;
+        } else {
+          this.notificationMessage = 'Fișier invalid';
+        }
       }).finally(() => {
 
       });

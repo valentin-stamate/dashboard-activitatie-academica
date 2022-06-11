@@ -2,7 +2,6 @@ import {ResponseError} from "../middleware/middleware";
 import {ContentType, ResponseMessage, StatusCode} from "../services/rest.util";
 import {UploadedFile} from "express-fileupload";
 import {XLSXService, XLSXVerificationService} from "../services/file/xlsx.service";
-import {MailService} from "../services/email.service";
 import {FormsService} from "../services/forms.service";
 import JSZip from "jszip";
 import {DOCXService} from "../services/file/docx.service";
@@ -10,25 +9,28 @@ import {UtilService} from "../services/util.service";
 import XLSX from "xlsx";
 import {AllowedStudentModel, CoordinatorModel, StudentModel} from "../database/db.models";
 import {dbConnection} from "../database/connect";
-import {EmailEndpointResponse} from "./models";
 import {
     AcademyMemberModel,
     AwardAndNominationModel,
-    CitationModel, DidacticActivityModel, EditorialMemberModel,
-    ISIProceedingModel, OrganizedEventModel, PatentModel, ResearchContractModel,
+    CitationModel,
+    DidacticActivityModel,
+    EditorialMemberModel,
+    ISIProceedingModel,
+    OrganizedEventModel,
+    PatentModel,
+    ResearchContractModel,
     ScientificArticleBDIModel,
-    ScientificArticleISIModel, ScientificBookModel, ScientificCommunicationModel, TranslationModel, WithoutActivityModel
+    ScientificArticleISIModel,
+    ScientificBookModel,
+    ScientificCommunicationModel,
+    TranslationModel,
+    WithoutActivityModel
 } from "../database/forms/db.student.form.models";
 import {
     CoordinatorReferentialActivityModel,
     CoordinatorScientificActivityModel
 } from "../database/forms/db.coordinator.forms";
-import {
-    AllowedStudentsHeaders,
-    CoordinatorsHeaders,
-    ReportsAnnouncementHeaders,
-    TimetableHeaders
-} from "../services/file/xlsx.utils";
+import {AllowedStudentsHeaders, CoordinatorsHeaders, TimetableHeaders} from "../services/file/xlsx.utils";
 
 export class AdminService {
 
@@ -231,6 +233,12 @@ export class AdminService {
     }
 
     static async faz(timetableFile: UploadedFile, afterTableNote: string, month: number, intervals: Interval[]): Promise<any> {
+        const checkingResult = XLSXVerificationService.checkExcelFile(timetableFile, Object.values(TimetableHeaders));
+
+        if (checkingResult != null) {
+            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+        }
+
         const fazProfessorDataList = XLSXService.parseFAZ(timetableFile, month, intervals);
 
         const zip = new JSZip();

@@ -5,6 +5,11 @@ import {RestEndpoints} from "../../../models/rest.endpoints";
 import {UtilService} from "../../../service/util.service";
 import {EmailTemplates} from "../email.templates";
 
+interface Interval {
+  start: number;
+  end: number;
+}
+
 @Component({
   selector: 'app-faz',
   templateUrl: './faz.component.html',
@@ -15,11 +20,16 @@ export class FazComponent implements OnInit {
   loading = false;
   fileStructureModal = false;
 
-  filename = '';
+  filename: string = '';
 
   fazFooter = EmailTemplates.FAZ_FOOTER;
 
   config: AxiosRequestConfig;
+
+  intervals: Interval[] = [{
+    start: 0,
+    end: 0,
+  }];
 
   constructor() {
     const token = CookieService.readCookie(Cookies.AUTH);
@@ -34,10 +44,18 @@ export class FazComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  addInterval() {
+    this.intervals.push({
+      start: 0,
+      end: 0,
+    });
+  }
+
   onDownload(event: Event, form: HTMLFormElement) {
     event.preventDefault();
 
     const formData = new FormData(form);
+    formData.set('intervals', JSON.stringify(this.intervals));
 
     this.loading = true;
     axios.post(RestEndpoints.FAZ, formData, {...this.config, responseType: 'blob'})
@@ -45,8 +63,13 @@ export class FazComponent implements OnInit {
         const fileName = `faz_${UtilService.stringDate(new Date())}.zip`;
         UtilService.downloadBuffer(res.data, fileName);
       }).catch(async err => {
-        const errBlob = err.response.data as Blob;
-        this.notificationMessage = await errBlob.text();
+
+        if (typeof err.response.data === typeof '') {
+          const errBlob = err.response.data as Blob;
+          this.notificationMessage = await errBlob.text();
+        } else {
+          this.notificationMessage = 'Fișier invalid';
+        }
       }).finally(() => {
         this.loading = false;
       });
@@ -59,9 +82,11 @@ export class FazComponent implements OnInit {
   onFileInputChange(input: HTMLInputElement) {
     const filename = UtilService.getFilenameFromInput(input);
 
-    if (filename) {
+    if (filename != null) {
       this.filename = filename;
     }
+
+    console.log(this.filename);
   }
 
   onCloseModal() {
