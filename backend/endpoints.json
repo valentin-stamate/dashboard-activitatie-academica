@@ -2638,11 +2638,6 @@
 									"mode": "formdata",
 									"formdata": [
 										{
-											"key": "fullName",
-											"value": "Full Name",
-											"type": "text"
-										},
-										{
 											"key": "thesisDomain",
 											"value": "Computer Science",
 											"type": "text"
@@ -3479,7 +3474,7 @@
 								},
 								{
 									"key": "intervals",
-									"value": "10",
+									"value": "\"[]\"",
 									"type": "text"
 								},
 								{

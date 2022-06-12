@@ -149,22 +149,21 @@ export class AdminService {
         });
 
         /* I know this it's not readable but yeah, many forms */
-        let scArticleISI = studentsRows.reduce((prev, item) => {prev.push(...(item.scientificArticleISI ?? [])); return prev;}, [] as ScientificArticleISIModel[]);
-
-        let isiProceedings = studentsRows.reduce((prev, item) => { prev.push(...(item.isiProceeding ?? [])); return prev;}, [] as ISIProceedingModel[]);
-        let scArticleBDI = studentsRows.reduce((prev, item) => {prev.push(...(item.scientificArticleBDI ?? [])); return prev;}, [] as ScientificArticleBDIModel[]);
-        let scBook = studentsRows.reduce((prev, item) => {prev.push(...(item.scientificBook ?? [])); return prev;}, [] as ScientificBookModel[]);
-        let translation = studentsRows.reduce((prev, item) => {prev.push(...(item.translation ?? [])); return prev;}, [] as TranslationModel[]);
-        let scCommunication = studentsRows.reduce((prev, item) => {prev.push(...(item.scientificCommunication ?? [])); return prev;}, [] as ScientificCommunicationModel[]);
-        let patent = studentsRows.reduce((prev, item) => {prev.push(...(item.patent ?? [])); return prev;}, [] as PatentModel[]);
-        let researchContract = studentsRows.reduce((prev, item) => {prev.push(...(item.researchContract ?? [])); return prev;}, [] as ResearchContractModel[]);
-        let citation = studentsRows.reduce((prev, item) => {prev.push(...(item.citation ?? [])); return prev;}, [] as CitationModel[]);
-        let awardsNomination = studentsRows.reduce((prev, item) => {prev.push(...(item.awardAndNomination ?? [])); return prev;}, [] as AwardAndNominationModel[]);
-        let academyMember = studentsRows.reduce((prev, item) => {prev.push(...(item.academyMember ?? [])); return prev;}, [] as AcademyMemberModel[]);
-        let editorialMember = studentsRows.reduce((prev, item) => {prev.push(...(item.editorialMember ?? [])); return prev;}, [] as EditorialMemberModel[]);
-        let organizedEvent = studentsRows.reduce((prev, item) => {prev.push(...(item.organizedEvent ?? [])); return prev;}, [] as OrganizedEventModel[]);
-        let withoutActivity = studentsRows.reduce((prev, item) => {prev.push(...(item.withoutActivity ?? [])); return prev;}, [] as WithoutActivityModel[]);
-        let didacticActivity = studentsRows.reduce((prev, item) => {prev.push(...(item.didacticActivity ?? [])); return prev;}, [] as DidacticActivityModel[]);
+        const scArticleISI =     studentsRows.reduce((prev, item) => {prev.push(...(item.scientificArticleISI ?? [])   .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const isiProceedings =   studentsRows.reduce((prev, item) => {prev.push(...(item.isiProceeding ?? [])          .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const scArticleBDI =     studentsRows.reduce((prev, item) => {prev.push(...(item.scientificArticleBDI ?? [])   .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const scBook =           studentsRows.reduce((prev, item) => {prev.push(...(item.scientificBook ?? [])         .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const translation =      studentsRows.reduce((prev, item) => {prev.push(...(item.translation ?? [])            .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const scCommunication =  studentsRows.reduce((prev, item) => {prev.push(...(item.scientificCommunication ?? []).map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const patent =           studentsRows.reduce((prev, item) => {prev.push(...(item.patent ?? [])                 .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const researchContract = studentsRows.reduce((prev, item) => {prev.push(...(item.researchContract ?? [])       .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const citation =         studentsRows.reduce((prev, item) => {prev.push(...(item.citation ?? [])               .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const awardsNomination = studentsRows.reduce((prev, item) => {prev.push(...(item.awardAndNomination ?? [])     .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const academyMember =    studentsRows.reduce((prev, item) => {prev.push(...(item.academyMember ?? [])          .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const editorialMember =  studentsRows.reduce((prev, item) => {prev.push(...(item.editorialMember ?? [])        .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const organizedEvent =   studentsRows.reduce((prev, item) => {prev.push(...(item.organizedEvent ?? [])         .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const withoutActivity =  studentsRows.reduce((prev, item) => {prev.push(...(item.withoutActivity ?? [])        .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
+        const didacticActivity = studentsRows.reduce((prev, item) => {prev.push(...(item.didacticActivity ?? [])       .map((row: any) => {return {...row, owner: item.identifier};})); return prev;}, [] as any[]);
 
         const scISISheet = FormsService.getScientificArticleISISheet(scArticleISI);
         const isiProceedingsSheet = FormsService.getISIProceedingsSheet(isiProceedings);
@@ -211,8 +210,8 @@ export class AdminService {
             ],
         }));
 
-        const coordinatorScientificActivity = coordinatorsRows.reduce((prev, item) => {prev.push(...(item.scientificActivity == null ? [] : [item.scientificActivity])); return prev;}, [] as CoordinatorScientificActivityModel[]);
-        const coordinatorReferenceActivity = coordinatorsRows.reduce((prev, item) => {prev.push(...(item.referentialActivity == null ? [] : [item.referentialActivity])); return prev;}, [] as CoordinatorReferentialActivityModel[]);
+        const coordinatorScientificActivity = coordinatorsRows.reduce((prev, item) => {prev.push(...(item.scientificActivity == null ? [] : [{...item.scientificActivity, owner: `${item.function} ${item.name}`}])); return prev;}, [] as any[]);
+        const coordinatorReferenceActivity = coordinatorsRows.reduce((prev, item) => {prev.push(...(item.referentialActivity == null ? [] : [{...item.referentialActivity, owner: `${item.function} ${item.name}`}])); return prev;}, [] as any[]);
 
         const coordinatorScientificActivitySheet = FormsService.getCoordinatorScientificActivitySheet(coordinatorScientificActivity);
         const coordinatorReferenceActivitySheet = FormsService.getCoordinatorReferenceActivitySheet(coordinatorReferenceActivity);

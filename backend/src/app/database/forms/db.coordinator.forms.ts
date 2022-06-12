@@ -7,8 +7,6 @@ export class CoordinatorScientificActivityModel {
     id!: number;
 
     @Column({nullable: false})
-    fullName!: string;
-    @Column({nullable: false})
     publicationNumberWebOfScience!: string;
     @Column({nullable: false})
     committees!: string;
@@ -25,7 +23,6 @@ export class CoordinatorScientificActivityModel {
     static fromObject(object: any): CoordinatorScientificActivityModel {
         const model = new CoordinatorScientificActivityModel();
 
-        model.fullName = object.fullName ?? '';
         model.publicationNumberWebOfScience = object.publicationNumberWebOfScience ?? '';
         model.committees = object.committees ?? '';
         model.conferences = object.conferences ?? '';
@@ -35,7 +32,6 @@ export class CoordinatorScientificActivityModel {
     }
 
     update(object: any) {
-        this.fullName = object.fullName ?? this.fullName;
         this.publicationNumberWebOfScience = object.publicationNumberWebOfScience ?? this.publicationNumberWebOfScience;
         this.committees = object.committees ?? this.committees;
         this.conferences = object.conferences ?? this.conferences;
@@ -49,8 +45,6 @@ export class CoordinatorReferentialActivityModel {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column({nullable: false})
-    fullName!: string;
     @Column({nullable: false})
     thesisDomain!: string;
     @Column({nullable: false})
@@ -68,7 +62,6 @@ export class CoordinatorReferentialActivityModel {
     static fromObject(object: any): CoordinatorReferentialActivityModel {
         const model = new CoordinatorReferentialActivityModel();
 
-        model.fullName = object.fullName ?? '';
         model.thesisDomain = object.thesisDomain ?? '';
         model.thesisReference = object.thesisReference ?? '';
         model.IOSUD = object.IOSUD ?? '';
@@ -78,7 +71,6 @@ export class CoordinatorReferentialActivityModel {
     }
 
     update(object: any) {
-        this.fullName = object.fullName ?? this.fullName;
         this.thesisDomain = object.thesisDomain ?? this.thesisDomain;
         this.thesisReference = object.thesisReference ?? this.thesisReference;
         this.IOSUD = object.IOSUD ?? this.IOSUD;
