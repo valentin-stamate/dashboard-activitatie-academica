@@ -16,7 +16,7 @@
     <div class="section">
       <div class="title">Beneficii aduse studenţilor doctoranzi</div>
 
-      <div class="columns cards">
+      <div class="columns cards" *ngIf="userType === 3">
 
         <div class="card column">
           <div class="card-icon-container">
@@ -25,7 +25,7 @@
 
           <div class="card-content">
             <div class="content has-text-centered">
-              <b>Organizare eficientă a activității</b>
+              <b>Rapoarte cercetare doctoranzi</b>
             </div>
           </div>
         </div>
@@ -38,7 +38,7 @@
 
           <div class="card-content">
             <div class="content has-text-centered">
-              <b>Comunicare facilă</b>
+              <b>Email secretariat</b>
             </div>
           </div>
         </div>
@@ -50,22 +50,22 @@
 
           <div class="card-content">
             <div class="content has-text-centered">
-              <b>Acces din orice loc</b>
+              <b>Chat</b>
             </div>
           </div>
         </div>
 
-        <div class="card column">
-          <div class="card-icon-container">
-            <i class="fa-solid fa-shield-halved card-icon icon-color"></i>
-          </div>
+<!--        <div class="card column">-->
+<!--          <div class="card-icon-container">-->
+<!--            <i class="fa-solid fa-shield-halved card-icon icon-color"></i>-->
+<!--          </div>-->
 
-          <div class="card-content">
-            <div class="content has-text-centered">
-              <b>Siguranţă</b>
-            </div>
-          </div>
-        </div>
+<!--          <div class="card-content">-->
+<!--            <div class="content has-text-centered">-->
+<!--              <b>Siguranţă</b>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
       </div>
     </div>
