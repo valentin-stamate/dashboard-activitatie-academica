@@ -20,4 +20,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void { }
 
+  openChat() {
+    // @ts-ignore
+    tidioChatApi.open();
+  }
+
 }

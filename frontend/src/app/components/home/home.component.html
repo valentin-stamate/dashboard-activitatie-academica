@@ -22,7 +22,7 @@
       <!-- Student -->
       <div class="columns cards" *ngIf="userType === 1" [routerLink]="">
 
-        <div class="card column">
+        <a class="card column" routerLink="/reports">
           <div class="card-icon-container">
             <i class="fa-solid fa-file card-icon icon-color"></i>
           </div>
@@ -32,44 +32,19 @@
               <b>Rapoarte cercetare doctoranzi</b>
             </div>
           </div>
-        </div>
+        </a>
 
-
-        <div class="card column">
+        <a class="card column" (click)="openChat()">
           <div class="card-icon-container">
-            <i class="fa-solid fa-people-group card-icon icon-color"></i>
+            <i class="fa-solid fa-comment card-icon icon-color"></i>
           </div>
 
           <div class="card-content">
             <div class="content has-text-centered">
-              <b>Email secretariat</b>
+              <b>Comunicare rapidă cu secretariatul</b>
             </div>
           </div>
-        </div>
-
-        <div class="card column">
-          <div class="card-icon-container">
-            <i class="fa-solid fa-earth-americas card-icon icon-color"></i>
-          </div>
-
-          <div class="card-content">
-            <div class="content has-text-centered">
-              <b>Chat</b>
-            </div>
-          </div>
-        </div>
-
-<!--        <div class="card column">-->
-<!--          <div class="card-icon-container">-->
-<!--            <i class="fa-solid fa-shield-halved card-icon icon-color"></i>-->
-<!--          </div>-->
-
-<!--          <div class="card-content">-->
-<!--            <div class="content has-text-centered">-->
-<!--              <b>Siguranţă</b>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
+        </a>
 
       </div>
 
@@ -164,18 +139,6 @@
             </div>
           </div>
         </a>
-
-        <!--        <div class="card column">-->
-        <!--          <div class="card-icon-container">-->
-        <!--            <i class="fa-solid fa-shield-halved card-icon icon-color"></i>-->
-        <!--          </div>-->
-
-        <!--          <div class="card-content">-->
-        <!--            <div class="content has-text-centered">-->
-        <!--              <b>Siguranţă</b>-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--        </div>-->
 
       </div>
 
