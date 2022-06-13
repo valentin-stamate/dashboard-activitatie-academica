@@ -38,7 +38,7 @@ export class StudentService {
             throw new ResponseError(ResponseMessage.USER_NOT_FOUND);
         }
 
-        return studentModel;
+        return existingStudent;
     }
 
     static async getForms(studentModel: StudentModel): Promise<any> {

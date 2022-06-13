@@ -2521,11 +2521,6 @@
 									"mode": "formdata",
 									"formdata": [
 										{
-											"key": "fullName",
-											"value": "Demo Names",
-											"type": "text"
-										},
-										{
 											"key": "publicationNumberWebOfScience",
 											"value": "323 I guess",
 											"type": "text"
