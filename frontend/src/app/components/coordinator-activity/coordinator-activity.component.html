@@ -1,18 +1,18 @@
 <app-navbar [navigation]="true"></app-navbar>
 
 <div class="page">
-  <div class="page-content">
+  <div class="page-content" style="width: 920px">
 
     <div class="columns">
 
       <div class="column">
 
         <nav class="panel middle-block fill">
-          <div class="panel-heading is-flex is-flex-direction-row">
+          <div class="panel-heading is-flex is-flex-direction-row is-align-items-center">
             <div>Activitatea științifică a conducatorului de doctorat</div>
             <div class="is-flex-grow-1"></div>
-            <button *ngIf="existingScientificActivity" class="button icon is-success"></button>
-            <button *ngIf="!existingScientificActivity" class="button icon is-warning"></button>
+            <small *ngIf="existingScientificActivity" class="small-text"><b>Completat</b></small>
+            <small *ngIf="!existingScientificActivity" class="small-text"><b>Necompletat</b></small>
           </div>
 
           <div class="p-5 flex-column">
@@ -65,14 +65,14 @@
         </nav>
 
         <nav class="panel middle-block fill">
-          <div class="panel-heading is-flex is-flex-direction-row">
+          <div class="panel-heading is-flex is-flex-direction-row is-align-items-center">
             <div>
               Activitatea referențială a conducătorului de doctorat/abilitat de la
               IOSUD-UAIC
             </div>
             <div class="is-flex-grow-1"></div>
-            <button *ngIf="existingReferentialActivity" class="button icon is-success"></button>
-            <button *ngIf="!existingReferentialActivity" class="button icon is-warning"></button>
+            <small *ngIf="existingReferentialActivity" class="small-text"><b>Completat</b></small>
+            <small *ngIf="!existingReferentialActivity" class="small-text"><b>Necompletat</b></small>
           </div>
 
           <div class="p-5 flex-column">
@@ -123,7 +123,7 @@
           </div>
         </nav>
 
-        <nav class="panel middle-block fill">
+        <nav class="panel middle-block fill" id="files">
           <div class="panel-heading is-flex is-flex-direction-row">
             <div>
               Încărcare fișier doveditor

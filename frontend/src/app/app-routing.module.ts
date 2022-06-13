@@ -69,8 +69,8 @@ const routes: Routes = [
   {path: 'user', component: UserComponent},
 
   /** Coordinator */
-  {path: 'coordinator-activity', component: CoordinatorActivityComponent},
   {path: 'coordinator-students', component: CoordinatorStudentsComponent},
+  {path: 'coordinator-activity', component: CoordinatorActivityComponent},
 
   /** Admin */
   {path: 'admin-users', component: AdminUsers, children: [
