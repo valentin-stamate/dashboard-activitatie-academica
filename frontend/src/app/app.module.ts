@@ -8,10 +8,10 @@ import { SignupComponent } from './components/authentication/signup/signup.compo
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ReportsComponent } from './components/reports/reports.component';
-import { AdminComponent } from './components/admin/admin.component';
-import { UsersComponent } from './components/admin/users/users.component';
-import { SemesterActivityComponent } from './components/admin/semester-activity/semester-activity.component';
-import { ExportComponent } from './components/admin/export/export.component';
+import { AdminUsers } from './components/admin-users/admin-users.component';
+import { UsersComponent } from './components/admin-users/users/users.component';
+import { SemesterActivityComponent } from './components/admin-email/semester-activity/semester-activity.component';
+import { ExportComponent } from './components/admin-files/export/export.component';
 import { FormsModule } from "@angular/forms";
 import { ScientificArticleIsiComponent } from './components/reports/reports/scientific-article-isi/scientific-article-isi.component';
 import { IsiProceedingsComponent } from './components/reports/reports/isi-proceedings/isi-proceedings.component';
@@ -28,14 +28,16 @@ import { EditorialMemberComponent } from './components/reports/reports/editorial
 import { OrganizedEventComponent } from './components/reports/reports/organized-event/organized-event.component';
 import { WithoutActivityComponent } from './components/reports/reports/without-activity/without-activity.component';
 import { DidacticActivityComponent } from './components/reports/reports/didactic-activity/didactic-activity.component';
-import { FazComponent } from './components/admin/faz/faz.component';
+import { FazComponent } from './components/admin-files/faz/faz.component';
 import { UserComponent } from './components/user/user.component';
-import { VerbalProcessComponent } from './components/admin/verbal-process/verbal-process.component';
-import { ActivityNotificationComponent } from './components/admin/activity-notification/activity-notification.component';
+import { VerbalProcessComponent } from './components/admin-email/verbal-process/verbal-process.component';
+import { ActivityNotificationComponent } from './components/admin-email/activity-notification/activity-notification.component';
 import { CoordinatorActivityComponent } from './components/coordinator-activity/coordinator-activity.component';
 import { CoordinatorStudentsComponent } from './components/coordinator-students/coordinator-students.component';
 import { NoReportComponent } from './components/reports/reports/no-report/no-report.component';
-import { CoordinatorsComponent } from './components/admin/coordinators/coordinators.component';
+import { CoordinatorsComponent } from './components/admin-users/coordinators/coordinators.component';
+import { AdminEmailComponent } from './components/admin-email/admin-email.component';
+import { AdminFilesComponent } from './components/admin-files/admin-files.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,7 @@ import { CoordinatorsComponent } from './components/admin/coordinators/coordinat
     HomeComponent,
     NavbarComponent,
     ReportsComponent,
-    AdminComponent,
+    AdminUsers,
     UsersComponent,
     SemesterActivityComponent,
     ExportComponent,
@@ -73,6 +75,8 @@ import { CoordinatorsComponent } from './components/admin/coordinators/coordinat
     CoordinatorStudentsComponent,
     NoReportComponent,
     CoordinatorsComponent,
+    AdminEmailComponent,
+    AdminFilesComponent,
   ],
   imports: [
     BrowserModule,

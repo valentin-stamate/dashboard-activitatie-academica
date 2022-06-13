@@ -21,10 +21,18 @@
     <div id="navbarBasicExample" class="navbar-menu" *ngIf="navigation === true">
       <div class="navbar-start">
         <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleHomeActiveLink()" routerLink="/home"><b>Acasă</b></a>
+
+        <!-- Student -->
         <a class="navbar-item has-text-white app-navbar-item" routerLinkActive="link-active" routerLink="/reports" *ngIf="userType === userTypes.STUDENT"><b>Raportare Cercetare Doctoranzi</b></a>
+
+        <!-- Coordinator -->
         <a class="navbar-item has-text-white app-navbar-item" routerLinkActive="link-active" routerLink="/coordinator-students" *ngIf="userType === userTypes.COORDINATOR"><b>Formularele completate de doctoranzi</b></a>
         <a class="navbar-item has-text-white app-navbar-item" routerLinkActive="link-active" routerLink="/coordinator-activity" *ngIf="userType === userTypes.COORDINATOR"><b>Raportare Activitate Coordonatori</b></a>
-        <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleAdminActiveLink()" routerLink="/admin/users" *ngIf="userType === userTypes.ADMIN"><b>Admin</b></a>
+
+        <!-- Admin -->
+        <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleAdminUsersActiveLink()" routerLink="/admin-users/students" *ngIf="userType === userTypes.ADMIN"><b>Utilizatori</b></a>
+        <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleAdminEmailActiveLink()" routerLink="/admin-email/semester-activity" *ngIf="userType === userTypes.ADMIN"><b>Email</b></a>
+        <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleAdminFilesActiveLink()" routerLink="/admin-files/faz" *ngIf="userType === userTypes.ADMIN"><b>Fișiere</b></a>
       </div>
 
       <div class="navbar-end">

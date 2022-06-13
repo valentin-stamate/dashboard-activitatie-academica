@@ -1,0 +1,32 @@
+<app-navbar [navigation]="true"></app-navbar>
+
+<div class="page">
+  <div class="page-content">
+
+    <div class="tabs is-centered is-boxed m-0">
+      <ul>
+        <li routerLinkActive="is-active">
+          <a routerLink="semester-activity">
+            <span class="icon is-small"><i class="fa-solid fa-envelope"></i></span>
+            <span>Activitate Semestrială</span>
+          </a>
+        </li>
+        <li routerLinkActive="is-active">
+          <a routerLink="verbal-process">
+            <span class="icon is-small"><i class="fa-solid fa-envelope"></i></span>
+            <span>Proces-Verbal</span>
+          </a>
+        </li>
+        <li routerLinkActive="is-active">
+          <a routerLink="thesis-notification">
+            <span class="icon is-small"><i class="fa-solid fa-envelope"></i></span>
+            <span>Notificare Rapoarte</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <router-outlet></router-outlet>
+
+  </div>
+</div>

@@ -8,7 +8,7 @@ export class UtilService {
     }
 
     if (route === '/users') {
-      return url.includes(route) || url === '/admin';
+      return url.includes(route) || url === '/admin-users';
     }
 
     return url.includes(route);

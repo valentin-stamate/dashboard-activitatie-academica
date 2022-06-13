@@ -3,7 +3,7 @@ import {Cookies, CookieService} from "../../../service/cookie.service";
 import axios, {AxiosRequestConfig} from "axios";
 import {RestEndpoints} from "../../../models/rest.endpoints";
 import {UtilService} from "../../../service/util.service";
-import {EmailTemplates} from "../email.templates";
+import {EmailTemplates} from "../../admin-email/email.templates";
 
 interface Interval {
   start: number;

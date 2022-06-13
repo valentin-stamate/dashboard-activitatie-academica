@@ -14,9 +14,13 @@
 
     <!-- Card Section -->
     <div class="section">
-      <div class="title">Beneficii aduse studenţilor doctoranzi</div>
+      <div class="title" *ngIf="userType === 1">Beneficii aduse studenţilor doctoranzi</div>
+      <div class="title" *ngIf="userType === 2">Beneficii aduse coordonatorilor</div>
+      <div class="title" *ngIf="userType === 3">Beneficii aduse secretariatului</div>
 
-      <div class="columns cards" *ngIf="userType === 3">
+
+      <!-- Student -->
+      <div class="columns cards" *ngIf="userType === 1" [routerLink]="">
 
         <div class="card column">
           <div class="card-icon-container">
@@ -68,6 +72,127 @@
 <!--        </div>-->
 
       </div>
+
+      <!-- Coordinator -->
+      <div class="columns cards" *ngIf="userType === 2" [routerLink]="">
+
+        <div class="card column">
+          <div class="card-icon-container">
+            <i class="fa-solid fa-file card-icon icon-color"></i>
+          </div>
+
+          <div class="card-content">
+            <div class="content has-text-centered">
+              <b>Rapoarte cercetare doctoranzi</b>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="card column">
+          <div class="card-icon-container">
+            <i class="fa-solid fa-people-group card-icon icon-color"></i>
+          </div>
+
+          <div class="card-content">
+            <div class="content has-text-centered">
+              <b>Email secretariat</b>
+            </div>
+          </div>
+        </div>
+
+        <div class="card column">
+          <div class="card-icon-container">
+            <i class="fa-solid fa-earth-americas card-icon icon-color"></i>
+          </div>
+
+          <div class="card-content">
+            <div class="content has-text-centered">
+              <b>Chat</b>
+            </div>
+          </div>
+        </div>
+
+        <!--        <div class="card column">-->
+        <!--          <div class="card-icon-container">-->
+        <!--            <i class="fa-solid fa-shield-halved card-icon icon-color"></i>-->
+        <!--          </div>-->
+
+        <!--          <div class="card-content">-->
+        <!--            <div class="content has-text-centered">-->
+        <!--              <b>Siguranţă</b>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+
+      </div>
+
+      <!-- Admin -->
+      <div class="columns cards" *ngIf="userType === 3" [routerLink]="">
+
+        <a class="card column" routerLink="/admin-users/students">
+          <div class="card-icon-container">
+            <i class="fa-solid fa-users card-icon icon-color"></i>
+          </div>
+
+          <div class="card-content">
+            <div class="content has-text-centered">
+              <b>Management ușor al utilizatorilor</b>
+            </div>
+          </div>
+        </a>
+
+        <a class="card column" routerLink="/admin-email/semester-activity">
+          <div class="card-icon-container">
+            <i class="fa-solid fa-envelope card-icon icon-color"></i>
+          </div>
+
+          <div class="card-content">
+            <div class="content has-text-centered">
+              <b>Emailuri ușor de trimis</b>
+            </div>
+          </div>
+        </a>
+
+        <a class="card column" routerLink="/admin-files/faz">
+          <div class="card-icon-container">
+            <i class="fa-solid fa-file-arrow-down card-icon icon-color"></i>
+          </div>
+
+          <div class="card-content">
+            <div class="content has-text-centered">
+              <b>Generare rapida de FAZ-uri</b>
+            </div>
+          </div>
+        </a>
+
+        <a class="card column" routerLink="/admin-files/export">
+          <div class="card-icon-container">
+            <i class="fa-solid fa-cloud-arrow-down card-icon icon-color"></i>
+          </div>
+
+          <div class="card-content">
+            <div class="content has-text-centered">
+              <b>Export usor al datelor</b>
+            </div>
+          </div>
+        </a>
+
+        <!--        <div class="card column">-->
+        <!--          <div class="card-icon-container">-->
+        <!--            <i class="fa-solid fa-shield-halved card-icon icon-color"></i>-->
+        <!--          </div>-->
+
+        <!--          <div class="card-content">-->
+        <!--            <div class="content has-text-centered">-->
+        <!--              <b>Siguranţă</b>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+
+      </div>
+
+
     </div>
 
   </div>

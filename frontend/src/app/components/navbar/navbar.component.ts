@@ -61,12 +61,29 @@ export class NavbarComponent implements OnInit {
     window.location.href = '/login';
   }
 
-  handleAdminActiveLink(){
+  handleAdminUsersActiveLink(){
     let relativePath: string = this.location.path();
 
     const paths: string[] = [
-      '/admin', '/admin/users', '/admin/semester-activity', '/admin/export', '/admin/faz',
-      '/admin/email', '/admin/verbal-process', '/admin/thesis-notification', '/admin/coordinators',
+      '/admin-users', '/admin-users/students', '/admin-users/coordinators',
+    ];
+    return paths.includes(relativePath);
+  }
+
+  handleAdminEmailActiveLink(){
+    let relativePath: string = this.location.path();
+
+    const paths: string[] = [
+      '/admin-email', '/admin-email/semester-activity', '/admin-email/verbal-process', '/admin-email/thesis-notification',
+    ];
+    return paths.includes(relativePath);
+  }
+
+  handleAdminFilesActiveLink(){
+    let relativePath: string = this.location.path();
+
+    const paths: string[] = [
+      '/admin-files', '/admin-files/export', '/admin-files/faz',
     ];
     return paths.includes(relativePath);
   }

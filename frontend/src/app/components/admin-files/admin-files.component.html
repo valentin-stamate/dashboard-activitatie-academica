@@ -1,0 +1,26 @@
+<app-navbar [navigation]="true"></app-navbar>
+
+<div class="page">
+  <div class="page-content">
+
+    <div class="tabs is-centered is-boxed m-0">
+      <ul>
+        <li routerLinkActive="is-active">
+          <a routerLink="faz">
+            <span class="icon is-small"><i class="fa-solid fa-calendar"></i></span>
+            <span>FAZ</span>
+          </a>
+        </li>
+        <li routerLinkActive="is-active">
+          <a routerLink="export">
+            <span class="icon is-small"><i class="fa-solid fa-download"></i></span>
+            <span>Export Rapoarte</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <router-outlet></router-outlet>
+
+  </div>
+</div>

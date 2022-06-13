@@ -5,10 +5,10 @@ import {LoginComponent} from "./components/authentication/login/login.component"
 import {SignupComponent} from "./components/authentication/signup/signup.component";
 import {HomeComponent} from "./components/home/home.component";
 import {ReportsComponent} from "./components/reports/reports.component";
-import {AdminComponent} from "./components/admin/admin.component";
-import {UsersComponent} from "./components/admin/users/users.component";
-import {SemesterActivityComponent} from "./components/admin/semester-activity/semester-activity.component";
-import {ExportComponent} from "./components/admin/export/export.component";
+import {AdminUsers} from "./components/admin-users/admin-users.component";
+import {UsersComponent} from "./components/admin-users/users/users.component";
+import {SemesterActivityComponent} from "./components/admin-email/semester-activity/semester-activity.component";
+import {ExportComponent} from "./components/admin-files/export/export.component";
 import {
   ScientificArticleIsiComponent
 } from "./components/reports/reports/scientific-article-isi/scientific-article-isi.component";
@@ -30,13 +30,15 @@ import {EditorialMemberComponent} from "./components/reports/reports/editorial-m
 import {OrganizedEventComponent} from "./components/reports/reports/organized-event/organized-event.component";
 import {WithoutActivityComponent} from "./components/reports/reports/without-activity/without-activity.component";
 import {DidacticActivityComponent} from "./components/reports/reports/didactic-activity/didactic-activity.component";
-import {FazComponent} from "./components/admin/faz/faz.component";
+import {FazComponent} from "./components/admin-files/faz/faz.component";
 import {UserComponent} from "./components/user/user.component";
-import {VerbalProcessComponent} from "./components/admin/verbal-process/verbal-process.component";
-import {ActivityNotificationComponent} from "./components/admin/activity-notification/activity-notification.component";
+import {VerbalProcessComponent} from "./components/admin-email/verbal-process/verbal-process.component";
+import {ActivityNotificationComponent} from "./components/admin-email/activity-notification/activity-notification.component";
 import {CoordinatorActivityComponent} from "./components/coordinator-activity/coordinator-activity.component";
 import {CoordinatorStudentsComponent} from "./components/coordinator-students/coordinator-students.component";
-import {CoordinatorsComponent} from "./components/admin/coordinators/coordinators.component";
+import {CoordinatorsComponent} from "./components/admin-users/coordinators/coordinators.component";
+import {AdminEmailComponent} from "./components/admin-email/admin-email.component";
+import {AdminFilesComponent} from "./components/admin-files/admin-files.component";
 
 const routes: Routes = [
   /** Unknown user */
@@ -71,12 +73,18 @@ const routes: Routes = [
   {path: 'coordinator-students', component: CoordinatorStudentsComponent},
 
   /** Admin */
-  {path: 'admin', component: AdminComponent, children: [
-      {path: 'users', component: UsersComponent},
+  {path: 'admin-users', component: AdminUsers, children: [
+      {path: 'students', component: UsersComponent},
       {path: 'coordinators', component: CoordinatorsComponent},
-      {path: 'email', component: SemesterActivityComponent},
+    ]},
+
+  {path: 'admin-email', component: AdminEmailComponent, children: [
+      {path: 'semester-activity', component: SemesterActivityComponent},
       {path: 'verbal-process', component: VerbalProcessComponent},
       {path: 'thesis-notification', component: ActivityNotificationComponent},
+    ]},
+
+  {path: 'admin-files', component: AdminFilesComponent, children: [
       {path: 'faz', component: FazComponent},
       {path: 'export', component: ExportComponent},
     ]},
