@@ -46,9 +46,6 @@ export class AppComponent {
       return;
     }
 
-    console.log('dasjldk')
-    console.log(user);
-
     // @ts-ignore
     tidioChatApi.setVisitorData({
       distinct_id: user.id, // Unique visitor ID in your system
