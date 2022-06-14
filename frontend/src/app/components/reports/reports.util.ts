@@ -9,7 +9,7 @@ enum ReportTypes {
   PATENTS = 'Brevete',
   RESEARCH_CONTRACTS = 'Contracte de cercetare',
   CITATIONS = 'Citări',
-  AWARDS_AND_NOMINATIONS = 'Premii si nominalizări',
+  AWARDS_AND_NOMINATIONS = 'Premii și nominalizări',
   ACADEMY_MEMBER = 'Membru în academii',
   EDITORIAL_MEMBER  = 'Membru în echipa editorială',
   ORGANIZED_EVENTS = 'Evenimente organizate',

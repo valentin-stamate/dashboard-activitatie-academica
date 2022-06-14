@@ -46,13 +46,16 @@ export class AppComponent {
       return;
     }
 
+    console.log('dasjldk')
+    console.log(user);
+
     // @ts-ignore
-    document.tidioIdentify = {
+    tidioChatApi.setVisitorData({
       distinct_id: user.id, // Unique visitor ID in your system
       email: user.email, // visitor email
       name: user.identifier, // Visitor name
-      // phone: "+44 2032897807" //Visitor phone
-    };
+    });
+
   }
 
 }

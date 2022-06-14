@@ -9,11 +9,17 @@ import {JwtService} from "../../service/jwt.service";
 })
 export class HomeComponent implements OnInit {
 
-  userType: number;
+  userType: number = 0;
 
   constructor() {
     const token = CookieService.readCookie(Cookies.AUTH);
     const decodedJwt = JwtService.decodeJWT(token);
+
+    if (decodedJwt == null) {
+      CookieService.deleteAllCookies();
+      location.href = '/login';
+      return;
+    }
 
     this.userType = decodedJwt.userType;
   }
