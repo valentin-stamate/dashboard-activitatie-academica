@@ -53,6 +53,6 @@ export class AdminLoginMessage {
 }
 
 export enum EmailDefaults {
-    FROM = 'Școala Doctorală FII <adriana.bejinariu@info.uaic.ro>',
+    FROM = 'Școala Doctorală FII <scdoc01@info.uaic.ro>',
     APP_NAME = 'Școala Doctorală de Informatică',
 }

@@ -78,11 +78,22 @@ export class AdminEmailController {
         const parsedRecipientExcept = emailToListString.replace(new RegExp(/ /g), '');
         emailToList = parsedRecipientExcept.split(',');
 
+        const startTimestamp = parseInt(body.startDate);
+        const endTimestamp = parseInt(body.endDate);
+
+        if (isNaN(startTimestamp) || isNaN(endTimestamp)) {
+            next(new ResponseError(ResponseMessage.INVALID_DATE, StatusCode.BAD_REQUEST));
+            return;
+        }
+
+        const startDate = new Date(startTimestamp);
+        const endDate = new Date(endTimestamp);
+
         try {
             const file = files.file as UploadedFile;
-            const emailResults = await AdminEmailService.sendVerbalProcess(email, subject, from, file, emailToList, getEmails, send);
+            const result = await AdminEmailService.sendVerbalProcess(email, subject, from, file, emailToList, getEmails, send, startDate, endDate);
 
-            res.end(JSON.stringify(emailResults));
+            res.end(JSON.stringify(result));
         } catch (err) {
             next(err);
         }
@@ -120,13 +131,16 @@ export class AdminEmailController {
         const parsedRecipientExcept = emailToListString.replace(new RegExp(/ /g), '');
         emailToList = parsedRecipientExcept.split(',');
 
-        if (isNaN(Date.parse(body.startDate)) || isNaN(Date.parse(body.endDate))) {
+        const startTimestamp = parseInt(body.startDate);
+        const endTimestamp = parseInt(body.endDate);
+
+        if (isNaN(startTimestamp) || isNaN(endTimestamp)) {
             next(new ResponseError(ResponseMessage.INVALID_DATE, StatusCode.BAD_REQUEST));
             return;
         }
 
-        const startDate = new Date(body.startDate);
-        const endDate = new Date(body.endDate);
+        const startDate = new Date(startTimestamp);
+        const endDate = new Date(endTimestamp);
 
         try {
             const data = await AdminEmailService.sendThesisEmailNotification(email, subject, from, file, emailToList, getEmails, send, startDate, endDate);

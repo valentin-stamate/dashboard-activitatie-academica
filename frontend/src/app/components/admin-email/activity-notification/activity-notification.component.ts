@@ -34,6 +34,11 @@ export class ActivityNotificationComponent implements OnInit {
 
   emailToList: string[] = [];
 
+  startMonth: number = 0;
+  endMonth: number = 0;
+  startYear: number = 2022;
+  endYear: number = 2022;
+
   constructor() {
     const token = CookieService.readCookie(Cookies.AUTH);
     this.config = {
@@ -57,13 +62,24 @@ export class ActivityNotificationComponent implements OnInit {
   onExtractEmails(event: Event, form: HTMLFormElement, template: HTMLTextAreaElement, preview: HTMLDivElement) {
     event.preventDefault();
 
-    console.log('efsd')
-
     const formData = new FormData(form);
     formData.set('emailTemplate', preview.innerHTML.replace(new RegExp('email-key', 'g'), ''));
     formData.set('send', 'false');
     formData.set('getEmails', 'true');
     formData.set('emailTo', this.emailToList.join(','));
+
+    const startDate = new Date();
+    startDate.setDate(1);
+    startDate.setMonth(this.startMonth);
+    startDate.setFullYear(this.startYear);
+
+    const endDate = new Date();
+    endDate.setDate(1);
+    endDate.setMonth(this.endMonth);
+    endDate.setFullYear(this.endYear);
+
+    formData.set('startDate', `${startDate.getTime()}`);
+    formData.set('endDate', `${endDate.getTime()}`);
 
     axios.post(RestEndpoints.REPORT_NOTIFICATION, formData, this.config)
       .then(res => {
@@ -94,6 +110,19 @@ export class ActivityNotificationComponent implements OnInit {
     formData.set('getEmails', 'false');
     formData.set('emailTo', this.emailToList.join(','));
 
+    const startDate = new Date();
+    startDate.setDate(1);
+    startDate.setMonth(this.startMonth);
+    startDate.setFullYear(this.startYear);
+
+    const endDate = new Date();
+    endDate.setDate(1);
+    endDate.setMonth(this.endMonth);
+    endDate.setFullYear(this.endYear);
+
+    formData.set('startDate', `${startDate.getTime()}`);
+    formData.set('endDate', `${endDate.getTime()}`);
+
     this.organizationEmailLoading = true;
     this.organizationEmailFinish = false;
     this.modalData = [];
@@ -120,6 +149,19 @@ export class ActivityNotificationComponent implements OnInit {
     formData.set('send', 'false');
     formData.set('getEmails', 'false');
     formData.set('emailTo', this.emailToList.join(','));
+
+    const startDate = new Date();
+    startDate.setDate(1);
+    startDate.setMonth(this.startMonth);
+    startDate.setFullYear(this.startYear);
+
+    const endDate = new Date();
+    endDate.setDate(1);
+    endDate.setMonth(this.endMonth);
+    endDate.setFullYear(this.endYear);
+
+    formData.set('startDate', `${startDate.getTime()}`);
+    formData.set('endDate', `${endDate.getTime()}`);
 
     this.previewEmailLoading = true;
 

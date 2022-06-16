@@ -1,5 +1,5 @@
 export class EmailTemplates {
-  static FROM = 'Adriana Bejinariu <adriana.bejinariu@info.uaic.ro>';
+  static FROM = 'Adriana Bejinariu <scdoc01@info.uaic.ro>';
   static SIGNATURE = '--' +
     '<small style="color: #888888"><i>\n' +
     'Bejinariu Adriana - Secretar Școala Doctorală de Informatică\n' +

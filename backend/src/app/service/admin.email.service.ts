@@ -72,17 +72,18 @@ export class AdminEmailService {
         return emailEndpointResponse;
     }
 
-    static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, emailToList: string[], getEmails: boolean, send: boolean): Promise<EmailEndpointResponse | string[]> {
+    static async sendVerbalProcess(emailTemplate: string, subject: string, from: string, file: UploadedFile, emailToList: string[], getEmails: boolean, send: boolean, startDate: Date, endDate: Date): Promise<EmailEndpointResponse | string[]> {
         const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(ReportsAnnouncementHeaders));
 
         if (checkingResult != null) {
             throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
         }
 
-        const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, true);
+        const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, true, startDate, endDate);
+
 
         if (getEmails) {
-            return verbalProcessDataList.map(item => item.coordinatorEmail);
+            return verbalProcessDataList.map(item => `${item.coordinatorEmail}:${item.studentEmail}`);
         }
 
         const emailEndpointResponse: EmailEndpointResponse = {
@@ -91,7 +92,7 @@ export class AdminEmailService {
         };
 
         for (let data of verbalProcessDataList) {
-            if (!emailToList.some(item => item === data.studentEmail)) {
+            if (!emailToList.some(item => item === `${data.coordinatorEmail}:${data.studentEmail}`)) {
                 continue;
             }
 
@@ -154,7 +155,7 @@ export class AdminEmailService {
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, false, startDate, endDate);
 
         if (getEmails) {
-            return verbalProcessDataList.map(item => item.coordinatorEmail);
+            return verbalProcessDataList.map(item => `${item.studentEmail}:${item.coordinatorEmail}`);
         }
 
         const emailEndpointResponse: EmailEndpointResponse = {
@@ -163,7 +164,7 @@ export class AdminEmailService {
         };
 
         for (const data of verbalProcessDataList) {
-            if (!emailToList.some(item => item === data.studentEmail)) {
+            if (!emailToList.some(item => item === `${data.studentEmail}:${data.coordinatorEmail}`)) {
                 continue;
             }
 

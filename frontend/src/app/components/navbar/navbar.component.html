@@ -32,13 +32,13 @@
         <!-- Admin -->
         <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleAdminUsersActiveLink()" routerLink="/admin-users/students" *ngIf="userType === userTypes.ADMIN"><b>Utilizatori</b></a>
         <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleAdminEmailActiveLink()" routerLink="/admin-email/semester-activity" *ngIf="userType === userTypes.ADMIN"><b>Email</b></a>
-        <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleAdminFilesActiveLink()" routerLink="/admin-files/faz" *ngIf="userType === userTypes.ADMIN"><b>Fișiere</b></a>
+        <a class="navbar-item has-text-white app-navbar-item" [class.link-active]="handleAdminFilesActiveLink()" routerLink="/admin-files/faz" *ngIf="userType === userTypes.ADMIN"><b>Export Fișiere</b></a>
       </div>
 
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-info" routerLinkActive="is-active" routerLink="/user"><b>{{user.identifier}}</b></a>
+            <a class="button is-info" routerLinkActive="is-active" routerLink="/user" *ngIf="userType === userTypes.STUDENT"><b>{{user.identifier}}</b></a>
             <a class="button is-warning" (click)="onLogout($event)"><b>Logout</b></a>
           </div>
         </div>

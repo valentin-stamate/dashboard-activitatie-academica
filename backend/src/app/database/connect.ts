@@ -56,35 +56,64 @@ export async function populateDatabase() {
     const coordinatorRepo = dbConnection.getRepository(CoordinatorModel);
     const studentRepo = dbConnection.getRepository(StudentModel);
 
-    const adminModel = AdminModel.fromObject({
+    const adminModelA = AdminModel.fromObject({
+        username: 'adriana.bejinariu',
+        email: 'adriana.bejinariu20@gmail.com',
+    });
+
+    const adminModelB = AdminModel.fromObject({
         username: 'valentin',
         email: 'stamatevalentin125@gmail.com',
     });
 
-    const fullProfessorName = 'Prof.   univ. dr.  Buraza Costel';
-    const [professorFunction, professorName] = UtilService.splitProfessorName(fullProfessorName);
+    const fullProfessorNameA = 'Prof.   univ. dr.  Buraza Costel';
+    const [professorFunctionA, professorNameA] = UtilService.splitProfessorName(fullProfessorNameA);
 
-    const coordinatorModel = CoordinatorModel.fromObject({
-        name: professorName,
-        function: professorFunction,
-        email: 'stamatevalentin125@gmail.com',
-        password: 'admin',
+    const coordinatorModelA = CoordinatorModel.fromObject({
+        name: professorNameA,
+        function: professorFunctionA,
+        email: 'adriana.bejinariu20@gmail.com',
+        password: '12345!@#$%QwErT',
     });
 
-    const studentModel = StudentModel.fromObject({
+    const fullProfessorNameB = 'Prof.   univ. dr.  Ciochina Stefan';
+    const [professorFunctionB, professorNameB] = UtilService.splitProfessorName(fullProfessorNameB);
+
+    const coordinatorModelB = CoordinatorModel.fromObject({
+        name: professorNameB,
+        function: professorFunctionB,
+        email: 'stamatevalentin125@gmail.com',
+        password: 'ana.are.mere.125',
+    });
+
+    const studentModelA = StudentModel.fromObject({
+        identifier: 'adriana.bejinariu',
+        fullName: 'Adriana Bejinariu',
+        email: 'adriana.bejinariu20@gmail.com',
+        alternativeEmail: 'adriana.bejinariu@info.uaic.ro',
+        attendanceYear: 2019,
+        coordinatorName: professorNameA,
+        coordinatorFunction: professorFunctionA,
+        isActive: true,
+    });
+
+    const studentModelB = StudentModel.fromObject({
         identifier: 'valentin',
         fullName: 'Valentin Aioanei',
         email: 'stamatevalentin125@gmail.com',
         alternativeEmail: 'valentin.stamate@info.uaic.ro',
         attendanceYear: 2019,
-        coordinatorName: professorName,
-        coordinatorFunction: professorFunction,
+        coordinatorName: professorNameA,
+        coordinatorFunction: professorFunctionA,
         isActive: true,
     });
 
-    await adminRepo.save(adminModel);
-    await coordinatorRepo.save(coordinatorModel);
-    await studentRepo.save(studentModel);
+    await adminRepo.save(adminModelA);
+    await adminRepo.save(adminModelB);
+    await coordinatorRepo.save(coordinatorModelA);
+    await coordinatorRepo.save(coordinatorModelB);
+    await studentRepo.save(studentModelA);
+    await studentRepo.save(studentModelB);
 
     console.log('Database populated successfully');
 }

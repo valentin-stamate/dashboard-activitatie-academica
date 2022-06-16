@@ -11,8 +11,8 @@
           <div class="panel-heading is-flex is-flex-direction-row is-align-items-center">
             <div>Activitatea științifică a conducatorului de doctorat</div>
             <div class="is-flex-grow-1"></div>
-            <small *ngIf="existingScientificActivity" class="small-text"><b>Completat</b></small>
-            <small *ngIf="!existingScientificActivity" class="small-text"><b>Incomplet</b></small>
+            <small *ngIf="existingScientificActivity" class="small-text is-success"><b>Completat</b></small>
+            <small *ngIf="!existingScientificActivity" class="small-text is-danger"><b>Incomplet</b></small>
           </div>
 
           <div class="p-5 flex-column">
@@ -71,8 +71,8 @@
               IOSUD-UAIC
             </div>
             <div class="is-flex-grow-1"></div>
-            <small *ngIf="existingReferentialActivity" class="small-text"><b>Completat</b></small>
-            <small *ngIf="!existingReferentialActivity" class="small-text"><b>Incomplet</b></small>
+            <small *ngIf="existingReferentialActivity" class="small-text is-success"><b>Completat</b></small>
+            <small *ngIf="!existingReferentialActivity" class="small-text is-danger"><b>Incomplet</b></small>
           </div>
 
           <div class="p-5 flex-column">
@@ -155,8 +155,8 @@
 
             <div class="subtitle">Listă fișiere încărcate</div>
 
-            <div class="file-buttons">
-              <div *ngFor="let item of files">
+            <div class="is-flex is-flex-wrap-wrap" style="gap: 32px">
+              <div *ngFor="let item of files" class="is-flex">
                 <button class="button is-small" (click)="onDownloadFile(item)">{{item.name}}</button>
                 <button class="button is-small is-danger" (click)="onDeleteFile(item)">X</button>
               </div>

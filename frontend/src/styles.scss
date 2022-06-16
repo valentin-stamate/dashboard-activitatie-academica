@@ -11,11 +11,13 @@ $padding: 32px;
 
 .email-recipient-container {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
 .email-recipient {
   display: flex;
+  flex-direction: row;
   gap: 4px;
   background-color: #e7e7e7;
   padding: 4px 18px 4px 8px;

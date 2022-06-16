@@ -178,8 +178,9 @@ export class XLSXService {
     }
 
     /** Se parseaza fisierul cu anuntarea rapoartelor
-     * If second algorithm is used, then startDate and endDate must be provided */
-    static parseReportAnnouncement(file: UploadedFile, firstAlgorithm: boolean, startDate: Date = new Date(), endDate: Date = new Date()): VerbalProcessData[] {
+     * Primul algoritm se refera la <b>Proces-Verbal</b>
+     * Al doilea algoritm se refera la <b>Notificare Rapoarte</b> */
+    static parseReportAnnouncement(file: UploadedFile, firstAlgorithm: boolean, startDate: Date, endDate: Date): VerbalProcessData[] {
         const verbalProcessDataList: VerbalProcessData[] = [];
 
         const workBook = XLSX.read(file.data);
@@ -202,52 +203,77 @@ export class XLSXService {
             let lastData = undefined;
             let source = undefined;
 
-            /* If the cell is empty, put undefined, else put the date if it's valid or a date object otherwise */
-            r1Data[1] = r1Data[1] === undefined ? undefined : (isNaN(new Date(r1Data[1]) as any) ? new Date() : new Date(r1Data[1]));
-            r2Data[1] = r2Data[1] === undefined ? undefined : (isNaN(new Date(r2Data[1]) as any) ? new Date() : new Date(r2Data[1]));
-            r3Data[1] = r3Data[1] === undefined ? undefined : (isNaN(new Date(r3Data[1]) as any) ? new Date() : new Date(r3Data[1]));
+            /* If the cell is empty, or it has a non date value, return empty string, else return the date */
+            const processDateCell = (cell: any) => {
+                if (!isNaN(new Date(cell) as any)) {
+                    return new Date(cell);
+                }
+
+                return `${cell || ''}`.trim();
+            };
+
+            r1Data[1] = processDateCell(r1Data[1]);
+            r2Data[1] = processDateCell(r2Data[1]);
+            r3Data[1] = processDateCell(r3Data[1]);
+
+            const matchDate = (date: Date, startDate: Date, endDate: Date): boolean => {
+                if (date == null || typeof date === typeof '') {
+                    return false;
+                }
+
+                return UtilService.compareDatesWithoutDay(startDate, date) && UtilService.compareDatesWithoutDay(date, endDate);
+            };
 
             if (firstAlgorithm) {
-                /* Ia cel mai din stanga raport care nu are o data valida din 'Data Prez.' */
-                if (isNaN(r3Data[1])) {
-                    lastData = r3Data;
-                    source = ReportsAnnouncementHeaders.R3;
-                }
+                /* Ia cel mai din stanga raport care are o data valida din 'Data Prez.' si se afla in interval */
 
-                if (isNaN(r2Data[1])) {
-                    lastData = r2Data;
-                    source = ReportsAnnouncementHeaders.R2;
-                }
+                let found = false;
 
-                if (isNaN(r1Data[1])) {
+                if (!found && matchDate(r1Data[1], startDate, endDate)) {
                     lastData = r1Data;
                     source = ReportsAnnouncementHeaders.R1;
+                    found = true;
                 }
+
+                if (!found && matchDate(r2Data[1], startDate, endDate)) {
+                    lastData = r2Data;
+                    source = ReportsAnnouncementHeaders.R2;
+                    found = true;
+                }
+
+                if (!found && matchDate(r3Data[1], startDate, endDate)) {
+                    lastData = r3Data;
+                    source = ReportsAnnouncementHeaders.R3;
+                    found = true;
+                }
+
             } else {
-                /* Ia data din Data.Prog cea mai din stanga care se afla in interval si care nu are o data completata in Data.Prog */
-                const matchDate = (date: Date, startDate: Date, endDate: Date): boolean => {
-                    return UtilService.compareDatesWithoutDay(startDate, date) && UtilService.compareDatesWithoutDay(date, endDate);
-                };
+                /* Ia cel mai din stanga raport cu data din Data.Prog care se afla in interval si care nu are o valoare in Data.Prez */
 
-                if (matchDate(r3Data[0], startDate, endDate) && isNaN(r3Data[1])) {
-                    lastData = r3Data;
-                    source = ReportsAnnouncementHeaders.R3;
-                }
+                let found = false;
 
-                if (matchDate(r2Data[0], startDate, endDate) && isNaN(r2Data[1])) {
-                    lastData = r2Data;
-                    source = ReportsAnnouncementHeaders.R2;
-                }
-
-                if (matchDate(r1Data[0], startDate, endDate) && isNaN(r1Data[1])) {
+                if (!found && matchDate(r1Data[0], startDate, endDate) && r1Data[1] === '') {
                     lastData = r1Data;
                     source = ReportsAnnouncementHeaders.R1;
+                    found = true;
                 }
+
+                if (!found && matchDate(r2Data[0], startDate, endDate) && r2Data[1] === '') {
+                    lastData = r2Data;
+                    source = ReportsAnnouncementHeaders.R2;
+                    found = true;
+                }
+
+                if (!found && matchDate(r3Data[0], startDate, endDate) && r3Data[1] === '') {
+                    lastData = r3Data;
+                    source = ReportsAnnouncementHeaders.R3;
+                    found = true;
+                }
+
             }
 
             /* Don't make the Verbal Process for those who have no date into the 'Data Prez.' */
             if (lastData == null || source == null) {
-                console.log('The fuck');
                 continue;
             }
 

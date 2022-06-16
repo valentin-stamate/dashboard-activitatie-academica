@@ -51,6 +51,12 @@ export class FazComponent implements OnInit {
     });
   }
 
+  deleteInterval() {
+    if (this.intervals.length > 1) {
+      this.intervals.pop();
+    }
+  }
+
   onDownload(event: Event, form: HTMLFormElement) {
     event.preventDefault();
 

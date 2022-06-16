@@ -10,7 +10,7 @@ export class UtilService {
             return false;
         }
 
-        return dateA.getMonth() < dateB.getMonth();
+        return dateA.getMonth() <= dateB.getMonth();
     }
 
     static generateRandomString(length: number = 64) {

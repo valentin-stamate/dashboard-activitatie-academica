@@ -34,6 +34,11 @@ export class VerbalProcessComponent implements OnInit {
 
   emailToList: string[] = [];
 
+  startMonth: number = 0;
+  endMonth: number = 0;
+  startYear: number = 2022;
+  endYear: number = 2022;
+
   constructor() {
     const token = CookieService.readCookie(Cookies.AUTH);
     this.config = {
@@ -64,12 +69,30 @@ export class VerbalProcessComponent implements OnInit {
     formData.set('getEmails', 'true');
     formData.set('emailTo', this.emailToList.join(','));
 
+    const startDate = new Date();
+    startDate.setDate(1);
+    startDate.setMonth(this.startMonth);
+    startDate.setFullYear(this.startYear);
+
+    const endDate = new Date();
+    endDate.setDate(1);
+    endDate.setMonth(this.endMonth);
+    endDate.setFullYear(this.endYear);
+
+    formData.set('startDate', `${startDate.getTime()}`);
+    formData.set('endDate', `${endDate.getTime()}`);
+
     axios.post(RestEndpoints.VERBAL_PROCESS, formData, this.config)
       .then(res => {
         this.emailToList = res.data;
       }).catch(err => {
         console.log(err.response.data);
-        this.notificationMessage = 'Fișier invalid';
+
+        if (typeof err.response.data === typeof '') {
+          this.notificationMessage = err.response.data;
+        } else {
+          this.notificationMessage = 'Fișier invalid';
+        }
       }).finally(() => {
 
       });
@@ -84,6 +107,19 @@ export class VerbalProcessComponent implements OnInit {
     formData.set('send', 'true');
     formData.set('getEmails', 'false');
     formData.set('emailTo', this.emailToList.join(','));
+
+    const startDate = new Date();
+    startDate.setDate(1);
+    startDate.setMonth(this.startMonth);
+    startDate.setFullYear(this.startYear);
+
+    const endDate = new Date();
+    endDate.setDate(1);
+    endDate.setMonth(this.endMonth);
+    endDate.setFullYear(this.endYear);
+
+    formData.set('startDate', `${startDate.getTime()}`);
+    formData.set('endDate', `${endDate.getTime()}`);
 
     this.organizationEmailLoading = true;
     this.organizationEmailFinish = false;
@@ -111,6 +147,19 @@ export class VerbalProcessComponent implements OnInit {
     formData.set('send', 'false');
     formData.set('getEmails', 'false');
     formData.set('emailTo', this.emailToList.join(','));
+
+    const startDate = new Date();
+    startDate.setDate(1);
+    startDate.setMonth(this.startMonth);
+    startDate.setFullYear(this.startYear);
+
+    const endDate = new Date();
+    endDate.setDate(1);
+    endDate.setMonth(this.endMonth);
+    endDate.setFullYear(this.endYear);
+
+    formData.set('startDate', `${startDate.getTime()}`);
+    formData.set('endDate', `${endDate.getTime()}`);
 
     this.previewEmailLoading = true;
 

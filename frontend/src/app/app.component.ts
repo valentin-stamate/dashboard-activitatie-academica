@@ -50,7 +50,7 @@ export class AppComponent {
     tidioChatApi.setVisitorData({
       distinct_id: user.id, // Unique visitor ID in your system
       email: user.email, // visitor email
-      name: user.identifier, // Visitor name
+      name: user.fullName, // Visitor name
     });
 
   }

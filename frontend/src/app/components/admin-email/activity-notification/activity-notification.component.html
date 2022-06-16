@@ -54,23 +54,76 @@
             <div class="columns">
 
               <div class="column">
-                <div class="field">
-                  <label class="label">Data de start</label>
-                  <div class="control">
-                    <input class="input" type="date" name="startDate">
-                    <small>Luna și anul se iau în considerare pentru deciderea raportului se ales.</small>
+
+                <div class="is-flex" style="gap: 16px">
+
+                  <div class="field">
+                    <label class="label">Selectează luna</label>
+                    <div class="select">
+                      <select [(ngModel)]="startMonth" name="startMonth">
+                        <option>Select dropdown</option>
+                        <option value="0">Ianuarie</option>
+                        <option value="1">Februarie</option>
+                        <option value="2">Martie</option>
+                        <option value="3">Aprilie</option>
+                        <option value="4">Mai</option>
+                        <option value="5">Iunie</option>
+                        <option value="6">Iulie</option>
+                        <option value="7">August</option>
+                        <option value="8">Septembrie</option>
+                        <option value="9">Octombrie</option>
+                        <option value="10">Noiembrie</option>
+                        <option value="11">Decembrie</option>
+                      </select>
+                    </div>
+                    <div><small>Perioada de start pentru alegerea raportului</small></div>
                   </div>
+
+                  <div class="field">
+                    <label class="label">Anul</label>
+                    <div class="control">
+                      <input class="input" type="number" [(ngModel)]="startYear" name="startYear">
+                    </div>
+                  </div>
+
                 </div>
+
 
               </div>
 
               <div class="column">
-                <div class="field">
-                  <label class="label">Data de sfarșit</label>
-                  <div class="control">
-                    <input class="input" type="date" name="endDate">
-<!--                    <small>A se separa fiecare email prin virgulă fară spații</small>-->
+
+                <div class="is-flex" style="gap: 16px">
+
+                  <div class="field">
+                    <label class="label">Selectează luna</label>
+                    <div class="select">
+                      <select [(ngModel)]="endMonth" name="endMonth">
+                        <option>Select dropdown</option>
+                        <option value="0">Ianuarie</option>
+                        <option value="1">Februarie</option>
+                        <option value="2">Martie</option>
+                        <option value="3">Aprilie</option>
+                        <option value="4">Mai</option>
+                        <option value="5">Iunie</option>
+                        <option value="6">Iulie</option>
+                        <option value="7">August</option>
+                        <option value="8">Septembrie</option>
+                        <option value="9">Octombrie</option>
+                        <option value="10">Noiembrie</option>
+                        <option value="11">Decembrie</option>
+                      </select>
+                    </div>
+                    <div><small>Perioada de sfârșit pentru alegerea raportului</small></div>
                   </div>
+
+                  <div class="field">
+                    <label class="label">Anul</label>
+                    <div class="control">
+                      <input class="input" type="number" [(ngModel)]="endYear" name="endYear">
+                    </div>
+                  </div>
+
                 </div>
 
               </div>
@@ -101,7 +154,7 @@
 
               <div class="column">
                 <div class="field">
-                  <label class="label">Data de start</label>
+                  <label class="label">Editare template</label>
                   <div class="control">
                     <textarea class="textarea" name="emailTemplate" rows="10" [(ngModel)]="emailTemplate" #template></textarea>
                     <small>Suportă formatare HTML</small><br>
