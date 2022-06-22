@@ -9,27 +9,6 @@ import {UtilService} from "../services/util.service";
 import XLSX from "xlsx";
 import {AllowedStudentModel, CoordinatorModel, StudentModel} from "../database/db.models";
 import {dbConnection} from "../database/connect";
-import {
-    AcademyMemberModel,
-    AwardAndNominationModel,
-    CitationModel,
-    DidacticActivityModel,
-    EditorialMemberModel,
-    ISIProceedingModel,
-    OrganizedEventModel,
-    PatentModel,
-    ResearchContractModel,
-    ScientificArticleBDIModel,
-    ScientificArticleISIModel,
-    ScientificBookModel,
-    ScientificCommunicationModel,
-    TranslationModel,
-    WithoutActivityModel
-} from "../database/forms/db.student.form.models";
-import {
-    CoordinatorReferentialActivityModel,
-    CoordinatorScientificActivityModel
-} from "../database/forms/db.coordinator.forms";
 import {AllowedStudentsHeaders, CoordinatorsHeaders, TimetableHeaders} from "../services/file/xlsx.utils";
 
 export class AdminService {
@@ -72,7 +51,7 @@ export class AdminService {
         const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(AllowedStudentsHeaders));
 
         if (checkingResult != null) {
-            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+            throw new ResponseError(ResponseMessage.INVALID_FILE, StatusCode.BAD_REQUEST, ContentType.TEXT);
         }
 
         const allowedStudentsList = XLSXService.parseExistingStudents(file);
@@ -220,8 +199,8 @@ export class AdminService {
         XLSX.utils.book_append_sheet(coordinatorDataWorkBook, coordinatorScientificActivitySheet, 'Activitatea științifică');
         XLSX.utils.book_append_sheet(coordinatorDataWorkBook, coordinatorReferenceActivitySheet, 'Activitatea referențială');
 
-        const studentFormsBuffer = new Buffer(XLSX.write(studentDataWorkBook, {bookType: 'xlsx', type: 'buffer'}));
-        const coordinatorFormsBuffer = new Buffer(XLSX.write(coordinatorDataWorkBook, {bookType: 'xlsx', type: 'buffer'}));
+        const studentFormsBuffer = Buffer.from(XLSX.write(studentDataWorkBook, {bookType: 'xlsx', type: 'buffer'}));
+        const coordinatorFormsBuffer = Buffer.from(XLSX.write(coordinatorDataWorkBook, {bookType: 'xlsx', type: 'buffer'}));
 
         const zip = new JSZip();
         /* Generate Excel Buffer With Exported Student Data */
@@ -235,7 +214,7 @@ export class AdminService {
         const checkingResult = XLSXVerificationService.checkExcelFile(timetableFile, Object.values(TimetableHeaders));
 
         if (checkingResult != null) {
-            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+            throw new ResponseError(ResponseMessage.INVALID_FILE, StatusCode.BAD_REQUEST, ContentType.TEXT);
         }
 
         const fazProfessorDataList = XLSXService.parseFAZ(timetableFile, month, intervals);
@@ -256,7 +235,7 @@ export class AdminService {
         const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(CoordinatorsHeaders));
 
         if (checkingResult != null) {
-            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+            throw new ResponseError(ResponseMessage.INVALID_FILE, StatusCode.BAD_REQUEST, ContentType.TEXT);
         }
 
         const coordinators = XLSXService.parseCoordinatorsExcel(file);

@@ -86,13 +86,7 @@ export class VerbalProcessComponent implements OnInit {
       .then(res => {
         this.emailToList = res.data;
       }).catch(err => {
-        console.log(err.response.data);
-
-        if (typeof err.response.data === typeof '') {
-          this.notificationMessage = err.response.data;
-        } else {
-          this.notificationMessage = 'Fișier invalid';
-        }
+        this.notificationMessage = err.response.data;
       }).finally(() => {
 
       });

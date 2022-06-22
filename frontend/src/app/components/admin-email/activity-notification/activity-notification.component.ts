@@ -84,17 +84,9 @@ export class ActivityNotificationComponent implements OnInit {
     axios.post(RestEndpoints.REPORT_NOTIFICATION, formData, this.config)
       .then(res => {
         this.emailToList = res.data;
-        console.log(res.data)
-
+        console.log(res.data);
       }).catch(err => {
-        console.log(err.response.data);
-
-        if (typeof err.response.data === typeof '') {
-          this.notificationMessage = err.response.data;
-        } else {
-          this.notificationMessage = 'Fișier invalid';
-        }
-
+        this.notificationMessage = err.response.data;
       }).finally(() => {
 
       });

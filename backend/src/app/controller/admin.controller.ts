@@ -4,8 +4,6 @@ import {ContentType, ResponseMessage, StatusCode} from "../services/rest.util";
 import {UploadedFile} from "express-fileupload";
 import {UtilService} from "../services/util.service";
 import {AdminService} from "../service/admin.service";
-import {JwtService} from "../services/jwt.service";
-import {AdminModel, CoordinatorModel} from "../database/db.models";
 import {CoordinatorService} from "../service/coordinator.service";
 
 export class AdminController {
@@ -124,7 +122,7 @@ export class AdminController {
         const files = req.files;
 
         if (files == null || body.intervals == null || body.afterTableNote == null || body.month == null) {
-            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST));
+            next(new ResponseError(ResponseMessage.INCOMPLETE_FORM, StatusCode.BAD_REQUEST, ContentType.TEXT));
             return;
         }
 

@@ -1,6 +1,13 @@
 # System Management: Frontend
 
+## How to run?
+
+1. Install the dependencies using npm: ```npm install```
+2. Run the server: ```npm start```
+3. Build the project (for deployment): ```npm run build```
+
 ## Resources
+
 * Inspiration for layout & design : https://dribbble.com/
 * Angular tutorial: https://youtu.be/3dHNOWTI7H8
 * Installing bootstrap: https://stackoverflow.com/a/65519961/10805602

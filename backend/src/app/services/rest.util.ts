@@ -19,6 +19,7 @@ export enum ResponseMessage {
     FORM_NOT_FOUND = 'Formularul nu a fost găsit',
     FILES_NOT_FOUND = 'Nu au fost găsite fișiere',
     FILE_NOT_FOUND = 'Fișierul nu a fost găsit',
+    INVALID_FILE = 'Fișier invalid',
 }
 
 export enum ContentType {

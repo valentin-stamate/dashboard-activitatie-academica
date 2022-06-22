@@ -1,3 +1,28 @@
+# Backend
+
+## How to run?
+
+1. Install the dependencies: ```npm install```
+2. Create a file in the root of the project called `.env` and put the environment variables there.
+3. Run the server: ```npm start```
+
+## ENV
+* PORT (default is 8080)
+* NODE_ENV (development | production)
+* PASSWORD_SECRET (used as a salt for encryption)
+* TOKEN_SECRET (used for jwt)
+* DB_DIALECT
+* DB_HOST
+* DB_USERNAME
+* DB_PASSWORD
+* DB_NAME
+* SMTP_HOST
+* SMTP_USER
+* SMTP_PASS
+* SMTP_SECURE
+* POPULATE_DB (force initialize the database and populates it with the default users)
+* DB_LOGGING
+
 ## Resources
 
 * GraphQl with Express : https://graphql.org/graphql-js/running-an-express-graphql-server
@@ -123,20 +148,3 @@
 * ts-node bug https://github.com/facebook/jest/issues/12655
 * TypeORM find: https://typeorm.io/find-options
 * Capitalize all words: https://www.codegrepper.com/code-examples/javascript/capitalize+all+words+javascript
-
-## ENV
-* PORT (default is 8080)
-* NODE_ENV (development | production)
-* PASSWORD_SECRET (used as a salt for encryption)
-* TOKEN_SECRET (used for jwt)
-* DB_DIALECT
-* DB_HOST
-* DB_USERNAME
-* DB_PASSWORD
-* DB_NAME
-* SMTP_HOST
-* SMTP_USER
-* SMTP_PASS
-* SMTP_SECURE
-* POPULATE_DB (force initialize the database and populates it with the default users)
-* DB_LOGGING

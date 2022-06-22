@@ -1,10 +1,9 @@
 <app-navbar [navigation]="true"></app-navbar>
 
 <div class="page">
-  <div class="page-content">
+  <div class="page-content" style="width: 920px">
 
     <div class="columns">
-
 
       <div class="column">
         <!-- Students -->
@@ -14,9 +13,9 @@
             <div class="is-flex-grow-1"></div>
           </div>
 
-          <div class="p-5 flex-column">
+          <div class="p-5 flex-column scroll-sm">
 
-            <div class="list scroll">
+            <div class="list">
 
               <div class="block list-item" *ngFor="let item of coordinatorStudents">
                 <div>
@@ -309,9 +308,7 @@
           </div>
 
         </nav>
-      </div>
 
-      <div class="column">
         <!-- Formulare -->
         <app-no-report *ngIf="currentFormSelected === 0"></app-no-report>
         <app-scientific-article-isi [readonly]="true" [form]="form" *ngIf="currentFormSelected === 1"></app-scientific-article-isi>

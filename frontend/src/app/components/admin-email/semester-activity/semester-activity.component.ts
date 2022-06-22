@@ -67,13 +67,8 @@ export class SemesterActivityComponent implements OnInit {
     axios.post(RestEndpoints.SEMESTER_ACTIVITY, formData, this.config)
       .then(res => {
         this.emailToList = res.data;
-      }).catch(err => {
-        console.log(err.response.data);
-        if (typeof err.response.data === typeof '') {
-          this.notificationMessage = err.response.data;
-        } else {
-          this.notificationMessage = 'Fișier invalid';
-        }
+      }).catch(async err => {
+        this.notificationMessage = err.response.data;
       }).finally(() => {
 
       });
@@ -99,7 +94,6 @@ export class SemesterActivityComponent implements OnInit {
         this.modalData = data.successfulEmails;
         this.organizationEmailFinish = true;
       }).catch(err => {
-      console.log(err);
         this.notificationMessage = err.response.data;
       }).finally(() => {
         this.organizationEmailLoading = false;
@@ -125,7 +119,6 @@ export class SemesterActivityComponent implements OnInit {
         this.previewModalData = data.emailPreview;
         this.previewModal = true;
       }).catch(err => {
-        console.log(err);
         this.notificationMessage = err.response.data;
       }).finally(() => {
         this.previewEmailLoading = false;

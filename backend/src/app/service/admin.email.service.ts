@@ -2,7 +2,7 @@ import {UploadedFile} from "express-fileupload";
 import {EmailEndpointResponse} from "./models";
 import {XLSXService, XLSXVerificationService} from "../services/file/xlsx.service";
 import {ResponseError} from "../middleware/middleware";
-import {ContentType, StatusCode} from "../services/rest.util";
+import {ContentType, ResponseMessage, StatusCode} from "../services/rest.util";
 import {MailService} from "../services/email.service";
 import {DOCXService} from "../services/file/docx.service";
 import {UtilService} from "../services/util.service";
@@ -14,7 +14,7 @@ export class AdminEmailService {
         const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(SemesterTimetableHeaders));
 
         if (checkingResult != null) {
-            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+            throw new ResponseError(ResponseMessage.INVALID_FILE, StatusCode.BAD_REQUEST, ContentType.TEXT);
         }
 
         const semesterActivityDataList = XLSXService.parseSemesterActivityTimetable(file);
@@ -76,7 +76,7 @@ export class AdminEmailService {
         const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(ReportsAnnouncementHeaders));
 
         if (checkingResult != null) {
-            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+            throw new ResponseError(ResponseMessage.INVALID_FILE, StatusCode.BAD_REQUEST, ContentType.TEXT);
         }
 
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, true, startDate, endDate);
@@ -149,7 +149,7 @@ export class AdminEmailService {
         const checkingResult = XLSXVerificationService.checkExcelFile(file, Object.values(ReportsAnnouncementHeaders));
 
         if (checkingResult != null) {
-            throw new ResponseError(checkingResult, StatusCode.BAD_REQUEST, ContentType.JSON);
+            throw new ResponseError(ResponseMessage.INVALID_FILE, StatusCode.BAD_REQUEST, ContentType.TEXT);
         }
 
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, false, startDate, endDate);

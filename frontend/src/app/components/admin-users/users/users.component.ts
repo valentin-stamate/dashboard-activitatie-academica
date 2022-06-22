@@ -98,7 +98,13 @@ export class UsersComponent implements OnInit {
       .then(res => {
         this.notificationMessage = `Numărul de studenți adăugați cu succes: ${res.data}`;
       }).catch(err => {
-        this.notificationMessage = err.response.data;
+        console.log(err.response.data);
+
+        if (typeof err.response.data === typeof '') {
+          this.notificationMessage = err.response.data;
+        } else {
+          this.notificationMessage = 'Fișier invalid';
+        }
       }).finally(() => {
         this.allowedStudentsImportLoading = false;
         this.onAllowedStudentsRefresh();

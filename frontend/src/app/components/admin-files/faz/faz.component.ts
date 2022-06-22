@@ -69,13 +69,8 @@ export class FazComponent implements OnInit {
         const fileName = `faz_${UtilService.stringDate(new Date())}.zip`;
         UtilService.downloadBuffer(res.data, fileName);
       }).catch(async err => {
-
-        if (typeof err.response.data === typeof '') {
-          const errBlob = err.response.data as Blob;
-          this.notificationMessage = await errBlob.text();
-        } else {
-          this.notificationMessage = 'Fișier invalid';
-        }
+        const errBlob = err.response.data as Blob;
+        this.notificationMessage = await errBlob.text();
       }).finally(() => {
         this.loading = false;
       });

@@ -213,6 +213,11 @@ $padding: 32px;
   overflow: auto;
 }
 
+.scroll-sm {
+  max-height: 220px;
+  overflow: auto;
+}
+
 .small-text {
   font-size: 0.825rem;
 }
