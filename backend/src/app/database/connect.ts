@@ -62,44 +62,23 @@ export async function populateDatabase() {
     });
 
     const adminModelB = AdminModel.fromObject({
-        username: 'valentin',
+        username: 'valentin.stamate',
         email: 'stamatevalentin125@gmail.com',
     });
 
-    const fullProfessorNameA = 'Prof.   univ. dr.  Buraza Costel';
+    const fullProfessorNameA = 'Prof.univ.dr. Lenuța Alboaie';
     const [professorFunctionA, professorNameA] = UtilService.splitProfessorName(fullProfessorNameA);
 
     const coordinatorModelA = CoordinatorModel.fromObject({
         name: professorNameA,
         function: professorFunctionA,
-        email: 'adriana.bejinariu20@gmail.com',
-        password: '12345!@#$%QwErT',
-    });
-
-    const fullProfessorNameB = 'Prof.   univ. dr.  Ciochina Stefan';
-    const [professorFunctionB, professorNameB] = UtilService.splitProfessorName(fullProfessorNameB);
-
-    const coordinatorModelB = CoordinatorModel.fromObject({
-        name: professorNameB,
-        function: professorFunctionB,
         email: 'stamatevalentin125@gmail.com',
-        password: 'ana.are.mere.125',
+        password: '12345',
     });
 
     const studentModelA = StudentModel.fromObject({
-        identifier: 'adriana.bejinariu',
-        fullName: 'Adriana Bejinariu',
-        email: 'adriana.bejinariu20@gmail.com',
-        alternativeEmail: 'adriana.bejinariu@info.uaic.ro',
-        attendanceYear: 2019,
-        coordinatorName: professorNameA,
-        coordinatorFunction: professorFunctionA,
-        isActive: true,
-    });
-
-    const studentModelB = StudentModel.fromObject({
-        identifier: 'valentin',
-        fullName: 'Valentin Aioanei',
+        identifier: 'valentin.stamate',
+        fullName: 'STAMATE D. VALENTIN',
         email: 'stamatevalentin125@gmail.com',
         alternativeEmail: 'valentin.stamate@info.uaic.ro',
         attendanceYear: 2019,
@@ -108,10 +87,20 @@ export async function populateDatabase() {
         isActive: true,
     });
 
+    const studentModelB = StudentModel.fromObject({
+        identifier: '31091020401RSD201007',
+        fullName: 'CALANCEA C. CRISTINA-GEORGIANA',
+        email: 'geo.calancea@gmail.com',
+        alternativeEmail: 'geo.calancea@gmail.com',
+        attendanceYear: 2020,
+        coordinatorName: professorNameA,
+        coordinatorFunction: professorFunctionA,
+        isActive: true,
+    });
+
     await adminRepo.save(adminModelA);
     await adminRepo.save(adminModelB);
     await coordinatorRepo.save(coordinatorModelA);
-    await coordinatorRepo.save(coordinatorModelB);
     await studentRepo.save(studentModelA);
     await studentRepo.save(studentModelB);
 

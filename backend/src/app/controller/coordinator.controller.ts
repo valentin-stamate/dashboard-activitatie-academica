@@ -58,12 +58,8 @@ export class CoordinatorController {
 
             const fileModel = await CoordinatorService.downloadFile(coordinator.id, fileId);
 
-            console.log(fileModel.name);
-
             res.setHeader('Content-disposition', 'attachment; filename=' + fileModel.name);
             res.setHeader('Content-type', fileModel.mimeType);
-
-            console.log(fileModel.data);
 
             res.end(fileModel.data);
         } catch (err) {

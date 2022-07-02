@@ -81,9 +81,8 @@ export class AdminEmailService {
 
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, true, startDate, endDate);
 
-
         if (getEmails) {
-            return verbalProcessDataList.map(item => `${item.coordinatorEmail}:${item.studentEmail}`);
+            return verbalProcessDataList.map(item => `${item.coordinatorEmail}`);
         }
 
         const emailEndpointResponse: EmailEndpointResponse = {
@@ -92,7 +91,7 @@ export class AdminEmailService {
         };
 
         for (let data of verbalProcessDataList) {
-            if (!emailToList.some(item => item === `${data.coordinatorEmail}:${data.studentEmail}`)) {
+            if (!emailToList.some(item => item === `${data.coordinatorEmail}`)) {
                 continue;
             }
 
@@ -155,7 +154,7 @@ export class AdminEmailService {
         const verbalProcessDataList = XLSXService.parseReportAnnouncement(file, false, startDate, endDate);
 
         if (getEmails) {
-            return verbalProcessDataList.map(item => `${item.studentEmail}:${item.coordinatorEmail}`);
+            return verbalProcessDataList.map(item => `Student:${item.studentEmail} Coordonator:${item.coordinatorEmail}`);
         }
 
         const emailEndpointResponse: EmailEndpointResponse = {
@@ -164,7 +163,8 @@ export class AdminEmailService {
         };
 
         for (const data of verbalProcessDataList) {
-            if (!emailToList.some(item => item === `${data.studentEmail}:${data.coordinatorEmail}`)) {
+            /* For some reason it works like this, without space, I don't know where dissapears */
+            if (!emailToList.some(item => item === `Student:${data.studentEmail}Coordonator:${data.coordinatorEmail}`)) {
                 continue;
             }
 

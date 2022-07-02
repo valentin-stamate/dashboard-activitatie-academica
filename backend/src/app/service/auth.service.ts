@@ -212,9 +212,6 @@ export class AuthService {
         const adminRepo = dbConnection.getRepository(AdminModel);
         const authorizationKeyRepo = dbConnection.getRepository(AuthorizationKeyModel);
 
-        console.log(username);
-        console.log(email);
-
         const existingAdmin = await adminRepo.findOne({
             where: {
                 username: username,

@@ -76,8 +76,6 @@ export class StudentFormService {
 
         existingStudent.scientificArticleISI = existingStudent.scientificArticleISI ?? [];
 
-        console.log(existingStudent);
-
         const report = existingStudent.scientificArticleISI.find(item => `${item.id}` === reportId);
         
         if (report == null) {

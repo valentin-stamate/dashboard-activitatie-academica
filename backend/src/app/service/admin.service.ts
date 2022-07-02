@@ -62,19 +62,19 @@ export class AdminService {
 
         await allowedStudentsRepo.clear();
 
-        await studentsRepo.createQueryBuilder()
-            .update()
-            .set({isActive: false})
-            .execute();
+        // await studentsRepo.createQueryBuilder()
+        //     .update()
+        //     .set({isActive: false})
+        //     .execute();
 
         for (let data of allowedStudentsList) {
             const model = AllowedStudentModel.fromObject(data);
             await allowedStudentsRepo.save(model);
 
-            await studentsRepo.createQueryBuilder()
-                .update()
-                .set({isActive: true})
-                .where(`identifier = :identifier`, {identifier: model.identifier});
+            // await studentsRepo.createQueryBuilder()
+            //     .update()
+            //     .set({isActive: true})
+            //     .where(`identifier = :identifier`, {identifier: model.identifier});
 
             rowsCreated++;
         }
@@ -241,12 +241,23 @@ export class AdminService {
         const coordinators = XLSXService.parseCoordinatorsExcel(file);
 
         const coordinatorRepo = dbConnection.getRepository(CoordinatorModel);
-        await coordinatorRepo.clear();
+        // await coordinatorRepo.clear();
 
         let rowsCreated = 0;
         for (let item of coordinators) {
             const model = CoordinatorModel.fromObject(item);
-            await coordinatorRepo.create(model);
+
+            const existingCoordinator = await coordinatorRepo.findOne({
+                where: {
+                    name: model.name,
+                }
+            });
+
+            if (existingCoordinator != null) {
+                continue;
+            }
+
+            await coordinatorRepo.save(model);
             rowsCreated++;
         }
 

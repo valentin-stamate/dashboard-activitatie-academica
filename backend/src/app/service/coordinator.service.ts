@@ -108,6 +108,7 @@ export class CoordinatorService {
             where: {
                 coordinatorName: coordinator.name,
                 coordinatorFunction: coordinator.function,
+                isActive: true,
             }
         });
     }

@@ -137,7 +137,8 @@
                 <div class="email-recipient-container">
 
                   <div class="email-recipient" *ngFor="let item of emailToList">
-                    <div>{{item}}</div>
+                    <div>{{item.split(' ')[0]}}</div>
+                    <div>{{item.split(' ')[1]}}</div>
                     <div class="email-button" (click)="onDeleteEmail(item)">x</div>
                   </div>
 

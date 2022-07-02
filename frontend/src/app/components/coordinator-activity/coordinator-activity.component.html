@@ -160,7 +160,7 @@
                 a descărca un fișier dați click pe numele lui, iar pentru stergere, butonul roșu.
               </div>
 
-              <div class="is-flex is-flex-wrap-wrap" style="gap: 32px">
+              <div class="is-flex is-flex-wrap-wrap" style="gap: 32px; margin-top: 16px">
                 <div *ngFor="let item of files" class="is-flex">
                   <button class="button is-small" (click)="onDownloadFile(item)">{{item.name}}</button>
                   <button class="button is-small is-danger" (click)="onDeleteFile(item)">X</button>

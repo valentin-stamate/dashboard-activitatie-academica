@@ -23,7 +23,6 @@ export class CoordinatorStudentFormsController {
             const fileName = `report_${UtilService.stringDate(new Date())}.zip`;
 
             res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-            console.log(ContentType.DOCX);
             res.setHeader('Content-type', ContentType.DOCX);
             res.end(buffer);
         } catch (err) {

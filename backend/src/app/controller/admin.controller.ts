@@ -26,8 +26,6 @@ export class AdminController {
         try {
             const fileModel = await CoordinatorService.downloadFile(coordinatorId, fileId);
 
-            console.log(fileModel.name);
-
             res.setHeader('Content-disposition', 'attachment; filename=' + fileModel.name);
             res.setHeader('Content-type', fileModel.mimeType);
             res.end(fileModel.data);
