@@ -46,7 +46,7 @@ app.use(fileUpload());
 // Handle logs in console during development
 if (env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
-    app.use(cors({origin: ['http://localhost:4200']}));
+    app.use(cors({origin: ['http://localhost:4200', 'http://thesis.valentinstamate.com']}));
 }
 
 // Handle security and origin in production

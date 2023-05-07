@@ -10,4 +10,5 @@
 ## Credits
 * Author: Stamate Valentin
 * Coordinator: Prof. Univ. Drd. Lenuța Alboaie
+* Special thanks to: Adriana Bejinariu
 
